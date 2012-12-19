@@ -20,10 +20,10 @@
 #include <time.h>
 
 #include <errno.h>
+//#include <iostream>
 
 
 #define IFACE_NAME "vcan0"
-
 
 // Interface section
 struct iparameters
@@ -66,6 +66,7 @@ int getSocket(char* iface_name)
 	{
 		errsv = errno;
 		fprintf(stderr, "Ошибка при открытии сокета: %d\n", errsv);
+        fflush (stderr);
 		return 0;
 	}
 
@@ -79,9 +80,11 @@ int getSocket(char* iface_name)
 	{
 		errsv = errno;
 		fprintf(stderr,"Не найден интерфейс %s, ошибка: %d\n", iface_name, errno);
+        fflush (stderr);
 		return 0;
 	}
 	printf("Найден CAN интерфейс: %d\n", ifr.ifr_ifindex);
+    fflush (stdout);
 
 	// Биндим сокет на нужный интерфейс
 	struct sockaddr_can addr;
@@ -97,6 +100,7 @@ int send_can_frame(int s, struct can_frame* frame)
 	if (!s)
 	{
 		printf("send_can_frame: сокет не существует\n");
+        fflush (stdout);
 	}
 
 	errno = 0;
@@ -105,12 +109,14 @@ int send_can_frame(int s, struct can_frame* frame)
 	{
 		int errsv = errno;
 		fprintf(stderr, "send_can_frame: ошибка при отправке: %d\n", errsv);
+        fflush (stderr);
 		return 0;
 	}
 /*
 //#ifdef DEBUG
 	//printf("Успешно отправлено %d байт на %s\n", bytes_sent, iface_name);
 	printf("send_can_frame: успешно отправлено %d байт\n", bytes_sent);
+    fflush (stdout);
 //#endif // DEBUG
 */
 	return 1;
@@ -121,6 +127,7 @@ int read_can_frame(int s, struct can_frame* frame)
 	if (!s)
 	{
 		printf("read_can_frame: сокет не существует\n");
+        fflush (stdout);
 	}
 
 	errno = 0;
@@ -129,6 +136,7 @@ int read_can_frame(int s, struct can_frame* frame)
 	{
 		int errsv = errno;
 		fprintf(stderr, "read_can_frame: ошибка при чтении: %d\n", errsv);
+        fflush (stderr);
 		return 0;
 	}
 /*
@@ -141,6 +149,7 @@ int read_can_frame(int s, struct can_frame* frame)
 	for(i = 0; i < (*frame).can_dlc; i++)
 		printf("0x%02x, ", (*frame).data[i]);
 	printf("]\n");
+    fflush (stdout);
 //#endif // DEBUG
 */
 	return 1;
@@ -199,27 +208,29 @@ void (*cbk_speed)(double* speed);
 void (*cbk_speed_limit)(int* speed_limit);
 void (*cbk_passed_distance)(int* passed_distance);
 
-void set_callbacks(void (*f_speed)(double* speed), void (*f_speed_limit)(int* speed_limit), void (*f_passed_distance)(int* passed_distance))
+void sktcanl_set_callbacks(void (*f_speed)(double* speed), void (*f_speed_limit)(int* speed_limit), void (*f_passed_distance)(int* passed_distance))
 {
 	cbk_speed = f_speed;
 	cbk_speed_limit = f_speed_limit;
 	cbk_passed_distance = f_passed_distance;
 }
 
-int init()
+int sktcanl_init()
 {
 	char* iface_name = IFACE_NAME;
 
 	// Подготавливаем сокет
 	printf("Инициализация SocketCAN\n");
+    fflush (stdout);
 	read_socket = getSocket(iface_name);
 	if(!read_socket)
 		return 0;
 	printf("Сокет чтения готов\n");
+    fflush (stdout);
 	return 1;
 }
 
-void read_can_msg()
+void sktcanl_read_can_msg()
 {
 	read_can_frame(read_socket, &read_frame);
 
@@ -234,6 +245,7 @@ void read_can_msg()
 			cbk_speed(&c_speed);
 		}
 		printf("Скорость: %f\n", c_speed);
+        fflush (stdout);
 	}
 	else if (cfd_passed_distance(&read_frame, &c_passed_distance) == 1)
 	{
@@ -242,6 +254,7 @@ void read_can_msg()
 			cbk_passed_distance(&c_passed_distance);
 		}
 		printf("Пройденный путь: %d\n", c_passed_distance);
+        fflush (stdout);
 	}
 	else if (cfd_speed_limit(&read_frame, &c_speed_limit) == 1)
 	{
@@ -250,6 +263,7 @@ void read_can_msg()
 			cbk_speed_limit(&c_speed_limit);
 		}
 		printf("Ограничение скорости: %d\n", c_speed_limit);
+        fflush (stdout);
 	}
 }
 

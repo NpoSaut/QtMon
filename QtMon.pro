@@ -16,7 +16,8 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    systemstateviewmodel.cpp
+    systemstateviewmodel.cpp \
+    sktcanl/src/sktcanl.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -28,4 +29,7 @@ RESOURCES += \
 OTHER_FILES +=
 
 HEADERS += \
-    systemstateviewmodel.h
+    systemstateviewmodel.h \
+    sktcanl/src/sktcanl.h
+
+CONFIG += console

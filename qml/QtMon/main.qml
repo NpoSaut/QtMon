@@ -55,7 +55,7 @@ Rectangle {
 
     SystemStateView {
         id: stateView
-
+        objectName: "stateView"
     }
 
 

@@ -5,66 +5,70 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 {
     // fileds init start
     speedValue = 48;
-    speedRestrictionValue = 60;
+    speedRestrictionValue = 65;
     longitudeValue = 60.148;
     latitudeValue = 56.856;
     vigilanceRequiredValue = true;
+    systemWarningLevelValue = 0;
+    fullSetWarningLevelValue = 0;
+    pressureOkValue = true;
+    epvReadyValue = true;
+    epvReleasedValue = false;
     // fileds init end
 }
 
 // -- start: Properties Getters and Setters --
-
-const double SystemStateViewModel::getSpeedValue() const
+const double SystemStateViewModel::getSpeed() const
 {
     return speedValue;
 }
-void SystemStateViewModel::setSpeedValue(const double value)
+void SystemStateViewModel::setSpeed(const double value)
 {
     if (speedValue != value)
     {
         speedValue = value;
-        emit speedChanged();
+        emit SpeedChanged();
     }
 }
 
-const double SystemStateViewModel::getSpeedRestrictionValue() const
+const double SystemStateViewModel::getSpeedRestriction() const
 {
     return speedRestrictionValue;
 }
-void SystemStateViewModel::setSpeedRestrictionValue(const double value)
+void SystemStateViewModel::setSpeedRestriction(const double value)
 {
     if (speedRestrictionValue != value)
     {
         speedRestrictionValue = value;
-        emit speedRestrictionChanged();
+        emit SpeedRestrictionChanged();
     }
 }
 
-const double SystemStateViewModel::getLongitudeValue() const
+const double SystemStateViewModel::getLongitude() const
 {
     return longitudeValue;
 }
-void SystemStateViewModel::setLongitudeValue(const double value)
+void SystemStateViewModel::setLongitude(const double value)
 {
     if (longitudeValue != value)
     {
         longitudeValue = value;
-        emit longitudeChanged();
+        emit LongitudeChanged();
     }
 }
-const double SystemStateViewModel::getLatitudeValue() const
+
+const double SystemStateViewModel::getLatitude() const
 {
     return latitudeValue;
 }
-void SystemStateViewModel::setLatitudeValue(const double value)
+void SystemStateViewModel::setLatitude(const double value)
 {
     if (latitudeValue != value)
     {
         latitudeValue = value;
-        emit latitudeChanged();
+        emit LatitudeChanged();
     }
 }
-
 
 const bool SystemStateViewModel::getIsVigilanceRequired() const
 {
@@ -78,4 +82,70 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
         emit IsVigilanceRequiredChanged();
     }
 }
+
+const int SystemStateViewModel::getSystemWarningLevel() const
+{
+    return systemWarningLevelValue;
+}
+void SystemStateViewModel::setSystemWarningLevel(const int value)
+{
+    if (systemWarningLevelValue != value)
+    {
+        systemWarningLevelValue = value;
+        emit SystemWarningLevelChanged();
+    }
+}
+
+const int SystemStateViewModel::getFullSetWarningLevel() const
+{
+    return fullSetWarningLevelValue;
+}
+void SystemStateViewModel::setFullSetWarningLevel(const int value)
+{
+    if (fullSetWarningLevelValue != value)
+    {
+        fullSetWarningLevelValue = value;
+        emit FullSetWarningLevelChanged();
+    }
+}
+
+const bool SystemStateViewModel::getIsPressureOk() const
+{
+    return pressureOkValue;
+}
+void SystemStateViewModel::setIsPressureOk(const bool value)
+{
+    if (pressureOkValue != value)
+    {
+        pressureOkValue = value;
+        emit IsPressureOkChanged();
+    }
+}
+
+const bool SystemStateViewModel::getIsEpvReady() const
+{
+    return epvReadyValue;
+}
+void SystemStateViewModel::setIsEpvReady(const bool value)
+{
+    if (epvReadyValue != value)
+    {
+        epvReadyValue = value;
+        emit IsEpvReadyChanged();
+    }
+}
+
+const bool SystemStateViewModel::getIsEpvReleased() const
+{
+    return epvReleasedValue;
+}
+void SystemStateViewModel::setIsEpvReleased(const bool value)
+{
+    if (epvReleasedValue != value)
+    {
+        epvReleasedValue = value;
+        emit IsEpvReleasedChanged();
+    }
+}
+
 // -- end: Properties Getters and Setters --

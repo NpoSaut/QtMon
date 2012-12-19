@@ -696,16 +696,25 @@ Rectangle {
                             anchors.right: parent.right
 
                             Image {
-                                source: "Slices/FullSet-Small-Ok.png"
+                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
+                                                                             stateView.FullSetWarningLevel == 1 ?
+                                                                                 "Slices/FullSet-Small-Warning.png" :
+                                                                                 "Slices/FullSet-Small-Error.png"
                             }
                             Image {
-                                source: "Slices/Pressure-Small-Ok.png"
+                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
                             }
                             Image {
-                                source: "Slices/Epv-Small-Ok.png"
+                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
+                                                                  stateView.IsEpvReady ?
+                                                                      "Slices/Epv-Small-Ok.png" :
+                                                                      "Slices/Epv-Small-NotReady.png"
                             }
                             Image {
-                                source: "Slices/System-Medium-Ok.png"
+                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
+                                                                             stateView.SystemWarningLevel == 1 ?
+                                                                                 "Slices/System-Medium-Warning.png" :
+                                                                                 "Slices/System-Medium-Error.png"
                             }
                         }
                     }

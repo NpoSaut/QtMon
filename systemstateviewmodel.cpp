@@ -148,4 +148,17 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
     }
 }
 
+const bool SystemStateViewModel::getPropertyView() const
+{
+    return propertyView;
+}
+void SystemStateViewModel::setPropertyView(const bool value)
+{
+    if (propertyView != value)
+    {
+        propertyView = value;
+        emit PropertyViewChanged();
+    }
+}
+
 // -- end: Properties Getters and Setters --

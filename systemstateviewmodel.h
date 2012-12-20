@@ -38,6 +38,9 @@ class SystemStateViewModel : public QDeclarativeItem
     bool epvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
 
+    bool propertyView;
+    Q_PROPERTY(bool PropertyView READ getPropertyView WRITE setPropertyView NOTIFY PropertyViewChanged)
+
     // private properties end
 
 public:
@@ -74,6 +77,9 @@ public:
     const bool getIsEpvReleased() const;
     void setIsEpvReleased(const bool);
 
+    const bool getPropertyView() const;
+    void setPropertyView(const bool);
+
     // public properties end
 
 signals:
@@ -88,6 +94,7 @@ signals:
     void IsPressureOkChanged();
     void IsEpvReadyChanged();
     void IsEpvReleasedChanged();
+    void PropertyViewChanged();
     // properties signals end
 
 public slots:

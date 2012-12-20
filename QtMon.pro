@@ -26,7 +26,8 @@ qtcAddDeployment()
 RESOURCES += \
     res.qrc
 
-OTHER_FILES +=
+OTHER_FILES += \
+    properties.xml
 
 HEADERS += \
     systemstateviewmodel.h \

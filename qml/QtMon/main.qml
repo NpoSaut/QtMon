@@ -62,6 +62,7 @@ Rectangle {
     states: [
         State {
             name: "page1"
+            when: (stateView.PropertyView == false)
             PropertyChanges { target: page1indicator; width: 12 }
             PropertyChanges { target: page2indicator; width: 6 }
             PropertyChanges { target: pagesContainer; y: 0 }
@@ -71,6 +72,7 @@ Rectangle {
         },
         State {
             name: "page2"
+            when: (stateView.PropertyView == true)
             PropertyChanges { target: page1indicator; width: 6 }
             PropertyChanges { target: page2indicator; width: 12 }
             PropertyChanges { target: pagesContainer; y: -480 }
@@ -124,14 +126,17 @@ Rectangle {
                     x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
                     y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
+                    Behavior on x { SmoothedAnimation { duration: 500 } }
+                    Behavior on y { SmoothedAnimation { duration: 500 } }
+
                     source: "Slices/map.svg"
                     asynchronous: true
 
-    //                MouseArea {
-    //                    enabled: false
-    //                    anchors.fill: parent
-    //                    drag.target: parent; drag.axis: Drag.XandYAxis;
-    //                }
+//                    MouseArea {
+//                        enabled: false
+//                        anchors.fill: parent
+//                        drag.target: parent; drag.axis: Drag.XandYAxis;
+//                    }
                 }
 
                 Image {
@@ -148,6 +153,8 @@ Rectangle {
                     height: 48
                     color: "#00000000"
                     anchors.left: parent.left
+
+                    Behavior on y { SmoothedAnimation { duration: 500 } }
 
                     Rectangle {
                         x: 6
@@ -283,6 +290,8 @@ Rectangle {
                 height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
                 color: "#4999c9"
                 anchors.bottom: parent.bottom
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
             }
 
             Rectangle {
@@ -294,6 +303,8 @@ Rectangle {
                 color: "#c94949"
                 anchors.topMargin: 0
                 anchors.top: parent.top
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
             }
 
 

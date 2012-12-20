@@ -14,5 +14,6 @@
     <Property type="bool" name="IsPressureOk" filed="pressureOkValue" def="true" />
     <Property type="bool" name="IsEpvReady" filed="epvReadyValue" def="true" />
     <Property type="bool" name="IsEpvReleased" filed="epvReleasedValue" def="false" />
+    <Property type="bool" name="PropertyView" filed="propertyView" def="false" />
   </Properties>
 </Task>

@@ -6,8 +6,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init start
     speedValue = 48;
     speedRestrictionValue = 65;
-    longitudeValue = 60.148;
-    latitudeValue = 56.856;
+    longitudeValue = 60.47;
+    latitudeValue = 56.883;
     vigilanceRequiredValue = true;
     systemWarningLevelValue = 0;
     fullSetWarningLevelValue = 0;

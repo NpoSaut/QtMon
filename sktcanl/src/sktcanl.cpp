@@ -23,7 +23,7 @@
 //#include <iostream>
 
 
-#define IFACE_NAME "vcan0"
+#define IFACE_NAME "can0"
 
 // Interface section
 struct iparameters

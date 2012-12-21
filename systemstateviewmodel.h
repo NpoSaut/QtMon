@@ -53,6 +53,9 @@ class SystemStateViewModel : public QDeclarativeItem
     int milage;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
 
+    int alsnFreq;
+    Q_PROPERTY(int alsnFreq READ getAlsnFreq WRITE setAlsnFreq NOTIFY AlsnFreqChanged)
+
     // private properties end
 
 public:
@@ -104,6 +107,9 @@ public:
     const int getMilage() const;
     void setMilage(const int);
 
+    const int getAlsnFreq() const;
+    void setAlsnFreq(const int);
+
     // public properties end
 
 signals:
@@ -123,6 +129,7 @@ signals:
     void TimeChanged();
     void DateChanged();
     void MilageChanged();
+    void AlsnFreqChanged();
     // properties signals end
 
 public slots:

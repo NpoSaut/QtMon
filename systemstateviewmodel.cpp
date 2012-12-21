@@ -19,6 +19,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     time = "21:11";
     date = "28 декабря 2012";
     milage = 0;
+    alsnFreq = 25;
     // fileds init end
 }
 
@@ -215,6 +216,19 @@ void SystemStateViewModel::setMilage(const int value)
     {
         milage = value;
         emit MilageChanged();
+    }
+}
+
+const int SystemStateViewModel::getAlsnFreq() const
+{
+    return alsnFreq;
+}
+void SystemStateViewModel::setAlsnFreq(const int value)
+{
+    if (alsnFreq != value)
+    {
+        alsnFreq = value;
+        emit AlsnFreqChanged();
     }
 }
 

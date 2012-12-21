@@ -222,7 +222,7 @@ int cfd_trafficlight_freq(struct can_frame* frame, int* trafficlight_freq)
 {
 	if ((*frame).can_id != 0x08F) return -1;
 
-	(*trafficlight_freq) = (int) ( (*frame).data[4] & 0b00000011 );
+    (*trafficlight_freq) = (int) (( (*frame).data[4] & 0b00110000 ) >> 4);
 
 	return 1;
 }
@@ -264,10 +264,10 @@ int cfd_mm_lat_lon(struct can_frame* frame, double* lat, double* lon)
 	if ((*frame).can_id != 0x213) return -1;
 
 	int lat_i =((int) (*frame).data[0]) + (((int) (*frame).data[1]) << 8) + (((int) (*frame).data[2]) << 16) + (((int) (*frame).data[3]) << 24);
-	*lat = (double)lat_i * 10e-8 * 180 / 3.14159265359;
+    *lat = (double)lat_i * 10e-9 * 180 / 3.14159265359;
 
 	int lon_i =((int) (*frame).data[4]) + (((int) (*frame).data[5]) << 8) + (((int) (*frame).data[6]) << 16) + (((int) ((*frame).data[7]) & 0b01111111 ) << 24);
-	*lon = (double)lon_i * 10e-8 * 180 / 3.14159265359;
+    *lon = (double)lon_i * 10e-9 * 180 / 3.14159265359;
 
 	return 1;
 }
@@ -405,6 +405,15 @@ void sktcanl_read_can_msg()
 		printf("Светофор: %d\n", c_trafficlight_light);
 		fflush(stdout);
 	}
+    if (cfd_trafficlight_freq(&read_frame, &c_trafficlight_freq) == 1)
+    {
+        if (prev_c_trafficlight_freq != c_trafficlight_freq)
+        {
+            cbk_trafficlight_freq(&c_trafficlight_freq);
+        }
+        printf("Частота светофора: %d\n", c_trafficlight_freq);
+        fflush(stdout);
+    }
 	if (cfd_epv_state(&read_frame, &c_speed_limit) == 1)
 	{
 		if (prev_c_epv_state != c_epv_state)

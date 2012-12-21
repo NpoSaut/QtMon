@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 80
+    property double maxSpeed: 100
 
     function switchPage(i) {
         if (i == 1) {
@@ -126,8 +126,8 @@ Rectangle {
                     x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
                     y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
-                    Behavior on x { SmoothedAnimation { duration: 500 } }
-                    Behavior on y { SmoothedAnimation { duration: 500 } }
+                    Behavior on x { SmoothedAnimation { duration: 1000 } }
+                    Behavior on y { SmoothedAnimation { duration: 1000 } }
 
                     source: "Slices/map.png"
                     asynchronous: true
@@ -719,18 +719,22 @@ Rectangle {
                         states: [
                             State {
                                 name: "alsn0"
+                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
                                 PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
                             },
                             State {
                                 name: "alsn25"
+                                when: (stateView.alsnFreq == 25)
                                 PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             },
                             State {
                                 name: "alsn50"
+                                when: (stateView.alsnFreq == 50)
                                 PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             },
                             State {
                                 name: "alsn75"
+                                when: (stateView.alsnFreq == 75)
                                 PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             }
                         ]

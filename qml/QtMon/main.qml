@@ -53,154 +53,99 @@ Rectangle {
         }
     }
 
-    Image {
-        source: "Slices/all.png"
+    SystemStateView {
+        id: stateView
+        objectName: "stateView"
     }
 
-//    SystemStateView {
-//        id: stateView
-//        objectName: "stateView"
-//    }
+
+    states: [
+        State {
+            name: "page1"
+            when: (stateView.PropertyView == false)
+            PropertyChanges { target: page1indicator; width: 12 }
+            PropertyChanges { target: page2indicator; width: 6 }
+            PropertyChanges { target: pagesContainer; y: 0 }
+
+            PropertyChanges { target: page1buttonHeader; anchors.leftMargin: 22 }
+            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.0 }
+        },
+        State {
+            name: "page2"
+            when: (stateView.PropertyView == true)
+            PropertyChanges { target: page1indicator; width: 6 }
+            PropertyChanges { target: page2indicator; width: 12 }
+            PropertyChanges { target: pagesContainer; y: -480 }
+
+            PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
+            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
+        }
+    ]
+
+    transitions: Transition {
+        NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
+        NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
+        NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+    }
+
+    Rectangle {
+        id: pagesArea
+        color: "#00000000"
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.rightMargin: 149
+        anchors.left: parent.left
+        anchors.leftMargin: 151
+
+        Column {
+            id: pagesContainer
+            anchors.right: parent.right
+            anchors.left: parent.left
+            Rectangle {
+                id: page1container
+                height: 480
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                clip: true
+
+                Image {
+                    property double leftCoordinate: 60.226
+                    property double topCoordinate: 56.942
+                    property double rightCoordinate: 60.561
+                    property double bottomCoordinate: 56.791
+
+                    property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
+                    property double verticalDensity: height/(bottomCoordinate - topCoordinate)
 
 
-//    states: [
-//        State {
-//            name: "page1"
-//            when: (stateView.PropertyView == false)
-//            PropertyChanges { target: page1indicator; width: 12 }
-//            PropertyChanges { target: page2indicator; width: 6 }
-//            PropertyChanges { target: pagesContainer; y: 0 }
+                    x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
+                    y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
-//            PropertyChanges { target: page1buttonHeader; anchors.leftMargin: 22 }
-//            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.0 }
-//        },
-//        State {
-//            name: "page2"
-//            when: (stateView.PropertyView == true)
-//            PropertyChanges { target: page1indicator; width: 6 }
-//            PropertyChanges { target: page2indicator; width: 12 }
-//            PropertyChanges { target: pagesContainer; y: -480 }
+                    Behavior on x { SmoothedAnimation { duration: 500 } }
+                    Behavior on y { SmoothedAnimation { duration: 500 } }
 
-//            PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
-//            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
-//        }
-//    ]
+                    source: "Slices/map.png"
+                    asynchronous: true
 
-//    transitions: Transition {
-//        NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
-//        NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
-//        NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
-//        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
-//        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
-//    }
-
-//    Rectangle {
-//        id: pagesArea
-//        color: "#00000000"
-//        anchors.bottom: parent.bottom
-//        anchors.top: parent.top
-//        anchors.right: parent.right
-//        anchors.rightMargin: 149
-//        anchors.left: parent.left
-//        anchors.leftMargin: 151
-
-//        Column {
-//            id: pagesContainer
-//            anchors.right: parent.right
-//            anchors.left: parent.left
-//            Rectangle {
-//                id: page1container
-//                height: 480
-//                color: "#00000000"
-//                anchors.right: parent.right
-//                anchors.left: parent.left
-//                anchors.leftMargin: 0
-//                clip: true
-
-//                Image {
-//                    property double leftCoordinate: 60.226
-//                    property double topCoordinate: 56.942
-//                    property double rightCoordinate: 60.561
-//                    property double bottomCoordinate: 56.791
-
-//                    property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
-//                    property double verticalDensity: height/(bottomCoordinate - topCoordinate)
-
-
-//                    x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
-//                    y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
-
-//                    Behavior on x { SmoothedAnimation { duration: 500 } }
-//                    Behavior on y { SmoothedAnimation { duration: 500 } }
-
-//                    source: "Slices/map.png"
-//                    asynchronous: true
-
-////                    MouseArea {
-////                        enabled: false
-////                        anchors.fill: parent
-////                        drag.target: parent; drag.axis: Drag.XandYAxis;
-////                    }
-//                }
-
-//                Image {
-//                    x: 534
-//                    y: 364
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    source: "Slices/Cross.png"
-//                }
-
-//                Rectangle {
-//                    y: parent.height - speedValueBar.height - height/2
-//                    width: 60
-//                    height: 48
-//                    color: "#00000000"
-//                    anchors.left: parent.left
-
-//                    Behavior on y { SmoothedAnimation { duration: 500 } }
-
-//                    Rectangle {
-//                        x: 6
-//                        y: -6
-//                        gradient: Gradient {
-//                            GradientStop {
-//                                position: 0
-//                                color: "#b4ffffff"
-//                            }
-
-//                            GradientStop {
-//                                position: 1
-//                                color: "#00ffffff"
-//                            }
-//                        }
-//                        width: parent.height
-//                        height: parent.width
-//                        anchors.horizontalCenter: parent.horizontalCenter
-//                        anchors.verticalCenter: parent.verticalCenter
-//                        rotation: -90
-//                    }
-
-//                    Column {
+//                    MouseArea {
+//                        enabled: false
 //                        anchors.fill: parent
-
-//                        Text {
-//                            id: speedValueLabel
-//                            color: "#4999c9"
-//                            text: stateView.Speed
-//                            anchors.horizontalCenter: parent.horizontalCenter
-//                            font.pixelSize: 26
-//                            font.family: "URW Gothic L"
-//                        }
-//                        Text {
-//                            color: "#4999c9"
-//                            text: qsTr("км/ч")
-//                            anchors.horizontalCenter: parent.horizontalCenter
-//                            font.pixelSize: 12
-//                            font.family: "URW Gothic L"
-//                        }
+//                        drag.target: parent; drag.axis: Drag.XandYAxis;
 //                    }
-//                }
+                }
+
+                Image {
+                    x: 534
+                    y: 364
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: "Slices/Cross.png"
+                }
 
 //                Image {
 //                    id: vigilanceSign
@@ -230,548 +175,726 @@ Rectangle {
 //                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
 //                    }
 //                }
-//            }
+                Rectangle {
+                    id: graduateBar
 
-//            Rectangle {
-//                id: rectangle1
-//                height: 480
-//                gradient: Gradient {
-//                    GradientStop {
-//                        position: 0
-//                        color: "#6b6b6b"
-//                    }
+                    x: -2
+                    y: 0
+                    width: 10
+                    height: rootRect.height
 
-//                    GradientStop {
-//                        position: 1
-//                        color: "#2b2b2b"
-//                    }
-//                }
-//                anchors.right: parent.right
-//                anchors.left: parent.left
+                    color: "#00000000"
 
-//                Text {
-//                    id: text2
-//                    color: "#ffffff"
-//                    text: qsTr("Состояние системы")
-//                    anchors.topMargin: 10
-//                    horizontalAlignment: Text.AlignHCenter
-//                    anchors.right: parent.right
-//                    anchors.left: parent.left
-//                    anchors.top: parent.top
-//                    font.pixelSize: 24
-//                    font.family: "URW Gothic L"
-//                }
-//            }
-//        }
-//        MouseArea {
-//            id: mousearea1
-//            enabled: false
-//            anchors.fill: parent
-//            onPressed: swipePressed(mouseY)
-//            onReleased: swipeReleased(mouseY)
-//        }
-//    }
+                    Rectangle {
+                        property int sp: 10
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 20
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 30
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 40
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 50
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 60
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 70
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 80
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 90
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 100
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                }
+
+                Rectangle {
+                    id: hintBox
+
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: background.height
+                    width: background.width
+
+                    color: "#00000000"
+
+                    Image {
+                        id: background
+                        source: "Slices/hint.png"
+                    }
+
+                    Text {
+                        text: stateView.Time;
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
+                    }
+
+                    Text {
+                        //text: stateView.Date;
+                        text: qsTr("21 декабря 2012");
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
+                    }
+
+                    Text {
+                        text: stateView.Milage + qsTr(" км");
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.right: parent.right
+                        anchors.rightMargin: 16
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rectangle1
+                height: 480
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#6b6b6b"
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: "#2b2b2b"
+                    }
+                }
+                anchors.right: parent.right
+                anchors.left: parent.left
+
+                Text {
+                    id: text2
+                    color: "#ffffff"
+                    text: qsTr("Состояние системы")
+                    anchors.topMargin: 10
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    font.pixelSize: 24
+                    font.family: "URW Gothic L"
+                }
+            }
+        }
+        MouseArea {
+            id: mousearea1
+            enabled: false
+            anchors.fill: parent
+            onPressed: swipePressed(mouseY)
+            onReleased: swipeReleased(mouseY)
+        }
+    }
 
 
 
-//    Rectangle {
-//        width: 145
-//        height: 480
-//        color: "#00000000"
-//        anchors.left: parent.left
-//        anchors.bottom: parent.bottom
-//        anchors.top: parent.top
+    Rectangle {
+        id: panelLeft
 
-//        Image {
-//            id: image2
-//            anchors.left: parent.left
-//            anchors.bottom: parent.bottom
-//            anchors.top: parent.top
-//            source: "Slices/Panel-Left.png"
+        width: 145
+        height: 480
+        color: "#00000000"
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
 
-//            Rectangle {
-//                id: speedValueBar
-//                x: 145
-//                y: 280
-//                width: 7
-//                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
-//                color: "#4999c9"
-//                anchors.bottom: parent.bottom
+        Image {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            source: "Slices/Panel-Left.png"
 
-//                Behavior on height { SmoothedAnimation { duration: 500 } }
-//            }
+            Rectangle {
+                id: speedValueBar
+                x: 144
+                y: 280
+                width: 7
+                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
+                color: "#4999c9"
+                anchors.bottom: parent.bottom
 
-//            Rectangle {
-//                id: restrictionBar
-//                x: 145
-//                y: 0
-//                width: 7
-//                height: rootRect.height - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height)
-//                color: "#c94949"
-//                anchors.topMargin: 0
-//                anchors.top: parent.top
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
 
-//                Behavior on height { SmoothedAnimation { duration: 500 } }
-//            }
+            Rectangle {
+                id: speedValueSubBar
+                x: 139
+                y: 280
+                width: 7
+                height: 58
+                color: "#4999c9"
+                anchors.bottom: parent.bottom
 
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
 
-//        }
+            Rectangle {
+                id: restrictionBar
+                x: 144
+                y: 0
+                width: 7
+                height: rootRect.height - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height)
+                color: "#c94949"
+                anchors.topMargin: 0
+                anchors.top: parent.top
 
-//        Column {
-//            id: restrictionBox
-//            x: 7
-//            y: 0
-//            height: 120
-//            anchors.right: parent.right
-//            anchors.rightMargin: 5
-//            anchors.left: parent.left
-//            anchors.leftMargin: 5
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
 
-//            Text {
-//                height: 15
-//                color: "#c94949"
-//                text: qsTr("ограничение")
-//                font.pixelSize: 18
-//                font.family: "URW Gothic L"
-////                font.bold: true
-//            }
-//            Text {
-//                height: 10
-//                color: "#c94949"
-//                text: qsTr("скорости")
-//                font.pixelSize: 18
-//                font.family: "URW Gothic L"
-////                font.bold: true
-//            }
-//            Text {
-//                height: 66
-//                //x: -780
-//                //y: 20
-//                color: "#c94949"
-//                text: stateView.SpeedRestriction
-//                smooth: false
-//                anchors.right: parent.right
-//                horizontalAlignment: Text.AlignLeft
-//                font.pixelSize: 64
-//                font.family: "URW Gothic L"
-////                font.bold: true
-//            }
-//            Text {
-//                color: "#c94949"
-//                text: qsTr("км/ч ")
-//                anchors.right: parent.right
-//                font.pixelSize: 18
-//                font.family: "URW Gothic L"
+            Rectangle {
+                id: restrictionSubBar
+                x: 139
+                y: 0
+                width: 7
+                height: 120
+                color: "#c94949"
+                anchors.topMargin: 0
+                anchors.top: parent.top
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
+        }
+
+        Column {
+            id: restrictionBox
+
+            width: 140
+            height: 120
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: 3
+
+            Text {
+                text: qsTr("ограничение")
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 15
+
+                color: "#d3a44c"
+                font.pixelSize: 18
+                font.family: "URW Gothic L"
 //                font.bold: true
-//            }
-//        }
+            }
+            Text {
+                text: qsTr("скорости")
 
-//        Rectangle {
-//            x: 0
-//            y: 120
-//            height: 360
-//            color: "#00000000"
-//            anchors.bottom: parent.bottom
-//            anchors.bottomMargin: 0
-//            anchors.right: parent.right
-//            anchors.left: parent.left
-//            anchors.leftMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 10
 
+                color: "#d3a44c"
+                font.pixelSize: 18
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+            Text {
+                text: stateView.SpeedRestriction
 
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 66
 
+                color: "#c94949"
+                font.pixelSize: 64
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+            Text {
+                text: qsTr("км/ч ")
 
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
 
+                color: "#c94949"
+                font.pixelSize: 18
+                font.family: "URW Gothic L"
+                font.bold: true
+            }
+        }
 
-//            ListView {
-//                id: lightsPanel
-//                width: 126
-//                height: 282
-//                interactive: false
-//                //interactive: false
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.horizontalCenter: parent.horizontalCenter
-//                focus: true
+        Rectangle {
+            id: lightStuff
 
-//                currentIndex: 2
-
-//                highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-
-//                delegate: Item {
-//                    height: 52
-
-//                    Rectangle {
-//                        id: wrapper
-//                        width: 116
-//                        height: 52
-//                        color: "#00000000"
-//                        Image {
-//                            id: lightOffImage
-//                            source: "Slices/Light-Off.png"
-//                        }
-//                        Image {
-//                            id: lightOnImage
-//                            source: "Slices/Light-" + name + ".png"
-//                            opacity: 0
-//                        }
-
-//                        state: lightState
-
-//                        states: [
-//                            State {
-//                                name: "On"
-//                                PropertyChanges { target: lightOnImage; opacity: 1 }
-//                                PropertyChanges { target: lightOffImage; opacity: 0 }
-//                            },
-//                            State {
-//                                name: "Off"
-//                            }
-//                        ]
-
-//                        transitions: Transition {
-//                            NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 200 }
-//                        }
-//                    }
-//                }
-//                model: ListModel {
-//                    ListElement {
-//                        name: "Green1"
-//                        lightState: "On"
-//                    }
-//                    ListElement {
-//                        name: "Yellow"
-//                        lightState: "Off"
-//                    }
-//                    ListElement {
-//                        name: "YellowRed"
-//                        lightState: "On"
-//                    }
-//                    ListElement {
-//                        name: "Red"
-//                        lightState: "Off"
-//                    }
-//                    ListElement {
-//                        name: "White"
-//                        lightState: "Off"
-//                    }
-//                }
-
-//                states: [
-//                    State {
-//                        name: "Green1"
-//                        PropertyChanges { target: lightOnImage; opacity: 1 }
-//                        PropertyChanges { target: lightOffImage; opacity: 0 }
-//                    }
-//                ]
-//            }
+            width: 140
+            height: 300
+            anchors.left: parent.left
+            y: restrictionBox.height
 
 
+            color: "#00000000"
 
-//        }
-//    }
+            Image{
+                id: lightGreen
 
-//    Rectangle {
-//        x: 652
-//        y: 0
-//        width: 149
-//        height: 480
-//        color: "#00000000"
-//        anchors.bottom: parent.bottom
-//        anchors.right: parent.right
-//        anchors.top: parent.top
+                y: parent.height/6 * 1 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
-//        Image {
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            anchors.right: parent.right
-//            source: "Slices/Panel-Right.png"
-//        }
+                source: (stateView.Light === 4 ? "Slices/Light-Green.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightYellow
 
-//        Image {
-//            x: -14
-//            y: 104
-//            anchors.right: parent.right
-//            anchors.verticalCenter: parent.verticalCenter
-//            source: "Slices/Panel-Right-Middle.png"
-//        }
+                y: parent.height/6 * 2 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
-//        Column {
-//            x: -6
-//            y: 0
-//            anchors.fill: parent
+                source: (stateView.Light === 3 ? "Slices/Light-Yellow.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightYellowRed
 
-//            Rectangle {
-//                id: rectangle2
-//                height: 120
-//                color: "#00000000"
-//                anchors.right: parent.right
-//                anchors.left: parent.left
-//                Rectangle {
-//                    width: 6
-//                    color: "#4999c9"
-//                    anchors.left: parent.left
-//                    anchors.bottom: parent.bottom
-//                    anchors.top: parent.top
-//                }
+                y: parent.height/6 * 3 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
-//                Text {
-//                    id: text1
-//                    y: 63
-//                    color: "#ffffff"
-//                    text: qsTr("АЛСН")
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 60
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    font.pixelSize: 25
-//                    font.family: "URW Gothic L"
-//                }
+                source: (stateView.Light === 2 ? "Slices/Light-YellowRed.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightRed
 
-//                Row {
-//                    spacing: 5
-//                    anchors.top: parent.top
-//                    anchors.topMargin: 20
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: 20
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 15
+                y: parent.height/6 * 4 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
-//                    Column {
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 0
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 0
-//                        Text {
-//                            text: qsTr("25")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("50")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("75")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                    }
+                source: (stateView.Light === 1 ? "Slices/Light-Red.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightWhite
 
-//                    Rectangle {
-//                        id: alsnSelector
-//                        width: 20
-//                        color: "#00000000"
-//                        radius: 8
-//                        border.width: 2
-//                        border.color: "#ffffff"
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 3
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 3
+                y: parent.height/6 * 5 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
-//                        Rectangle {
-//                            id: alsnSelectorMarker
-//                            x: 2
-//                            y: 2
-//                            width: 16
-//                            height: 16
-//                            color: "#ffffff"
-//                            radius: 8
-//                            anchors.horizontalCenter: parent.horizontalCenter
-//                            MouseArea {
-//                                anchors.fill: parent
-//                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
-//                                onReleased: refreshAlsnState();
-//                            }
-//                        }
+                source: (stateView.Light === 0 ? "Slices/Light-White.png" : "Slices/Light-Off.png")
+            }
+        }
 
-//                        states: [
-//                            State {
-//                                name: "alsn0"
-//                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
-//                            },
-//                            State {
-//                                name: "alsn25"
-//                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn50"
-//                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn75"
-//                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            }
-//                        ]
+        Column {
+            id: speedBox
 
-//                        transitions: Transition {
-//                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
-//                        }
-//                    }
-//                }
-//            }
+            width: 140
+            height: 62 // ???
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
 
-//            Rectangle {
-//                id: rectangle4
-//                x: 0
-//                y: 240
-//                height: 120
-//                color: "#00000000"
-//                anchors.right: parent.right
-//                anchors.left: parent.left
-//                Rectangle {
-//                    id: page1indicator
-//                    width: 6
-//                    color: "#4999c9"
-//                    anchors.left: parent.left
-//                    anchors.bottom: parent.bottom
-//                    anchors.top: parent.top
-//                }
+            Text {
+                text: stateView.Speed
 
-//                Column {
-//                    id: page1buttonHeader
-//                    x: 25
-//                    y: 32
-//                    anchors.right: parent.right
-//                    anchors.rightMargin: 10
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 25
-//                    anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 42
 
-//                    Text {
-//                        color: "#ffffff"
-//                        text: qsTr("Текущее")
-//                        font.pointSize: 20
-//                        font.family: "URW Gothic L"
-//                    }
+                color: "#4999c9"
+                font.pixelSize: 40
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+            Text {
+                text: qsTr("км/ч ")
 
-//                    Row {
-//                        id: page1buttonInfo
-//                        spacing: 2
-//                        anchors.right: parent.right
-//                        Text {
-//                            color: "#4999c9"
-//                            text: stateView.Speed
-//                            anchors.bottom: parent.bottom
-////                            font.bold: true
-//                            font.pointSize: 17
-//                            font.family: "URW Gothic L"
-//                        }
-//                        Text {
-//                            color: "#ffffff"
-//                            text: qsTr("/")
-//                            anchors.bottom: parent.bottom
-////                            font.bold: true
-//                            font.pointSize: 14
-//                            font.family: "URW Gothic L"
-//                        }
-//                        Text {
-//                            color: "#c94949"
-//                            text: stateView.SpeedRestriction
-//                            anchors.bottom: parent.bottom
-////                            font.bold: true
-//                            font.pointSize: 14
-//                            font.family: "URW Gothic L"
-//                        }
-//                        }
-//                }
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onPressed: switchPage(1)
-//                }
-//            }
-//            Rectangle {
-//                id: rectangle3
-//                    x: 0
-//                    y: 120
-//                    height: 120
-//                    color: "#00000000"
-//                    anchors.right: parent.right
-//                    anchors.left: parent.left
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
 
-//                    Rectangle {
-//                        id: page2indicator
-//                        width: 6
-//                        color: "#4999c9"
-//                        anchors.left: parent.left
-//                        anchors.bottom: parent.bottom
-//                        anchors.top: parent.top
-//                    }
-//                    Column {
-//                        id: page2buttonHeader
-//                        x: 25
-//                        y: 32
-//                        anchors.right: parent.right
-//                        anchors.rightMargin: 10
-//                        anchors.left: parent.left
-//                        anchors.leftMargin: 25
-//                        anchors.verticalCenter: parent.verticalCenter
+                color: "#4999c9"
+                font.pixelSize: 14
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+        }
 
-//                        Text {
-//                            color: "#ffffff"
-//                            text: qsTr("Система")
-//                            font.pointSize: 20
-//                            font.family: "URW Gothic L"
-//                        }
+    }
 
-//                        Row {
-//                            id: page2buttonInfo
-//                            spacing: 3
-//                            anchors.right: parent.right
+    Rectangle {
+        id: panelRight
 
-//                            Image {
-//                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
-//                                                                             stateView.FullSetWarningLevel == 1 ?
-//                                                                                 "Slices/FullSet-Small-Warning.png" :
-//                                                                                 "Slices/FullSet-Small-Error.png"
-//                            }
-//                            Image {
-//                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
-//                            }
-//                            Image {
-//                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
-//                                                                  stateView.IsEpvReady ?
-//                                                                      "Slices/Epv-Small-Ok.png" :
-//                                                                      "Slices/Epv-Small-NotReady.png"
-//                            }
-//                            Image {
-//                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
-//                                                                             stateView.SystemWarningLevel == 1 ?
-//                                                                                 "Slices/System-Medium-Warning.png" :
-//                                                                                 "Slices/System-Medium-Error.png"
-//                            }
-//                        }
-//                    }
-//                    MouseArea {
-//                        anchors.fill: parent
-//                        onPressed: switchPage(2)
-//                    }
-//            }
+        x: 652
+        y: 0
+        width: 149
+        height: 480
+        color: "#00000000"
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.top: parent.top
 
-//            Rectangle {
-//                height: 120
-//                color: "#00000000"
-//                anchors.right: parent.right
-//                anchors.left: parent.left
-//                Rectangle {
-//                    width: 6
-//                    color: "#4999c9"
-//                    anchors.left: parent.left
-//                    anchors.bottom: parent.bottom
-//                    anchors.top: parent.top
-//                }
-//            }
+        Image {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            source: "Slices/Panel-Right.png"
+        }
 
-//        }
+        Image {
+            x: -14
+            y: 104
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            source: "Slices/Panel-Right-Middle.png"
+        }
 
-//    }
+        Column {
+            x: -6
+            y: 0
+            anchors.fill: parent
+
+            Rectangle {
+                id: rectangle2
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
+                Rectangle {
+                    width: 6
+                    color: "#4999c9"
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.top: parent.top
+                }
+
+                Text {
+                    id: text1
+                    y: 63
+                    color: "#ffffff"
+                    text: qsTr("АЛСН")
+                    anchors.left: parent.left
+                    anchors.leftMargin: 60
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 25
+                    font.family: "URW Gothic L"
+                }
+
+                Row {
+                    spacing: 5
+                    anchors.top: parent.top
+                    anchors.topMargin: 20
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+
+                    Column {
+                        anchors.top: parent.top
+                        anchors.topMargin: 0
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 0
+                        Text {
+                            text: qsTr("25")
+                            font.pointSize: 10
+                            font.family: "URW Gothic L"
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#ffffff"
+                            height: parent.height/3
+                        }
+                        Text {
+                            text: qsTr("50")
+                            font.pointSize: 10
+                            font.family: "URW Gothic L"
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#ffffff"
+                            height: parent.height/3
+                        }
+                        Text {
+                            text: qsTr("75")
+                            font.pointSize: 10
+                            font.family: "URW Gothic L"
+                            verticalAlignment: Text.AlignVCenter
+                            color: "#ffffff"
+                            height: parent.height/3
+                        }
+                    }
+
+                    Rectangle {
+                        id: alsnSelector
+                        width: 20
+                        color: "#00000000"
+                        radius: 8
+                        border.width: 2
+                        border.color: "#ffffff"
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 3
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
+
+                        Rectangle {
+                            id: alsnSelectorMarker
+                            x: 2
+                            y: 2
+                            width: 16
+                            height: 16
+                            color: "#ffffff"
+                            radius: 8
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            MouseArea {
+                                anchors.fill: parent
+                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
+                                onReleased: refreshAlsnState();
+                            }
+                        }
+
+                        states: [
+                            State {
+                                name: "alsn0"
+                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
+                            },
+                            State {
+                                name: "alsn25"
+                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+                            },
+                            State {
+                                name: "alsn50"
+                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+                            },
+                            State {
+                                name: "alsn75"
+                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+                            }
+                        ]
+
+                        transitions: Transition {
+                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: rectangle4
+                x: 0
+                y: 240
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
+                Rectangle {
+                    id: page1indicator
+                    width: 6
+                    color: "#4999c9"
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.top: parent.top
+                }
+
+                Column {
+                    id: page1buttonHeader
+                    x: 25
+                    y: 32
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.left: parent.left
+                    anchors.leftMargin: 25
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Текущее")
+                        font.pointSize: 20
+                        font.family: "URW Gothic L"
+                    }
+
+                    Row {
+                        id: page1buttonInfo
+                        spacing: 2
+                        anchors.right: parent.right
+                        Text {
+                            color: "#4999c9"
+                            text: stateView.Speed
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 17
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("/")
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            color: "#c94949"
+                            text: stateView.SpeedRestriction
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                        }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: switchPage(1)
+                }
+            }
+            Rectangle {
+                id: rectangle3
+                    x: 0
+                    y: 120
+                    height: 120
+                    color: "#00000000"
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+
+                    Rectangle {
+                        id: page2indicator
+                        width: 6
+                        color: "#4999c9"
+                        anchors.left: parent.left
+                        anchors.bottom: parent.bottom
+                        anchors.top: parent.top
+                    }
+                    Column {
+                        id: page2buttonHeader
+                        x: 25
+                        y: 32
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.left: parent.left
+                        anchors.leftMargin: 25
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("Система")
+                            font.pointSize: 20
+                            font.family: "URW Gothic L"
+                        }
+
+                        Row {
+                            id: page2buttonInfo
+                            spacing: 3
+                            anchors.right: parent.right
+
+                            Image {
+                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
+                                                                             stateView.FullSetWarningLevel == 1 ?
+                                                                                 "Slices/FullSet-Small-Warning.png" :
+                                                                                 "Slices/FullSet-Small-Error.png"
+                            }
+                            Image {
+                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
+                            }
+                            Image {
+                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
+                                                                  stateView.IsEpvReady ?
+                                                                      "Slices/Epv-Small-Ok.png" :
+                                                                      "Slices/Epv-Small-NotReady.png"
+                            }
+                            Image {
+                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
+                                                                             stateView.SystemWarningLevel == 1 ?
+                                                                                 "Slices/System-Medium-Warning.png" :
+                                                                                 "Slices/System-Medium-Error.png"
+                            }
+                        }
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: switchPage(2)
+                    }
+            }
+
+            Rectangle {
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
+                Rectangle {
+                    width: 6
+                    color: "#4999c9"
+                    anchors.left: parent.left
+                    anchors.bottom: parent.bottom
+                    anchors.top: parent.top
+                }
+            }
+
+        }
+
+    }
 
 }

@@ -4,7 +4,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     // fileds init start
-    speedValue = 48;
+    speedValue = 50;
     speedRestrictionValue = 65;
     longitudeValue = 60.47;
     latitudeValue = 56.883;
@@ -14,6 +14,11 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     pressureOkValue = true;
     epvReadyValue = true;
     epvReleasedValue = false;
+    propertyView = false;
+    light = 0;
+    time = "21:11";
+    date = "28 декабря 2012";
+    milage = 0;
     // fileds init end
 }
 
@@ -158,6 +163,58 @@ void SystemStateViewModel::setPropertyView(const bool value)
     {
         propertyView = value;
         emit PropertyViewChanged();
+    }
+}
+
+const int SystemStateViewModel::getLight() const
+{
+    return light;
+}
+void SystemStateViewModel::setLight(const int value)
+{
+    if (light != value)
+    {
+        light = value;
+        emit LightChanged();
+    }
+}
+
+const QString SystemStateViewModel::getTime() const
+{
+    return time;
+}
+void SystemStateViewModel::setTime(const QString value)
+{
+    if (time != value)
+    {
+        time = value;
+        emit TimeChanged();
+    }
+}
+
+const QString SystemStateViewModel::getDate() const
+{
+    return date;
+}
+void SystemStateViewModel::setDate(const QString value)
+{
+    if (date != value)
+    {
+        date = value;
+        emit DateChanged();
+    }
+}
+
+const int SystemStateViewModel::getMilage() const
+{
+    return milage;
+}
+void SystemStateViewModel::setMilage(const int value)
+{
+    if (milage != value)
+    {
+        milage = value;
+        emit MilageChanged();
     }
 }
 

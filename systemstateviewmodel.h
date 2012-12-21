@@ -41,6 +41,18 @@ class SystemStateViewModel : public QDeclarativeItem
     bool propertyView;
     Q_PROPERTY(bool PropertyView READ getPropertyView WRITE setPropertyView NOTIFY PropertyViewChanged)
 
+    int light;
+    Q_PROPERTY(int Light READ getLight WRITE setLight NOTIFY LightChanged)
+
+    QString time;
+    Q_PROPERTY(QString Time READ getTime WRITE setTime NOTIFY TimeChanged)
+
+    QString date;
+    Q_PROPERTY(QString Date READ getDate WRITE setDate NOTIFY DateChanged)
+
+    int milage;
+    Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
+
     // private properties end
 
 public:
@@ -80,6 +92,18 @@ public:
     const bool getPropertyView() const;
     void setPropertyView(const bool);
 
+    const int getLight() const;
+    void setLight(const int);
+
+    const QString getTime() const;
+    void setTime(const QString);
+
+    const QString getDate() const;
+    void setDate(const QString);
+
+    const int getMilage() const;
+    void setMilage(const int);
+
     // public properties end
 
 signals:
@@ -95,6 +119,10 @@ signals:
     void IsEpvReadyChanged();
     void IsEpvReleasedChanged();
     void PropertyViewChanged();
+    void LightChanged();
+    void TimeChanged();
+    void DateChanged();
+    void MilageChanged();
     // properties signals end
 
 public slots:

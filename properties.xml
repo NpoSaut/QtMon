@@ -1,0 +1,19 @@
+<Task>
+  <Properties>
+    <!-- Скорость и ограничения -->
+    <Property type="double" name="Speed" filed="speedValue" def="48" />
+    <Property type="double" name="SpeedRestriction" filed="speedRestrictionValue" def="65" />
+    <!-- GPS-координаты -->
+    <Property type="double" name="Longitude" filed="longitudeValue" def="60.148" />
+    <Property type="double" name="Latitude" filed="latitudeValue" def="56.856" />
+    <!-- Бдительность -->
+    <Property type="bool" name="IsVigilanceRequired" filed="vigilanceRequiredValue" def="true" />
+    <!-- Состояние системы -->
+    <Property type="int" name="SystemWarningLevel" filed="systemWarningLevelValue" def="0" />
+    <Property type="int" name="FullSetWarningLevel" filed="fullSetWarningLevelValue" def="0" />
+    <Property type="bool" name="IsPressureOk" filed="pressureOkValue" def="true" />
+    <Property type="bool" name="IsEpvReady" filed="epvReadyValue" def="true" />
+    <Property type="bool" name="IsEpvReleased" filed="epvReleasedValue" def="false" />
+    <Property type="bool" name="PropertyView" filed="propertyView" def="false" />
+  </Properties>
+</Task>

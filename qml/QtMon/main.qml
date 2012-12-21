@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 80
+    property double maxSpeed: 100
 
     function switchPage(i) {
         if (i == 1) {
@@ -62,21 +62,23 @@ Rectangle {
     states: [
         State {
             name: "page1"
+            when: (stateView.PropertyView == false)
             PropertyChanges { target: page1indicator; width: 12 }
             PropertyChanges { target: page2indicator; width: 6 }
             PropertyChanges { target: pagesContainer; y: 0 }
 
             PropertyChanges { target: page1buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.01 }
+            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.0 }
         },
         State {
             name: "page2"
+            when: (stateView.PropertyView == true)
             PropertyChanges { target: page1indicator; width: 6 }
             PropertyChanges { target: page2indicator; width: 12 }
             PropertyChanges { target: pagesContainer; y: -480 }
 
             PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.01 }
+            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
         }
     ]
 
@@ -112,10 +114,10 @@ Rectangle {
                 clip: true
 
                 Image {
-                    property double leftCoordinate: 60
-                    property double topCoordinate: 57
-                    property double rightCoordinate: 60.5
-                    property double bottomCoordinate: 56.8
+                    property double leftCoordinate: 60.226
+                    property double topCoordinate: 56.942
+                    property double rightCoordinate: 60.561
+                    property double bottomCoordinate: 56.791
 
                     property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
                     property double verticalDensity: height/(bottomCoordinate - topCoordinate)
@@ -124,14 +126,17 @@ Rectangle {
                     x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
                     y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
-                    source: "Slices/map.svg"
+                    Behavior on x { SmoothedAnimation { duration: 1000 } }
+                    Behavior on y { SmoothedAnimation { duration: 1000 } }
+
+                    source: "Slices/map.png"
                     asynchronous: true
 
-    //                MouseArea {
-    //                    enabled: false
-    //                    anchors.fill: parent
-    //                    drag.target: parent; drag.axis: Drag.XandYAxis;
-    //                }
+//                    MouseArea {
+//                        enabled: false
+//                        anchors.fill: parent
+//                        drag.target: parent; drag.axis: Drag.XandYAxis;
+//                    }
                 }
 
                 Image {
@@ -142,79 +147,185 @@ Rectangle {
                     source: "Slices/Cross.png"
                 }
 
+//                Image {
+//                    id: vigilanceSign
+//                    anchors.leftMargin: 15
+//                    anchors.topMargin: 15
+//                    anchors.left: parent.left
+//                    anchors.top: parent.top
+//                    source: "Slices/VigilanceSign.png"
+
+//                    state: stateView.IsVigilanceRequired ? "On" : "Off"
+//                    states: [
+//                        State {
+//                            name: "On"
+//                        },
+//                        State {
+//                            name: "Off"
+//                            PropertyChanges { target: vigilanceSign; opacity: 0.005; anchors.topMargin: 5 }
+//                        }
+//                    ]
+//                    transitions: Transition {
+//                        NumberAnimation { target: vigilanceSign; properties: "opacity"; easing.type: Easing.OutQuad; duration: 150 }
+//                        NumberAnimation { target: vigilanceSign; properties: "anchors.topMargin"; easing.type: Easing.OutElastic; duration: 700 }
+//                    }
+
+//                    MouseArea {
+//                        anchors.fill: parent
+//                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+//                    }
+//                }
                 Rectangle {
-                    y: parent.height - speedValueBar.height - height/2
-                    width: 60
-                    height: 48
+                    id: graduateBar
+
+                    x: -2
+                    y: 0
+                    width: 10
+                    height: rootRect.height
+
                     color: "#00000000"
-                    anchors.left: parent.left
 
                     Rectangle {
-                        x: 6
-                        y: -6
-                        gradient: Gradient {
-                            GradientStop {
-                                position: 0
-                                color: "#b4ffffff"
-                            }
+                        property int sp: 10
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
 
-                            GradientStop {
-                                position: 1
-                                color: "#00ffffff"
-                            }
-                        }
-                        width: parent.height
-                        height: parent.width
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        rotation: -90
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
                     }
+                    Rectangle {
+                        property int sp: 20
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
 
-                    Column {
-                        anchors.fill: parent
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 30
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
 
-                        Text {
-                            id: speedValueLabel
-                            color: "#4999c9"
-                            text: stateView.Speed
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: 26
-                        }
-                        Text {
-                            color: "#4999c9"
-                            text: qsTr("км/ч")
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: 12
-                        }
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 40
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 50
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 60
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 70
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 80
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 90
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
+                    }
+                    Rectangle {
+                        property int sp: 100
+                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
+                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
+
+                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
+                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
+                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
                     }
                 }
 
-                Image {
-                    id: vigilanceSign
-                    anchors.leftMargin: 15
-                    anchors.topMargin: 15
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    source: "Slices/VigilanceSign.png"
+                Rectangle {
+                    id: hintBox
 
-                    state: stateView.IsVigilanceRequired ? "On" : "Off"
-                    states: [
-                        State {
-                            name: "On"
-                        },
-                        State {
-                            name: "Off"
-                            PropertyChanges { target: vigilanceSign; opacity: 0.005; anchors.topMargin: 5 }
-                        }
-                    ]
-                    transitions: Transition {
-                        NumberAnimation { target: vigilanceSign; properties: "opacity"; easing.type: Easing.OutQuad; duration: 150 }
-                        NumberAnimation { target: vigilanceSign; properties: "anchors.topMargin"; easing.type: Easing.OutElastic; duration: 700 }
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: background.height
+                    width: background.width
+
+                    color: "#00000000"
+
+                    Image {
+                        id: background
+                        source: "Slices/hint.png"
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+                    Text {
+                        text: stateView.Time;
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
+                    }
+
+                    Text {
+                        //text: stateView.Date;
+                        text: qsTr("21 декабря 2012");
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
+                    }
+
+                    Text {
+                        text: stateView.Milage + qsTr(" км");
+
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 2
+                        anchors.right: parent.right
+                        anchors.rightMargin: 16
+
+                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        color: "#2d2d2d";
                     }
                 }
             }
@@ -246,6 +357,7 @@ Rectangle {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     font.pixelSize: 24
+                    font.family: "URW Gothic L"
                 }
             }
         }
@@ -261,6 +373,8 @@ Rectangle {
 
 
     Rectangle {
+        id: panelLeft
+
         width: 145
         height: 480
         color: "#00000000"
@@ -269,7 +383,6 @@ Rectangle {
         anchors.top: parent.top
 
         Image {
-            id: image2
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.top: parent.top
@@ -277,176 +390,209 @@ Rectangle {
 
             Rectangle {
                 id: speedValueBar
-                x: 145
+                x: 144
                 y: 280
                 width: 7
                 height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
                 color: "#4999c9"
                 anchors.bottom: parent.bottom
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
+
+            Rectangle {
+                id: speedValueSubBar
+                x: 139
+                y: 280
+                width: 7
+                height: 58
+                color: "#4999c9"
+                anchors.bottom: parent.bottom
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
             }
 
             Rectangle {
                 id: restrictionBar
-                x: 145
+                x: 144
                 y: 0
                 width: 7
                 height: rootRect.height - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height)
                 color: "#c94949"
                 anchors.topMargin: 0
                 anchors.top: parent.top
+
+                Behavior on height { SmoothedAnimation { duration: 500 } }
             }
 
+            Rectangle {
+                id: restrictionSubBar
+                x: 139
+                y: 0
+                width: 7
+                height: 120
+                color: "#c94949"
+                anchors.topMargin: 0
+                anchors.top: parent.top
 
+                Behavior on height { SmoothedAnimation { duration: 500 } }
+            }
         }
 
         Column {
             id: restrictionBox
-            x: 7
-            y: 0
+
+            width: 140
             height: 120
-            anchors.right: parent.right
-            anchors.rightMargin: 5
+            anchors.top: parent.top
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.topMargin: 3
 
             Text {
-                color: "#c94949"
                 text: qsTr("ограничение")
-                font.pixelSize: 16
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 15
+
+                color: "#d3a44c"
+                font.pixelSize: 18
                 font.family: "URW Gothic L"
-                font.bold: true
+//                font.bold: true
             }
             Text {
-                color: "#c94949"
                 text: qsTr("скорости")
-                font.pixelSize: 16
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 10
+
+                color: "#d3a44c"
+                font.pixelSize: 18
                 font.family: "URW Gothic L"
-                font.bold: true
+//                font.bold: true
             }
             Text {
-                color: "#c94949"
                 text: stateView.SpeedRestriction
-                smooth: false
-                anchors.right: parent.right
-                horizontalAlignment: Text.AlignLeft
-                font.pixelSize: 48
-                font.family: "Arial"
-                font.bold: true
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 66
+
+                color: "#c94949"
+                font.pixelSize: 64
+                font.family: "URW Gothic L"
+//                font.bold: true
             }
             Text {
+                text: qsTr("км/ч ")
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+
                 color: "#c94949"
-                text: qsTr("км/ч")
-                anchors.right: parent.right
-                font.pixelSize: 16
+                font.pixelSize: 18
                 font.family: "URW Gothic L"
                 font.bold: true
             }
         }
 
         Rectangle {
-            x: 0
-            y: 120
-            height: 360
-            color: "#00000000"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: parent.right
+            id: lightStuff
+
+            width: 140
+            height: 300
             anchors.left: parent.left
-            anchors.leftMargin: 0
+            y: restrictionBox.height
 
 
+            color: "#00000000"
 
+            Image{
+                id: lightGreen
 
-
-
-            ListView {
-                id: lightsPanel
-                width: 126
-                height: 282
-                interactive: false
-                //interactive: false
-                anchors.verticalCenter: parent.verticalCenter
+                y: parent.height/6 * 1 - height / 2
+                transformOrigin: Item.Center
                 anchors.horizontalCenter: parent.horizontalCenter
-                focus: true
 
-                currentIndex: 2
-
-                highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-
-                delegate: Item {
-                    height: 52
-
-                    Rectangle {
-                        id: wrapper
-                        width: 116
-                        height: 52
-                        color: "#00000000"
-                        Image {
-                            id: lightOffImage
-                            source: "Slices/Light-Off.png"
-                        }
-                        Image {
-                            id: lightOnImage
-                            source: "Slices/Light-" + name + ".png"
-                            opacity: 0
-                        }
-
-                        state: lightState
-
-                        states: [
-                            State {
-                                name: "On"
-                                PropertyChanges { target: lightOnImage; opacity: 1 }
-                                PropertyChanges { target: lightOffImage; opacity: 0 }
-                            },
-                            State {
-                                name: "Off"
-                            }
-                        ]
-
-                        transitions: Transition {
-                            NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 200 }
-                        }
-                    }
-                }
-                model: ListModel {
-                    ListElement {
-                        name: "Green1"
-                        lightState: "On"
-                    }
-                    ListElement {
-                        name: "Yellow"
-                        lightState: "Off"
-                    }
-                    ListElement {
-                        name: "YellowRed"
-                        lightState: "On"
-                    }
-                    ListElement {
-                        name: "Red"
-                        lightState: "Off"
-                    }
-                    ListElement {
-                        name: "White"
-                        lightState: "Off"
-                    }
-                }
-
-                states: [
-                    State {
-                        name: "Green1"
-                        PropertyChanges { target: lightOnImage; opacity: 1 }
-                        PropertyChanges { target: lightOffImage; opacity: 0 }
-                    }
-                ]
+                source: (stateView.Light === 4 ? "Slices/Light-Green.png" : "Slices/Light-Off.png")
             }
+            Image{
+                id: lightYellow
 
+                y: parent.height/6 * 2 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
 
+                source: (stateView.Light === 3 ? "Slices/Light-Yellow.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightYellowRed
 
+                y: parent.height/6 * 3 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                source: (stateView.Light === 2 ? "Slices/Light-YellowRed.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightRed
+
+                y: parent.height/6 * 4 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                source: (stateView.Light === 1 ? "Slices/Light-Red.png" : "Slices/Light-Off.png")
+            }
+            Image{
+                id: lightWhite
+
+                y: parent.height/6 * 5 - height / 2
+                transformOrigin: Item.Center
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                source: (stateView.Light === 0 ? "Slices/Light-White.png" : "Slices/Light-Off.png")
+            }
         }
+
+        Column {
+            id: speedBox
+
+            width: 140
+            height: 62 // ???
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+
+            Text {
+                text: stateView.Speed
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                height: 42
+
+                color: "#4999c9"
+                font.pixelSize: 40
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+            Text {
+                text: qsTr("км/ч ")
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+
+                color: "#4999c9"
+                font.pixelSize: 14
+                font.family: "URW Gothic L"
+//                font.bold: true
+            }
+        }
+
     }
 
     Rectangle {
+        id: panelRight
+
         x: 652
         y: 0
         width: 149
@@ -499,6 +645,7 @@ Rectangle {
                     anchors.leftMargin: 60
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 25
+                    font.family: "URW Gothic L"
                 }
 
                 Row {
@@ -518,6 +665,7 @@ Rectangle {
                         Text {
                             text: qsTr("25")
                             font.pointSize: 10
+                            font.family: "URW Gothic L"
                             verticalAlignment: Text.AlignVCenter
                             color: "#ffffff"
                             height: parent.height/3
@@ -525,6 +673,7 @@ Rectangle {
                         Text {
                             text: qsTr("50")
                             font.pointSize: 10
+                            font.family: "URW Gothic L"
                             verticalAlignment: Text.AlignVCenter
                             color: "#ffffff"
                             height: parent.height/3
@@ -532,6 +681,7 @@ Rectangle {
                         Text {
                             text: qsTr("75")
                             font.pointSize: 10
+                            font.family: "URW Gothic L"
                             verticalAlignment: Text.AlignVCenter
                             color: "#ffffff"
                             height: parent.height/3
@@ -569,18 +719,22 @@ Rectangle {
                         states: [
                             State {
                                 name: "alsn0"
+                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
                                 PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
                             },
                             State {
                                 name: "alsn25"
+                                when: (stateView.alsnFreq == 25)
                                 PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             },
                             State {
                                 name: "alsn50"
+                                when: (stateView.alsnFreq == 50)
                                 PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             },
                             State {
                                 name: "alsn75"
+                                when: (stateView.alsnFreq == 75)
                                 PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
                             }
                         ]
@@ -623,6 +777,7 @@ Rectangle {
                         color: "#ffffff"
                         text: qsTr("Текущее")
                         font.pointSize: 20
+                        font.family: "URW Gothic L"
                     }
 
                     Row {
@@ -633,22 +788,25 @@ Rectangle {
                             color: "#4999c9"
                             text: stateView.Speed
                             anchors.bottom: parent.bottom
-                            font.bold: true
+//                            font.bold: true
                             font.pointSize: 17
+                            font.family: "URW Gothic L"
                         }
                         Text {
                             color: "#ffffff"
                             text: qsTr("/")
                             anchors.bottom: parent.bottom
-                            font.bold: true
+//                            font.bold: true
                             font.pointSize: 14
+                            font.family: "URW Gothic L"
                         }
                         Text {
                             color: "#c94949"
                             text: stateView.SpeedRestriction
                             anchors.bottom: parent.bottom
-                            font.bold: true
+//                            font.bold: true
                             font.pointSize: 14
+                            font.family: "URW Gothic L"
                         }
                         }
                 }
@@ -688,6 +846,7 @@ Rectangle {
                             color: "#ffffff"
                             text: qsTr("Система")
                             font.pointSize: 20
+                            font.family: "URW Gothic L"
                         }
 
                         Row {
@@ -696,16 +855,25 @@ Rectangle {
                             anchors.right: parent.right
 
                             Image {
-                                source: "Slices/FullSet-Small-Ok.png"
+                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
+                                                                             stateView.FullSetWarningLevel == 1 ?
+                                                                                 "Slices/FullSet-Small-Warning.png" :
+                                                                                 "Slices/FullSet-Small-Error.png"
                             }
                             Image {
-                                source: "Slices/Pressure-Small-Ok.png"
+                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
                             }
                             Image {
-                                source: "Slices/Epv-Small-Ok.png"
+                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
+                                                                  stateView.IsEpvReady ?
+                                                                      "Slices/Epv-Small-Ok.png" :
+                                                                      "Slices/Epv-Small-NotReady.png"
                             }
                             Image {
-                                source: "Slices/System-Medium-Ok.png"
+                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
+                                                                             stateView.SystemWarningLevel == 1 ?
+                                                                                 "Slices/System-Medium-Warning.png" :
+                                                                                 "Slices/System-Medium-Error.png"
                             }
                         }
                     }

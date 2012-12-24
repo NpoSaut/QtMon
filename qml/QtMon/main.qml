@@ -497,63 +497,63 @@ Rectangle {
             }
         }
 
-        Rectangle {
-            id: lightStuff
+//        Rectangle {
+//            id: lightStuff
 
-            width: 140
-            height: 300
-            anchors.left: parent.left
-            y: restrictionBox.height
+//            width: 140
+//            height: 300
+//            anchors.left: parent.left
+//            y: restrictionBox.height
 
 
-            color: "#00000000"
+//            color: "#00000000"
 
-            Image{
-                id: lightGreen
+//            Image{
+//                id: lightGreen
 
-                y: parent.height/6 * 1 - height / 2
-                transformOrigin: Item.Center
-                anchors.horizontalCenter: parent.horizontalCenter
+//                y: parent.height/6 * 1 - height / 2
+//                transformOrigin: Item.Center
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                source: (stateView.Light === 4 ? "Slices/Light-Green.png" : "Slices/Light-Off.png")
-            }
-            Image{
-                id: lightYellow
+//                source: (stateView.Light === 4 ? "Slices/Light-Green.png" : "Slices/Light-Off.png")
+//            }
+//            Image{
+//                id: lightYellow
 
-                y: parent.height/6 * 2 - height / 2
-                transformOrigin: Item.Center
-                anchors.horizontalCenter: parent.horizontalCenter
+//                y: parent.height/6 * 2 - height / 2
+//                transformOrigin: Item.Center
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                source: (stateView.Light === 3 ? "Slices/Light-Yellow.png" : "Slices/Light-Off.png")
-            }
-            Image{
-                id: lightYellowRed
+//                source: (stateView.Light === 3 ? "Slices/Light-Yellow.png" : "Slices/Light-Off.png")
+//            }
+//            Image{
+//                id: lightYellowRed
 
-                y: parent.height/6 * 3 - height / 2
-                transformOrigin: Item.Center
-                anchors.horizontalCenter: parent.horizontalCenter
+//                y: parent.height/6 * 3 - height / 2
+//                transformOrigin: Item.Center
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                source: (stateView.Light === 2 ? "Slices/Light-YellowRed.png" : "Slices/Light-Off.png")
-            }
-            Image{
-                id: lightRed
+//                source: (stateView.Light === 2 ? "Slices/Light-YellowRed.png" : "Slices/Light-Off.png")
+//            }
+//            Image{
+//                id: lightRed
 
-                y: parent.height/6 * 4 - height / 2
-                transformOrigin: Item.Center
-                anchors.horizontalCenter: parent.horizontalCenter
+//                y: parent.height/6 * 4 - height / 2
+//                transformOrigin: Item.Center
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                source: (stateView.Light === 1 ? "Slices/Light-Red.png" : "Slices/Light-Off.png")
-            }
-            Image{
-                id: lightWhite
+//                source: (stateView.Light === 1 ? "Slices/Light-Red.png" : "Slices/Light-Off.png")
+//            }
+//            Image{
+//                id: lightWhite
 
-                y: parent.height/6 * 5 - height / 2
-                transformOrigin: Item.Center
-                anchors.horizontalCenter: parent.horizontalCenter
+//                y: parent.height/6 * 5 - height / 2
+//                transformOrigin: Item.Center
+//                anchors.horizontalCenter: parent.horizontalCenter
 
-                source: (stateView.Light === 0 ? "Slices/Light-White.png" : "Slices/Light-Off.png")
-            }
-        }
+//                source: (stateView.Light === 0 ? "Slices/Light-White.png" : "Slices/Light-Off.png")
+//            }
+//        }
 
         Column {
             id: speedBox

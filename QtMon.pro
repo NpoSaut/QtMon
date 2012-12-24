@@ -23,8 +23,7 @@ SOURCES += main.cpp \
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
-RESOURCES += \
-    res.qrc
+RESOURCES +=
 
 OTHER_FILES += \
     properties.xml
@@ -34,3 +33,5 @@ HEADERS += \
     sktcanl/src/sktcanl.h
 
 CONFIG += console
+
+#DEFINES += DEBUG

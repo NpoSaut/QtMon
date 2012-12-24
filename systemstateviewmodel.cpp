@@ -4,231 +4,245 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     // fileds init start
-    speedValue = 50;
-    speedRestrictionValue = 65;
-    longitudeValue = 60.47;
-    latitudeValue = 56.883;
-    vigilanceRequiredValue = true;
-    systemWarningLevelValue = 0;
-    fullSetWarningLevelValue = 0;
-    pressureOkValue = true;
-    epvReadyValue = true;
-    epvReleasedValue = false;
-    propertyView = false;
-    light = 0;
-    time = "21:11";
-    date = "28 декабря 2012";
-    milage = 0;
-    alsnFreq = 25;
+    getspeedValue = 48;
+    getspeedRestrictionValue = 65;
+    getlongitudeValue = 60.148;
+    getlatitudeValue = 56.856;
+    getisVigilanceRequiredValue = true;
+    getsystemWarningLevelValue = 0;
+    getfullSetWarningLevelValue = 0;
+    getisPressureOkValue = true;
+    getisEpvReadyValue = true;
+    getisEpvReleasedValue = false;
+    getmilageValue = 0;
+    getlightValue = 0;
+    getalsnFreqValue = 25;
+    gettimeValue = "18:58";
+    getdateValue = "21.12.2012";
+    getpropertyViewValue = false;
     // fileds init end
 }
 
 // -- start: Properties Getters and Setters --
+// Текущая скорость
 const double SystemStateViewModel::getSpeed() const
 {
-    return speedValue;
+    return getspeedValue;
 }
 void SystemStateViewModel::setSpeed(const double value)
 {
-    if (speedValue != value)
+    if (getspeedValue != value)
     {
-        speedValue = value;
+        getspeedValue = value;
         emit SpeedChanged();
     }
 }
 
+// Ограничение скорости
 const double SystemStateViewModel::getSpeedRestriction() const
 {
-    return speedRestrictionValue;
+    return getspeedRestrictionValue;
 }
 void SystemStateViewModel::setSpeedRestriction(const double value)
 {
-    if (speedRestrictionValue != value)
+    if (getspeedRestrictionValue != value)
     {
-        speedRestrictionValue = value;
+        getspeedRestrictionValue = value;
         emit SpeedRestrictionChanged();
     }
 }
 
 const double SystemStateViewModel::getLongitude() const
 {
-    return longitudeValue;
+    return getlongitudeValue;
 }
 void SystemStateViewModel::setLongitude(const double value)
 {
-    if (longitudeValue != value)
+    if (getlongitudeValue != value)
     {
-        longitudeValue = value;
+        getlongitudeValue = value;
         emit LongitudeChanged();
     }
 }
 
 const double SystemStateViewModel::getLatitude() const
 {
-    return latitudeValue;
+    return getlatitudeValue;
 }
 void SystemStateViewModel::setLatitude(const double value)
 {
-    if (latitudeValue != value)
+    if (getlatitudeValue != value)
     {
-        latitudeValue = value;
+        getlatitudeValue = value;
         emit LatitudeChanged();
     }
 }
 
+// Необходимость подтверждения бдительности
 const bool SystemStateViewModel::getIsVigilanceRequired() const
 {
-    return vigilanceRequiredValue;
+    return getisVigilanceRequiredValue;
 }
 void SystemStateViewModel::setIsVigilanceRequired(const bool value)
 {
-    if (vigilanceRequiredValue != value)
+    if (getisVigilanceRequiredValue != value)
     {
-        vigilanceRequiredValue = value;
+        getisVigilanceRequiredValue = value;
         emit IsVigilanceRequiredChanged();
     }
 }
 
+// Общий уровень предупреждений
 const int SystemStateViewModel::getSystemWarningLevel() const
 {
-    return systemWarningLevelValue;
+    return getsystemWarningLevelValue;
 }
 void SystemStateViewModel::setSystemWarningLevel(const int value)
 {
-    if (systemWarningLevelValue != value)
+    if (getsystemWarningLevelValue != value)
     {
-        systemWarningLevelValue = value;
+        getsystemWarningLevelValue = value;
         emit SystemWarningLevelChanged();
     }
 }
 
+// Укомплектованность конфигурации
 const int SystemStateViewModel::getFullSetWarningLevel() const
 {
-    return fullSetWarningLevelValue;
+    return getfullSetWarningLevelValue;
 }
 void SystemStateViewModel::setFullSetWarningLevel(const int value)
 {
-    if (fullSetWarningLevelValue != value)
+    if (getfullSetWarningLevelValue != value)
     {
-        fullSetWarningLevelValue = value;
+        getfullSetWarningLevelValue = value;
         emit FullSetWarningLevelChanged();
     }
 }
 
+// Давление в норме
 const bool SystemStateViewModel::getIsPressureOk() const
 {
-    return pressureOkValue;
+    return getisPressureOkValue;
 }
 void SystemStateViewModel::setIsPressureOk(const bool value)
 {
-    if (pressureOkValue != value)
+    if (getisPressureOkValue != value)
     {
-        pressureOkValue = value;
+        getisPressureOkValue = value;
         emit IsPressureOkChanged();
     }
 }
 
+// Готовность ЭПК
 const bool SystemStateViewModel::getIsEpvReady() const
 {
-    return epvReadyValue;
+    return getisEpvReadyValue;
 }
 void SystemStateViewModel::setIsEpvReady(const bool value)
 {
-    if (epvReadyValue != value)
+    if (getisEpvReadyValue != value)
     {
-        epvReadyValue = value;
+        getisEpvReadyValue = value;
         emit IsEpvReadyChanged();
     }
 }
 
+// Признак срыва ЭПК
 const bool SystemStateViewModel::getIsEpvReleased() const
 {
-    return epvReleasedValue;
+    return getisEpvReleasedValue;
 }
 void SystemStateViewModel::setIsEpvReleased(const bool value)
 {
-    if (epvReleasedValue != value)
+    if (getisEpvReleasedValue != value)
     {
-        epvReleasedValue = value;
+        getisEpvReleasedValue = value;
         emit IsEpvReleasedChanged();
     }
 }
 
-const bool SystemStateViewModel::getPropertyView() const
-{
-    return propertyView;
-}
-void SystemStateViewModel::setPropertyView(const bool value)
-{
-    if (propertyView != value)
-    {
-        propertyView = value;
-        emit PropertyViewChanged();
-    }
-}
-
-const int SystemStateViewModel::getLight() const
-{
-    return light;
-}
-void SystemStateViewModel::setLight(const int value)
-{
-    if (light != value)
-    {
-        light = value;
-        emit LightChanged();
-    }
-}
-
-const QString SystemStateViewModel::getTime() const
-{
-    return time;
-}
-void SystemStateViewModel::setTime(const QString value)
-{
-    if (time != value)
-    {
-        time = value;
-        emit TimeChanged();
-    }
-}
-
-const QString SystemStateViewModel::getDate() const
-{
-    return date;
-}
-void SystemStateViewModel::setDate(const QString value)
-{
-    if (date != value)
-    {
-        date = value;
-        emit DateChanged();
-    }
-}
-
+// Проиденное расстояние
 const int SystemStateViewModel::getMilage() const
 {
-    return milage;
+    return getmilageValue;
 }
 void SystemStateViewModel::setMilage(const int value)
 {
-    if (milage != value)
+    if (getmilageValue != value)
     {
-        milage = value;
+        getmilageValue = value;
         emit MilageChanged();
     }
 }
 
+// Код сигнала светофора (0 - К, 1 - КЖ, ...)
+const int SystemStateViewModel::getLight() const
+{
+    return getlightValue;
+}
+void SystemStateViewModel::setLight(const int value)
+{
+    if (getlightValue != value)
+    {
+        getlightValue = value;
+        emit LightChanged();
+    }
+}
+
+// Частота АЛСН
 const int SystemStateViewModel::getAlsnFreq() const
 {
-    return alsnFreq;
+    return getalsnFreqValue;
 }
 void SystemStateViewModel::setAlsnFreq(const int value)
 {
-    if (alsnFreq != value)
+    if (getalsnFreqValue != value)
     {
-        alsnFreq = value;
+        getalsnFreqValue = value;
         emit AlsnFreqChanged();
+    }
+}
+
+// Время
+const QString SystemStateViewModel::getTime() const
+{
+    return gettimeValue;
+}
+void SystemStateViewModel::setTime(const QString value)
+{
+    if (gettimeValue != value)
+    {
+        gettimeValue = value;
+        emit TimeChanged();
+    }
+}
+
+// Дата
+const QString SystemStateViewModel::getDate() const
+{
+    return getdateValue;
+}
+void SystemStateViewModel::setDate(const QString value)
+{
+    if (getdateValue != value)
+    {
+        getdateValue = value;
+        emit DateChanged();
+    }
+}
+
+// Неведомо чудо
+const bool SystemStateViewModel::getPropertyView() const
+{
+    return getpropertyViewValue;
+}
+void SystemStateViewModel::setPropertyView(const bool value)
+{
+    if (getpropertyViewValue != value)
+    {
+        getpropertyViewValue = value;
+        emit PropertyViewChanged();
     }
 }
 

@@ -1,19 +1,35 @@
 <Task>
+  <ClassInfo name="SystemStateViewModel" />
   <Properties>
     <!-- Скорость и ограничения -->
-    <Property type="double" name="Speed" filed="speedValue" def="48" />
-    <Property type="double" name="SpeedRestriction" filed="speedRestrictionValue" def="65" />
+    <Property type="double" name="Speed" def="48" description="Текущая скорость" />
+    <Property type="double" name="SpeedRestriction" def="65" description="Ограничение скорости" />
+    
     <!-- GPS-координаты -->
-    <Property type="double" name="Longitude" filed="longitudeValue" def="60.148" />
-    <Property type="double" name="Latitude" filed="latitudeValue" def="56.856" />
+    <Property type="double" name="Longitude" def="60.148" />
+    <Property type="double" name="Latitude" def="56.856" />
+    
     <!-- Бдительность -->
-    <Property type="bool" name="IsVigilanceRequired" filed="vigilanceRequiredValue" def="true" />
+    <Property type="bool" name="IsVigilanceRequired" def="true" description="Необходимость подтверждения бдительности" />
+    
     <!-- Состояние системы -->
-    <Property type="int" name="SystemWarningLevel" filed="systemWarningLevelValue" def="0" />
-    <Property type="int" name="FullSetWarningLevel" filed="fullSetWarningLevelValue" def="0" />
-    <Property type="bool" name="IsPressureOk" filed="pressureOkValue" def="true" />
-    <Property type="bool" name="IsEpvReady" filed="epvReadyValue" def="true" />
-    <Property type="bool" name="IsEpvReleased" filed="epvReleasedValue" def="false" />
-    <Property type="bool" name="PropertyView" filed="propertyView" def="false" />
+    <Property type="int" name="SystemWarningLevel" def="0" description="Общий уровень предупреждений" />
+    <Property type="int" name="FullSetWarningLevel" def="0" description="Укомплектованность конфигурации" />
+    <Property type="bool" name="IsPressureOk" def="true" description="Давление в норме" />
+    <Property type="bool" name="IsEpvReady" def="true" description="Готовность ЭПК" />
+    <Property type="bool" name="IsEpvReleased" def="false" description="Признак срыва ЭПК" /> 
+
+    <!-- Одометр -->
+    <Property type="int" name="Milage" def="0" description="Проиденное расстояние" />
+    
+    <!-- Светофорное -->
+    <Property type="int" name="Light" def="0" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
+    <Property type="int" name="AlsnFreq" def="25" description="Частота АЛСН" />
+
+    <!-- Дата и время -->
+    <Property type="QString" name="Time" def="&quot;18:58&quot;" description="Время" />
+    <Property type="QString" name="Date" def="&quot;21.12.2012&quot;" description="Дата" />
+    
+    <Property type="bool" name="PropertyView" def="false" description="Неведомо чудо" />
   </Properties>
 </Task>

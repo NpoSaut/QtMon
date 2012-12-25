@@ -139,12 +139,13 @@ Rectangle {
 //                    }
                 }
 
-                Image {
+                Text {
                     x: 534
                     y: 364
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    source: "Slices/Cross.png"
+                    //source: "Slices/Cross.png"
+                    text: stateView.Longitude + qsTr(":") + stateView.Latitude
                 }
 
 //                Image {

@@ -38,14 +38,14 @@ Nmea::Result Nmea::decodeRMC(QString message)
     // Lattitude, degrees
     double latd = fields.at(3).mid(0,2).toDouble();
     double latmmm = fields.at(3).mid(2,-1).toDouble();
-    double lat = latd + (1/60)*latmmm;
+    double lat = latd + latmmm/60;
     if (fields.at(4) == "S")
         lat = -lat;
 
     // Longitude, degrees
     double lond = fields.at(5).mid(0,3).toDouble();
     double lonmmm = fields.at(5).mid(3,-1).toDouble();
-    double lon = latd + (1/60)*latmmm;
+    double lon = lond + lonmmm/60;
     if (fields.at(6) == "W")
         lon = -lon;
 

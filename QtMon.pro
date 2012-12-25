@@ -17,7 +17,8 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     systemstateviewmodel.cpp \
-    sktcanl/src/sktcanl.cpp
+    sktcanl/src/sktcanl.cpp \
+    nmea.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -31,6 +32,7 @@ OTHER_FILES += \
 
 HEADERS += \
     systemstateviewmodel.h \
-    sktcanl/src/sktcanl.h
+    sktcanl/src/sktcanl.h \
+    nmea.h
 
 CONFIG += console

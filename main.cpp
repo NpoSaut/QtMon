@@ -6,8 +6,9 @@
 
 #include "sktcanl/src/sktcanl.h"
 #include <iostream>
+#include "nmea.h"
 
-SystemStateViewModel *systemState ;
+SystemStateViewModel *systemState;
 
 void getSpeed (double* speed)
 {
@@ -43,8 +44,8 @@ void getMilage (int* val)
 
 void getGps (double* lat, double* lon)
 {
-    systemState->setLongitude(*lon);
-    systemState->setLatitude(*lat);
+//    systemState->setLongitude(*lon);
+//    systemState->setLatitude(*lat);
 }
 
 void getDateTime (int* h, int* m, int* s)
@@ -101,8 +102,8 @@ void getParamsFromConsole ()
         {
             if (cmd.size() == 3)
             {
-                systemState->setLongitude( cmd.at(1).toDouble() );
-                systemState->setLatitude( cmd.at(2).toDouble() );
+//                systemState->setLongitude( cmd.at(1).toDouble() );
+//                systemState->setLatitude( cmd.at(2).toDouble() );
             }
             out << "Longitude: " << systemState->getLongitude()
                 << "; Lattitude: " << systemState->getLatitude() << endl;
@@ -142,8 +143,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
 
+    Nmea nmea (*systemState);
+    nmea.getNmeaPacket("$GPRMC,024606.590,A,5651.27857,N,06035.91777,E,0.0,0.0,241212,,,N*7D");
+
 //    QtConcurrent::run(getParamsFromConsole);
-    QtConcurrent::run(getParamsFromCan);
+//    QtConcurrent::run(getParamsFromCan);
 
     return app->exec();
 }

@@ -588,6 +588,82 @@ Rectangle {
             }
         }
 
+
+        ListView {
+            id: lightsPanel
+            x: 10
+            y: 132
+            width: 126
+            height: 280
+            interactive: false
+            anchors.horizontalCenter: parent.horizontalCenter
+            focus: true
+
+            currentIndex: 2
+
+            highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+
+            delegate: Item {
+                height: 52
+
+                Rectangle {
+                    width: 116
+                    height: 52
+                    color: "#00000000"
+                    Image {
+                        id: lightOffImage
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        source: "Slices/Light-Off.png"
+                    }
+                    Image {
+                        id: lightOnImage
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        source: "Slices/Light-" + name + ".png"
+                        opacity: 0
+                    }
+
+                    state: stateView.Light == permissiveIndex ? "On" : "Off"
+
+                    states: [
+                        State {
+                            name: "On"
+                            PropertyChanges { target: lightOnImage; opacity: 1 }
+                            PropertyChanges { target: lightOffImage; opacity: 0 }
+                        },
+                        State {
+                            name: "Off"
+                        }
+                    ]
+
+                    transitions: Transition {
+                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 200 }
+                    }
+                }
+            }
+            model: ListModel {
+                ListElement {
+                    name: "Green1"
+                    permissiveIndex: 3
+                }
+                ListElement {
+                    name: "Yellow"
+                    permissiveIndex: 2
+                }
+                ListElement {
+                    name: "YellowRed"
+                    permissiveIndex: 1
+                }
+                ListElement {
+                    name: "Red"
+                    permissiveIndex: 0
+                }
+                ListElement {
+                    name: "White"
+                    permissiveIndex: -1
+                }
+            }
+        }
+
     }
 
     Rectangle {

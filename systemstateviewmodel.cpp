@@ -247,3 +247,8 @@ void SystemStateViewModel::setPropertyView(const bool value)
 }
 
 // -- end: Properties Getters and Setters --
+
+
+
+
+

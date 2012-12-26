@@ -69,10 +69,8 @@ public:
     void setSpeedRestriction(const double);
 
     const double getLongitude() const;
-    void setLongitude(const double);
 
     const double getLatitude() const;
-    void setLatitude(const double);
 
     const bool getIsVigilanceRequired() const;
     void setIsVigilanceRequired(const bool);
@@ -99,10 +97,8 @@ public:
     void setLight(const int);
 
     const QString getTime() const;
-    void setTime(const QString);
 
     const QString getDate() const;
-    void setDate(const QString);
 
     const int getMilage() const;
     void setMilage(const int);
@@ -133,7 +129,10 @@ signals:
     // properties signals end
 
 public slots:
-    
+    void setLongitude(const double);
+    void setLatitude(const double);
+    void setTime(const QString);
+    void setDate(const QString);
 };
 
 #endif // SYSTEMSTATEVIEWMODEL_H

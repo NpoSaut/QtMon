@@ -9,6 +9,7 @@
 #include "nmea.h"
 
 SystemStateViewModel *systemState;
+Nmea* nmea = new Nmea();
 
 void getSpeed (double* speed)
 {
@@ -143,8 +144,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
 
-    Nmea nmea (*systemState);
-    nmea.getNmeaPacket("$GPRMC,024606.590,A,5651.27857,N,06035.91777,E,0.0,0.0,241212,,,N*7D");
+    QObject::connect(nmea, SIGNAL(DateChanged(QString)), systemState, SLOT(setDate(QString)));
+    QObject::connect(nmea, SIGNAL(TimeChanged(QString)), systemState, SLOT(setTime(QString)));
+    QObject::connect(nmea, SIGNAL(LattitudeChanged(double)), systemState, SLOT(setLatitude(double)));
+    QObject::connect(nmea, SIGNAL(LongitudeChanged(double)), systemState, SLOT(setLongitude(double)));
+
+    nmea->getNmeaPacket("$GPRMC,024606.590,A,5651.27857,N,06035.91777,E,0.0,0.0,241212,,,N*7D");
 
 //    QtConcurrent::run(getParamsFromConsole);
 //    QtConcurrent::run(getParamsFromCan);

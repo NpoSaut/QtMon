@@ -1,23 +1,32 @@
 #ifndef NMEA_H
 #define NMEA_H
 
+#include <QObject>
 #include <QString>
-#include "systemstateviewmodel.h"
 
-class Nmea
+class Nmea : public QObject
 {
+    Q_OBJECT
+
 public:
-    Nmea(SystemStateViewModel& viewModel);
+//    Nmea (QObject* parent);
+
+public slots:
     void getNmeaPacket (QString message);
 
 private:
-    SystemStateViewModel& viewModel;
     enum Result
     {
         SUCCESS = 1
     };
 
     Result decodeRMC (QString message);
+
+signals:
+    void LattitudeChanged (const double lat);
+    void LongitudeChanged (const double lon);
+    void DateChanged (const QString date);
+    void TimeChanged (const QString time);
 };
 
 #endif // NMEA_H

@@ -1,11 +1,10 @@
 #include "nmea.h"
-#include "systemstateviewmodel.h"
 #include <QStringList>
 
-Nmea::Nmea(SystemStateViewModel& viewModel)
-    :viewModel (viewModel)
-{
-}
+//Nmea::Nmea (QObject* parent)
+//    : QObject(parent)
+//{
+//}
 
 void Nmea::getNmeaPacket (QString packet)
 {
@@ -49,17 +48,17 @@ Nmea::Result Nmea::decodeRMC(QString message)
     if (fields.at(6) == "W")
         lon = -lon;
 
-    // Push data to viewModel
+    // Emit new data signals
     if (IsReliable)
     {
         QString time = QString("%1:%2:%3").arg(dth, 2, '0').arg(dtm, 2, '0').arg(dts, 2, '0');
-        viewModel.setTime(time);
+        emit TimeChanged(time);
 
         QString date = QString("%1/%2/%3").arg(dtd, 2, '0').arg(dtmn, 2, '0').arg(dty, 2, '0');
-        viewModel.setTime(date);
+        emit DateChanged(date);
 
-        viewModel.setLatitude(lat);
-        viewModel.setLongitude(lon);
+        emit LattitudeChanged(lat);
+        emit LongitudeChanged(lon);
     }
     return SUCCESS;
 }

@@ -117,56 +117,61 @@ Rectangle {
                     id: mapContainer
                     anchors.fill: parent
 
-                    Image {
-                        property int horizontalIndex: 5472
-                        property int verticalIndex: 2514
+                    property double zeroTileLeft: 60.4689
+                    property double zeroTileTop: 56.8970
+                    property double zeroTileRight: 60.5125
+                    property double zeroTileBottom: 56.8732
 
-                        property double tileWidth: 60.5125 - 60.4689
-                        property double tileHeight: 56.8732 - 56.8970
+                    property int zeroTileHorizontalIndex: 5472
+                    property int zeroTileVertivalIndex: 2514
 
-                        property double leftCoordinate: 60.4689 + (horizontalIndex - 5472) * tileWidth
-                        property double topCoordinate: 56.8970 + (verticalIndex - 2514) * tileHeight
-                        property double rightCoordinate: leftCoordinate + tileWidth
-                        property double bottomCoordinate: topCoordinate + tileHeight
+                    property double tileWidth: zeroTileRight - zeroTileLeft
+                    property double tileHeight: zeroTileBottom - zeroTileTop
 
-                        property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
-                        property double verticalDensity: height/(bottomCoordinate - topCoordinate)
+                    Repeater {
+                        model: 12
+                        Image {
+                            property int relativeVerticalIndex: (index / 4) - 1
+                            property int relativeHorizontalIndex: (index % 4) - 1
+
+                            property int horizontalIndex: mapContainer.zeroTileHorizontalIndex + relativeHorizontalIndex
+                            property int verticalIndex: mapContainer.zeroTileVertivalIndex + relativeVerticalIndex
+
+                            property double leftCoordinate: mapContainer.zeroTileLeft + relativeHorizontalIndex * mapContainer.tileWidth
+                            property double topCoordinate: mapContainer.zeroTileTop + relativeVerticalIndex * mapContainer.tileHeight
+
+                            property double rightCoordinate: leftCoordinate + mapContainer.tileWidth
+                            property double bottomCoordinate: topCoordinate + mapContainer.tileHeight
+
+                            property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
+                            property double verticalDensity: height/(bottomCoordinate - topCoordinate)
 
 
-                        x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
-                        y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
+                            x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
+                            y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
-                        //Behavior on x { SmoothedAnimation { duration: 1000 } }
-                        //Behavior on y { SmoothedAnimation { duration: 1000 } }
+                            source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            asynchronous: true
 
-                        source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
-                        asynchronous: true
+                            Column
+                            {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
+                                Text {
+                                    text: parent.parent.relativeHorizontalIndex + "  " + parent.parent.relativeVerticalIndex
+                                }
+                                Text {
+                                    text: parent.parent.horizontalIndex + "  " + parent.parent.verticalIndex
+                                }
+                            }
+
+
+                            //Behavior on x { SmoothedAnimation { duration: 1000 } }
+                            //Behavior on y { SmoothedAnimation { duration: 1000 } }
+                        }
                     }
-                    Image {
-                        property int horizontalIndex: 5471
-                        property int verticalIndex: 2514
-
-                        property double tileWidth: 60.5125 - 60.4689
-                        property double tileHeight: 56.8732 - 56.8970
-
-                        property double leftCoordinate: 60.4689 + (horizontalIndex - 5472) * tileWidth
-                        property double topCoordinate: 56.8970 + (verticalIndex - 2514) * tileHeight
-                        property double rightCoordinate: leftCoordinate + tileWidth
-                        property double bottomCoordinate: topCoordinate + tileHeight
-
-                        property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
-                        property double verticalDensity: height/(bottomCoordinate - topCoordinate)
 
 
-                        x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
-                        y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
-
-                        //Behavior on x { SmoothedAnimation { duration: 1000 } }
-                        //Behavior on y { SmoothedAnimation { duration: 1000 } }
-
-                        source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
-                        asynchronous: true
-                    }
                 }
 
                 Image {

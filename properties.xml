@@ -6,8 +6,8 @@
     <Property type="double" name="SpeedRestriction" def="65" description="Ограничение скорости" />
     
     <!-- GPS-координаты -->
-    <Property type="double" name="Longitude" def="60.148" />
-    <Property type="double" name="Latitude" def="56.856" />
+    <Property type="double" name="Longitude" def="60.4688" />
+    <Property type="double" name="Latitude" def="56.88397" />
     
     <!-- Бдительность -->
     <Property type="bool" name="IsVigilanceRequired" def="true" description="Необходимость подтверждения бдительности" />

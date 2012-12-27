@@ -113,30 +113,60 @@ Rectangle {
                 anchors.leftMargin: 0
                 clip: true
 
-                Image {
-                    property double leftCoordinate: 60.226
-                    property double topCoordinate: 56.942
-                    property double rightCoordinate: 60.561
-                    property double bottomCoordinate: 56.791
+                Rectangle {
+                    id: mapContainer
+                    anchors.fill: parent
 
-                    property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
-                    property double verticalDensity: height/(bottomCoordinate - topCoordinate)
+                    Image {
+                        property int horizontalIndex: 5472
+                        property int verticalIndex: 2514
+
+                        property double tileWidth: 60.5125 - 60.4689
+                        property double tileHeight: 56.8732 - 56.8970
+
+                        property double leftCoordinate: 60.4689 + (horizontalIndex - 5472) * tileWidth
+                        property double topCoordinate: 56.8970 + (verticalIndex - 2514) * tileHeight
+                        property double rightCoordinate: leftCoordinate + tileWidth
+                        property double bottomCoordinate: topCoordinate + tileHeight
+
+                        property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
+                        property double verticalDensity: height/(bottomCoordinate - topCoordinate)
 
 
-                    x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
-                    y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
+                        x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
+                        y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
 
-                    Behavior on x { SmoothedAnimation { duration: 1000 } }
-                    Behavior on y { SmoothedAnimation { duration: 1000 } }
+                        //Behavior on x { SmoothedAnimation { duration: 1000 } }
+                        //Behavior on y { SmoothedAnimation { duration: 1000 } }
 
-                    source: "Slices/map.png"
-                    asynchronous: true
+                        source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                        asynchronous: true
+                    }
+                    Image {
+                        property int horizontalIndex: 5471
+                        property int verticalIndex: 2514
 
-//                    MouseArea {
-//                        enabled: false
-//                        anchors.fill: parent
-//                        drag.target: parent; drag.axis: Drag.XandYAxis;
-//                    }
+                        property double tileWidth: 60.5125 - 60.4689
+                        property double tileHeight: 56.8732 - 56.8970
+
+                        property double leftCoordinate: 60.4689 + (horizontalIndex - 5472) * tileWidth
+                        property double topCoordinate: 56.8970 + (verticalIndex - 2514) * tileHeight
+                        property double rightCoordinate: leftCoordinate + tileWidth
+                        property double bottomCoordinate: topCoordinate + tileHeight
+
+                        property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
+                        property double verticalDensity: height/(bottomCoordinate - topCoordinate)
+
+
+                        x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
+                        y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
+
+                        //Behavior on x { SmoothedAnimation { duration: 1000 } }
+                        //Behavior on y { SmoothedAnimation { duration: 1000 } }
+
+                        source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                        asynchronous: true
+                    }
                 }
 
                 Image {

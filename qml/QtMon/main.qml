@@ -601,23 +601,24 @@ Rectangle {
 
             currentIndex: 2
 
-            highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-
             delegate: Item {
                 height: 52
+                width: 116
 
                 Rectangle {
-                    width: 116
-                    height: 52
+                    anchors.fill: parent
                     color: "#00000000"
+
                     Image {
                         id: lightOffImage
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         source: "Slices/Light-Off.png"
                     }
                     Image {
                         id: lightOnImage
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                         source: "Slices/Light-" + name + ".png"
                         opacity: 0
                     }
@@ -636,7 +637,7 @@ Rectangle {
                     ]
 
                     transitions: Transition {
-                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 200 }
+                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
                     }
                 }
             }

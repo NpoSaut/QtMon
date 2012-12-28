@@ -53,6 +53,24 @@ Rectangle {
         }
     }
 
+
+    focus: true
+    Keys.onPressed: {
+        if (event.key == Qt.Key_F1) {
+            // Send CAN requset to change ALSN freq
+        }
+        else if (event.key == Qt.Key_F2) {
+            stateView.PropertyView = false;
+        }
+        else if (event.key == Qt.Key_F3) {
+            stateView.PropertyView = true;
+        }
+        else if (event.key == Qt.Key_F4) {
+            // Reserved
+        }
+    }
+
+
     SystemStateView {
         id: stateView
         objectName: "stateView"
@@ -539,7 +557,6 @@ Rectangle {
             height: 280
             interactive: false
             anchors.horizontalCenter: parent.horizontalCenter
-            focus: true
 
             currentIndex: 2
 
@@ -585,7 +602,7 @@ Rectangle {
             }
             model: ListModel {
                 ListElement {
-                    name: "Green1"
+                    name: "Green"
                     permissiveIndex: 3
                 }
                 ListElement {

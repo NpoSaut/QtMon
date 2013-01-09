@@ -75,7 +75,7 @@ Rectangle {
             when: (stateView.PropertyView == true)
             PropertyChanges { target: page1indicator; width: 6 }
             PropertyChanges { target: page2indicator; width: 12 }
-            PropertyChanges { target: pagesContainer; y: -480 }
+            PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
 
             PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
             PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
@@ -106,7 +106,7 @@ Rectangle {
             anchors.left: parent.left
             Rectangle {
                 id: page1container
-                height: 480
+                height: pagesArea.height
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
@@ -128,39 +128,61 @@ Rectangle {
                     property double tileWidth: zeroTileRight - zeroTileLeft
                     property double tileHeight: zeroTileBottom - zeroTileTop
 
+                    property double horizontalDensity: 256/(zeroTileRight - zeroTileLeft)
+                    property double verticalDensity: 256/(zeroTileBottom - zeroTileTop)
+
+                    function getHorizontalIndex(Longitude)
+                    {
+                        return Math.floor((Longitude - zeroTileLeft)/tileWidth) + zeroTileHorizontalIndex;
+                    }
+                    function getVerticalIndex(Latitude)
+                    {
+                        return Math.floor((Latitude - zeroTileTop)/tileHeight) + zeroTileVertivalIndex;
+                    }
+
+                    property int currentHorizontalIndex: getHorizontalIndex(stateView.Longitude)
+                    property int currentVerticalIndex: getVerticalIndex(stateView.Latitude)
+
+
                     Repeater {
-                        model: 12
+                        model:9
                         Image {
-                            property int relativeVerticalIndex: (index / 4) - 1
-                            property int relativeHorizontalIndex: (index % 4) - 1
+                            property int relativeHorizontalIndex: (index % 3) - 1
+                            property int relativeVerticalIndex: (Math.floor(index / 3)) - 1
 
-                            property int horizontalIndex: mapContainer.zeroTileHorizontalIndex + relativeHorizontalIndex
-                            property int verticalIndex: mapContainer.zeroTileVertivalIndex + relativeVerticalIndex
+                            property int horizontalIndex: mapContainer.currentHorizontalIndex + relativeHorizontalIndex
+                            property int verticalIndex: mapContainer.currentVerticalIndex + relativeVerticalIndex
 
-                            property double leftCoordinate: mapContainer.zeroTileLeft + relativeHorizontalIndex * mapContainer.tileWidth
-                            property double topCoordinate: mapContainer.zeroTileTop + relativeVerticalIndex * mapContainer.tileHeight
+                            property double leftCoordinate: mapContainer.zeroTileLeft + (mapContainer.currentHorizontalIndex + relativeHorizontalIndex - mapContainer.zeroTileHorizontalIndex) * mapContainer.tileWidth
+                            property double topCoordinate: mapContainer.zeroTileTop + (mapContainer.currentVerticalIndex + relativeVerticalIndex - mapContainer.zeroTileVertivalIndex) * mapContainer.tileHeight
 
-                            property double rightCoordinate: leftCoordinate + mapContainer.tileWidth
-                            property double bottomCoordinate: topCoordinate + mapContainer.tileHeight
-
-                            property double horizontalDensity: width/(rightCoordinate - leftCoordinate)
-                            property double verticalDensity: height/(bottomCoordinate - topCoordinate)
-
-
-                            x: (leftCoordinate -stateView.Longitude)*horizontalDensity + page1container.width/2
-                            y: (topCoordinate - stateView.Latitude)*verticalDensity + page1container.height/2
+                            x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
+                            y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
                             source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
-                            asynchronous: true
+                            //asynchronous: true
 
+                            Rectangle
+                            {
+                                color: "#00000000"
+                                border.color: "#ff00f7"
+                                anchors.fill: parent
+                            }
                             Column
                             {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
                                 Text {
+                                    color: "#ff00f7"
+                                    text: index
+                                    font.bold: true
+                                }
+                                Text {
+                                    color: "#ff00f7"
                                     text: parent.parent.relativeHorizontalIndex + "  " + parent.parent.relativeVerticalIndex
                                 }
                                 Text {
+                                    color: "#ff00f7"
                                     text: parent.parent.horizontalIndex + "  " + parent.parent.verticalIndex
                                 }
                             }
@@ -173,6 +195,11 @@ Rectangle {
 
 
                 }
+                Text {
+                    color: "#00428d"
+                    font.pointSize: 14
+                    text: "Center: " + mapContainer.currentHorizontalIndex + "  " + mapContainer.currentVerticalIndex
+                }
 
                 Image {
                     x: 534
@@ -182,34 +209,34 @@ Rectangle {
                     source: "Slices/Cross.png"
                 }
 
-//                Image {
-//                    id: vigilanceSign
-//                    anchors.leftMargin: 15
-//                    anchors.topMargin: 15
-//                    anchors.left: parent.left
-//                    anchors.top: parent.top
-//                    source: "Slices/VigilanceSign.png"
+                Image {
+                    id: vigilanceSign
+                    anchors.leftMargin: 15
+                    anchors.topMargin: 15
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    source: "Slices/VigilanceSign.png"
 
-//                    state: stateView.IsVigilanceRequired ? "On" : "Off"
-//                    states: [
-//                        State {
-//                            name: "On"
-//                        },
-//                        State {
-//                            name: "Off"
-//                            PropertyChanges { target: vigilanceSign; opacity: 0.005; anchors.topMargin: 5 }
-//                        }
-//                    ]
-//                    transitions: Transition {
-//                        NumberAnimation { target: vigilanceSign; properties: "opacity"; easing.type: Easing.OutQuad; duration: 150 }
-//                        NumberAnimation { target: vigilanceSign; properties: "anchors.topMargin"; easing.type: Easing.OutElastic; duration: 700 }
-//                    }
+                    state: stateView.IsVigilanceRequired ? "On" : "Off"
+                    states: [
+                        State {
+                            name: "On"
+                        },
+                        State {
+                            name: "Off"
+                            PropertyChanges { target: vigilanceSign; opacity: 0.005; anchors.topMargin: 5 }
+                        }
+                    ]
+                    transitions: Transition {
+                        NumberAnimation { target: vigilanceSign; properties: "opacity"; easing.type: Easing.OutQuad; duration: 150 }
+                        NumberAnimation { target: vigilanceSign; properties: "anchors.topMargin"; easing.type: Easing.OutElastic; duration: 700 }
+                    }
 
-//                    MouseArea {
-//                        anchors.fill: parent
-//                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
-//                    }
-//                }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+                    }
+                }
                 Rectangle {
                     id: graduateBar
 
@@ -366,8 +393,8 @@ Rectangle {
             }
 
             Rectangle {
-                id: rectangle1
-                height: 480
+                id: page2container
+                height: pagesArea.height
                 gradient: Gradient {
                     GradientStop {
                         position: 0
@@ -531,64 +558,6 @@ Rectangle {
                 font.bold: true
             }
         }
-
-//        Rectangle {
-//            id: lightStuff
-
-//            width: 140
-//            height: 300
-//            anchors.left: parent.left
-//            y: restrictionBox.height
-
-
-//            color: "#00000000"
-
-//            Image{
-//                id: lightGreen
-
-//                y: parent.height/6 * 1 - height / 2
-//                transformOrigin: Item.Center
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                source: (stateView.Light === 4 ? "Slices/Light-Green.png" : "Slices/Light-Off.png")
-//            }
-//            Image{
-//                id: lightYellow
-
-//                y: parent.height/6 * 2 - height / 2
-//                transformOrigin: Item.Center
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                source: (stateView.Light === 3 ? "Slices/Light-Yellow.png" : "Slices/Light-Off.png")
-//            }
-//            Image{
-//                id: lightYellowRed
-
-//                y: parent.height/6 * 3 - height / 2
-//                transformOrigin: Item.Center
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                source: (stateView.Light === 2 ? "Slices/Light-YellowRed.png" : "Slices/Light-Off.png")
-//            }
-//            Image{
-//                id: lightRed
-
-//                y: parent.height/6 * 4 - height / 2
-//                transformOrigin: Item.Center
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                source: (stateView.Light === 1 ? "Slices/Light-Red.png" : "Slices/Light-Off.png")
-//            }
-//            Image{
-//                id: lightWhite
-
-//                y: parent.height/6 * 5 - height / 2
-//                transformOrigin: Item.Center
-//                anchors.horizontalCenter: parent.horizontalCenter
-
-//                source: (stateView.Light === 0 ? "Slices/Light-White.png" : "Slices/Light-Off.png")
-//            }
-//        }
 
         Column {
             id: speedBox
@@ -846,6 +815,12 @@ Rectangle {
                         }
                 }
                 MouseArea {
+                    x: 0
+                    y: 0
+                    anchors.rightMargin: 0
+                    anchors.bottomMargin: 0
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 0
                     anchors.fill: parent
                     onPressed: switchPage(1)
                 }

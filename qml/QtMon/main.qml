@@ -117,31 +117,29 @@ Rectangle {
                     id: mapContainer
                     anchors.fill: parent
 
-                    property double zeroTileLeft: 60.4689
-                    property double zeroTileTop: 56.8970
-                    property double zeroTileRight: 60.5125
-                    property double zeroTileBottom: 56.8732
-
-                    property int zeroTileHorizontalIndex: 5472
-                    property int zeroTileVertivalIndex: 2514
-
-                    property double tileWidth: zeroTileRight - zeroTileLeft
-                    property double tileHeight: zeroTileBottom - zeroTileTop
-
-                    property double horizontalDensity: 256/(zeroTileRight - zeroTileLeft)
-                    property double verticalDensity: 256/(zeroTileBottom - zeroTileTop)
-
                     function getHorizontalIndex(Longitude)
                     {
-                        return Math.floor((Longitude - zeroTileLeft)/tileWidth) + zeroTileHorizontalIndex;
+                        return Math.floor( (Longitude + 180) / 360 * (1<<13) ) ;
                     }
                     function getVerticalIndex(Latitude)
                     {
-                        return Math.floor((Latitude - zeroTileTop)/tileHeight) + zeroTileVertivalIndex;
+                        return Math.floor((1 - Math.log(Math.tan(Math.PI * Latitude / 180) + 1 / Math.cos(Math.PI * Latitude / 180)) / Math.PI) / 2 * (1<<13));
+                    }
+                    function getLongitude(horizontalIndex)
+                    {
+                        return horizontalIndex / Math.pow(2.0, 13) * 360.0 - 180;
+                    }
+                    function getLatitude(verticalIndex)
+                    {
+                        var n = Math.PI - 2.0 * Math.PI * verticalIndex / Math.pow(2.0, 13);
+                        return 180.0 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
                     }
 
                     property int currentHorizontalIndex: getHorizontalIndex(stateView.Longitude)
                     property int currentVerticalIndex: getVerticalIndex(stateView.Latitude)
+
+                    property double horizontalDensity: 256/(getLongitude(currentHorizontalIndex + 1) - getLongitude(currentHorizontalIndex))
+                    property double verticalDensity: 256/(getLatitude(currentVerticalIndex + 1) - getLatitude(currentVerticalIndex))
 
 
                     Repeater {
@@ -153,8 +151,8 @@ Rectangle {
                             property int horizontalIndex: mapContainer.currentHorizontalIndex + relativeHorizontalIndex
                             property int verticalIndex: mapContainer.currentVerticalIndex + relativeVerticalIndex
 
-                            property double leftCoordinate: mapContainer.zeroTileLeft + (mapContainer.currentHorizontalIndex + relativeHorizontalIndex - mapContainer.zeroTileHorizontalIndex) * mapContainer.tileWidth
-                            property double topCoordinate: mapContainer.zeroTileTop + (mapContainer.currentVerticalIndex + relativeVerticalIndex - mapContainer.zeroTileVertivalIndex) * mapContainer.tileHeight
+                            property double leftCoordinate: mapContainer.getLongitude(horizontalIndex)
+                            property double topCoordinate: mapContainer.getLatitude(verticalIndex)
 
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
@@ -186,7 +184,6 @@ Rectangle {
                                     text: parent.parent.horizontalIndex + "  " + parent.parent.verticalIndex
                                 }
                             }
-
 
                             //Behavior on x { SmoothedAnimation { duration: 1000 } }
                             //Behavior on y { SmoothedAnimation { duration: 1000 } }

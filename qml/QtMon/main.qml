@@ -407,23 +407,23 @@ Rectangle {
             source: "Slices/Panel-Left.png"
 
             Rectangle {
-                id: speedValueBar
                 x: 144
-                y: 280
+                y: 0
                 width: 7
-                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
-                color: "#4999c9"
-                anchors.bottom: parent.bottom
+                height: rootRect.height
+                color: "#fff"
+                anchors.topMargin: 0
+                anchors.top: parent.top
 
                 Behavior on height { SmoothedAnimation { duration: 500 } }
             }
 
             Rectangle {
-                id: speedValueSubBar
-                x: 139
+                id: speedValueBar
+                x: 144
                 y: 280
                 width: 7
-                height: 58
+                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
                 color: "#4999c9"
                 anchors.bottom: parent.bottom
 
@@ -442,127 +442,105 @@ Rectangle {
 
                 Behavior on height { SmoothedAnimation { duration: 500 } }
             }
-
-            Rectangle {
-                id: restrictionSubBar
-                x: 139
-                y: 0
-                width: 7
-                height: 120
-                color: "#c94949"
-                anchors.topMargin: 0
-                anchors.top: parent.top
-
-                Behavior on height { SmoothedAnimation { duration: 500 } }
-            }
         }
 
-        Column {
-            id: restrictionBox
-
-            width: 140
-            height: 120
+        Rectangle {
+            height: 85
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 3
+            anchors.topMargin: 18
+            color: "#00000000"
+            anchors.right: parent.right
+            id: restrictionBox
 
-            Text {
-                text: qsTr("ограничение")
+            Repeater {
+                model: [ "#6c000000", "#c94949" ]
 
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                height: 15
+                Column {
+                    anchors.top: parent.top
+                    anchors.topMargin: 1-index
+                    anchors.right: parent.right
+                    anchors.rightMargin: index
 
-                color: "#d3a44c"
-                font.pixelSize: 18
-                font.family: "URW Gothic L"
-//                font.bold: true
-            }
-            Text {
-                text: qsTr("скорости")
+                    Text {
+                        text: stateView.SpeedRestriction
+                        anchors.right: parent.right
+                        color: modelData
+                        font.pointSize: 51.2
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                        height: 70
+                    }
+                    Text {
+                        text: qsTr("км/ч ")
 
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                height: 10
+                        anchors.right: parent.right
 
-                color: "#d3a44c"
-                font.pixelSize: 18
-                font.family: "URW Gothic L"
-//                font.bold: true
-            }
-            Text {
-                text: stateView.SpeedRestriction
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                height: 66
-
-                color: "#c94949"
-                font.pixelSize: 64
-                font.family: "URW Gothic L"
-//                font.bold: true
-            }
-            Text {
-                text: qsTr("км/ч ")
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                color: "#c94949"
-                font.pixelSize: 18
-                font.family: "URW Gothic L"
-                font.bold: true
+                        color: modelData
+                        font.pixelSize: 18
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
             }
         }
 
-        Column {
-            id: speedBox
-
-            width: 140
-            height: 62 // ???
+        Rectangle {
             anchors.bottom: parent.bottom
-            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            width: 70
+            height: 68
+            color: "#00000000"
+            id: speedBox
+            Repeater {
+                model: [ "#ff30759e", "#d8ffffff" ]
+                Column {
+                    y: index
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1-index
 
-            Text {
-                text: stateView.Speed
+                    Text {
+                        text: stateView.Speed
+                        anchors.right: parent.right
 
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                height: 42
+                        height: 42
 
-                color: "#4999c9"
-                font.pixelSize: 40
-                font.family: "URW Gothic L"
-//                font.bold: true
-            }
-            Text {
-                text: qsTr("км/ч ")
+                        color: modelData
+                        font.pointSize: 32
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                    Text {
+                        text: qsTr("км/ч ")
+                        anchors.right: parent.right
 
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                color: "#4999c9"
-                font.pixelSize: 14
-                font.family: "URW Gothic L"
-//                font.bold: true
+                        color: modelData
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
             }
         }
+
 
 
         ListView {
             id: lightsPanel
-            x: 10
-            y: 132
-            width: 126
+            x: 7
+            y: 123
+            width: 54
             height: 280
+            anchors.horizontalCenterOffset: -21
             interactive: false
             anchors.horizontalCenter: parent.horizontalCenter
 
             currentIndex: 2
 
             delegate: Item {
-                height: 52
-                width: 116
+                height: 55
+                width: 54
 
                 Rectangle {
                     anchors.fill: parent

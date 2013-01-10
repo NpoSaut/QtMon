@@ -15,12 +15,24 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="design3.svg"
+   sodipodi:docname="design.svg"
    inkscape:export-filename="/home/anton/design_test/all.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
      id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4921">
+      <stop
+         style="stop-color:#7d7d7d;stop-opacity:1"
+         offset="0"
+         id="stop4923" />
+      <stop
+         style="stop-color:#4a4a4a;stop-opacity:1"
+         offset="1"
+         id="stop4925" />
+    </linearGradient>
     <linearGradient
        id="linearGradient4951">
       <stop
@@ -3379,6 +3391,15 @@
          stdDeviation="2.1117588"
          id="feGaussianBlur4900" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4921"
+       id="linearGradient4927"
+       x1="1.0486665"
+       y1="438.80258"
+       x2="41.734833"
+       y2="354.33963"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3388,8 +3409,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="393.9623"
-     inkscape:cy="250.23511"
+     inkscape:cx="462.15347"
+     inkscape:cy="227.11868"
      inkscape:document-units="px"
      inkscape:current-layer="layer9"
      showgrid="false"
@@ -3410,8 +3431,8 @@
      inkscape:snap-smooth-nodes="false"
      inkscape:snap-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="716"
+     inkscape:window-width="1600"
+     inkscape:window-height="848"
      inkscape:window-x="-1"
      inkscape:window-y="-4"
      inkscape:window-maximized="1"
@@ -4948,7 +4969,7 @@
        inkscape:connector-curvature="0"
        id="path5571"
        d="m -43.656855,201.07464 c 0,0 118.201011,70.94468 118.201011,165.49033 0,94.54565 -117.343146,138.66042 -117.343146,138.66042 z"
-       style="fill:#4a4a4a;fill-opacity:1;stroke:url(#radialGradient4939);stroke-opacity:1"
+       style="fill:url(#linearGradient4927);fill-opacity:1;stroke:url(#radialGradient4939);stroke-opacity:1"
        transform="matrix(-0.84060538,0,0,-0.84060538,816.40647,365.70979)" />
     <path
        inkscape:connector-curvature="0"

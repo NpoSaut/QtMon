@@ -3409,10 +3409,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="462.15347"
+     inkscape:cx="294.65347"
      inkscape:cy="227.11868"
      inkscape:document-units="px"
-     inkscape:current-layer="layer9"
+     inkscape:current-layer="layer10"
      showgrid="false"
      borderlayer="false"
      inkscape:snap-grids="true"
@@ -4954,7 +4954,8 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="АЛСН"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <path
        transform="matrix(-0.84060538,0,0,-0.84060538,816.40647,365.70979)"
        style="fill:none;stroke:#000000;stroke-width:2.37923765;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter4898)"
@@ -5420,7 +5421,6 @@
      inkscape:groupmode="layer"
      id="layer10"
      inkscape:label="Светофор Новый"
-     sodipodi:insensitive="true"
      style="display:inline">
     <path
        style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;opacity:0.32558139;color:#000000;fill:url(#linearGradient5047);fill-opacity:1;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
@@ -5436,7 +5436,7 @@
        sodipodi:nodetypes="csscc"
        mask="url(#mask4940)" />
     <path
-       style="fill:#07f202;fill-opacity:0.58857141;stroke:none"
+       style="fill:#07f202;fill-opacity:0.58857141000000002;stroke:#003a02;stroke-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 84.718894,149.97235 c 0,14.55792 -11.801527,26.35945 -26.359447,26.35945 C 43.801527,176.3318 32,164.53027 32,149.97235 32,135.41444 43.801527,132 58.359447,132 c 14.55792,0 26.359447,3.41444 26.359447,17.97235 z"
        id="path4870"
        inkscape:connector-curvature="0"

@@ -193,107 +193,6 @@ Rectangle {
 //                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
 //                    }
 //                }
-                Rectangle {
-                    id: graduateBar
-
-                    x: -2
-                    y: 0
-                    width: 10
-                    height: rootRect.height
-
-                    color: "#00000000"
-
-                    Rectangle {
-                        property int sp: 10
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 20
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 30
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 40
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 50
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 60
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 70
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 80
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 90
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                    Rectangle {
-                        property int sp: 100
-                        y: rootRect.height - (rootRect.height - restrictionBox.height) / maxSpeed * sp - 8
-                        color: stateView.SpeedRestriction >= sp ? "#505050" : "#00000000"
-
-                        Rectangle { x:0; y: 8; height: 2; width: 10; color: parent.color }
-                        Text { x: 10; y: 0; text: parent.sp; font.family: "URW Gothic L"; font.pixelSize: 14;
-                            color: stateView.SpeedRestriction >= parent.sp ? "#2d2d2d" : "#00000000" }
-                    }
-                }
 
                 Rectangle {
                     id: hintBox
@@ -393,7 +292,7 @@ Rectangle {
     Rectangle {
         id: panelLeft
 
-        width: 145
+        width: 144
         height: 480
         color: "#00000000"
         anchors.left: parent.left
@@ -407,12 +306,11 @@ Rectangle {
             source: "Slices/Panel-Left.png"
 
             Rectangle {
-                x: 144
+                x: panelLeft.width
                 y: 0
                 width: 7
                 height: rootRect.height
                 color: "#fff"
-                anchors.topMargin: 0
                 anchors.top: parent.top
 
                 Behavior on height { SmoothedAnimation { duration: 500 } }
@@ -420,10 +318,9 @@ Rectangle {
 
             Rectangle {
                 id: speedValueBar
-                x: 144
-                y: 280
+                x: panelLeft.width
                 width: 7
-                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height)
+                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height) + speedBox.height
                 color: "#4999c9"
                 anchors.bottom: parent.bottom
 
@@ -432,12 +329,11 @@ Rectangle {
 
             Rectangle {
                 id: restrictionBar
-                x: 144
+                x: panelLeft.width
                 y: 0
                 width: 7
-                height: rootRect.height - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height)
+                height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
                 color: "#c94949"
-                anchors.topMargin: 0
                 anchors.top: parent.top
 
                 Behavior on height { SmoothedAnimation { duration: 500 } }
@@ -445,20 +341,24 @@ Rectangle {
         }
 
         Rectangle {
-            height: 85
+            height: 108
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 18
+            anchors.topMargin: 0
             color: "#00000000"
+            anchors.rightMargin: 10
             anchors.right: parent.right
             id: restrictionBox
+            x: 0
+            y: 0
+            width: 134
 
             Repeater {
                 model: [ "#6c000000", "#c94949" ]
 
                 Column {
-                    anchors.top: parent.top
-                    anchors.topMargin: 1-index
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: index
                     anchors.right: parent.right
                     anchors.rightMargin: index
 
@@ -469,15 +369,13 @@ Rectangle {
                         font.pointSize: 51.2
                         font.family: "URW Gothic L"
                         font.bold: true
-                        height: 70
+                        height: 62
                     }
                     Text {
                         text: qsTr("км/ч ")
-
                         anchors.right: parent.right
-
                         color: modelData
-                        font.pixelSize: 18
+                        font.pointSize: 14.4
                         font.family: "URW Gothic L"
                         font.bold: true
                     }
@@ -490,9 +388,11 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: 8
             width: 70
-            height: 68
+            height: 63
             color: "#00000000"
             id: speedBox
+            x: 66
+            y: 417
             Repeater {
                 model: [ "#ff30759e", "#d8ffffff" ]
                 Column {
@@ -503,9 +403,7 @@ Rectangle {
                     Text {
                         text: stateView.Speed
                         anchors.right: parent.right
-
-                        height: 42
-
+                        height: 38
                         color: modelData
                         font.pointSize: 32
                         font.family: "URW Gothic L"
@@ -514,9 +412,8 @@ Rectangle {
                     Text {
                         text: qsTr("км/ч ")
                         anchors.right: parent.right
-
                         color: modelData
-                        font.pixelSize: 14
+                        font.pointSize: 11.2
                         font.family: "URW Gothic L"
                         font.bold: true
                     }
@@ -525,6 +422,51 @@ Rectangle {
         }
 
 
+
+        Rectangle {
+            id: graduateBar
+
+            width: 10
+
+            color: "#00000000"
+            anchors.top: parent.top
+            anchors.topMargin: restrictionBox.height
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+            anchors.right: parent.right
+
+            Repeater
+            {
+                model: Math.floor(maxSpeed/10) - 1
+                Row {
+                    property int sp: (index + 1) * 10
+                    anchors.right: parent.right
+                    height: 14;
+                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
+                    opacity: stateView.SpeedRestriction >= sp ? 1 : 0
+                    spacing: 2
+
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        width: 20
+                        color: "#00000000"
+
+                        Repeater {
+                            model: [ "#71000000", "#a8ffffff" ]
+                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 11; font.bold: true
+                                anchors.verticalCenterOffset: index-1
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                anchors.rightMargin: 1-index
+                                color: modelData }
+                        }
+                    }
+
+                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 2; width: 4; color: "#ffbfbfbf" }
+                }
+            }
+        }
 
         ListView {
             id: lightsPanel
@@ -601,6 +543,7 @@ Rectangle {
                 }
             }
         }
+
 
     }
 

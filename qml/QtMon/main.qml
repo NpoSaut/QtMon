@@ -165,24 +165,7 @@ Rectangle {
                                 color: "#00000000"
                                 border.color: "#ff00f7"
                                 anchors.fill: parent
-                            }
-                            Column
-                            {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: parent.verticalCenter
-                                Text {
-                                    color: "#ff00f7"
-                                    text: index
-                                    font.bold: true
-                                }
-                                Text {
-                                    color: "#ff00f7"
-                                    text: parent.parent.relativeHorizontalIndex + "  " + parent.parent.relativeVerticalIndex
-                                }
-                                Text {
-                                    color: "#ff00f7"
-                                    text: parent.parent.horizontalIndex + "  " + parent.parent.verticalIndex
-                                }
+                                opacity: 0.1
                             }
 
                             //Behavior on x { SmoothedAnimation { duration: 1000 } }
@@ -191,11 +174,6 @@ Rectangle {
                     }
 
 
-                }
-                Text {
-                    color: "#00428d"
-                    font.pointSize: 14
-                    text: "Center: " + mapContainer.currentHorizontalIndex + "  " + mapContainer.currentVerticalIndex
                 }
 
                 Image {

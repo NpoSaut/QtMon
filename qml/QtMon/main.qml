@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 100
+    property double maxSpeed: 80
 
     function switchPage(i) {
         if (i == 1) {
@@ -316,7 +316,6 @@ Rectangle {
             }
         }
         MouseArea {
-            id: mousearea1
             enabled: false
             anchors.fill: parent
             onPressed: swipePressed(mouseY)
@@ -617,7 +616,7 @@ Rectangle {
             anchors.fill: parent
 
             Rectangle {
-                id: rectangle2
+                id: rightButton1Container
                 height: 120
                 color: "#00000000"
                 anchors.right: parent.right
@@ -631,7 +630,6 @@ Rectangle {
                 }
 
                 Text {
-                    id: text1
                     y: 63
                     color: "#ffffff"
                     text: qsTr("АЛСН")
@@ -741,7 +739,7 @@ Rectangle {
             }
 
             Rectangle {
-                id: rectangle4
+                id: rightButton2Container
                 x: 0
                 y: 240
                 height: 120
@@ -810,7 +808,7 @@ Rectangle {
                 }
             }
             Rectangle {
-                id: rectangle3
+                id: rightButton3Container
                     x: 0
                     y: 120
                     height: 120
@@ -878,6 +876,7 @@ Rectangle {
             }
 
             Rectangle {
+                id: rightButton4Container
                 height: 120
                 color: "#00000000"
                 anchors.right: parent.right

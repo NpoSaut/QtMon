@@ -8,7 +8,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     getspeedRestrictionValue = 65;
     getlongitudeValue = 60.4688;
     getlatitudeValue = 56.88397;
-    getisVigilanceRequiredValue = true;
+    getisVigilanceRequiredValue = false;
     getsystemWarningLevelValue = 0;
     getfullSetWarningLevelValue = 0;
     getisPressureOkValue = true;

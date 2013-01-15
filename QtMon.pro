@@ -17,7 +17,9 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     systemstateviewmodel.cpp \
-    sktcanl/src/sktcanl.cpp
+    iodrv/endecs.cpp \
+    iodrv/sktcan.cpp \
+    iodrv/iodrv.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -30,8 +32,12 @@ OTHER_FILES += \
 
 HEADERS += \
     systemstateviewmodel.h \
-    sktcanl/src/sktcanl.h
+    iodrv/sktcan.h \
+    iodrv/endecs.h \
+    iodrv/iodrvmain.h \
+    iodrv/iodrv.h
 
-CONFIG += console
+CONFIG += console \
+    serialport
 
 #DEFINES += DEBUG

@@ -39,11 +39,11 @@ void SystemStateViewModel::setSpeed(const double value)
 }
 
 // Ограничение скорости
-const double SystemStateViewModel::getSpeedRestriction() const
+const int SystemStateViewModel::getSpeedRestriction() const
 {
     return getspeedRestrictionValue;
 }
-void SystemStateViewModel::setSpeedRestriction(const double value)
+void SystemStateViewModel::setSpeedRestriction(const int value)
 {
     if (getspeedRestrictionValue != value)
     {

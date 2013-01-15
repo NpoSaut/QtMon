@@ -441,7 +441,7 @@ Rectangle {
                         anchors.right: parent.right
                         height: 38
                         color: modelData
-                        font.pointSize: 32
+                        font.pointSize: 26
                         font.family: "URW Gothic L"
                         font.bold: true
                     }
@@ -473,13 +473,14 @@ Rectangle {
 
             Repeater
             {
+                id: repeater
                 model: Math.floor(maxSpeed/10) - 1
                 Row {
                     property int sp: (index + 1) * 10
                     anchors.right: parent.right
                     height: 14;
                     y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
-                    opacity: stateView.SpeedRestriction >= sp ? 1 : 0
+                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
                     spacing: 2
 
                     Rectangle {
@@ -490,7 +491,7 @@ Rectangle {
 
                         Repeater {
                             model: [ "#71000000", "#a8ffffff" ]
-                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 11; font.bold: true
+                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
                                 anchors.verticalCenterOffset: index-1
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.right: parent.right
@@ -499,7 +500,8 @@ Rectangle {
                         }
                     }
 
-                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 2; width: 4; color: "#ffbfbfbf" }
+                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
+                                width: 4 + Math.floor(repeater.count / 6) * index; }
                 }
             }
         }

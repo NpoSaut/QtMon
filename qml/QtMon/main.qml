@@ -612,6 +612,14 @@ Rectangle {
             source: "Slices/Panel-Right-Middle.png"
         }
 
+        Rectangle {
+            width: 6
+            color: "#4999c9"
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+        }
+
         Column {
             x: -6
             y: 0
@@ -623,13 +631,6 @@ Rectangle {
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
-                Rectangle {
-                    width: 6
-                    color: "#4999c9"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.top: parent.top
-                }
 
                 Text {
                     y: 63
@@ -748,13 +749,16 @@ Rectangle {
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
+
                 Rectangle {
                     id: page1indicator
                     width: 6
                     color: "#4999c9"
                     anchors.left: parent.left
                     anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
                     anchors.top: parent.top
+                    anchors.topMargin: -1
                 }
 
                 Column {
@@ -824,7 +828,9 @@ Rectangle {
                         color: "#4999c9"
                         anchors.left: parent.left
                         anchors.bottom: parent.bottom
+                        anchors.bottomMargin: -3
                         anchors.top: parent.top
+                        anchors.topMargin: 1
                     }
                     Column {
                         id: page2buttonHeader
@@ -883,13 +889,6 @@ Rectangle {
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
-                Rectangle {
-                    width: 6
-                    color: "#4999c9"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.top: parent.top
-                }
             }
 
         }

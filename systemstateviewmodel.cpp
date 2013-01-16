@@ -17,8 +17,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     getmilageValue = 0;
     getlightValue = 0;
     getalsnFreqValue = 25;
-    gettimeValue = "18:58";
-    getdateValue = "21.12.2012";
+    gettimeValue = "-:-";
+    getdateValue = "- / - / -";
     getpropertyViewValue = false;
     // fileds init end
 }

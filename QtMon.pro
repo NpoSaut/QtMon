@@ -42,4 +42,4 @@ CONFIG += console \
 
 #QMAKE_CXXFLAGS += -std=c++11
 
-#DEFINES += DEBUG
+#DEFINES += QT_NO_CAST_FROM_ASCII

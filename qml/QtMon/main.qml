@@ -245,6 +245,7 @@ Rectangle {
                     id: hintBox
 
                     anchors.bottom: parent.bottom
+                    anchors.bottomMargin: -10
                     anchors.horizontalCenter: parent.horizontalCenter
                     height: background.height
                     width: background.width
@@ -259,8 +260,8 @@ Rectangle {
                     Text {
                         text: stateView.Time;
 
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 2
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
                         anchors.left: parent.left
                         anchors.leftMargin: 16
 
@@ -269,26 +270,29 @@ Rectangle {
                     }
 
                     Text {
-                        //text: stateView.Date;
-                        text: qsTr("21 декабря 2012");
+                        text: stateView.Date;
+                       //text: qsTr("21 декабря 2012");
 
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 2
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.horizontalCenterOffset: 5
 
                         font.family: "URW Gothic L"; font.pixelSize: 14;
                         color: "#2d2d2d";
                     }
 
                     Text {
-                        text: stateView.Milage + qsTr(" км");
+                        id: hintBoxMilageKm
+                        text: Math.round(stateView.Milage/1000) + qsTr('.')
+                                + Math.round(stateView.Milage/100)%10 + qsTr(" км")
 
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 2
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
                         anchors.right: parent.right
                         anchors.rightMargin: 16
 
-                        font.family: "URW Gothic L"; font.pixelSize: 14;
+                        font.family: "URW Gothic L"; font.pixelSize: 14
                         color: "#2d2d2d";
                     }
                 }
@@ -355,7 +359,7 @@ Rectangle {
                 x: panelLeft.width
                 y: 0
                 width: 7
-                height: rootRect.height
+                height: rootRect.height - speedBox.height
                 color: "#fff"
                 anchors.top: parent.top
 
@@ -366,9 +370,10 @@ Rectangle {
                 id: speedValueBar
                 x: panelLeft.width
                 width: 7
-                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height) + speedBox.height
+                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
                 color: "#4999c9"
                 anchors.bottom: parent.bottom
+                anchors.bottomMargin: speedBox.height
 
                 Behavior on height { SmoothedAnimation { duration: 500 } }
             }
@@ -447,7 +452,7 @@ Rectangle {
                     anchors.rightMargin: 1-index
 
                     Text {
-                        text: stateView.Speed
+                        text: Math.round(stateView.Speed)
                         anchors.right: parent.right
                         height: 38
                         color: modelData

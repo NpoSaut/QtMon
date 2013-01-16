@@ -3,7 +3,7 @@
   <Properties>
     <!-- Скорость и ограничения -->
     <Property type="double" name="Speed" def="48" description="Текущая скорость" />
-    <Property type="double" name="SpeedRestriction" def="65" description="Ограничение скорости" />
+    <Property type="int" name="SpeedRestriction" def="65" description="Ограничение скорости" />
     
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />

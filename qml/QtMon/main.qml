@@ -58,6 +58,16 @@ Rectangle {
     Keys.onPressed: {
         if (event.key == Qt.Key_F1) {
             // Send CAN requset to change ALSN freq
+
+            // Emulation
+            if ( stateView.AlsnFreq == 25 )
+                stateView.AlsnFreq = 50;
+            else if ( stateView.AlsnFreq == 50 )
+                stateView.AlsnFreq = 75;
+            else if ( stateView.AlsnFreq == 75 )
+                stateView.AlsnFreq = 25;
+            else
+                stateView.AlsnFreq = 25;
         }
         else if (event.key == Qt.Key_F2) {
             stateView.PropertyView = false;
@@ -604,6 +614,18 @@ Rectangle {
             source: "Slices/Panel-Right.png"
         }
 
+        // Очень плохо, что это здесь находится!!!
+        Image {
+            id: alsnSwitchBackgroundCircle
+            anchors.left: parent.right
+            anchors.leftMargin: -60
+            anchors.top: parent.top
+            anchors.topMargin: -height/2 + 60
+
+            fillMode: "Tile"
+            source: "Slices/alsn-switch.png"
+        }
+
         Image {
             x: -14
             y: 104
@@ -632,119 +654,221 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
 
-                Text {
-                    y: 63
-                    color: "#ffffff"
-                    text: qsTr("АЛСН")
-                    anchors.left: parent.left
-                    anchors.leftMargin: 60
+                Rectangle {
+                    id: alsnTextBox
+                    color: "#00000000"
+                    anchors.right: alsnSwitch.left
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 25
-                    font.family: "URW Gothic L"
+                    anchors.verticalCenterOffset: -3
+                    height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
+                    width: alsnTextBoxLine.width
+
+                    Text {
+                        id: alsnTextBoxText
+                        anchors.left: parent.left
+
+                        text: qsTr("АЛСН")
+                        color: "#ffdddddd"
+                        font.pixelSize: 18
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                    Rectangle {
+                        id: alsnTextBoxLine
+                        anchors.left: parent.left
+                        anchors.top: alsnTextBoxText.bottom
+                        width: 60
+                        height: 2
+                        color: "#ffdddddd"
+
+                    }
+                    Text {
+                        id: alsnTextBoxFreq
+                        anchors.left: parent.left
+                        anchors.top: alsnTextBoxLine.bottom
+
+                        text: qsTr("частота")
+                        color: "#ffdddddd"
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
                 }
 
-                Row {
-                    spacing: 5
+                Rectangle {
+                    id: alsnSwitch
+                    color: "#00000000"
+
                     anchors.top: parent.top
-                    anchors.topMargin: 20
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
+                    anchors.topMargin: -height/2 + 60
+                    anchors.left: parent.right
+                    anchors.leftMargin: -60
+                    width: alsnSwitchBackgroundCircle.width
+                    height: alsnSwitchBackgroundCircle.height
 
-                    Column {
-                        anchors.top: parent.top
-                        anchors.topMargin: 0
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 0
-                        Text {
-                            text: qsTr("25")
-                            font.pointSize: 10
-                            font.family: "URW Gothic L"
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#ffffff"
-                            height: parent.height/3
-                        }
-                        Text {
-                            text: qsTr("50")
-                            font.pointSize: 10
-                            font.family: "URW Gothic L"
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#ffffff"
-                            height: parent.height/3
-                        }
-                        Text {
-                            text: qsTr("75")
-                            font.pointSize: 10
-                            font.family: "URW Gothic L"
-                            verticalAlignment: Text.AlignVCenter
-                            color: "#ffffff"
-                            height: parent.height/3
-                        }
-                    }
+                    property real radius: 102
+                    property real angle: 15
+                    property string objColor: "#ffdddddd"
 
-                    Rectangle {
-                        id: alsnSelector
-                        width: 20
-                        color: "#00000000"
-                        radius: 8
-                        border.width: 2
-                        border.color: "#ffffff"
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 3
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
+                    Repeater
+                    {
+                        model: [25, 50, 75]
 
                         Rectangle {
-                            id: alsnSelectorMarker
-                            x: 2
-                            y: 2
-                            width: 16
-                            height: 16
-                            color: "#ffffff"
-                            radius: 8
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            MouseArea {
-                                anchors.fill: parent
-                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
-                                onReleased: refreshAlsnState();
-                            }
-                        }
+                            property real myRot: (1 - index) * alsnSwitch.angle
+                            property int freq: modelData
 
-                        states: [
-                            State {
-                                name: "alsn0"
-                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
-                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
-                            },
-                            State {
-                                name: "alsn25"
-                                when: (stateView.alsnFreq == 25)
-                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-                            },
-                            State {
-                                name: "alsn50"
-                                when: (stateView.alsnFreq == 50)
-                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-                            },
-                            State {
-                                name: "alsn75"
-                                when: (stateView.alsnFreq == 75)
-                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-                            }
-                        ]
+                            x: alsnSwitch.width/2 - alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                            y: alsnSwitch.height/2 - alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                            rotation: myRot
 
-                        transitions: Transition {
-                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
+                            color: alsnSwitch.objColor
+                            width: 2
+                            height: 2
+                            smooth: true
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.right
+                                anchors.leftMargin: 6
+
+                                text: parent.freq
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                color: alsnSwitch.objColor
+                                smooth: true
+                            }
                         }
                     }
+
+                    states: [
+                        State {
+                            name: "alsn0"
+                            when: (stateView.AlsnFreq != 25 && tateView.AlsnFreq != 50 && tateView.AlsnFreq != 75)
+                            PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn25"
+                            when: (stateView.AlsnFreq == 25)
+                            PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn50"
+                            when: (stateView.AlsnFreq == 50)
+                            PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn75"
+                            when: (stateView.AlsnFreq == 75)
+                            PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                        }
+                    ]
+
+                    transitions: Transition {
+                        NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
+                    }
                 }
+
+//                Row {
+//                    spacing: 5
+//                    anchors.top: parent.top
+//                    anchors.topMargin: 20
+//                    anchors.bottom: parent.bottom
+//                    anchors.bottomMargin: 20
+//                    anchors.left: parent.left
+//                    anchors.leftMargin: 15
+
+//                    Column {
+//                        anchors.top: parent.top
+//                        anchors.topMargin: 0
+//                        anchors.bottom: parent.bottom
+//                        anchors.bottomMargin: 0
+//                        Text {
+//                            text: qsTr("25")
+//                            font.pointSize: 10
+//                            font.family: "URW Gothic L"
+//                            verticalAlignment: Text.AlignVCenter
+//                            color: "#ffffff"
+//                            height: parent.height/3
+//                        }
+//                        Text {
+//                            text: qsTr("50")
+//                            font.pointSize: 10
+//                            font.family: "URW Gothic L"
+//                            verticalAlignment: Text.AlignVCenter
+//                            color: "#ffffff"
+//                            height: parent.height/3
+//                        }
+//                        Text {
+//                            text: qsTr("75")
+//                            font.pointSize: 10
+//                            font.family: "URW Gothic L"
+//                            verticalAlignment: Text.AlignVCenter
+//                            color: "#ffffff"
+//                            height: parent.height/3
+//                        }
+//                    }
+
+//                    Rectangle {
+//                        id: alsnSelector
+//                        width: 20
+//                        color: "#00000000"
+//                        radius: 8
+//                        border.width: 2
+//                        border.color: "#ffffff"
+//                        anchors.bottom: parent.bottom
+//                        anchors.bottomMargin: 3
+//                        anchors.top: parent.top
+//                        anchors.topMargin: 3
+
+//                        Rectangle {
+//                            id: alsnSelectorMarker
+//                            x: 2
+//                            y: 2
+//                            width: 16
+//                            height: 16
+//                            color: "#ffffff"
+//                            radius: 8
+//                            anchors.horizontalCenter: parent.horizontalCenter
+//                            MouseArea {
+//                                anchors.fill: parent
+//                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
+//                                onReleased: refreshAlsnState();
+//                            }
+//                        }
+
+//                        states: [
+//                            State {
+//                                name: "alsn0"
+//                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
+//                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
+//                            },
+//                            State {
+//                                name: "alsn25"
+//                                when: (stateView.alsnFreq == 25)
+//                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+//                            },
+//                            State {
+//                                name: "alsn50"
+//                                when: (stateView.alsnFreq == 50)
+//                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+//                            },
+//                            State {
+//                                name: "alsn75"
+//                                when: (stateView.alsnFreq == 75)
+//                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
+//                            }
+//                        ]
+
+//                        transitions: Transition {
+//                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
+//                        }
+//                    }
+//                }
             }
 
             Rectangle {
                 id: rightButton2Container
-                x: 0
-                y: 240
                 height: 120
                 color: "#00000000"
                 anchors.right: parent.right

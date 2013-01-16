@@ -40,4 +40,6 @@ HEADERS += \
 CONFIG += console \
     serialport
 
+#QMAKE_CXXFLAGS += -std=c++11
+
 #DEFINES += DEBUG

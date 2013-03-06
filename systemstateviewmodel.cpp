@@ -17,8 +17,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     getmilageValue = 0;
     getlightValue = 0;
     getalsnFreqValue = 25;
-    gettimeValue = "18:58";
-    getdateValue = "21.12.2012";
+    gettimeValue = "-:-";
+    getdateValue = "- / - / -";
     getpropertyViewValue = false;
     // fileds init end
 }
@@ -39,11 +39,11 @@ void SystemStateViewModel::setSpeed(const double value)
 }
 
 // Ограничение скорости
-const double SystemStateViewModel::getSpeedRestriction() const
+const int SystemStateViewModel::getSpeedRestriction() const
 {
     return getspeedRestrictionValue;
 }
-void SystemStateViewModel::setSpeedRestriction(const double value)
+void SystemStateViewModel::setSpeedRestriction(const int value)
 {
     if (getspeedRestrictionValue != value)
     {

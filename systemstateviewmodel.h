@@ -13,8 +13,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(double Speed READ getSpeed WRITE setSpeed NOTIFY SpeedChanged)
 
     // Ограничение скорости
-    double getspeedRestrictionValue;
-    Q_PROPERTY(double SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
+    int getspeedRestrictionValue;
+    Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
 
     double getlongitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
@@ -77,7 +77,7 @@ public:
 
     // public properties getters start
     const double getSpeed() const;
-    const double getSpeedRestriction() const;
+    const int getSpeedRestriction() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const bool getIsVigilanceRequired() const;
@@ -117,7 +117,7 @@ signals:
 public slots:
     // public properties setters start
     void setSpeed(const double);
-    void setSpeedRestriction(const double);
+    void setSpeedRestriction(const int);
     void setLongitude(const double);
     void setLatitude(const double);
     void setIsVigilanceRequired(const bool);

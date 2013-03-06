@@ -3,7 +3,7 @@
   <Properties>
     <!-- Скорость и ограничения -->
     <Property type="double" name="Speed" def="48" description="Текущая скорость" />
-    <Property type="double" name="SpeedRestriction" def="65" description="Ограничение скорости" />
+    <Property type="int" name="SpeedRestriction" def="65" description="Ограничение скорости" />
     
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
@@ -27,8 +27,8 @@
     <Property type="int" name="AlsnFreq" def="25" description="Частота АЛСН" />
 
     <!-- Дата и время -->
-    <Property type="QString" name="Time" def="&quot;18:58&quot;" description="Время" />
-    <Property type="QString" name="Date" def="&quot;21.12.2012&quot;" description="Дата" />
+    <Property type="QString" name="Time" def="&quot;-:-&quot;" description="Время" />
+    <Property type="QString" name="Date" def="&quot;- / - / -&quot;" description="Дата" />
     
     <Property type="bool" name="PropertyView" def="false" description="Неведомо чудо" />
   </Properties>

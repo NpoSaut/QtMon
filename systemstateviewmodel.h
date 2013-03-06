@@ -13,8 +13,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(double Speed READ getSpeed WRITE setSpeed NOTIFY SpeedChanged)
 
     // Ограничение скорости
-    double getspeedRestrictionValue;
-    Q_PROPERTY(double SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
+    int getspeedRestrictionValue;
+    Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
 
     double getlongitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
@@ -75,70 +75,24 @@ class SystemStateViewModel : public QDeclarativeItem
 public:
     explicit SystemStateViewModel(QDeclarativeItem *parent = 0);
 
-    // public properties start
-    // Текущая скорость
+    // public properties getters start
     const double getSpeed() const;
-    void setSpeed(const double);
-
-    // Ограничение скорости
-    const double getSpeedRestriction() const;
-    void setSpeedRestriction(const double);
-
+    const int getSpeedRestriction() const;
     const double getLongitude() const;
-    void setLongitude(const double);
-
     const double getLatitude() const;
-    void setLatitude(const double);
-
-    // Необходимость подтверждения бдительности
     const bool getIsVigilanceRequired() const;
-    void setIsVigilanceRequired(const bool);
-
-    // Общий уровень предупреждений
     const int getSystemWarningLevel() const;
-    void setSystemWarningLevel(const int);
-
-    // Укомплектованность конфигурации
     const int getFullSetWarningLevel() const;
-    void setFullSetWarningLevel(const int);
-
-    // Давление в норме
     const bool getIsPressureOk() const;
-    void setIsPressureOk(const bool);
-
-    // Готовность ЭПК
     const bool getIsEpvReady() const;
-    void setIsEpvReady(const bool);
-
-    // Признак срыва ЭПК
     const bool getIsEpvReleased() const;
-    void setIsEpvReleased(const bool);
-
-    // Проиденное расстояние
     const int getMilage() const;
-    void setMilage(const int);
-
-    // Код сигнала светофора (0 - К, 1 - КЖ, ...)
     const int getLight() const;
-    void setLight(const int);
-
-    // Частота АЛСН
     const int getAlsnFreq() const;
-    void setAlsnFreq(const int);
-
-    // Время
     const QString getTime() const;
-    void setTime(const QString);
-
-    // Дата
     const QString getDate() const;
-    void setDate(const QString);
-
-    // Неведомо чудо
     const bool getPropertyView() const;
-    void setPropertyView(const bool);
-
-    // public properties end
+    // public properties getters end
 
 signals:
     // properties signals start
@@ -161,6 +115,24 @@ signals:
     // properties signals end
 
 public slots:
+    // public properties setters start
+    void setSpeed(const double);
+    void setSpeedRestriction(const int);
+    void setLongitude(const double);
+    void setLatitude(const double);
+    void setIsVigilanceRequired(const bool);
+    void setSystemWarningLevel(const int);
+    void setFullSetWarningLevel(const int);
+    void setIsPressureOk(const bool);
+    void setIsEpvReady(const bool);
+    void setIsEpvReleased(const bool);
+    void setMilage(const int);
+    void setLight(const int);
+    void setAlsnFreq(const int);
+    void setTime(const QString);
+    void setDate(const QString);
+    void setPropertyView(const bool);
+    // public properties setters end
     
 };
 

@@ -342,7 +342,7 @@ Rectangle {
     Rectangle {
         id: panelLeft
 
-        width: 144
+        width: 151
         height: 480
         color: "#00000000"
         anchors.left: parent.left
@@ -356,14 +356,11 @@ Rectangle {
             source: "Slices/Panel-Left.png"
         }
 
-        //------------------------------
-
-
         // Очень плохо, что это здесь находится!!!
         Image {
             id: alsnSwitchBackgroundCircle
-            anchors.left: parent.right
-            anchors.leftMargin: -60
+            anchors.right: parent.left
+            anchors.rightMargin: -60
             anchors.top: parent.top
             anchors.topMargin: -height/2 + 60
 
@@ -376,13 +373,13 @@ Rectangle {
             y: 104
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            source: "Slices/Panel-Right-Middle.png"
+            source: "Slices/Panel-Left-Middle.png"
         }
 
         Rectangle {
             width: 6
             color: "#4999c9"
-            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.top: parent.top
         }
@@ -402,7 +399,7 @@ Rectangle {
                 Rectangle {
                     id: alsnTextBox
                     color: "#00000000"
-                    anchors.right: alsnSwitch.left
+                    anchors.left: alsnSwitch.right
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: -3
                     height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
@@ -446,12 +443,12 @@ Rectangle {
 
                     anchors.top: parent.top
                     anchors.topMargin: -height/2 + 60
-                    anchors.left: parent.right
-                    anchors.leftMargin: -60
+                    anchors.right: parent.left
+                    anchors.rightMargin: -60
                     width: alsnSwitchBackgroundCircle.width
                     height: alsnSwitchBackgroundCircle.height
 
-                    property real radius: 102
+                    property real radius: 100
                     property real angle: 15
                     property string objColor: "#ffdddddd"
 
@@ -463,8 +460,8 @@ Rectangle {
                             property real myRot: (1 - index) * alsnSwitch.angle
                             property int freq: modelData
 
-                            x: alsnSwitch.width/2 - alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
-                            y: alsnSwitch.height/2 - alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                            x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                            y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
                             rotation: myRot
 
                             color: alsnSwitch.objColor
@@ -474,8 +471,8 @@ Rectangle {
 
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                anchors.left: parent.right
-                                anchors.leftMargin: 6
+                                anchors.right: parent.left
+                                anchors.rightMargin: 4
 
                                 text: parent.freq
                                 font.pixelSize: 14
@@ -526,7 +523,7 @@ Rectangle {
                     id: page1indicator
                     width: 6
                     color: "#4999c9"
-                    anchors.left: parent.left
+                    anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 1
                     anchors.top: parent.top
@@ -598,7 +595,7 @@ Rectangle {
                         id: page2indicator
                         width: 6
                         color: "#4999c9"
-                        anchors.left: parent.left
+                        anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: -3
                         anchors.top: parent.top

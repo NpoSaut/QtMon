@@ -354,270 +354,10 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             source: "Slices/Panel-Left.png"
-
-            Rectangle {
-                x: panelLeft.width
-                y: 0
-                width: 7
-                height: rootRect.height - speedBox.height
-                color: "#fff"
-                anchors.top: parent.top
-
-                Behavior on height { SmoothedAnimation { duration: 500 } }
-            }
-
-            Rectangle {
-                id: speedValueBar
-                x: panelLeft.width
-                width: 7
-                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
-                color: "#4999c9"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: speedBox.height
-
-                Behavior on height { SmoothedAnimation { duration: 500 } }
-            }
-
-            Rectangle {
-                id: restrictionBar
-                x: panelLeft.width
-                y: 0
-                width: 7
-                height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
-                color: "#c94949"
-                anchors.top: parent.top
-
-                Behavior on height { SmoothedAnimation { duration: 500 } }
-            }
         }
 
-        Rectangle {
-            height: 108
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.topMargin: 0
-            color: "#00000000"
-            anchors.rightMargin: 10
-            anchors.right: parent.right
-            id: restrictionBox
-            x: 0
-            y: 0
-            width: 134
+        //------------------------------
 
-            Repeater {
-                model: [ "#6c000000", "#c94949" ]
-
-                Column {
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: index
-                    anchors.right: parent.right
-                    anchors.rightMargin: index
-
-                    Text {
-                        text: stateView.SpeedRestriction
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 51.2
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                        height: 62
-                    }
-                    Text {
-                        text: qsTr("км/ч ")
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 14.4
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
-            }
-        }
-
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-            width: 70
-            height: 63
-            color: "#00000000"
-            id: speedBox
-            x: 66
-            y: 417
-            Repeater {
-                model: [ "#ff30759e", "#d8ffffff" ]
-                Column {
-                    y: index
-                    anchors.right: parent.right
-                    anchors.rightMargin: 1-index
-
-                    Text {
-                        text: Math.round(stateView.Speed)
-                        anchors.right: parent.right
-                        height: 38
-                        color: modelData
-                        font.pointSize: 26
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                    Text {
-                        text: qsTr("км/ч ")
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 11.2
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
-            }
-        }
-
-
-
-        Rectangle {
-            id: graduateBar
-
-            width: 10
-
-            color: "#00000000"
-            anchors.top: parent.top
-            anchors.topMargin: restrictionBox.height
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: speedBox.height
-            anchors.right: parent.right
-
-            Repeater
-            {
-                id: repeater
-                model: Math.floor(maxSpeed/10) - 1
-                Row {
-                    property int sp: (index + 1) * 10
-                    anchors.right: parent.right
-                    height: 14;
-                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
-                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
-                    spacing: 2
-
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height
-                        width: 20
-                        color: "#00000000"
-
-                        Repeater {
-                            model: [ "#71000000", "#a8ffffff" ]
-                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
-                                anchors.verticalCenterOffset: index-1
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.right
-                                anchors.rightMargin: 1-index
-                                color: modelData }
-                        }
-                    }
-
-                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
-                                width: 4 + Math.floor(repeater.count / 6) * index; }
-                }
-            }
-        }
-
-        ListView {
-            id: lightsPanel
-            x: 7
-            y: 123
-            width: 54
-            height: 280
-            anchors.horizontalCenterOffset: -21
-            interactive: false
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            currentIndex: 2
-
-            delegate: Item {
-                height: 55
-                width: 54
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#00000000"
-
-                    Image {
-                        id: lightOffImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-Off.png"
-                    }
-                    Image {
-                        id: lightOnImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-" + name + ".png"
-                        opacity: 0
-                    }
-
-                    state: stateView.Light == permissiveIndex ? "On" : "Off"
-
-                    states: [
-                        State {
-                            name: "On"
-                            PropertyChanges { target: lightOnImage; opacity: 1 }
-                            PropertyChanges { target: lightOffImage; opacity: 0 }
-                        },
-                        State {
-                            name: "Off"
-                        }
-                    ]
-
-                    transitions: Transition {
-                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
-                    }
-                }
-            }
-            model: ListModel {
-                ListElement {
-                    name: "Green"
-                    permissiveIndex: 3
-                }
-                ListElement {
-                    name: "Yellow"
-                    permissiveIndex: 2
-                }
-                ListElement {
-                    name: "YellowRed"
-                    permissiveIndex: 1
-                }
-                ListElement {
-                    name: "Red"
-                    permissiveIndex: 0
-                }
-                ListElement {
-                    name: "White"
-                    permissiveIndex: -1
-                }
-            }
-        }
-
-
-    }
-
-    Rectangle {
-        id: panelRight
-
-        x: 652
-        y: 0
-        width: 149
-        height: 480
-        color: "#00000000"
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.top: parent.top
-
-        Image {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            source: "Slices/Panel-Right.png"
-        }
 
         // Очень плохо, что это здесь находится!!!
         Image {
@@ -773,103 +513,6 @@ Rectangle {
                         NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
                     }
                 }
-
-//                Row {
-//                    spacing: 5
-//                    anchors.top: parent.top
-//                    anchors.topMargin: 20
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: 20
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 15
-
-//                    Column {
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 0
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 0
-//                        Text {
-//                            text: qsTr("25")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("50")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("75")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                    }
-
-//                    Rectangle {
-//                        id: alsnSelector
-//                        width: 20
-//                        color: "#00000000"
-//                        radius: 8
-//                        border.width: 2
-//                        border.color: "#ffffff"
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 3
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 3
-
-//                        Rectangle {
-//                            id: alsnSelectorMarker
-//                            x: 2
-//                            y: 2
-//                            width: 16
-//                            height: 16
-//                            color: "#ffffff"
-//                            radius: 8
-//                            anchors.horizontalCenter: parent.horizontalCenter
-//                            MouseArea {
-//                                anchors.fill: parent
-//                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
-//                                onReleased: refreshAlsnState();
-//                            }
-//                        }
-
-//                        states: [
-//                            State {
-//                                name: "alsn0"
-//                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
-//                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
-//                            },
-//                            State {
-//                                name: "alsn25"
-//                                when: (stateView.alsnFreq == 25)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn50"
-//                                when: (stateView.alsnFreq == 50)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn75"
-//                                when: (stateView.alsnFreq == 75)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            }
-//                        ]
-
-//                        transitions: Transition {
-//                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
-//                        }
-//                    }
-//                }
             }
 
             Rectangle {
@@ -1020,6 +663,275 @@ Rectangle {
                 anchors.left: parent.left
             }
 
+        }
+
+
+    }
+
+    Rectangle {
+        id: panelRight
+
+        x: 652
+        y: 0
+        width: 149
+        height: 480
+        color: "#00000000"
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.top: parent.top
+
+        Image {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            source: "Slices/Panel-Right.png"
+        }
+
+
+        Rectangle {
+            id: graduateBar
+
+            width: 10
+
+            color: "#00000000"
+            anchors.top: parent.top
+            anchors.topMargin: restrictionBox.height
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+            anchors.left: parent.left
+
+            Repeater
+            {
+                id: repeater
+                model: Math.floor(maxSpeed/10) - 1
+                Row {
+                    property int sp: (index + 1) * 10
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    height: 14;
+                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
+                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
+                    spacing: 0
+
+                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
+                                width: 4 + 0.4*Math.floor(repeater.count / 6) * index; }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        width: 18
+                        color: "#00000000"
+
+                        Repeater {
+                            model: [ "#71000000", "#a8ffffff" ]
+                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
+                                anchors.verticalCenterOffset: index-1
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                anchors.rightMargin: 1-index
+                                color: modelData }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        Rectangle {
+            x: 0
+            y: 0
+            width: 7
+            height: rootRect.height - speedBox.height
+            color: "#fff"
+            anchors.top: parent.top
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+
+
+
+
+        Rectangle {
+            id: speedValueBar
+            x: 0
+            width: 7
+            height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            color: "#4999c9"
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+        Rectangle {
+            id: restrictionBar
+            x: 0
+            y: 0
+            width: 7
+            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            color: "#c94949"
+            anchors.top: parent.top
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+        Rectangle {
+            height: 108
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: -5
+            color: "#00000000"
+            anchors.leftMargin: 10
+            anchors.rightMargin: 45
+            anchors.right: parent.right
+            id: restrictionBox
+            x: 10
+            y: -5
+            width: 94
+
+            Repeater {
+                model: [ "#6c000000", "#c94949" ]
+
+                Column {
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: index
+                    anchors.left: parent.left
+                    anchors.leftMargin: 1-index
+
+                    Text {
+                        text: stateView.SpeedRestriction
+                        anchors.right: parent.right
+                        color: modelData
+                        font.pointSize: 51.2
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                        height: 62
+                    }
+                    Text {
+                        text: qsTr("км/ч ")
+                        anchors.right: parent.right
+                        color: modelData
+                        font.pointSize: 14.4
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.bottom: parent.bottom
+            width: 63
+            height: 63
+            color: "#00000000"
+            anchors.left: parent.left
+            id: speedBox
+            y: 417
+            Repeater {
+                model: [ "#ff30759e", "#d8ffffff" ]
+                Column {
+                    y: index
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1-index
+
+                    Text {
+                        text: Math.round(stateView.Speed)
+                        anchors.right: parent.right
+                        height: 38
+                        color: modelData
+                        font.pointSize: 26
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                    Text {
+                        text: qsTr("км/ч ")
+                        anchors.right: parent.right
+                        color: modelData
+                        font.pointSize: 11.2
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
+            }
+        }
+
+
+
+
+        ListView {
+            id: lightsPanel
+            x: 7
+            y: 123
+            width: 54
+            height: 280
+            anchors.horizontalCenterOffset: 15
+            interactive: false
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            currentIndex: 2
+
+            delegate: Item {
+                height: 55
+                width: 54
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#00000000"
+
+                    Image {
+                        id: lightOffImage
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "Slices/Light-Off.png"
+                    }
+                    Image {
+                        id: lightOnImage
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "Slices/Light-" + name + ".png"
+                        opacity: 0
+                    }
+
+                    state: stateView.Light == permissiveIndex ? "On" : "Off"
+
+                    states: [
+                        State {
+                            name: "On"
+                            PropertyChanges { target: lightOnImage; opacity: 1 }
+                            PropertyChanges { target: lightOffImage; opacity: 0 }
+                        },
+                        State {
+                            name: "Off"
+                        }
+                    ]
+
+                    transitions: Transition {
+                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
+                    }
+                }
+            }
+            model: ListModel {
+                ListElement {
+                    name: "Green"
+                    permissiveIndex: 3
+                }
+                ListElement {
+                    name: "Yellow"
+                    permissiveIndex: 2
+                }
+                ListElement {
+                    name: "YellowRed"
+                    permissiveIndex: 1
+                }
+                ListElement {
+                    name: "Red"
+                    permissiveIndex: 0
+                }
+                ListElement {
+                    name: "White"
+                    permissiveIndex: -1
+                }
+            }
         }
 
     }

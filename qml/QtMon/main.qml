@@ -139,6 +139,275 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.leftMargin: 0
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#6b6b6b"
+                    }
+
+                    GradientStop {
+                        position: 1
+                        color: "#2b2b2b"
+                    }
+                }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.topMargin: 5
+                anchors.top: parent.top
+                spacing: 10
+
+                Column {
+                    spacing: 10
+                    width: 120
+
+                    // Координата
+                   Column {
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+
+                           text: qsTr("КООРДИНАТА")
+                           color: "#ffffff00"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                       Rectangle {
+                           color: "#20000000"
+                           anchors.left: parent.left
+                           anchors.right: parent.right
+                           border.color: "#ffffff00"
+                           height: 20
+                           Text {
+                               anchors.horizontalCenter: parent.horizontalCenter
+                               anchors.verticalCenter: parent.verticalCenter
+                               text: qsTr("123км 400пк 00м")
+                               //text: stateView.Speed
+                               color: "#ffffffff"
+                               font.pixelSize: 14
+                               font.family: "URW Gothic L"
+                           }
+                       }
+                   }
+
+                    // № ПУТИ
+                   Column {
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+
+                           text: qsTr("№ ПУТИ")
+                           color: "#ffffff00"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                       Rectangle {
+                           color: "#20000000"
+                           anchors.left: parent.left
+                           anchors.right: parent.right
+                           border.color: "#ffffff00"
+                           height: 20
+                           Text {
+                               anchors.horizontalCenter: parent.horizontalCenter
+                               anchors.verticalCenter: parent.verticalCenter
+                               text: qsTr("1ПР")
+                               color: "#ffffffff"
+                               font.pixelSize: 14
+                               font.family: "URW Gothic L"
+                           }
+                       }
+                   }
+
+                   // УСКОРЕНИЕ
+                  Column {
+                      anchors.left: parent.left
+                      anchors.right: parent.right
+                      Text {
+                          anchors.horizontalCenter: parent.horizontalCenter
+
+                          text: qsTr("УСКОРЕНИЕ")
+                          color: "#ffffff00"
+                          font.pixelSize: 14
+                          font.family: "URW Gothic L"
+                      }
+                      Rectangle {
+                          color: "#20000000"
+                          anchors.left: parent.left
+                          anchors.right: parent.right
+                          border.color: "#ffffff00"
+                          height: 20
+                          Text {
+                              anchors.horizontalCenter: parent.horizontalCenter
+                              anchors.verticalCenter: parent.verticalCenter
+                              text: qsTr("0.15")
+                              color: "#ffffffff"
+                              font.pixelSize: 14
+                              font.family: "URW Gothic L"
+                          }
+                      }
+                  }
+
+                  // ТЦ
+                 Column {
+                     anchors.left: parent.left
+                     anchors.right: parent.right
+                     Text {
+                         anchors.horizontalCenter: parent.horizontalCenter
+
+                         text: qsTr("ТЦ")
+                         color: "#ffffff00"
+                         font.pixelSize: 14
+                         font.family: "URW Gothic L"
+                     }
+                     Rectangle {
+                         color: "#20000000"
+                         anchors.left: parent.left
+                         anchors.right: parent.right
+                         border.color: "#ffffff00"
+                         height: 20
+                         Text {
+                             anchors.horizontalCenter: parent.horizontalCenter
+                             anchors.verticalCenter: parent.verticalCenter
+                             text: qsTr("0.49 МПа")
+                             color: "#ffffffff"
+                             font.pixelSize: 14
+                             font.family: "URW Gothic L"
+                         }
+                     }
+                 }
+
+                 // ТМ
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        text: qsTr("ТМ")
+                        color: "#ffffff00"
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                    }
+                    Rectangle {
+                        color: "#20000000"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        border.color: "#ffffff00"
+                        height: 20
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr("0.49 МПа")
+                            color: "#ffffffff"
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                    }
+                }
+
+                }
+
+                // Время
+               Column {
+                   width: 100
+
+                   //anchors.left: parent.left
+                   //anchors.right: parent.right
+                   Text {
+                       anchors.horizontalCenter: parent.horizontalCenter
+
+                       text: qsTr("ВРЕМЯ")
+                       color: "#ffffff00"
+                       font.pixelSize: 14
+                       font.family: "URW Gothic L"
+                   }
+                   Rectangle {
+                       color: "#20000000"
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       border.color: "#ffffff00"
+                       height: 20
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           //text: qsTr("12:28:45")
+                           text: stateView.Time
+
+
+                           color: "#ffffffff"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                   }
+               }
+
+               Row {
+                   anchors.top: parent.top
+                   anchors.topMargin: 18
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 20
+                       height: 20
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           text: qsTr("П")
+                           //text: stateView.Time
+
+
+                           color: "#ffffffff"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                   }
+
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 20
+                       height: 20
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           text: qsTr("П")
+                           //text: stateView.Time
+
+
+                           color: "#ffffffff"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                   }
+               }
+
+            }
+
+            Rectangle {
+                color: "#20000000"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: 10
+                border.color: "#ffffff00"
+                //width: 100
+                height: 25
+            }
+
+
+
+            }
+
+            Rectangle {
+                id: page2container
+                height: pagesArea.height
+                anchors.right: parent.right
+                anchors.left: parent.left
                 clip: true
 
                 Rectangle {
@@ -295,37 +564,6 @@ Rectangle {
                         font.family: "URW Gothic L"; font.pixelSize: 14
                         color: "#2d2d2d";
                     }
-                }
-            }
-
-            Rectangle {
-                id: page2container
-                height: pagesArea.height
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#6b6b6b"
-                    }
-
-                    GradientStop {
-                        position: 1
-                        color: "#2b2b2b"
-                    }
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
-
-                Text {
-                    id: text2
-                    color: "#ffffff"
-                    text: qsTr("Состояние системы")
-                    anchors.topMargin: 10
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    font.pixelSize: 24
-                    font.family: "URW Gothic L"
                 }
             }
         }
@@ -542,7 +780,7 @@ Rectangle {
 
                     Text {
                         color: "#ffffff"
-                        text: qsTr("Текущее")
+                        text: qsTr("Ж/Д")
                         font.pointSize: 20
                         font.family: "URW Gothic L"
                     }
@@ -603,48 +841,19 @@ Rectangle {
                     }
                     Column {
                         id: page2buttonHeader
-                        x: 25
-                        y: 32
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        anchors.left: parent.left
-                        anchors.leftMargin: 25
+                        //anchors.left: parent.left
+                        //anchors.leftMargin: 25
                         anchors.verticalCenter: parent.verticalCenter
 
                         Text {
                             color: "#ffffff"
-                            text: qsTr("Система")
-                            font.pointSize: 20
+                            text: qsTr("Дорожный")
+                            font.pointSize: 18
                             font.family: "URW Gothic L"
                         }
 
-                        Row {
-                            id: page2buttonInfo
-                            spacing: 3
-                            anchors.right: parent.right
-
-                            Image {
-                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
-                                                                             stateView.FullSetWarningLevel == 1 ?
-                                                                                 "Slices/FullSet-Small-Warning.png" :
-                                                                                 "Slices/FullSet-Small-Error.png"
-                            }
-                            Image {
-                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
-                            }
-                            Image {
-                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
-                                                                  stateView.IsEpvReady ?
-                                                                      "Slices/Epv-Small-Ok.png" :
-                                                                      "Slices/Epv-Small-NotReady.png"
-                            }
-                            Image {
-                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
-                                                                             stateView.SystemWarningLevel == 1 ?
-                                                                                 "Slices/System-Medium-Warning.png" :
-                                                                                 "Slices/System-Medium-Error.png"
-                            }
-                        }
                     }
                     MouseArea {
                         anchors.fill: parent

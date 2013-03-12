@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 160
+    property double maxSpeed: 80
 
     function switchPage(i) {
         if (i == 1) {
@@ -116,12 +116,6 @@ Rectangle {
         NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
-    }
-
-    Timer {
-        interval: 10000
-        onTriggered: switchPage(2-pageNum)
-        running: true
     }
 
     Rectangle {
@@ -307,18 +301,17 @@ Rectangle {
             Rectangle {
                 id: page2container
                 height: pagesArea.height
-                color: "#6b6b6b"
-//                gradient: Gradient {
-//                    GradientStop {
-//                        position: 0
-//                        color: "#6b6b6b"
-//                    }
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#6b6b6b"
+                    }
 
-//                    GradientStop {
-//                        position: 1
-//                        color: "#2b2b2b"
-//                    }
-//                }
+                    GradientStop {
+                        position: 1
+                        color: "#2b2b2b"
+                    }
+                }
                 anchors.right: parent.right
                 anchors.left: parent.left
 
@@ -349,7 +342,7 @@ Rectangle {
     Rectangle {
         id: panelLeft
 
-        width: 144
+        width: 151
         height: 480
         color: "#00000000"
         anchors.left: parent.left
@@ -361,55 +354,437 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             source: "Slices/Panel-Left.png"
+        }
+
+        // Очень плохо, что это здесь находится!!!
+        Image {
+            id: alsnSwitchBackgroundCircle
+            anchors.right: parent.left
+            anchors.rightMargin: -60
+            anchors.top: parent.top
+            anchors.topMargin: -height/2 + 60
+
+            fillMode: "Tile"
+            source: "Slices/alsn-switch.png"
+        }
+
+        Image {
+            x: -14
+            y: 104
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            source: "Slices/Panel-Left-Middle.png"
+        }
+
+        Rectangle {
+            width: 6
+            color: "#4999c9"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+        }
+
+        Column {
+            x: -6
+            y: 0
+            anchors.fill: parent
 
             Rectangle {
-                x: panelLeft.width
-                y: 0
-                width: 7
-                height: rootRect.height - speedBox.height
-                color: "#fff"
-                anchors.top: parent.top
+                id: rightButton1Container
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
 
-                Behavior on height { SmoothedAnimation { duration: 500 } }
+                Rectangle {
+                    id: alsnTextBox
+                    color: "#00000000"
+                    anchors.left: alsnSwitch.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -3
+                    height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
+                    width: alsnTextBoxLine.width
+
+                    Text {
+                        id: alsnTextBoxText
+                        anchors.left: parent.left
+
+                        text: qsTr("АЛСН")
+                        color: "#ffdddddd"
+                        font.pixelSize: 18
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                    Rectangle {
+                        id: alsnTextBoxLine
+                        anchors.left: parent.left
+                        anchors.top: alsnTextBoxText.bottom
+                        width: 60
+                        height: 2
+                        color: "#ffdddddd"
+
+                    }
+                    Text {
+                        id: alsnTextBoxFreq
+                        anchors.left: parent.left
+                        anchors.top: alsnTextBoxLine.bottom
+
+                        text: qsTr("частота")
+                        color: "#ffdddddd"
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
+
+                Rectangle {
+                    id: alsnSwitch
+                    color: "#00000000"
+
+                    anchors.top: parent.top
+                    anchors.topMargin: -height/2 + 60
+                    anchors.right: parent.left
+                    anchors.rightMargin: -60
+                    width: alsnSwitchBackgroundCircle.width
+                    height: alsnSwitchBackgroundCircle.height
+
+                    property real radius: 100
+                    property real angle: 15
+                    property string objColor: "#ffdddddd"
+
+                    Repeater
+                    {
+                        model: [25, 50, 75]
+
+                        Rectangle {
+                            property real myRot: (1 - index) * alsnSwitch.angle
+                            property int freq: modelData
+
+                            x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                            y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                            rotation: myRot
+
+                            color: alsnSwitch.objColor
+                            width: 2
+                            height: 2
+                            smooth: true
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.left
+                                anchors.rightMargin: 4
+
+                                text: parent.freq
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                color: alsnSwitch.objColor
+                                smooth: true
+                            }
+                        }
+                    }
+
+                    states: [
+                        State {
+                            name: "alsn0"
+                            when: (stateView.AlsnFreq != 25 && tateView.AlsnFreq != 50 && tateView.AlsnFreq != 75)
+                            PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn25"
+                            when: (stateView.AlsnFreq == 25)
+                            PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn50"
+                            when: (stateView.AlsnFreq == 50)
+                            PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
+                        },
+                        State {
+                            name: "alsn75"
+                            when: (stateView.AlsnFreq == 75)
+                            PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                        }
+                    ]
+
+                    transitions: Transition {
+                        NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
+                    }
+                }
             }
 
             Rectangle {
-                id: speedValueBar
-                x: panelLeft.width
-                width: 7
-                height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
-                color: "#4999c9"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: speedBox.height
+                id: rightButton2Container
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
 
-                Behavior on height { SmoothedAnimation { duration: 500 } }
+                Rectangle {
+                    id: page1indicator
+                    width: 6
+                    color: "#4999c9"
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
+                    anchors.top: parent.top
+                    anchors.topMargin: -1
+                }
+
+                Column {
+                    id: page1buttonHeader
+                    x: 25
+                    y: 32
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.left: parent.left
+                    anchors.leftMargin: 25
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Текущее")
+                        font.pointSize: 20
+                        font.family: "URW Gothic L"
+                    }
+
+                    Row {
+                        id: page1buttonInfo
+                        spacing: 2
+                        anchors.right: parent.right
+                        Text {
+                            color: "#4999c9"
+                            text: stateView.Speed
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 17
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("/")
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            color: "#c94949"
+                            text: stateView.SpeedRestriction
+                            anchors.bottom: parent.bottom
+//                            font.bold: true
+                            font.pointSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                        }
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: switchPage(1)
+                }
+            }
+            Rectangle {
+                id: rightButton3Container
+                    x: 0
+                    y: 120
+                    height: 120
+                    color: "#00000000"
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+
+                    Rectangle {
+                        id: page2indicator
+                        width: 6
+                        color: "#4999c9"
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: -3
+                        anchors.top: parent.top
+                        anchors.topMargin: 1
+                    }
+                    Column {
+                        id: page2buttonHeader
+                        x: 25
+                        y: 32
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.left: parent.left
+                        anchors.leftMargin: 25
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("Система")
+                            font.pointSize: 20
+                            font.family: "URW Gothic L"
+                        }
+
+                        Row {
+                            id: page2buttonInfo
+                            spacing: 3
+                            anchors.right: parent.right
+
+                            Image {
+                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
+                                                                             stateView.FullSetWarningLevel == 1 ?
+                                                                                 "Slices/FullSet-Small-Warning.png" :
+                                                                                 "Slices/FullSet-Small-Error.png"
+                            }
+                            Image {
+                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
+                            }
+                            Image {
+                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
+                                                                  stateView.IsEpvReady ?
+                                                                      "Slices/Epv-Small-Ok.png" :
+                                                                      "Slices/Epv-Small-NotReady.png"
+                            }
+                            Image {
+                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
+                                                                             stateView.SystemWarningLevel == 1 ?
+                                                                                 "Slices/System-Medium-Warning.png" :
+                                                                                 "Slices/System-Medium-Error.png"
+                            }
+                        }
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onPressed: switchPage(2)
+                    }
             }
 
             Rectangle {
-                id: restrictionBar
-                x: panelLeft.width
-                y: 0
-                width: 7
-                height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
-                color: "#c94949"
-                anchors.top: parent.top
-
-                Behavior on height { SmoothedAnimation { duration: 500 } }
+                id: rightButton4Container
+                height: 120
+                color: "#00000000"
+                anchors.right: parent.right
+                anchors.left: parent.left
             }
+
+        }
+
+
+    }
+
+    Rectangle {
+        id: panelRight
+
+        x: 652
+        y: 0
+        width: 149
+        height: 480
+        color: "#00000000"
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.top: parent.top
+
+        Image {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            source: "Slices/Panel-Right.png"
+        }
+
+
+        Rectangle {
+            id: graduateBar
+
+            width: 10
+
+            color: "#00000000"
+            anchors.top: parent.top
+            anchors.topMargin: restrictionBox.height
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+            anchors.left: parent.left
+
+            Repeater
+            {
+                id: repeater
+                model: Math.floor(maxSpeed/10) - 1
+                Row {
+                    property int sp: (index + 1) * 10
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    height: 14;
+                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
+                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
+                    spacing: 0
+
+                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
+                                width: 4 + 0.4*Math.floor(repeater.count / 6) * index; }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        width: 18
+                        color: "#00000000"
+
+                        Repeater {
+                            model: [ "#71000000", "#a8ffffff" ]
+                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
+                                anchors.verticalCenterOffset: index-1
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.right: parent.right
+                                anchors.rightMargin: 1-index
+                                color: modelData }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        Rectangle {
+            x: 0
+            y: 0
+            width: 7
+            height: rootRect.height - speedBox.height
+            color: "#fff"
+            anchors.top: parent.top
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+
+
+
+
+        Rectangle {
+            id: speedValueBar
+            x: 0
+            width: 7
+            height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            color: "#4999c9"
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+        Rectangle {
+            id: restrictionBar
+            x: 0
+            y: 0
+            width: 7
+            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            color: "#c94949"
+            anchors.top: parent.top
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
         }
 
         Rectangle {
             height: 108
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 0
+            anchors.topMargin: -5
             color: "#00000000"
-            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            anchors.rightMargin: 45
             anchors.right: parent.right
             id: restrictionBox
-            x: 0
-            y: 0
-            width: 134
+            x: 10
+            y: -5
+            width: 94
 
             Repeater {
                 model: [ "#6c000000", "#c94949" ]
@@ -417,8 +792,8 @@ Rectangle {
                 Column {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: index
-                    anchors.right: parent.right
-                    anchors.rightMargin: index
+                    anchors.left: parent.left
+                    anchors.leftMargin: 1-index
 
                     Text {
                         text: stateView.SpeedRestriction
@@ -443,13 +818,11 @@ Rectangle {
 
         Rectangle {
             anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 15
-            width: 70
+            width: 63
             height: 63
             color: "#00000000"
+            anchors.left: parent.left
             id: speedBox
-            x: 66
             y: 417
             Repeater {
                 model: [ "#ff30759e", "#d8ffffff" ]
@@ -481,52 +854,6 @@ Rectangle {
 
 
 
-        Rectangle {
-            id: graduateBar
-
-            width: 10
-
-            color: "#00000000"
-            anchors.top: parent.top
-            anchors.topMargin: restrictionBox.height
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: speedBox.height
-            anchors.right: parent.right
-
-            Repeater
-            {
-                id: repeater
-                model: Math.floor(maxSpeed/20) - 1
-                Row {
-                    property int sp: (index + 1) * 20
-                    anchors.right: parent.right
-                    height: 14;
-                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
-                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
-                    spacing: 2
-
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height
-                        width: 20
-                        color: "#00000000"
-
-                        Repeater {
-                            model: [ "#71000000", "#a8ffffff" ]
-                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
-                                anchors.verticalCenterOffset: index-1
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.right
-                                anchors.rightMargin: 1-index
-                                color: modelData }
-                        }
-                    }
-
-                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
-                                width: 4 + Math.floor( index / repeater.count * 6); }
-                }
-            }
-        }
 
         ListView {
             id: lightsPanel
@@ -534,7 +861,7 @@ Rectangle {
             y: 123
             width: 54
             height: 280
-            anchors.horizontalCenterOffset: -21
+            anchors.horizontalCenterOffset: 15
             interactive: false
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -602,431 +929,6 @@ Rectangle {
                     permissiveIndex: -1
                 }
             }
-        }
-
-
-    }
-
-    Rectangle {
-        id: panelRight
-
-        x: 652
-        y: 0
-        width: 149
-        height: 480
-        color: "#00000000"
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.top: parent.top
-
-        Image {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            source: "Slices/Panel-Right.png"
-        }
-
-        // Очень плохо, что это здесь находится!!!
-        Image {
-            id: alsnSwitchBackgroundCircle
-            anchors.left: parent.right
-            anchors.leftMargin: -60
-            anchors.top: parent.top
-            anchors.topMargin: -height/2 + 60
-
-            fillMode: "Tile"
-            source: "Slices/alsn-switch.png"
-        }
-
-        Image {
-            x: -14
-            y: 104
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            source: "Slices/Panel-Right-Middle.png"
-        }
-
-        Rectangle {
-            width: 6
-            color: "#4999c9"
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            anchors.top: parent.top
-        }
-
-        Column {
-            x: -6
-            y: 0
-            anchors.fill: parent
-
-            Rectangle {
-                id: rightButton1Container
-                height: 120
-                color: "#00000000"
-                anchors.right: parent.right
-                anchors.left: parent.left
-
-                Rectangle {
-                    id: alsnTextBox
-                    color: "#00000000"
-                    anchors.right: alsnSwitch.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -3
-                    height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
-                    width: alsnTextBoxLine.width
-
-                    Text {
-                        id: alsnTextBoxText
-                        anchors.left: parent.left
-
-                        text: qsTr("АЛСН")
-                        color: "#ffdddddd"
-                        font.pixelSize: 18
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                    Rectangle {
-                        id: alsnTextBoxLine
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxText.bottom
-                        width: 60
-                        height: 2
-                        color: "#ffdddddd"
-
-                    }
-                    Text {
-                        id: alsnTextBoxFreq
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxLine.bottom
-
-                        text: qsTr("частота")
-                        color: "#ffdddddd"
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
-
-                Rectangle {
-                    id: alsnSwitch
-                    color: "#00000000"
-
-                    anchors.top: parent.top
-                    anchors.topMargin: -height/2 + 60
-                    anchors.left: parent.right
-                    anchors.leftMargin: -60
-                    width: alsnSwitchBackgroundCircle.width
-                    height: alsnSwitchBackgroundCircle.height
-
-                    property real radius: 102
-                    property real angle: 15
-                    property string objColor: "#ffdddddd"
-
-                    Repeater
-                    {
-                        model: [25, 50, 75]
-
-                        Rectangle {
-                            property real myRot: (1 - index) * alsnSwitch.angle
-                            property int freq: modelData
-
-                            x: alsnSwitch.width/2 - alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
-                            y: alsnSwitch.height/2 - alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
-                            rotation: myRot
-
-                            color: alsnSwitch.objColor
-                            width: 2
-                            height: 2
-                            smooth: true
-
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.left: parent.right
-                                anchors.leftMargin: 6
-
-                                text: parent.freq
-                                font.pixelSize: 14
-                                font.family: "URW Gothic L"
-                                color: alsnSwitch.objColor
-                                smooth: true
-                            }
-                        }
-                    }
-
-                    states: [
-                        State {
-                            name: "alsn0"
-                            when: (stateView.AlsnFreq != 25 && tateView.AlsnFreq != 50 && tateView.AlsnFreq != 75)
-                            PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn25"
-                            when: (stateView.AlsnFreq == 25)
-                            PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn50"
-                            when: (stateView.AlsnFreq == 50)
-                            PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn75"
-                            when: (stateView.AlsnFreq == 75)
-                            PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
-                        }
-                    ]
-
-                    transitions: Transition {
-                        NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
-                    }
-                }
-
-//                Row {
-//                    spacing: 5
-//                    anchors.top: parent.top
-//                    anchors.topMargin: 20
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: 20
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 15
-
-//                    Column {
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 0
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 0
-//                        Text {
-//                            text: qsTr("25")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("50")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                        Text {
-//                            text: qsTr("75")
-//                            font.pointSize: 10
-//                            font.family: "URW Gothic L"
-//                            verticalAlignment: Text.AlignVCenter
-//                            color: "#ffffff"
-//                            height: parent.height/3
-//                        }
-//                    }
-
-//                    Rectangle {
-//                        id: alsnSelector
-//                        width: 20
-//                        color: "#00000000"
-//                        radius: 8
-//                        border.width: 2
-//                        border.color: "#ffffff"
-//                        anchors.bottom: parent.bottom
-//                        anchors.bottomMargin: 3
-//                        anchors.top: parent.top
-//                        anchors.topMargin: 3
-
-//                        Rectangle {
-//                            id: alsnSelectorMarker
-//                            x: 2
-//                            y: 2
-//                            width: 16
-//                            height: 16
-//                            color: "#ffffff"
-//                            radius: 8
-//                            anchors.horizontalCenter: parent.horizontalCenter
-//                            MouseArea {
-//                                anchors.fill: parent
-//                                drag.target: parent; drag.axis: Drag.YAxis; drag.minimumY: 2; drag.maximumY: parent.parent.height - parent.height - 2;
-//                                onReleased: refreshAlsnState();
-//                            }
-//                        }
-
-//                        states: [
-//                            State {
-//                                name: "alsn0"
-//                                when: (stateView.alsnFreq != 25 && tateView.alsnFreq != 50 && tateView.alsnFreq != 75)
-//                                PropertyChanges { target: alsnSelectorMarker; opacity: 0.2 }
-//                            },
-//                            State {
-//                                name: "alsn25"
-//                                when: (stateView.alsnFreq == 25)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 0.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn50"
-//                                when: (stateView.alsnFreq == 50)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 1.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            },
-//                            State {
-//                                name: "alsn75"
-//                                when: (stateView.alsnFreq == 75)
-//                                PropertyChanges { target: alsnSelectorMarker; y: 2.5*(alsnSelector.height)/3 - 0.5*alsnSelectorMarker.height }
-//                            }
-//                        ]
-
-//                        transitions: Transition {
-//                            NumberAnimation { target: alsnSelectorMarker; properties: "y"; easing.type: Easing.InOutQuad; duration: 200 }
-//                        }
-//                    }
-//                }
-            }
-
-            Rectangle {
-                id: rightButton2Container
-                height: 120
-                color: "#00000000"
-                anchors.right: parent.right
-                anchors.left: parent.left
-
-                Rectangle {
-                    id: page1indicator
-                    width: 6
-                    color: "#4999c9"
-                    anchors.left: parent.left
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.top: parent.top
-                    anchors.topMargin: -1
-                }
-
-                Column {
-                    id: page1buttonHeader
-                    x: 25
-                    y: 32
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.left: parent.left
-                    anchors.leftMargin: 25
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Text {
-                        color: "#ffffff"
-                        text: qsTr("Текущее")
-                        font.pointSize: 20
-                        font.family: "URW Gothic L"
-                    }
-
-                    Row {
-                        id: page1buttonInfo
-                        spacing: 2
-                        anchors.right: parent.right
-                        Text {
-                            color: "#4999c9"
-                            text: Math.round(stateView.Speed)
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 17
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#ffffff"
-                            text: qsTr("/")
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#c94949"
-                            text: stateView.SpeedRestriction
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                        }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: switchPage(1)
-                }
-            }
-            Rectangle {
-                id: rightButton3Container
-                    x: 0
-                    y: 120
-                    height: 120
-                    color: "#00000000"
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-
-                    Rectangle {
-                        id: page2indicator
-                        width: 6
-                        color: "#4999c9"
-                        anchors.left: parent.left
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: -3
-                        anchors.top: parent.top
-                        anchors.topMargin: 1
-                    }
-                    Column {
-                        id: page2buttonHeader
-                        x: 25
-                        y: 32
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        anchors.left: parent.left
-                        anchors.leftMargin: 25
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Text {
-                            color: "#ffffff"
-                            text: qsTr("Система")
-                            font.pointSize: 20
-                            font.family: "URW Gothic L"
-                        }
-
-                        Row {
-                            id: page2buttonInfo
-                            spacing: 3
-                            anchors.right: parent.right
-
-                            Image {
-                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
-                                                                             stateView.FullSetWarningLevel == 1 ?
-                                                                                 "Slices/FullSet-Small-Warning.png" :
-                                                                                 "Slices/FullSet-Small-Error.png"
-                            }
-                            Image {
-                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
-                            }
-                            Image {
-                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
-                                                                  stateView.IsEpvReady ?
-                                                                      "Slices/Epv-Small-Ok.png" :
-                                                                      "Slices/Epv-Small-NotReady.png"
-                            }
-                            Image {
-                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
-                                                                             stateView.SystemWarningLevel == 1 ?
-                                                                                 "Slices/System-Medium-Warning.png" :
-                                                                                 "Slices/System-Medium-Error.png"
-                            }
-                        }
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onPressed: switchPage(2)
-                    }
-            }
-
-            Rectangle {
-                id: rightButton4Container
-                height: 120
-                color: "#00000000"
-                anchors.right: parent.right
-                anchors.left: parent.left
-            }
-
         }
 
     }

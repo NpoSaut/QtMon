@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 80
+    property double maxSpeed: 100
 
     function switchPage(i) {
         if (i == 1) {
@@ -384,6 +384,215 @@ Rectangle {
                    }
                }
 
+            }
+
+            // Спидометр
+            Rectangle {
+                id: speedometer
+                anchors.right: parent.right
+                anchors.rightMargin: 30
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 10
+                color: "#00000000"
+                //border.color: "#60ffa000"
+                //border.width: 1
+                //clip: true
+                width: 300
+                height: width
+
+                // Количество засечек
+                property int tickCount: 10
+
+                property double minAngle: 1.25 * Math.PI
+                property double maxAngle: -0.25 * Math.PI
+                property double anglePerKph: (minAngle - maxAngle)/maxSpeed
+
+                property double tableRadius: width / 2
+
+                // Обрезалка
+                Rectangle {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    property double filedWidth: 15
+
+                    anchors.topMargin: -filedWidth
+                    anchors.leftMargin: -filedWidth
+                    anchors.rightMargin: -filedWidth
+
+                    height: (1 - Math.sin(parent.minAngle)) * parent.tableRadius + filedWidth - 1
+
+                    color: "#00000000"
+                    clip: true
+
+                    // Дуга шкалы спидометра
+                    Rectangle {
+                        color: "#00000000"
+                        border.color: "#fff"
+                        border.width: 3
+
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        property double unFiledWidth: parent.filedWidth + border.width/2
+                        anchors.topMargin: unFiledWidth
+                        anchors.leftMargin: unFiledWidth
+                        anchors.rightMargin: unFiledWidth
+
+                        height: width
+                        radius: width / 2
+                    }
+                }
+
+                // Насечки на шкале
+                Repeater {
+                    model: speedometer.tickCount + 1
+                    Rectangle {
+
+                        property double kph: index * (maxSpeed / speedometer.tickCount)
+                        property double angle: speedometer.minAngle - kph * speedometer.anglePerKph
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenterOffset: - parent.tableRadius * Math.sin(angle)
+                        anchors.horizontalCenterOffset: parent.tableRadius * Math.cos(angle)
+
+
+                        Rectangle {
+                            width: 10
+                            height: 3
+
+                            rotation: -angle * 180 / Math.PI
+                            smooth: true
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 20 * Math.sin(parent.angle)
+                            anchors.horizontalCenterOffset: - 20 * Math.cos(parent.angle)
+                            text: parent.kph
+                            color: "#ffffffff"
+
+                            font.pixelSize: 16
+                            font.family: "URW Gothic L"
+                        }
+                    }
+                }
+
+                // Стрелка спидометра
+                Image {
+                    source: "Slices/Speed-Needle.png"
+
+                    rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
+                    smooth: true
+
+                    transformOrigin: Item.Right
+
+                    anchors.right: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                // Стрелка ограничения скорости
+                Rectangle {
+                    //source: "Slices/Speed-Needle.png"
+
+                    transformOrigin: Item.Right
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property double r: parent.tableRadius + 4
+                    property double angle: speedometer.minAngle - stateView.SpeedRestriction * speedometer.anglePerKph
+
+                    anchors.verticalCenterOffset: - r * Math.sin(angle)
+                    anchors.horizontalCenterOffset: r * Math.cos(angle)
+
+                    rotation: 180 - angle * 180 / Math.PI
+
+                    Rectangle {
+                        width: 16
+                        height: 6
+                        color: "#c94949"
+                        smooth: true
+
+                        anchors.right: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                // Стрелка целевой скорости
+                Rectangle {
+                    //source: "Slices/Speed-Needle.png"
+
+                    transformOrigin: Item.Right
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property double r: parent.tableRadius + 4
+                    property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
+
+                    anchors.verticalCenterOffset: - r * Math.sin(angle)
+                    anchors.horizontalCenterOffset: r * Math.cos(angle)
+
+                    rotation: 180 - angle * 180 / Math.PI
+
+                    Rectangle {
+                        width: 16
+                        height: 6
+                        color: "#ffd500"
+                        smooth: true
+
+                        anchors.right: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                // Числа скорости и ограничения в кругляше в центре
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    width: 80
+                    height: width
+                    radius: width / 2
+
+                    color: "#4999c9"
+
+                    // Текущая скорость
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        text: stateView.Speed
+                        color: "#fff"
+
+                        font.pixelSize: 35
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+
+                    // Ограничение скорости
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 65
+
+                        text: stateView.SpeedRestriction
+                        color: "#c94949"
+
+                        font.pixelSize: 35
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+
+                }
             }
 
             Rectangle {

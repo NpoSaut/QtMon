@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 80
+    property double maxSpeed: 160
 
     function switchPage(i) {
         if (i == 1) {
@@ -116,6 +116,12 @@ Rectangle {
         NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+    }
+
+    Timer {
+        interval: 10000
+        onTriggered: switchPage(2-pageNum)
+        running: true
     }
 
     Rectangle {
@@ -301,17 +307,18 @@ Rectangle {
             Rectangle {
                 id: page2container
                 height: pagesArea.height
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#6b6b6b"
-                    }
+                color: "#6b6b6b"
+//                gradient: Gradient {
+//                    GradientStop {
+//                        position: 0
+//                        color: "#6b6b6b"
+//                    }
 
-                    GradientStop {
-                        position: 1
-                        color: "#2b2b2b"
-                    }
-                }
+//                    GradientStop {
+//                        position: 1
+//                        color: "#2b2b2b"
+//                    }
+//                }
                 anchors.right: parent.right
                 anchors.left: parent.left
 
@@ -437,7 +444,7 @@ Rectangle {
         Rectangle {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 8
+            anchors.rightMargin: 15
             width: 70
             height: 63
             color: "#00000000"
@@ -489,9 +496,9 @@ Rectangle {
             Repeater
             {
                 id: repeater
-                model: Math.floor(maxSpeed/10) - 1
+                model: Math.floor(maxSpeed/20) - 1
                 Row {
-                    property int sp: (index + 1) * 10
+                    property int sp: (index + 1) * 20
                     anchors.right: parent.right
                     height: 14;
                     y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
@@ -516,7 +523,7 @@ Rectangle {
                     }
 
                     Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
-                                width: 4 + Math.floor(repeater.count / 6) * index; }
+                                width: 4 + Math.floor( index / repeater.count * 6); }
                 }
             }
         }
@@ -913,7 +920,7 @@ Rectangle {
                         anchors.right: parent.right
                         Text {
                             color: "#4999c9"
-                            text: stateView.Speed
+                            text: Math.round(stateView.Speed)
                             anchors.bottom: parent.bottom
 //                            font.bold: true
                             font.pointSize: 17

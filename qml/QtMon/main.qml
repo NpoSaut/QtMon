@@ -582,6 +582,21 @@ Rectangle {
                 }
             }
 
+            // Треугольники направления движения
+            Row {
+                spacing: 100
+                anchors.horizontalCenter: speedometer.horizontalCenter
+                anchors.bottom: speedometer.bottom
+                anchors.bottomMargin: 10
+
+                Image {
+                    source: "Slices/Direction-Forward.png"
+                }
+                Image {
+                    source: "Slices/Direction-Back.png"
+                }
+            }
+
             Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom

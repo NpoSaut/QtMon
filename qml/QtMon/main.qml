@@ -156,10 +156,10 @@ Rectangle {
                 anchors.leftMargin: 10
                 anchors.topMargin: 5
                 anchors.top: parent.top
-                spacing: 10
+                spacing: 70
 
                 Column {
-                    spacing: 10
+                    spacing: 40
                     width: 120
 
                     // Координата

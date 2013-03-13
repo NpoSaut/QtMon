@@ -154,13 +154,13 @@ Rectangle {
             Row {
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.topMargin: 5
+                anchors.topMargin: 23
                 anchors.top: parent.top
                 spacing: 70
 
                 Column {
                     spacing: 40
-                    width: 120
+                    width: 123
 
                     // Координата
                    Column {

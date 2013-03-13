@@ -52,6 +52,62 @@ void SystemStateViewModel::setSpeedRestriction(const int value)
     }
 }
 
+// Целевая скорость
+const int SystemStateViewModel::getTargetSpeed() const
+{
+    return gettargetSpeedValue;
+}
+void SystemStateViewModel::setTargetSpeed(const int value)
+{
+    if (gettargetSpeedValue != value)
+    {
+        gettargetSpeedValue = value;
+        emit TargetSpeedChanged();
+    }
+}
+
+// Ускорение
+const double SystemStateViewModel::getAcceleration() const
+{
+    return getaccelerationValue;
+}
+void SystemStateViewModel::setAcceleration(const double value)
+{
+    if (getaccelerationValue != value)
+    {
+        getaccelerationValue = value;
+        emit AccelerationChanged();
+    }
+}
+
+// ТЦ
+const QString SystemStateViewModel::getPressureTC() const
+{
+    return getpressureTCValue;
+}
+void SystemStateViewModel::setPressureTC(const QString value)
+{
+    if (getpressureTCValue != value)
+    {
+        getpressureTCValue = value;
+        emit PressureTCChanged();
+    }
+}
+
+// ТМ
+const QString SystemStateViewModel::getPressureTM() const
+{
+    return getpressureTMValue;
+}
+void SystemStateViewModel::setPressureTM(const QString value)
+{
+    if (getpressureTMValue != value)
+    {
+        getpressureTMValue = value;
+        emit PressureTMChanged();
+    }
+}
+
 const double SystemStateViewModel::getLongitude() const
 {
     return getlongitudeValue;
@@ -75,20 +131,6 @@ void SystemStateViewModel::setLatitude(const double value)
     {
         getlatitudeValue = value;
         emit LatitudeChanged();
-    }
-}
-
-// Необходимость подтверждения бдительности
-const bool SystemStateViewModel::getIsVigilanceRequired() const
-{
-    return getisVigilanceRequiredValue;
-}
-void SystemStateViewModel::setIsVigilanceRequired(const bool value)
-{
-    if (getisVigilanceRequiredValue != value)
-    {
-        getisVigilanceRequiredValue = value;
-        emit IsVigilanceRequiredChanged();
     }
 }
 
@@ -229,6 +271,62 @@ void SystemStateViewModel::setDate(const QString value)
     {
         getdateValue = value;
         emit DateChanged();
+    }
+}
+
+// Наличие кассеты регистрации
+const bool SystemStateViewModel::getIsRegistrationTapeActive() const
+{
+    return getisRegistrationTapeActiveValue;
+}
+void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
+{
+    if (getisRegistrationTapeActiveValue != value)
+    {
+        getisRegistrationTapeActiveValue = value;
+        emit IsRegistrationTapeActiveChanged();
+    }
+}
+
+// Режим движения (М = маневровый, П = поездной)
+const QString SystemStateViewModel::getDriveMode() const
+{
+    return getdriveModeValue;
+}
+void SystemStateViewModel::setDriveMode(const QString value)
+{
+    if (getdriveModeValue != value)
+    {
+        getdriveModeValue = value;
+        emit DriveModeChanged();
+    }
+}
+
+// Необходимость подтверждения бдительности
+const bool SystemStateViewModel::getIsVigilanceRequired() const
+{
+    return getisVigilanceRequiredValue;
+}
+void SystemStateViewModel::setIsVigilanceRequired(const bool value)
+{
+    if (getisVigilanceRequiredValue != value)
+    {
+        getisVigilanceRequiredValue = value;
+        emit IsVigilanceRequiredChanged();
+    }
+}
+
+// Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
+const int SystemStateViewModel::getDirection() const
+{
+    return getdirectionValue;
+}
+void SystemStateViewModel::setDirection(const int value)
+{
+    if (getdirectionValue != value)
+    {
+        getdirectionValue = value;
+        emit DirectionChanged();
     }
 }
 

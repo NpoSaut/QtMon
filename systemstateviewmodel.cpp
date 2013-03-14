@@ -8,8 +8,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
-    pressureTCValue = 0;
-    pressureTMValue = 0;
+    pressureTCValue = "0.00";
+    pressureTMValue = "0.00";
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
     systemWarningLevelValue = 0;
@@ -23,7 +23,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
-    driveModeValue = П;
+    driveModeValue = "П";
     isVigilanceRequiredValue = true;
     directionValue = 0;
     propertyViewValue = false;

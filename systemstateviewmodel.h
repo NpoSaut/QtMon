@@ -9,93 +9,93 @@ class SystemStateViewModel : public QDeclarativeItem
 
     // private properties start
     // Текущая скорость
-    double getspeedValue;
+    double speedValue;
     Q_PROPERTY(double Speed READ getSpeed WRITE setSpeed NOTIFY SpeedChanged)
 
     // Ограничение скорости
-    int getspeedRestrictionValue;
+    int speedRestrictionValue;
     Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
 
     // Целевая скорость
-    int gettargetSpeedValue;
+    int targetSpeedValue;
     Q_PROPERTY(int TargetSpeed READ getTargetSpeed WRITE setTargetSpeed NOTIFY TargetSpeedChanged)
 
     // Ускорение
-    double getaccelerationValue;
+    double accelerationValue;
     Q_PROPERTY(double Acceleration READ getAcceleration WRITE setAcceleration NOTIFY AccelerationChanged)
 
     // Давление ТЦ
-    QString getpressureTCValue;
+    QString pressureTCValue;
     Q_PROPERTY(QString PressureTC READ getPressureTC WRITE setPressureTC NOTIFY PressureTCChanged)
 
     // Давление ТМ
-    QString getpressureTMValue;
+    QString pressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
 
-    double getlongitudeValue;
+    double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
 
-    double getlatitudeValue;
+    double latitudeValue;
     Q_PROPERTY(double Latitude READ getLatitude WRITE setLatitude NOTIFY LatitudeChanged)
 
     // Общий уровень предупреждений
-    int getsystemWarningLevelValue;
+    int systemWarningLevelValue;
     Q_PROPERTY(int SystemWarningLevel READ getSystemWarningLevel WRITE setSystemWarningLevel NOTIFY SystemWarningLevelChanged)
 
     // Укомплектованность конфигурации
-    int getfullSetWarningLevelValue;
+    int fullSetWarningLevelValue;
     Q_PROPERTY(int FullSetWarningLevel READ getFullSetWarningLevel WRITE setFullSetWarningLevel NOTIFY FullSetWarningLevelChanged)
 
     // Давление в норме
-    bool getisPressureOkValue;
+    bool isPressureOkValue;
     Q_PROPERTY(bool IsPressureOk READ getIsPressureOk WRITE setIsPressureOk NOTIFY IsPressureOkChanged)
 
     // Готовность ЭПК
-    bool getisEpvReadyValue;
+    bool isEpvReadyValue;
     Q_PROPERTY(bool IsEpvReady READ getIsEpvReady WRITE setIsEpvReady NOTIFY IsEpvReadyChanged)
 
     // Признак срыва ЭПК
-    bool getisEpvReleasedValue;
+    bool isEpvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
 
     // Проиденное расстояние
-    int getmilageValue;
+    int milageValue;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
 
     // Код сигнала светофора (0 - К, 1 - КЖ, ...)
-    int getlightValue;
+    int lightValue;
     Q_PROPERTY(int Light READ getLight WRITE setLight NOTIFY LightChanged)
 
     // Частота АЛСН
-    int getalsnFreqValue;
+    int alsnFreqValue;
     Q_PROPERTY(int AlsnFreq READ getAlsnFreq WRITE setAlsnFreq NOTIFY AlsnFreqChanged)
 
     // Время
-    QString gettimeValue;
+    QString timeValue;
     Q_PROPERTY(QString Time READ getTime WRITE setTime NOTIFY TimeChanged)
 
     // Дата
-    QString getdateValue;
+    QString dateValue;
     Q_PROPERTY(QString Date READ getDate WRITE setDate NOTIFY DateChanged)
 
     // Наличие кассеты регистрации
-    bool getisRegistrationTapeActiveValue;
+    bool isRegistrationTapeActiveValue;
     Q_PROPERTY(bool IsRegistrationTapeActive READ getIsRegistrationTapeActive WRITE setIsRegistrationTapeActive NOTIFY IsRegistrationTapeActiveChanged)
 
     // Режим движения (М = маневровый, П = поездной)
-    QString getdriveModeValue;
+    QString driveModeValue;
     Q_PROPERTY(QString DriveMode READ getDriveMode WRITE setDriveMode NOTIFY DriveModeChanged)
 
     // Необходимость подтверждения бдительности
-    bool getisVigilanceRequiredValue;
+    bool isVigilanceRequiredValue;
     Q_PROPERTY(bool IsVigilanceRequired READ getIsVigilanceRequired WRITE setIsVigilanceRequired NOTIFY IsVigilanceRequiredChanged)
 
     // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
-    int getdirectionValue;
+    int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
 
     // Неведомо чудо
-    bool getpropertyViewValue;
+    bool propertyViewValue;
     Q_PROPERTY(bool PropertyView READ getPropertyView WRITE setPropertyView NOTIFY PropertyViewChanged)
 
     // private properties end

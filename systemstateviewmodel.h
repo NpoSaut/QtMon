@@ -24,11 +24,11 @@ class SystemStateViewModel : public QDeclarativeItem
     double getaccelerationValue;
     Q_PROPERTY(double Acceleration READ getAcceleration WRITE setAcceleration NOTIFY AccelerationChanged)
 
-    // ТЦ
+    // Давление ТЦ
     QString getpressureTCValue;
     Q_PROPERTY(QString PressureTC READ getPressureTC WRITE setPressureTC NOTIFY PressureTCChanged)
 
-    // ТМ
+    // Давление ТМ
     QString getpressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
 

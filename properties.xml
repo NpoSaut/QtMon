@@ -2,14 +2,14 @@
   <ClassInfo name="SystemStateViewModel" />
   <Properties>
     <!-- Скорость и ограничения -->
-    <Property type="double" name="Speed" def="48" description="Текущая скорость" source="IPD_STATE" />
-    <Property type="int" name="SpeedRestriction" def="65" description="Ограничение скорости" source="MCO_STATE" />
+    <Property type="double" name="Speed" def="0" description="Текущая скорость" source="IPD_STATE" />
+    <Property type="int" name="SpeedRestriction" def="40" description="Ограничение скорости" source="MCO_STATE" />
     <Property type="int" name="TargetSpeed" def="55" description="Целевая скорость" source="MCO_STATE" />
     <Property type="double" name="Acceleration" def="0" description="Ускорение" source="IPD_STATE" />
 
     <!-- Давление -->
-    <Property type="QString" name="PressureTC" def="0" description="ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
-    <Property type="QString" name="PressureTM" def="0" description="ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTC" def="0" description="Давление ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTM" def="0" description="Давление ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->
 
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
@@ -37,7 +37,7 @@
     <Property type="bool" name="IsRegistrationTapeActive" def="false" description="Наличие кассеты регистрации" source="AMR_STATE_1" />
 
     <!-- Режим движения -->
-    <Property type="QString" name="DriveMode" def="25" description="Режим движения (М = маневровый, П = поездной)" source="MCO_LIMITS" />
+    <Property type="QString" name="DriveMode" def="П" description="Режим движения (М = маневровый, П = поездной)" source="MCO_LIMITS" />
 
     <!-- Бдительность -->
     <Property type="bool" name="IsVigilanceRequired" def="true" description="Необходимость подтверждения бдительности" source="MCO_STATE[6.4]" /> <!-- Мигает если единица, контур если 0 -->

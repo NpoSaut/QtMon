@@ -80,7 +80,7 @@ void SystemStateViewModel::setAcceleration(const double value)
     }
 }
 
-// ТЦ
+// Давление ТЦ
 const QString SystemStateViewModel::getPressureTC() const
 {
     return getpressureTCValue;
@@ -94,7 +94,7 @@ void SystemStateViewModel::setPressureTC(const QString value)
     }
 }
 
-// ТМ
+// Давление ТМ
 const QString SystemStateViewModel::getPressureTM() const
 {
     return getpressureTMValue;

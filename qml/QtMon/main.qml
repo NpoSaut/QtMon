@@ -242,7 +242,8 @@ Rectangle {
                           Text {
                               anchors.horizontalCenter: parent.horizontalCenter
                               anchors.verticalCenter: parent.verticalCenter
-                              text: qsTr("0.15")
+                              //text: qsTr("0.15")
+                              text: stateView.Acceleration
                               color: "#ffffffff"
                               font.pixelSize: 14
                               font.family: "URW Gothic L"
@@ -355,7 +356,8 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: qsTr("П")
+                           text: stateView.DriveMode
+                           //text: qsTr("П")
                            //text: stateView.Time
 
 
@@ -373,7 +375,8 @@ Rectangle {
                        Image {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           source: "Slices/Registration-Type.png"
+                           //source: "Slices/Registration-Type.png"
+                           source: if(stateView.IsRegistrationTapeActive==true) "Slices/Registration-Type.png"
                        }
                    }
                }
@@ -501,7 +504,8 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
 
                     property double r: parent.tableRadius + 4
-                    property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
+                    //property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
+                    property double angle: speedometer.minAngle - stateView.TargetSpeed * speedometer.anglePerKph
 
                     anchors.verticalCenterOffset: - r * Math.sin(angle)
                     anchors.horizontalCenterOffset: r * Math.cos(angle)
@@ -590,10 +594,12 @@ Rectangle {
                 anchors.bottomMargin: 10
 
                 Image {
-                    source: "Slices/Direction-Forward.png"
+                    //source: "Slices/Direction-Forward.png"
+                    source: if(stateView.Direction==1) "Slices/Direction-Forward.png"
                 }
                 Image {
-                    source: "Slices/Direction-Back.png"
+                    //source: "Slices/Direction-Back.png"
+                    source: if(stateView.Direction==-1) "Slices/Direction-Back.png"
                 }
             }
 

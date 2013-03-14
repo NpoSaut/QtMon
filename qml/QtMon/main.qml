@@ -95,8 +95,8 @@ Rectangle {
             PropertyChanges { target: page2indicator; width: 6 }
             PropertyChanges { target: pagesContainer; y: 0 }
 
-            PropertyChanges { target: page1buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.0 }
+            PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
+            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: 20; opacity: 0.05 }
         },
         State {
             name: "page2"
@@ -105,17 +105,17 @@ Rectangle {
             PropertyChanges { target: page2indicator; width: 12 }
             PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
 
-            PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
+            PropertyChanges { target: page1buttonHeader; anchors.rightMargin: 22 }
+            //PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
         }
     ]
 
     transitions: Transition {
         NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
         NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
-        NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+        NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: page1buttonInfo; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: page1buttonInfo; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
     }
 
     Rectangle {
@@ -153,7 +153,7 @@ Rectangle {
 
             Row {
                 anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors.leftMargin: 14
                 anchors.topMargin: 23
                 anchors.top: parent.top
                 spacing: 70
@@ -375,8 +375,8 @@ Rectangle {
                        Image {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           //source: "Slices/Registration-Type.png"
-                           source: if(stateView.IsRegistrationTapeActive==true) "Slices/Registration-Type.png"
+                           source: "Slices/Registration-Type.png"
+                           opacity: stateView.IsRegistrationTapeActive ? 1 : 0
                        }
                    }
                }
@@ -588,18 +588,18 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 100
+                spacing: 90
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
                 anchors.bottomMargin: 10
 
                 Image {
-                    //source: "Slices/Direction-Forward.png"
-                    source: if(stateView.Direction==1) "Slices/Direction-Forward.png"
+                    opacity: stateView.Direction==1 ? 1 : 0.05
+                    source: "Slices/Direction-Forward.png"
                 }
                 Image {
-                    //source: "Slices/Direction-Back.png"
-                    source: if(stateView.Direction==-1) "Slices/Direction-Back.png"
+                    opacity: stateView.Direction==-1 ? 1 : 0.05
+                    source: "Slices/Direction-Back.png"
                 }
             }
 
@@ -962,8 +962,8 @@ Rectangle {
                     y: 32
                     anchors.right: parent.right
                     anchors.rightMargin: 10
-                    anchors.left: parent.left
-                    anchors.leftMargin: 25
+                    //anchors.left: parent.left
+                    //anchors.leftMargin: 25
                     anchors.verticalCenter: parent.verticalCenter
 
                     Text {
@@ -1030,7 +1030,7 @@ Rectangle {
                     Column {
                         id: page2buttonHeader
                         anchors.right: parent.right
-                        anchors.rightMargin: 10
+                        anchors.rightMargin: 14
                         //anchors.left: parent.left
                         //anchors.leftMargin: 25
                         anchors.verticalCenter: parent.verticalCenter

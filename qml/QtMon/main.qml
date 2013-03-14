@@ -1089,9 +1089,21 @@ Rectangle {
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
 
-            source: stateView.IsVigilanceRequired ?
-                    "Slices/Vigilance-Sign-Active.png" :
-                    "Slices/Vigilance-Sign-Inactive.png"
+            source: "Slices/Vigilance-Sign-Inactive.png"
+
+            Image {
+                anchors.fill: parent
+                source: "Slices/Vigilance-Sign-Active-Overlay.png"
+                opacity: 0
+                //opacity: stateView.IsVigilanceRequired ? 1 : 0
+
+                Timer {
+                    interval: 400
+                    running: stateView.IsVigilanceRequired || (parent.opacity != 0)
+                    repeat: true
+                    onTriggered: parent.opacity = 1 - parent.opacity
+                }
+            }
 
             MouseArea {
                 anchors.fill: parent

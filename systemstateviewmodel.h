@@ -86,9 +86,13 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isRegistrationTapeActiveValue;
     Q_PROPERTY(bool IsRegistrationTapeActive READ getIsRegistrationTapeActive WRITE setIsRegistrationTapeActive NOTIFY IsRegistrationTapeActiveChanged)
 
-    // Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
-    int driveModeValue;
-    Q_PROPERTY(int DriveMode READ getDriveMode WRITE setDriveMode NOTIFY DriveModeChanged)
+    // Целевой Режим движения
+    int driveModeTargetValue;
+    Q_PROPERTY(int DriveModeTarget READ getDriveModeTarget WRITE setDriveModeTarget NOTIFY DriveModeTargetChanged)
+
+    // Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
+    int driveModeFactValue;
+    Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY DriveModeFactChanged)
 
     // Необходимость подтверждения бдительности
     bool isVigilanceRequiredValue;
@@ -128,7 +132,8 @@ public:
     const QString getTime() const;
     const QString getDate() const;
     const bool getIsRegistrationTapeActive() const;
-    const int getDriveMode() const;
+    const int getDriveModeTarget() const;
+    const int getDriveModeFact() const;
     const bool getIsVigilanceRequired() const;
     const int getDirection() const;
     const bool getPropertyView() const;
@@ -156,7 +161,8 @@ signals:
     void TimeChanged();
     void DateChanged();
     void IsRegistrationTapeActiveChanged();
-    void DriveModeChanged();
+    void DriveModeTargetChanged();
+    void DriveModeFactChanged();
     void IsVigilanceRequiredChanged();
     void DirectionChanged();
     void PropertyViewChanged();
@@ -184,7 +190,8 @@ public slots:
     void setTime(const QString);
     void setDate(const QString);
     void setIsRegistrationTapeActive(const bool);
-    void setDriveMode(const int);
+    void setDriveModeTarget(const int);
+    void setDriveModeFact(const int);
     void setIsVigilanceRequired(const bool);
     void setDirection(const int);
     void setPropertyView(const bool);

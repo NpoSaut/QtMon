@@ -24,7 +24,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
-    driveModeValue = 0;
+    driveModeTargetValue = 0;
+    driveModeFactValue = 0;
     isVigilanceRequiredValue = true;
     directionValue = 0;
     propertyViewValue = false;
@@ -310,17 +311,31 @@ void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
     }
 }
 
-// Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
-const int SystemStateViewModel::getDriveMode() const
+// Целевой Режим движения
+const int SystemStateViewModel::getDriveModeTarget() const
 {
-    return driveModeValue;
+    return driveModeTargetValue;
 }
-void SystemStateViewModel::setDriveMode(const int value)
+void SystemStateViewModel::setDriveModeTarget(const int value)
 {
-    if (driveModeValue != value)
+    if (driveModeTargetValue != value)
     {
-        driveModeValue = value;
-        emit DriveModeChanged();
+        driveModeTargetValue = value;
+        emit DriveModeTargetChanged();
+    }
+}
+
+// Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
+const int SystemStateViewModel::getDriveModeFact() const
+{
+    return driveModeFactValue;
+}
+void SystemStateViewModel::setDriveModeFact(const int value)
+{
+    if (driveModeFactValue != value)
+    {
+        driveModeFactValue = value;
+        emit DriveModeFactChanged();
     }
 }
 

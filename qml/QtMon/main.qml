@@ -88,7 +88,7 @@ Rectangle {
         }
         // Alt: Режим движения
         else if (altMode && event.key == Qt.Key_F3) {
-            stateView.DriveMode = 1 - stateView.DriveMode;
+            stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
         }
         // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
@@ -379,7 +379,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: { switch (stateView.DriveMode)
+                           text: { switch (stateView.DriveModeFact)
                                    {
                                        case 0: return "П";
                                        case 1: return "М";

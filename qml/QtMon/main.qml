@@ -356,10 +356,14 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: stateView.DriveMode
-                           //text: qsTr("П")
-                           //text: stateView.Time
-
+                           text: { switch (stateView.DriveMode)
+                                   {
+                                       case 0: return "П";
+                                       case 1: return "М";
+                                       case 2: return "Р";
+                                       case 3: return"Д";
+                                   }
+                                }
 
                            color: "#ffffffff"
                            font.pixelSize: 14

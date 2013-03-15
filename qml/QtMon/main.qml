@@ -65,14 +65,14 @@ Rectangle {
             // Send CAN requset to change ALSN freq
 
             // Emulation
-            if (stateView.AlsnFreq == 25 )
-                stateView.AlsnFreq = 50;
-            else if ( stateView.AlsnFreq == 50 )
-                stateView.AlsnFreq = 75;
-            else if ( stateView.AlsnFreq == 75 )
-                stateView.AlsnFreq = 25;
+            if (stateView.AlsnFreqTarget == 25 )
+                stateView.AlsnFreqTarget = 50;
+            else if ( stateView.AlsnFreqTarget == 50 )
+                stateView.AlsnFreqTarget = 75;
+            else if ( stateView.AlsnFreqTarget == 75 )
+                stateView.AlsnFreqTarget = 25;
             else
-                stateView.AlsnFreq = 25;
+                stateView.AlsnFreqTarget = 25;
         }
         // Страница железнодорожного режима
         else if (!altMode && event.key == Qt.Key_F2) {
@@ -901,7 +901,8 @@ Rectangle {
 
                     property real radius: 100
                     property real angle: 15
-                    property string objColor: "#ffdddddd"
+                    property string objColor: "#ddd"
+                    property string objHighlightColor: "#f22"
 
                     Repeater
                     {
@@ -915,7 +916,7 @@ Rectangle {
                             y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
                             rotation: myRot
 
-                            color: alsnSwitch.objColor
+                            color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
                             width: 2
                             height: 2
                             smooth: true
@@ -937,22 +938,22 @@ Rectangle {
                     states: [
                         State {
                             name: "alsn0"
-                            when: (stateView.AlsnFreq != 25 && tateView.AlsnFreq != 50 && tateView.AlsnFreq != 75)
+                            when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
                             PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn25"
-                            when: (stateView.AlsnFreq == 25)
+                            when: (stateView.AlsnFreqTarget == 25)
                             PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn50"
-                            when: (stateView.AlsnFreq == 50)
+                            when: (stateView.AlsnFreqTarget == 50)
                             PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn75"
-                            when: (stateView.AlsnFreq == 75)
+                            when: (stateView.AlsnFreqTarget == 75)
                             PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
                         }
                     ]

@@ -19,7 +19,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isEpvReleasedValue = false;
     milageValue = 0;
     lightValue = 0;
-    alsnFreqValue = 25;
+    alsnFreqTargetValue = 25;
+    alsnFreqFactValue = 25;
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
@@ -239,17 +240,31 @@ void SystemStateViewModel::setLight(const int value)
     }
 }
 
-// Частота АЛСН
-const int SystemStateViewModel::getAlsnFreq() const
+// Целевая Частота АЛСН
+const int SystemStateViewModel::getAlsnFreqTarget() const
 {
-    return alsnFreqValue;
+    return alsnFreqTargetValue;
 }
-void SystemStateViewModel::setAlsnFreq(const int value)
+void SystemStateViewModel::setAlsnFreqTarget(const int value)
 {
-    if (alsnFreqValue != value)
+    if (alsnFreqTargetValue != value)
     {
-        alsnFreqValue = value;
-        emit AlsnFreqChanged();
+        alsnFreqTargetValue = value;
+        emit AlsnFreqTargetChanged();
+    }
+}
+
+// Фактическая Частота АЛСН
+const int SystemStateViewModel::getAlsnFreqFact() const
+{
+    return alsnFreqFactValue;
+}
+void SystemStateViewModel::setAlsnFreqFact(const int value)
+{
+    if (alsnFreqFactValue != value)
+    {
+        alsnFreqFactValue = value;
+        emit AlsnFreqFactChanged();
     }
 }
 

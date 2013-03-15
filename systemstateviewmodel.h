@@ -66,9 +66,13 @@ class SystemStateViewModel : public QDeclarativeItem
     int lightValue;
     Q_PROPERTY(int Light READ getLight WRITE setLight NOTIFY LightChanged)
 
-    // Частота АЛСН
-    int alsnFreqValue;
-    Q_PROPERTY(int AlsnFreq READ getAlsnFreq WRITE setAlsnFreq NOTIFY AlsnFreqChanged)
+    // Целевая Частота АЛСН
+    int alsnFreqTargetValue;
+    Q_PROPERTY(int AlsnFreqTarget READ getAlsnFreqTarget WRITE setAlsnFreqTarget NOTIFY AlsnFreqTargetChanged)
+
+    // Фактическая Частота АЛСН
+    int alsnFreqFactValue;
+    Q_PROPERTY(int AlsnFreqFact READ getAlsnFreqFact WRITE setAlsnFreqFact NOTIFY AlsnFreqFactChanged)
 
     // Время
     QString timeValue;
@@ -119,7 +123,8 @@ public:
     const bool getIsEpvReleased() const;
     const int getMilage() const;
     const int getLight() const;
-    const int getAlsnFreq() const;
+    const int getAlsnFreqTarget() const;
+    const int getAlsnFreqFact() const;
     const QString getTime() const;
     const QString getDate() const;
     const bool getIsRegistrationTapeActive() const;
@@ -146,7 +151,8 @@ signals:
     void IsEpvReleasedChanged();
     void MilageChanged();
     void LightChanged();
-    void AlsnFreqChanged();
+    void AlsnFreqTargetChanged();
+    void AlsnFreqFactChanged();
     void TimeChanged();
     void DateChanged();
     void IsRegistrationTapeActiveChanged();
@@ -173,7 +179,8 @@ public slots:
     void setIsEpvReleased(const bool);
     void setMilage(const int);
     void setLight(const int);
-    void setAlsnFreq(const int);
+    void setAlsnFreqTarget(const int);
+    void setAlsnFreqFact(const int);
     void setTime(const QString);
     void setDate(const QString);
     void setIsRegistrationTapeActive(const bool);

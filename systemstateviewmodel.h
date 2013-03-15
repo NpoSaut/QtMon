@@ -140,6 +140,9 @@ public:
     // public properties getters end
 
 signals:
+    // Сигнал о нажатии кнопки Выключения Красного
+    void DisableRedButtonPressed();
+
     // properties signals start
     void SpeedChanged();
     void SpeedRestrictionChanged();

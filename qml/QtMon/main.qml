@@ -81,7 +81,7 @@ Rectangle {
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
             // !! Испустить сигнал отмены красного :-/ !!
-            new stateView.DisableRedButtonPressed();
+            stateView.DisableRedButtonPressed();
         }
         // Страница дорожного режима
         else if (!altMode && event.key == Qt.Key_F3) {

@@ -82,9 +82,9 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isRegistrationTapeActiveValue;
     Q_PROPERTY(bool IsRegistrationTapeActive READ getIsRegistrationTapeActive WRITE setIsRegistrationTapeActive NOTIFY IsRegistrationTapeActiveChanged)
 
-    // Режим движения (М = маневровый, П = поездной)
-    QString driveModeValue;
-    Q_PROPERTY(QString DriveMode READ getDriveMode WRITE setDriveMode NOTIFY DriveModeChanged)
+    // Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
+    int driveModeValue;
+    Q_PROPERTY(int DriveMode READ getDriveMode WRITE setDriveMode NOTIFY DriveModeChanged)
 
     // Необходимость подтверждения бдительности
     bool isVigilanceRequiredValue;
@@ -123,7 +123,7 @@ public:
     const QString getTime() const;
     const QString getDate() const;
     const bool getIsRegistrationTapeActive() const;
-    const QString getDriveMode() const;
+    const int getDriveMode() const;
     const bool getIsVigilanceRequired() const;
     const int getDirection() const;
     const bool getPropertyView() const;
@@ -177,7 +177,7 @@ public slots:
     void setTime(const QString);
     void setDate(const QString);
     void setIsRegistrationTapeActive(const bool);
-    void setDriveMode(const QString);
+    void setDriveMode(const int);
     void setIsVigilanceRequired(const bool);
     void setDirection(const int);
     void setPropertyView(const bool);

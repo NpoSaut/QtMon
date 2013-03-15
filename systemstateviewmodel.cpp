@@ -23,7 +23,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
-    driveModeValue = "П";
+    driveModeValue = 0;
     isVigilanceRequiredValue = true;
     directionValue = 0;
     propertyViewValue = false;
@@ -295,12 +295,12 @@ void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
     }
 }
 
-// Режим движения (М = маневровый, П = поездной)
-const QString SystemStateViewModel::getDriveMode() const
+// Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
+const int SystemStateViewModel::getDriveMode() const
 {
     return driveModeValue;
 }
-void SystemStateViewModel::setDriveMode(const QString value)
+void SystemStateViewModel::setDriveMode(const int value)
 {
     if (driveModeValue != value)
     {

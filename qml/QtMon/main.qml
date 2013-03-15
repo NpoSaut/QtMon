@@ -55,12 +55,17 @@ Rectangle {
 
 
     focus: true
+
+    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
+    property bool altMode: false
+
     Keys.onPressed: {
+        // Переключение частоты АЛСН
         if (event.key == Qt.Key_F1) {
             // Send CAN requset to change ALSN freq
 
             // Emulation
-            if ( stateView.AlsnFreq == 25 )
+            if (stateView.AlsnFreq == 25 )
                 stateView.AlsnFreq = 50;
             else if ( stateView.AlsnFreq == 50 )
                 stateView.AlsnFreq = 75;
@@ -69,14 +74,32 @@ Rectangle {
             else
                 stateView.AlsnFreq = 25;
         }
-        else if (event.key == Qt.Key_F2) {
+        // Страница железнодорожного режима
+        else if (!altMode && event.key == Qt.Key_F2) {
             stateView.PropertyView = false;
         }
-        else if (event.key == Qt.Key_F3) {
+        // Alt: Отмена Красного
+        else if (altMode && event.key == Qt.Key_F2) {
+            // !! Испустить сигнал отмены красного :-/ !!
+        }
+        // Страница дорожного режима
+        else if (!altMode && event.key == Qt.Key_F3) {
             stateView.PropertyView = true;
         }
+        // Alt: Режим движения
+        else if (altMode && event.key == Qt.Key_F3) {
+            stateView.DriveMode = 1 - stateView.DriveMode;
+        }
+        // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
-            // Reserved
+            altMode = true;
+        }
+    }
+
+    Keys.onReleased: {
+        // Выключение альтернативного режима клавиш
+        if (event.key == Qt.Key_F4) {
+            altMode = false;
         }
     }
 
@@ -815,8 +838,6 @@ Rectangle {
         }
 
         Column {
-            x: -6
-            y: 0
             anchors.fill: parent
 
             Rectangle {
@@ -962,13 +983,10 @@ Rectangle {
 
                 Column {
                     id: page1buttonHeader
-                    x: 25
-                    y: 32
                     anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    //anchors.left: parent.left
-                    //anchors.leftMargin: 25
+                    anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
+                    visible: !altMode
 
                     Text {
                         color: "#ffffff"
@@ -1005,7 +1023,22 @@ Rectangle {
                             font.pointSize: 14
                             font.family: "URW Gothic L"
                         }
-                        }
+                    }
+                }
+
+                Column {
+                    id: page1buttonAltHeader
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: altMode
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Отмена\nКрасного")
+                        font.pointSize: 16
+                        font.family: "URW Gothic L"
+                    }
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -1014,8 +1047,6 @@ Rectangle {
             }
             Rectangle {
                 id: rightButton3Container
-                    x: 0
-                    y: 120
                     height: 120
                     color: "#00000000"
                     anchors.right: parent.right
@@ -1031,13 +1062,13 @@ Rectangle {
                         anchors.top: parent.top
                         anchors.topMargin: 1
                     }
+
                     Column {
                         id: page2buttonHeader
                         anchors.right: parent.right
                         anchors.rightMargin: 14
-                        //anchors.left: parent.left
-                        //anchors.leftMargin: 25
                         anchors.verticalCenter: parent.verticalCenter
+                        visible: !altMode
 
                         Text {
                             color: "#ffffff"
@@ -1046,6 +1077,21 @@ Rectangle {
                             font.family: "URW Gothic L"
                         }
 
+                    }
+
+                    Column {
+                        id: page2buttonAltHeader
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: altMode
+
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("Режим\nдвижения")
+                            font.pointSize: 16
+                            font.family: "URW Gothic L"
+                        }
                     }
                     MouseArea {
                         anchors.fill: parent
@@ -1059,6 +1105,28 @@ Rectangle {
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#30000000"
+                    anchors.rightMargin: 7
+                    anchors.topMargin: 4
+                    visible: altMode
+                }
+
+                Column {
+                    id: page4buttonAltHeader
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Alt")
+                        font.pointSize: 20
+                        font.family: "URW Gothic L"
+                    }
+                }
             }
 
         }
@@ -1099,7 +1167,7 @@ Rectangle {
                 anchors.fill: parent
                 source: "Slices/Vigilance-Sign-Active-Overlay.png"
                 opacity: 0
-                Behavior on opacity { PropertyAnimation { duration: 70; easing: Easing.InOutCubic } }
+                Behavior on opacity { PropertyAnimation { duration: 70 } }
 
                 Timer {
                     interval: 400

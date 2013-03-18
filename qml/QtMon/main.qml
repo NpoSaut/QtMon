@@ -1099,7 +1099,7 @@ Rectangle {
                 anchors.fill: parent
                 source: "Slices/Vigilance-Sign-Active-Overlay.png"
                 opacity: 0
-                //opacity: stateView.IsVigilanceRequired ? 1 : 0
+                Behavior on opacity { PropertyAnimation { duration: 70; easing: Easing.InOutCubic } }
 
                 Timer {
                     interval: 400

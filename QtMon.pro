@@ -37,8 +37,8 @@ HEADERS += \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h
 
-CONFIG += console
-#    serialport
+CONFIG += console \
+    serialport
 
 #QMAKE_CXXFLAGS += -std=c++11
 

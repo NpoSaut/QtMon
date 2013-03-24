@@ -513,6 +513,7 @@ Rectangle {
                 // Стрелка спидометра
                 Image {
                     source: "Slices/Needle-Speed.png"
+                    visible: stateView.Speed != -1
 
                     rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
                     smooth: true
@@ -589,7 +590,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: stateView.Speed
+                        text: stateView.Speed != -1 ? stateView.Speed.toFixed(0) : "N/A"
                         color: "#fff"
 
                         font.pixelSize: 35
@@ -603,7 +604,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65
 
-                        text: stateView.SpeedRestriction
+                        text: stateView.SpeedRestriction.toFixed(0)
                         color: "#c94949"
 
                         font.pixelSize: 35

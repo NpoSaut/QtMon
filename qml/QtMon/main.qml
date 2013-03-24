@@ -207,7 +207,7 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("123км 400пк 00м")
+                               text: qsTr("--км --пк --м")
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14
@@ -237,7 +237,7 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("1ПР")
+                               text: qsTr("--")
                                color: "#ffffffff"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
@@ -267,7 +267,7 @@ Rectangle {
                               anchors.horizontalCenter: parent.horizontalCenter
                               anchors.verticalCenter: parent.verticalCenter
                               //text: qsTr("0.15")
-                              text: stateView.Acceleration
+                              text: stateView.Acceleration.toFixed(2)
                               color: "#ffffffff"
                               font.pixelSize: 14
                               font.family: "URW Gothic L"
@@ -589,7 +589,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: stateView.Speed
+                        text: stateView.Speed.toFixed()
                         color: "#fff"
 
                         font.pixelSize: 35
@@ -603,7 +603,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65
 
-                        text: stateView.SpeedRestriction
+                        text: stateView.SpeedRestriction.toFixed()
                         color: "#c94949"
 
                         font.pixelSize: 35
@@ -769,8 +769,7 @@ Rectangle {
 
                     Text {
                         id: hintBoxMilageKm
-                        text: Math.round(stateView.Milage/1000) + qsTr('.')
-                                + Math.round(stateView.Milage/100)%10 + qsTr(" км")
+                        text: (stateView.Milage/1000).toFixed(1) + qsTr(" км")
 
                         anchors.top: parent.top
                         anchors.topMargin: 3

@@ -57,10 +57,22 @@ can_frame can_encoder::encode_disp_state_a()
     return frame;
 }
 
-can_frame can_encoder::encode_sys_key(key_state k_state)
+can_frame can_encoder::encode_disp_state_b()
 {
     can_frame frame;
-    frame.can_id = 0x060;
+    frame.can_id = 0x29F;
+    frame.can_dlc = 2;
+
+    frame.data[0] = 0;
+    frame.data[1] = 0;
+
+    return frame;
+}
+
+can_frame can_encoder::encode_sys_key(key_state k_state, int key_code)
+{
+    can_frame frame;
+    frame.can_id = 0x060;   // SYS_KEY
     frame.can_dlc = 1;
 
     int key_state_flag = 0;
@@ -74,12 +86,48 @@ can_frame can_encoder::encode_sys_key(key_state k_state)
             break;
     }
 
-    int key_code = 0x1C;
-
     frame.data[0] = key_code + (key_state_flag << 6);
 
     return frame;
 }
+
+can_frame can_encoder::encode_mm_data(int speed)
+{
+    can_frame frame;
+    frame.can_id = 0x211;
+    frame.can_dlc = 8;
+
+    frame.data[0] = 0;
+    frame.data[1] = speed & 0b11111111;
+    frame.data[2] = 0;
+    frame.data[3] = 0;
+    frame.data[4] = 0;
+    frame.data[5] = 0;
+    frame.data[6] = 0;
+    frame.data[7] = 0;
+
+    return frame;
+}
+
+can_frame can_encoder::encode_ipd_state( double speed, int distance, bool reliable )
+{
+    can_frame frame;
+    frame.can_id = 0x0C4;
+    frame.can_dlc = 8;
+
+    distance = abs(distance);
+
+    frame.data[0] = reliable ? 0 : 1;
+    frame.data[1] = speed != 0 ? 4 : 0; // наличие движения
+    frame.data[2] = speed;
+    frame.data[3] = char(distance/256);
+    frame.data[4] = char(distance);
+    frame.data[5] = char(distance/256/256);
+    frame.data[6] = reliable ? 0 : 1;
+    frame.data[7] = 0;
+}
+
+
 
 
 // Decode
@@ -90,16 +138,19 @@ can_frame can_encoder::encode_sys_key(key_state k_state)
 // 0 - A != B
 // 1 - success
 
-// SAUT_INFO_A
+// IPD_STATE_A
 int can_decoder::decode_speed(struct can_frame* frame, double* speed)
 {
-    if ((*frame).can_id != 0x233) return -1;
+    if ((*frame).can_id != 0x0C4) return -1;
 
+    (*speed) =(double)(   ( ((int)( (*frame).data[1] & 0b000000001 )) << 8 ) + (int)((*frame).data[2])   );
+
+    /* SAUT_INFO_A
     double s1 = (double)((*frame).data[0]);
     double s2 = ( (double)( (*frame).data[1] >> 1 ) ) / 128;
     double s3 = (double)( ((*frame).data[1] & 0b00000001 ) == 0 ? 0 : 256 );
+    (*speed) = s1 + s2 + s3;*/
 
-    (*speed) = s1 + s2 + s3;
     return 1;
 }
 
@@ -113,22 +164,70 @@ int can_decoder::decode_speed_limit(struct can_frame* frame, int* speed_limit)
     return 1;
 }
 
-// SAUT_INFO_A
-int can_decoder::decode_stop_flag(struct can_frame* frame, int* stop_flag)
+// MCO_STATE_A
+int can_decoder::decode_target_speed(struct can_frame* frame, int* target_speed)
 {
-    if ((*frame).can_id != 0x233) return -1;
+    if ((*frame).can_id != 0x050) return -1;
 
-    (*stop_flag) = (int) (( (*frame).data[7] >> 2 ) & 0b00000001 );
+    (*target_speed) = ( ((int)( (*frame).data[3] & 0b01000000 )) << 8 ) + (int)((*frame).data[2]);
 
     return 1;
 }
+
+// IPD_STATE_A
+int can_decoder::decode_acceleration(struct can_frame* frame, double* acceleration)
+{
+    if ((*frame).can_id != 0x0C4) return -1;
+
+    (*acceleration) = (double)( (*frame).data[7] ) / 128;
+
+    return 1;
+}
+
+
+// MCO_STATE_A
+int can_decoder::decode_epv_state(struct can_frame* frame, int* epv_state)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    (*epv_state) = (int) ( ( (*frame).data[5] >> 5 ) & 0b00000001 );
+
+    return 1;
+}
+
+// MCO_STATE_A
+int can_decoder::decode_epv_key(struct can_frame* frame, int* epv_key)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    (*epv_key) = (int) ( ( (*frame).data[0] >> 6 ) & 0b00000001 );
+
+    return 1;
+}
+
+
 
 // IPD_STATE_A
 int can_decoder::decode_movement_direction(struct can_frame* frame, int* movement_direction)
 {
     if ((*frame).can_id != 0x0C4) return -1;
 
-    (*movement_direction) = (int) (( (*frame).data[1] >> 7 ) & 0b00000001 );
+    int stop_flag = (int) (( (*frame).data[1] >> 2 ) & 0b00000001 );
+    int direction = (int) (( (*frame).data[1] >> 7 ) & 0b00000001 );
+
+    // return -1 = назад, 0 = стоим, +1 = вперёд
+    if (stop_flag == 0) // Стоим
+    {
+        (*movement_direction) = 0;
+    }
+    else if (direction == 0) // Едем вперёд
+    {
+        (*movement_direction) = 1;
+    }
+    else if (direction == 1) // Едем назад
+    {
+        (*movement_direction) = -1;
+    }
 
     return 1;
 }
@@ -173,26 +272,6 @@ int can_decoder::decode_passed_distance(struct can_frame* frame, int* passed_dis
     return 1;
 }
 
-// MCO_STATE_A
-int can_decoder::decode_epv_state(struct can_frame* frame, int* epv_state)
-{
-    if ((*frame).can_id != 0x050) return -1;
-
-    (*epv_state) = (int) ( ( (*frame).data[5] >> 5 ) & 0b00000001 );
-
-    return 1;
-}
-
-// MCO_STATE_A
-int can_decoder::decode_epv_key(struct can_frame* frame, int* epv_key)
-{
-    if ((*frame).can_id != 0x050) return -1;
-
-    (*epv_key) = (int) ( ( (*frame).data[0] >> 6 ) & 0b00000001 );
-
-    return 1;
-}
-
 
 // MM_ALT_LONG
 int can_decoder::decode_mm_lat_lon(struct can_frame* frame, double* lat, double* lon)
@@ -225,13 +304,67 @@ int can_decoder::decode_ipd_date(struct can_frame* frame, int* ipd_year, int* ip
     return 1;
 }
 
+// MCO_LIMITS_A
+int can_decoder::decode_driving_mode(struct can_frame* frame, int* driving_mode)
+{
+    if ((*frame).can_id != 0x052) return -1;
 
-void nmea::decode_nmea_message(QString message, struct gps_data* gd)
+    (*driving_mode) = (int) (( (*frame).data[7] ) & 0b00000011 );
+
+    return 1;
+}
+
+// MCO_STATE_A
+int can_decoder::decode_vigilance(struct can_frame* frame, int* vigilance)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    (*vigilance) = (int) (( (*frame).data[5] >> 4 ) & 0b00000001 );
+
+    return 1;
+}
+
+// AMR_STATE_I
+int can_decoder::decode_reg_tape_avl(struct can_frame* frame, int* reg_tape_avl)
+{
+    if ((*frame).can_id != 0x66F) return -1;
+
+    (*reg_tape_avl) = (int) (( (*frame).data[0] ) & 0b00000001 );
+
+    return 1;
+}
+
+// MVD_DD
+int can_decoder::decode_pressure_tc_tm(struct can_frame* frame, double* pressure_tc, double* pressure_tm)
+{
+    if ((*frame).can_id != 0x2EA) return -1;
+
+    (*pressure_tc) = ((double)((*frame).data[1]))/255;
+    (*pressure_tm) = ((double)((*frame).data[2]))/255;
+
+    return 1;
+}
+
+// VDS_STATE_A
+int can_decoder::decode_ssps_mode(struct can_frame* frame, int* ssps_mode)
+{
+    if ((*frame).can_id != 0x2E0) return -1;
+
+    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b00000001 );
+
+    return 1;
+}
+
+
+
+bool nmea::decode_nmea_message(QString message, struct gps_data* gd)
 {
     if (message.mid(3,3) == "RMC")
     {
         decode_rmc(message, gd);
+        return true;
     }
+    else return false;
 }
 
 // $GPRMC,024607.000,V,5651.27857,N,06035.91777,E,0.0,0.0,241212,,,N*70
@@ -264,11 +397,7 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
     int dty = ("20" + fields.at(9).mid(4,2)).toInt();
 
     // Reliability
-    bool IsReliable = false;
-    if (fields.at(2) == "A")
-        IsReliable = true;
-    else if (fields.at(2) == "V")
-        IsReliable = false;
+    bool IsReliable = fields.at(2).toLower().contains("a");
 
     // Lattitude, degrees
     double latd = fields.at(3).mid(0,2).toDouble();
@@ -284,6 +413,10 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
     if (fields.at(6) == "W")
         lon = -lon;
 
+    // Velocityvoid
+    //QStringList v_list = fields.at(7).split("."); // И целая, и дробная части могут быть переменной длины.
+    //double speed_kmh = ( v_list.at(0).toDouble() + v_list.at(1).toDouble() ) * 1.852;
+    double speed_kmh = fields.at(7).toDouble() * 1.852;
 
     gd->lat = lat;
     gd->lon = lon;
@@ -295,6 +428,7 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
     gd->day = dtd;
     gd->month = dtmn;
     gd->year = dty;
+    gd->speed = speed_kmh;
 }
 
 #endif

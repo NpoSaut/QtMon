@@ -1,16 +1,19 @@
-<Task>
+﻿<Task>
   <ClassInfo name="SystemStateViewModel" />
   <Properties>
     <!-- Скорость и ограничения -->
-    <Property type="double" name="Speed" def="48" description="Текущая скорость" />
-    <Property type="int" name="SpeedRestriction" def="65" description="Ограничение скорости" />
-    
+    <Property type="double" name="Speed" def="0" description="Текущая скорость" source="IPD_STATE" />
+    <Property type="int" name="SpeedRestriction" def="40" description="Ограничение скорости" source="MCO_STATE" />
+    <Property type="int" name="TargetSpeed" def="55" description="Целевая скорость" source="MCO_STATE" />
+    <Property type="double" name="Acceleration" def="0" description="Ускорение" source="IPD_STATE" />
+
+    <!-- Давление -->
+    <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->
+
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
     <Property type="double" name="Latitude" def="56.88397" />
-    
-    <!-- Бдительность -->
-    <Property type="bool" name="IsVigilanceRequired" def="true" description="Необходимость подтверждения бдительности" />
     
     <!-- Состояние системы -->
     <Property type="int" name="SystemWarningLevel" def="0" description="Общий уровень предупреждений" />
@@ -24,11 +27,27 @@
     
     <!-- Светофорное -->
     <Property type="int" name="Light" def="0" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
-    <Property type="int" name="AlsnFreq" def="25" description="Частота АЛСН" />
+    <Property type="int" name="AlsnFreqTarget" def="25" description="Целевая Частота АЛСН"/>
+    <Property type="int" name="AlsnFreqFact" def="25" description="Фактическая Частота АЛСН" source="BVU_STATE_A"/>
 
     <!-- Дата и время -->
     <Property type="QString" name="Time" def="&quot;-:-&quot;" description="Время" />
     <Property type="QString" name="Date" def="&quot;- / - / -&quot;" description="Дата" />
+
+    <!-- Кассета регистрации (яйца) -->
+    <Property type="bool" name="IsRegistrationTapeActive" def="false" description="Наличие кассеты регистрации" source="AMR_STATE_1" />
+
+    <!-- Режим движения -->
+    <Property type="int" name="DriveModeTarget" def="0" description="Целевой Режим движения" />
+    <Property type="int" name="DriveModeFact" def="0" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" />
+
+    <!-- Бдительность -->
+    <Property type="bool" name="IsVigilanceRequired" def="true" description="Необходимость подтверждения бдительности" source="MCO_STATE[6.4]" /> <!-- Мигает если единица, контур если 0 -->
+
+    <!-- Направление движения -->
+    <Property type="int" name="Direction" def="0" description="Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)" source="IPD_STATE" />
+
+    <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
     
     <Property type="bool" name="PropertyView" def="false" description="Неведомо чудо" />
   </Properties>

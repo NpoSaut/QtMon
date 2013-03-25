@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 80
+    property double maxSpeed: 60
 
     function switchPage(i) {
         if (i == 1) {
@@ -55,28 +55,52 @@ Rectangle {
 
 
     focus: true
+
+    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
+    property bool altMode: false
+
     Keys.onPressed: {
+        // Переключение частоты АЛСН
         if (event.key == Qt.Key_F1) {
             // Send CAN requset to change ALSN freq
 
             // Emulation
-            if ( stateView.AlsnFreq == 25 )
-                stateView.AlsnFreq = 50;
-            else if ( stateView.AlsnFreq == 50 )
-                stateView.AlsnFreq = 75;
-            else if ( stateView.AlsnFreq == 75 )
-                stateView.AlsnFreq = 25;
+            if (stateView.AlsnFreqTarget == 25 )
+                stateView.AlsnFreqTarget = 50;
+            else if ( stateView.AlsnFreqTarget == 50 )
+                stateView.AlsnFreqTarget = 75;
+            else if ( stateView.AlsnFreqTarget == 75 )
+                stateView.AlsnFreqTarget = 25;
             else
-                stateView.AlsnFreq = 25;
+                stateView.AlsnFreqTarget = 25;
         }
-        else if (event.key == Qt.Key_F2) {
+        // Страница железнодорожного режима
+        else if (!altMode && event.key == Qt.Key_F2) {
             stateView.PropertyView = false;
         }
-        else if (event.key == Qt.Key_F3) {
+        // Alt: Отмена Красного
+        else if (altMode && event.key == Qt.Key_F2) {
+            // !! Испустить сигнал отмены красного :-/ !!
+            stateView.DisableRedButtonPressed();
+        }
+        // Страница дорожного режима
+        else if (!altMode && event.key == Qt.Key_F3) {
             stateView.PropertyView = true;
         }
+        // Alt: Режим движения
+        else if (altMode && event.key == Qt.Key_F3) {
+            stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
+        }
+        // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
-            // Reserved
+            altMode = true;
+        }
+    }
+
+    Keys.onReleased: {
+        // Выключение альтернативного режима клавиш
+        if (event.key == Qt.Key_F4) {
+            altMode = false;
         }
     }
 
@@ -95,8 +119,8 @@ Rectangle {
             PropertyChanges { target: page2indicator; width: 6 }
             PropertyChanges { target: pagesContainer; y: 0 }
 
-            PropertyChanges { target: page1buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: -20; opacity: 0.0 }
+            PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
+            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: 20; opacity: 0.05 }
         },
         State {
             name: "page2"
@@ -105,17 +129,17 @@ Rectangle {
             PropertyChanges { target: page2indicator; width: 12 }
             PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
 
-            PropertyChanges { target: page2buttonHeader; anchors.leftMargin: 22 }
-            PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
+            PropertyChanges { target: page1buttonHeader; anchors.rightMargin: 22 }
+            //PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
         }
     ]
 
     transitions: Transition {
         NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
         NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
-        NumberAnimation { target: [page1buttonHeader, page2buttonHeader]; properties: "anchors.leftMargin"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: [page1buttonInfo, page2buttonInfo]; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+        NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: page1buttonInfo; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
+        NumberAnimation { target: page1buttonInfo; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
     }
 
     Rectangle {
@@ -139,6 +163,491 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.leftMargin: 0
+                Image {
+                    source: "Slices/Background.png"
+                    anchors.top: parent.top
+                    anchors.left: rootRect.left
+                }
+
+            Row {
+                anchors.left: parent.left
+                anchors.leftMargin: 14
+                anchors.topMargin: 23
+                anchors.top: parent.top
+                spacing: 70
+
+                Column {
+                    spacing: 40
+                    width: 123
+
+                    // Координата
+                   Column {
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+
+                           text: qsTr("КООРДИНАТА")
+                           color: "#ffffff00"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                       Rectangle {
+                           color: "#20000000"
+                           anchors.left: parent.left
+                           anchors.right: parent.right
+                           border.color: "#ffffff00"
+                           height: 20
+                           Text {
+                               anchors.horizontalCenter: parent.horizontalCenter
+                               anchors.verticalCenter: parent.verticalCenter
+                               text: qsTr("--км --пк --м")
+                               //text: stateView.Speed
+                               color: "#ffffffff"
+                               font.pixelSize: 14
+                               font.family: "URW Gothic L"
+                           }
+                       }
+                   }
+
+                    // № ПУТИ
+                   Column {
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+
+                           text: qsTr("№ ПУТИ")
+                           color: "#ffffff00"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                       Rectangle {
+                           color: "#20000000"
+                           anchors.left: parent.left
+                           anchors.right: parent.right
+                           border.color: "#ffffff00"
+                           height: 20
+                           Text {
+                               anchors.horizontalCenter: parent.horizontalCenter
+                               anchors.verticalCenter: parent.verticalCenter
+                               text: qsTr("--")
+                               color: "#ffffffff"
+                               font.pixelSize: 14
+                               font.family: "URW Gothic L"
+                           }
+                       }
+                   }
+
+                   // УСКОРЕНИЕ
+                  Column {
+                      anchors.left: parent.left
+                      anchors.right: parent.right
+                      Text {
+                          anchors.horizontalCenter: parent.horizontalCenter
+
+                          text: qsTr("УСКОРЕНИЕ")
+                          color: "#ffffff00"
+                          font.pixelSize: 14
+                          font.family: "URW Gothic L"
+                      }
+                      Rectangle {
+                          color: "#20000000"
+                          anchors.left: parent.left
+                          anchors.right: parent.right
+                          border.color: "#ffffff00"
+                          height: 20
+                          Text {
+                              anchors.horizontalCenter: parent.horizontalCenter
+                              anchors.verticalCenter: parent.verticalCenter
+                              //text: qsTr("0.15")
+                              text: stateView.Acceleration.toFixed(2)
+                              color: "#ffffffff"
+                              font.pixelSize: 14
+                              font.family: "URW Gothic L"
+                          }
+                      }
+                  }
+
+                  // ТЦ
+                 Column {
+                     anchors.left: parent.left
+                     anchors.right: parent.right
+                     Text {
+                         anchors.horizontalCenter: parent.horizontalCenter
+
+                         text: qsTr("ТЦ")
+                         color: "#ffffff00"
+                         font.pixelSize: 14
+                         font.family: "URW Gothic L"
+                     }
+                     Rectangle {
+                         color: "#20000000"
+                         anchors.left: parent.left
+                         anchors.right: parent.right
+                         border.color: "#ffffff00"
+                         height: 20
+                         Text {
+                             anchors.horizontalCenter: parent.horizontalCenter
+                             anchors.verticalCenter: parent.verticalCenter
+                             text: qsTr(stateView.PressureTC + " МПа")
+                             color: "#ffffffff"
+                             font.pixelSize: 14
+                             font.family: "URW Gothic L"
+                         }
+                     }
+                 }
+
+                 // ТМ
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        text: qsTr("ТМ")
+                        color: "#ffffff00"
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                    }
+                    Rectangle {
+                        color: "#20000000"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        border.color: "#ffffff00"
+                        height: 20
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: qsTr(stateView.PressureTM + " МПа")
+                            color: "#ffffffff"
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                    }
+                }
+
+                }
+
+                // Время
+               Column {
+                   width: 100
+
+                   //anchors.left: parent.left
+                   //anchors.right: parent.right
+                   Text {
+                       anchors.horizontalCenter: parent.horizontalCenter
+
+                       text: qsTr("ВРЕМЯ")
+                       color: "#ffffff00"
+                       font.pixelSize: 14
+                       font.family: "URW Gothic L"
+                   }
+                   Rectangle {
+                       color: "#20000000"
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       border.color: "#ffffff00"
+                       height: 20
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           //text: qsTr("12:28:45")
+                           text: stateView.Time
+
+
+                           color: "#ffffffff"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                   }
+               }
+
+               Row {
+                   anchors.top: parent.top
+                   anchors.topMargin: 18
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 20
+                       height: 20
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           text: { switch (stateView.DriveModeFact)
+                                   {
+                                       case 0: return "П";
+                                       case 1: return "М";
+                                       case 2: return "Р";
+                                       case 3: return"Д";
+                                   }
+                                }
+
+                           color: "#ffffffff"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                   }
+
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 21
+                       height: 20
+                       Image {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           source: "Slices/Registration-Type.png"
+                           opacity: stateView.IsRegistrationTapeActive ? 1 : 0
+                       }
+                   }
+               }
+
+            }
+
+            // Спидометр
+            Rectangle {
+                id: speedometer
+                anchors.right: parent.right
+                anchors.rightMargin: 30
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 10
+                color: "#00000000"
+                //border.color: "#60ffa000"
+                //border.width: 1
+                //clip: true
+                width: 300
+                height: width
+
+                // Количество засечек
+                property int tickCount: maxSpeed / 5
+
+                property double minAngle: 1.25 * Math.PI
+                property double maxAngle: -0.25 * Math.PI
+                property double anglePerKph: (minAngle - maxAngle)/maxSpeed
+
+                property double tableRadius: width / 2
+
+                // Обрезалка
+                Rectangle {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    property double filedWidth: 15
+
+                    anchors.topMargin: -filedWidth
+                    anchors.leftMargin: -filedWidth
+                    anchors.rightMargin: -filedWidth
+
+                    height: (1 - Math.sin(parent.minAngle)) * parent.tableRadius + filedWidth - 1
+
+                    color: "#00000000"
+                    clip: true
+
+                    // Дуга шкалы спидометра
+                    Rectangle {
+                        color: "#00000000"
+                        border.color: "#fff"
+                        border.width: 3
+
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        property double unFiledWidth: parent.filedWidth + border.width/2
+                        anchors.topMargin: unFiledWidth
+                        anchors.leftMargin: unFiledWidth
+                        anchors.rightMargin: unFiledWidth
+
+                        height: width
+                        radius: width / 2
+                    }
+                }
+
+                // Насечки на шкале
+                Repeater {
+                    model: speedometer.tickCount + 1
+                    Rectangle {
+
+                        property double kph: index * (maxSpeed / speedometer.tickCount)
+                        property double angle: speedometer.minAngle - kph * speedometer.anglePerKph
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenterOffset: - parent.tableRadius * Math.sin(angle)
+                        anchors.horizontalCenterOffset: parent.tableRadius * Math.cos(angle)
+
+
+                        Rectangle {
+                            width: 10
+                            height: 3
+
+                            rotation: -angle * 180 / Math.PI
+                            smooth: true
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 20 * Math.sin(parent.angle)
+                            anchors.horizontalCenterOffset: - 20 * Math.cos(parent.angle)
+                            text: parent.kph
+                            color: "#ffffffff"
+
+                            font.pixelSize: 16
+                            font.family: "URW Gothic L"
+                        }
+                    }
+                }
+
+                // Стрелка спидометра
+                Image {
+                    source: "Slices/Needle-Speed.png"
+                    visible: stateView.Speed != -1
+
+                    rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
+                    smooth: true
+
+                    transformOrigin: Item.Right
+
+                    anchors.right: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+
+                // Стрелка целевой скорости
+                Rectangle {
+                    transformOrigin: Item.Right
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property double r: parent.tableRadius + 4
+                    //property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
+                    property double angle: speedometer.minAngle - stateView.TargetSpeed * speedometer.anglePerKph
+
+                    anchors.verticalCenterOffset: - r * Math.sin(angle)
+                    anchors.horizontalCenterOffset: r * Math.cos(angle)
+
+                    rotation: 180 - angle * 180 / Math.PI
+
+                    Image {
+                        source: "Slices/Needle-Target-Speed.png"
+                        smooth: true
+
+                        anchors.right: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                // Стрелка ограничения скорости
+                Rectangle {
+                    transformOrigin: Item.Right
+
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    property double r: parent.tableRadius + 4
+                    property double angle: speedometer.minAngle - stateView.SpeedRestriction * speedometer.anglePerKph
+
+                    anchors.verticalCenterOffset: - r * Math.sin(angle)
+                    anchors.horizontalCenterOffset: r * Math.cos(angle)
+
+                    rotation: 180 - angle * 180 / Math.PI
+
+                    Image {
+                        source: "Slices/Needle-Restriction.png"
+                        smooth: true
+
+                        anchors.right: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                // Числа скорости и ограничения в кругляше в центре
+                Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    width: 80
+                    height: width
+                    radius: width / 2
+
+                    color: "#4999c9"
+
+                    // Текущая скорость
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        text: stateView.Speed != -1 ? stateView.Speed.toFixed() : "N/A"
+                        color: "#fff"
+
+                        font.pixelSize: 35
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+
+                    // Ограничение скорости
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 65
+
+                        text: stateView.SpeedRestriction.toFixed()
+                        color: "#c94949"
+
+                        font.pixelSize: 35
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+
+                }
+            }
+
+            // Треугольники направления движения
+            Row {
+                spacing: 90
+                anchors.horizontalCenter: speedometer.horizontalCenter
+                anchors.bottom: speedometer.bottom
+                anchors.bottomMargin: 10
+
+                Image {
+                    opacity: stateView.Direction==1 ? 1 : 0.05
+                    source: "Slices/Direction-Forward.png"
+                }
+                Image {
+                    opacity: stateView.Direction==-1 ? 1 : 0.05
+                    source: "Slices/Direction-Back.png"
+                }
+            }
+
+            Rectangle {
+                color: "#20000000"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: 10
+                border.color: "#ffffff00"
+                //width: 100
+                height: 25
+            }
+
+
+
+            }
+
+            Rectangle {
+                id: page2container
+                height: pagesArea.height
+                anchors.right: parent.right
+                anchors.left: parent.left
                 clip: true
 
                 Rectangle {
@@ -185,7 +694,7 @@ Rectangle {
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
-                            source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            source: "../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
                             //asynchronous: true
 
                             Rectangle
@@ -210,35 +719,6 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: "Slices/Cross.png"
-                }
-
-                Image {
-                    id: vigilanceSign
-                    anchors.leftMargin: 15
-                    anchors.topMargin: 15
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    source: "Slices/VigilanceSign.png"
-
-                    state: stateView.IsVigilanceRequired ? "On" : "Off"
-                    states: [
-                        State {
-                            name: "On"
-                        },
-                        State {
-                            name: "Off"
-                            PropertyChanges { target: vigilanceSign; opacity: 0.005; anchors.topMargin: 5 }
-                        }
-                    ]
-                    transitions: Transition {
-                        NumberAnimation { target: vigilanceSign; properties: "opacity"; easing.type: Easing.OutQuad; duration: 150 }
-                        NumberAnimation { target: vigilanceSign; properties: "anchors.topMargin"; easing.type: Easing.OutElastic; duration: 700 }
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
-                    }
                 }
 
                 Rectangle {
@@ -284,8 +764,7 @@ Rectangle {
 
                     Text {
                         id: hintBoxMilageKm
-                        text: Math.round(stateView.Milage/1000) + qsTr('.')
-                                + Math.round(stateView.Milage/100)%10 + qsTr(" км")
+                        text: (stateView.Milage/1000).toFixed(1) + qsTr(" км")
 
                         anchors.top: parent.top
                         anchors.topMargin: 3
@@ -295,37 +774,6 @@ Rectangle {
                         font.family: "URW Gothic L"; font.pixelSize: 14
                         color: "#2d2d2d";
                     }
-                }
-            }
-
-            Rectangle {
-                id: page2container
-                height: pagesArea.height
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#6b6b6b"
-                    }
-
-                    GradientStop {
-                        position: 1
-                        color: "#2b2b2b"
-                    }
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
-
-                Text {
-                    id: text2
-                    color: "#ffffff"
-                    text: qsTr("Состояние системы")
-                    anchors.topMargin: 10
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    font.pixelSize: 24
-                    font.family: "URW Gothic L"
                 }
             }
         }
@@ -385,8 +833,6 @@ Rectangle {
         }
 
         Column {
-            x: -6
-            y: 0
             anchors.fill: parent
 
             Rectangle {
@@ -450,7 +896,8 @@ Rectangle {
 
                     property real radius: 100
                     property real angle: 15
-                    property string objColor: "#ffdddddd"
+                    property string objColor: "#ddd"
+                    property string objHighlightColor: "#f22"
 
                     Repeater
                     {
@@ -464,7 +911,7 @@ Rectangle {
                             y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
                             rotation: myRot
 
-                            color: alsnSwitch.objColor
+                            color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
                             width: 2
                             height: 2
                             smooth: true
@@ -486,22 +933,22 @@ Rectangle {
                     states: [
                         State {
                             name: "alsn0"
-                            when: (stateView.AlsnFreq != 25 && tateView.AlsnFreq != 50 && tateView.AlsnFreq != 75)
+                            when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
                             PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn25"
-                            when: (stateView.AlsnFreq == 25)
+                            when: (stateView.AlsnFreqTarget == 25)
                             PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn50"
-                            when: (stateView.AlsnFreq == 50)
+                            when: (stateView.AlsnFreqTarget == 50)
                             PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
                         },
                         State {
                             name: "alsn75"
-                            when: (stateView.AlsnFreq == 75)
+                            when: (stateView.AlsnFreqTarget == 75)
                             PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
                         }
                     ]
@@ -532,50 +979,32 @@ Rectangle {
 
                 Column {
                     id: page1buttonHeader
-                    x: 25
-                    y: 32
                     anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.left: parent.left
-                    anchors.leftMargin: 25
+                    anchors.rightMargin: 12
                     anchors.verticalCenter: parent.verticalCenter
+                    visible: !altMode
 
                     Text {
                         color: "#ffffff"
-                        text: qsTr("Текущее")
+                        text: qsTr("Ж/Д")
                         font.pointSize: 20
                         font.family: "URW Gothic L"
                     }
+                }
 
-                    Row {
-                        id: page1buttonInfo
-                        spacing: 2
-                        anchors.right: parent.right
-                        Text {
-                            color: "#4999c9"
-                            text: stateView.Speed
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 17
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#ffffff"
-                            text: qsTr("/")
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#c94949"
-                            text: stateView.SpeedRestriction
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                        }
+                Column {
+                    id: page1buttonAltHeader
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: altMode
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Отмена\nКрасного")
+                        font.pointSize: 16
+                        font.family: "URW Gothic L"
+                    }
                 }
                 MouseArea {
                     anchors.fill: parent
@@ -584,8 +1013,6 @@ Rectangle {
             }
             Rectangle {
                 id: rightButton3Container
-                    x: 0
-                    y: 120
                     height: 120
                     color: "#00000000"
                     anchors.right: parent.right
@@ -601,49 +1028,35 @@ Rectangle {
                         anchors.top: parent.top
                         anchors.topMargin: 1
                     }
+
                     Column {
                         id: page2buttonHeader
-                        x: 25
-                        y: 32
                         anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        anchors.left: parent.left
-                        anchors.leftMargin: 25
+                        anchors.rightMargin: 14
                         anchors.verticalCenter: parent.verticalCenter
+                        visible: !altMode
 
                         Text {
                             color: "#ffffff"
-                            text: qsTr("Система")
-                            font.pointSize: 20
+                            text: qsTr("Дорожный")
+                            font.pointSize: 18
                             font.family: "URW Gothic L"
                         }
 
-                        Row {
-                            id: page2buttonInfo
-                            spacing: 3
-                            anchors.right: parent.right
+                    }
 
-                            Image {
-                                source: stateView.FullSetWarningLevel == 0 ? "Slices/FullSet-Small-Ok.png" :
-                                                                             stateView.FullSetWarningLevel == 1 ?
-                                                                                 "Slices/FullSet-Small-Warning.png" :
-                                                                                 "Slices/FullSet-Small-Error.png"
-                            }
-                            Image {
-                                source: stateView.IsPressureOk ? "Slices/Pressure-Small-Ok.png" : "Slices/Pressure-Small-Warning.png"
-                            }
-                            Image {
-                                source: stateView.IsEpvReleased ? "Slices/Epv-Small-Warning.png" :
-                                                                  stateView.IsEpvReady ?
-                                                                      "Slices/Epv-Small-Ok.png" :
-                                                                      "Slices/Epv-Small-NotReady.png"
-                            }
-                            Image {
-                                source: stateView.SystemWarningLevel == 0 ? "Slices/System-Medium-Ok.png" :
-                                                                             stateView.SystemWarningLevel == 1 ?
-                                                                                 "Slices/System-Medium-Warning.png" :
-                                                                                 "Slices/System-Medium-Error.png"
-                            }
+                    Column {
+                        id: page2buttonAltHeader
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: altMode
+
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("Режим\nдвижения")
+                            font.pointSize: 16
+                            font.family: "URW Gothic L"
                         }
                     }
                     MouseArea {
@@ -658,6 +1071,28 @@ Rectangle {
                 color: "#00000000"
                 anchors.right: parent.right
                 anchors.left: parent.left
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#30000000"
+                    anchors.rightMargin: 7
+                    anchors.topMargin: 4
+                    visible: altMode
+                }
+
+                Column {
+                    id: page4buttonAltHeader
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        color: "#ffffff"
+                        text: qsTr("Alt")
+                        font.pointSize: 20
+                        font.family: "URW Gothic L"
+                    }
+                }
             }
 
         }
@@ -678,11 +1113,6 @@ Rectangle {
         anchors.top: parent.top
 
         Image {
-            x: -8
-            y: 0
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.topMargin: 0
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
@@ -690,7 +1120,37 @@ Rectangle {
         }
 
 
-        Rectangle {
+
+        Image {
+            id: vigilanceSign
+            anchors.topMargin: 15
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            source: "Slices/Vigilance-Sign-Inactive.png"
+
+            Image {
+                anchors.fill: parent
+                source: "Slices/Vigilance-Sign-Active-Overlay.png"
+                opacity: 0
+                Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                Timer {
+                    interval: 400
+                    running: stateView.IsVigilanceRequired || (parent.opacity != 0)
+                    repeat: true
+                    onTriggered: parent.opacity = 1 - parent.opacity
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+            }
+        }
+
+
+	Rectangle {
             id: graduateBar
 
             width: 10
@@ -705,13 +1165,14 @@ Rectangle {
             Repeater
             {
                 id: repeater
-                model: Math.floor(maxSpeed/10) - 1
+                model: Math.floor(maxSpeed/5) - 1
                 Row {
-                    property int sp: (index + 1) * 10
+                    property int sp: (index + 1) * 5
                     anchors.left: parent.left
                     anchors.leftMargin: 5
                     height: 14;
                     y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
+                    visible: y > vigilanceSign.y + vigilanceSign.height
                     //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
                     spacing: 0
 
@@ -730,7 +1191,8 @@ Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.right: parent.right
                                 anchors.rightMargin: 1-index
-                                color: modelData }
+                                color: modelData
+                            }
                         }
                     }
                 }
@@ -802,7 +1264,7 @@ Rectangle {
                         font.bold: true
                     }
                     Text {
-                        text: qsTr("км/ч ")
+                        text: qsTr("км/ч")
                         anchors.right: parent.right
                         color: modelData
                         font.pointSize: 11.2
@@ -812,8 +1274,6 @@ Rectangle {
                 }
             }
         }
-
-
 
 
         ListView {

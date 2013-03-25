@@ -4,22 +4,31 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
     // fileds init start
-    getspeedValue = 48;
-    getspeedRestrictionValue = 65;
-    getlongitudeValue = 60.4688;
-    getlatitudeValue = 56.88397;
-    getisVigilanceRequiredValue = false;
-    getsystemWarningLevelValue = 0;
-    getfullSetWarningLevelValue = 0;
-    getisPressureOkValue = true;
-    getisEpvReadyValue = true;
-    getisEpvReleasedValue = false;
-    getmilageValue = 0;
-    getlightValue = 0;
-    getalsnFreqValue = 25;
-    gettimeValue = "-:-";
-    getdateValue = "- / - / -";
-    getpropertyViewValue = false;
+    speedValue = 0;
+    speedRestrictionValue = 40;
+    targetSpeedValue = 55;
+    accelerationValue = 0;
+    pressureTCValue = "0.00";
+    pressureTMValue = "0.00";
+    longitudeValue = 60.4688;
+    latitudeValue = 56.88397;
+    systemWarningLevelValue = 0;
+    fullSetWarningLevelValue = 0;
+    isPressureOkValue = true;
+    isEpvReadyValue = true;
+    isEpvReleasedValue = false;
+    milageValue = 0;
+    lightValue = 0;
+    alsnFreqTargetValue = 25;
+    alsnFreqFactValue = 25;
+    timeValue = "-:-";
+    dateValue = "- / - / -";
+    isRegistrationTapeActiveValue = false;
+    driveModeTargetValue = 0;
+    driveModeFactValue = 0;
+    isVigilanceRequiredValue = true;
+    directionValue = 0;
+    propertyViewValue = false;
     // fileds init end
 }
 
@@ -27,13 +36,13 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 // Текущая скорость
 const double SystemStateViewModel::getSpeed() const
 {
-    return getspeedValue;
+    return speedValue;
 }
 void SystemStateViewModel::setSpeed(const double value)
 {
-    if (getspeedValue != value)
+    if (speedValue != value)
     {
-        getspeedValue = value;
+        speedValue = value;
         emit SpeedChanged();
     }
 }
@@ -41,67 +50,109 @@ void SystemStateViewModel::setSpeed(const double value)
 // Ограничение скорости
 const int SystemStateViewModel::getSpeedRestriction() const
 {
-    return getspeedRestrictionValue;
+    return speedRestrictionValue;
 }
 void SystemStateViewModel::setSpeedRestriction(const int value)
 {
-    if (getspeedRestrictionValue != value)
+    if (speedRestrictionValue != value)
     {
-        getspeedRestrictionValue = value;
+        speedRestrictionValue = value;
         emit SpeedRestrictionChanged();
+    }
+}
+
+// Целевая скорость
+const int SystemStateViewModel::getTargetSpeed() const
+{
+    return targetSpeedValue;
+}
+void SystemStateViewModel::setTargetSpeed(const int value)
+{
+    if (targetSpeedValue != value)
+    {
+        targetSpeedValue = value;
+        emit TargetSpeedChanged();
+    }
+}
+
+// Ускорение
+const double SystemStateViewModel::getAcceleration() const
+{
+    return accelerationValue;
+}
+void SystemStateViewModel::setAcceleration(const double value)
+{
+    if (accelerationValue != value)
+    {
+        accelerationValue = value;
+        emit AccelerationChanged();
+    }
+}
+
+// Давление ТЦ
+const QString SystemStateViewModel::getPressureTC() const
+{
+    return pressureTCValue;
+}
+void SystemStateViewModel::setPressureTC(const QString value)
+{
+    if (pressureTCValue != value)
+    {
+        pressureTCValue = value;
+        emit PressureTCChanged();
+    }
+}
+
+// Давление ТМ
+const QString SystemStateViewModel::getPressureTM() const
+{
+    return pressureTMValue;
+}
+void SystemStateViewModel::setPressureTM(const QString value)
+{
+    if (pressureTMValue != value)
+    {
+        pressureTMValue = value;
+        emit PressureTMChanged();
     }
 }
 
 const double SystemStateViewModel::getLongitude() const
 {
-    return getlongitudeValue;
+    return longitudeValue;
 }
 void SystemStateViewModel::setLongitude(const double value)
 {
-    if (getlongitudeValue != value)
+    if (longitudeValue != value)
     {
-        getlongitudeValue = value;
+        longitudeValue = value;
         emit LongitudeChanged();
     }
 }
 
 const double SystemStateViewModel::getLatitude() const
 {
-    return getlatitudeValue;
+    return latitudeValue;
 }
 void SystemStateViewModel::setLatitude(const double value)
 {
-    if (getlatitudeValue != value)
+    if (latitudeValue != value)
     {
-        getlatitudeValue = value;
+        latitudeValue = value;
         emit LatitudeChanged();
-    }
-}
-
-// Необходимость подтверждения бдительности
-const bool SystemStateViewModel::getIsVigilanceRequired() const
-{
-    return getisVigilanceRequiredValue;
-}
-void SystemStateViewModel::setIsVigilanceRequired(const bool value)
-{
-    if (getisVigilanceRequiredValue != value)
-    {
-        getisVigilanceRequiredValue = value;
-        emit IsVigilanceRequiredChanged();
     }
 }
 
 // Общий уровень предупреждений
 const int SystemStateViewModel::getSystemWarningLevel() const
 {
-    return getsystemWarningLevelValue;
+    return systemWarningLevelValue;
 }
 void SystemStateViewModel::setSystemWarningLevel(const int value)
 {
-    if (getsystemWarningLevelValue != value)
+    if (systemWarningLevelValue != value)
     {
-        getsystemWarningLevelValue = value;
+        systemWarningLevelValue = value;
         emit SystemWarningLevelChanged();
     }
 }
@@ -109,13 +160,13 @@ void SystemStateViewModel::setSystemWarningLevel(const int value)
 // Укомплектованность конфигурации
 const int SystemStateViewModel::getFullSetWarningLevel() const
 {
-    return getfullSetWarningLevelValue;
+    return fullSetWarningLevelValue;
 }
 void SystemStateViewModel::setFullSetWarningLevel(const int value)
 {
-    if (getfullSetWarningLevelValue != value)
+    if (fullSetWarningLevelValue != value)
     {
-        getfullSetWarningLevelValue = value;
+        fullSetWarningLevelValue = value;
         emit FullSetWarningLevelChanged();
     }
 }
@@ -123,13 +174,13 @@ void SystemStateViewModel::setFullSetWarningLevel(const int value)
 // Давление в норме
 const bool SystemStateViewModel::getIsPressureOk() const
 {
-    return getisPressureOkValue;
+    return isPressureOkValue;
 }
 void SystemStateViewModel::setIsPressureOk(const bool value)
 {
-    if (getisPressureOkValue != value)
+    if (isPressureOkValue != value)
     {
-        getisPressureOkValue = value;
+        isPressureOkValue = value;
         emit IsPressureOkChanged();
     }
 }
@@ -137,13 +188,13 @@ void SystemStateViewModel::setIsPressureOk(const bool value)
 // Готовность ЭПК
 const bool SystemStateViewModel::getIsEpvReady() const
 {
-    return getisEpvReadyValue;
+    return isEpvReadyValue;
 }
 void SystemStateViewModel::setIsEpvReady(const bool value)
 {
-    if (getisEpvReadyValue != value)
+    if (isEpvReadyValue != value)
     {
-        getisEpvReadyValue = value;
+        isEpvReadyValue = value;
         emit IsEpvReadyChanged();
     }
 }
@@ -151,13 +202,13 @@ void SystemStateViewModel::setIsEpvReady(const bool value)
 // Признак срыва ЭПК
 const bool SystemStateViewModel::getIsEpvReleased() const
 {
-    return getisEpvReleasedValue;
+    return isEpvReleasedValue;
 }
 void SystemStateViewModel::setIsEpvReleased(const bool value)
 {
-    if (getisEpvReleasedValue != value)
+    if (isEpvReleasedValue != value)
     {
-        getisEpvReleasedValue = value;
+        isEpvReleasedValue = value;
         emit IsEpvReleasedChanged();
     }
 }
@@ -165,13 +216,13 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
 // Проиденное расстояние
 const int SystemStateViewModel::getMilage() const
 {
-    return getmilageValue;
+    return milageValue;
 }
 void SystemStateViewModel::setMilage(const int value)
 {
-    if (getmilageValue != value)
+    if (milageValue != value)
     {
-        getmilageValue = value;
+        milageValue = value;
         emit MilageChanged();
     }
 }
@@ -179,41 +230,55 @@ void SystemStateViewModel::setMilage(const int value)
 // Код сигнала светофора (0 - К, 1 - КЖ, ...)
 const int SystemStateViewModel::getLight() const
 {
-    return getlightValue;
+    return lightValue;
 }
 void SystemStateViewModel::setLight(const int value)
 {
-    if (getlightValue != value)
+    if (lightValue != value)
     {
-        getlightValue = value;
+        lightValue = value;
         emit LightChanged();
     }
 }
 
-// Частота АЛСН
-const int SystemStateViewModel::getAlsnFreq() const
+// Целевая Частота АЛСН
+const int SystemStateViewModel::getAlsnFreqTarget() const
 {
-    return getalsnFreqValue;
+    return alsnFreqTargetValue;
 }
-void SystemStateViewModel::setAlsnFreq(const int value)
+void SystemStateViewModel::setAlsnFreqTarget(const int value)
 {
-    if (getalsnFreqValue != value)
+    if (alsnFreqTargetValue != value)
     {
-        getalsnFreqValue = value;
-        emit AlsnFreqChanged();
+        alsnFreqTargetValue = value;
+        emit AlsnFreqTargetChanged();
+    }
+}
+
+// Фактическая Частота АЛСН
+const int SystemStateViewModel::getAlsnFreqFact() const
+{
+    return alsnFreqFactValue;
+}
+void SystemStateViewModel::setAlsnFreqFact(const int value)
+{
+    if (alsnFreqFactValue != value)
+    {
+        alsnFreqFactValue = value;
+        emit AlsnFreqFactChanged();
     }
 }
 
 // Время
 const QString SystemStateViewModel::getTime() const
 {
-    return gettimeValue;
+    return timeValue;
 }
 void SystemStateViewModel::setTime(const QString value)
 {
-    if (gettimeValue != value)
+    if (timeValue != value)
     {
-        gettimeValue = value;
+        timeValue = value;
         emit TimeChanged();
     }
 }
@@ -221,27 +286,97 @@ void SystemStateViewModel::setTime(const QString value)
 // Дата
 const QString SystemStateViewModel::getDate() const
 {
-    return getdateValue;
+    return dateValue;
 }
 void SystemStateViewModel::setDate(const QString value)
 {
-    if (getdateValue != value)
+    if (dateValue != value)
     {
-        getdateValue = value;
+        dateValue = value;
         emit DateChanged();
+    }
+}
+
+// Наличие кассеты регистрации
+const bool SystemStateViewModel::getIsRegistrationTapeActive() const
+{
+    return isRegistrationTapeActiveValue;
+}
+void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
+{
+    if (isRegistrationTapeActiveValue != value)
+    {
+        isRegistrationTapeActiveValue = value;
+        emit IsRegistrationTapeActiveChanged();
+    }
+}
+
+// Целевой Режим движения
+const int SystemStateViewModel::getDriveModeTarget() const
+{
+    return driveModeTargetValue;
+}
+void SystemStateViewModel::setDriveModeTarget(const int value)
+{
+    if (driveModeTargetValue != value)
+    {
+        driveModeTargetValue = value;
+        emit DriveModeTargetChanged();
+    }
+}
+
+// Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
+const int SystemStateViewModel::getDriveModeFact() const
+{
+    return driveModeFactValue;
+}
+void SystemStateViewModel::setDriveModeFact(const int value)
+{
+    if (driveModeFactValue != value)
+    {
+        driveModeFactValue = value;
+        emit DriveModeFactChanged();
+    }
+}
+
+// Необходимость подтверждения бдительности
+const bool SystemStateViewModel::getIsVigilanceRequired() const
+{
+    return isVigilanceRequiredValue;
+}
+void SystemStateViewModel::setIsVigilanceRequired(const bool value)
+{
+    if (isVigilanceRequiredValue != value)
+    {
+        isVigilanceRequiredValue = value;
+        emit IsVigilanceRequiredChanged();
+    }
+}
+
+// Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
+const int SystemStateViewModel::getDirection() const
+{
+    return directionValue;
+}
+void SystemStateViewModel::setDirection(const int value)
+{
+    if (directionValue != value)
+    {
+        directionValue = value;
+        emit DirectionChanged();
     }
 }
 
 // Неведомо чудо
 const bool SystemStateViewModel::getPropertyView() const
 {
-    return getpropertyViewValue;
+    return propertyViewValue;
 }
 void SystemStateViewModel::setPropertyView(const bool value)
 {
-    if (getpropertyViewValue != value)
+    if (propertyViewValue != value)
     {
-        getpropertyViewValue = value;
+        propertyViewValue = value;
         emit PropertyViewChanged();
     }
 }

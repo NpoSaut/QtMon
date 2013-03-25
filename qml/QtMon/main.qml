@@ -678,6 +678,11 @@ Rectangle {
         anchors.top: parent.top
 
         Image {
+            x: -8
+            y: 0
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.topMargin: 0
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
@@ -773,50 +778,6 @@ Rectangle {
         }
 
         Rectangle {
-            height: 108
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.topMargin: -5
-            color: "#00000000"
-            anchors.leftMargin: 10
-            anchors.rightMargin: 45
-            anchors.right: parent.right
-            id: restrictionBox
-            x: 10
-            y: -5
-            width: 94
-
-            Repeater {
-                model: [ "#6c000000", "#c94949" ]
-
-                Column {
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: index
-                    anchors.left: parent.left
-                    anchors.leftMargin: 1-index
-
-                    Text {
-                        text: stateView.SpeedRestriction
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 51.2
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                        height: 62
-                    }
-                    Text {
-                        text: qsTr("км/ч ")
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 14.4
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
-            }
-        }
-
-        Rectangle {
             anchors.bottom: parent.bottom
             width: 63
             height: 63
@@ -832,7 +793,7 @@ Rectangle {
                     anchors.rightMargin: 1-index
 
                     Text {
-                        text: Math.round(stateView.Speed)
+                        text: stateView.Speed.toFixed()
                         anchors.right: parent.right
                         height: 38
                         color: modelData

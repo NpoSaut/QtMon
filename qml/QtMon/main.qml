@@ -163,16 +163,10 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.leftMargin: 0
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#6b6b6b"
-                    }
-
-                    GradientStop {
-                        position: 1
-                        color: "#2b2b2b"
-                    }
+                Image {
+                    source: "Slices/Background.png"
+                    anchors.top: parent.top
+                    anchors.left: rootRect.left
                 }
 
             Row {
@@ -700,7 +694,7 @@ Rectangle {
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
-                            source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            source: "../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
                             //asynchronous: true
 
                             Rectangle

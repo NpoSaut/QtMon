@@ -694,7 +694,7 @@ Rectangle {
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
-                            source: "../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            source: "../../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
                             //asynchronous: true
 
                             Rectangle
@@ -1255,7 +1255,7 @@ Rectangle {
                     anchors.rightMargin: 1-index
 
                     Text {
-                        text: stateView.Speed.toFixed()
+                        text: stateView.Speed >= 0 ? stateView.Speed.toFixed() : "--"
                         anchors.right: parent.right
                         height: 38
                         color: modelData

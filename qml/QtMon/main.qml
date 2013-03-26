@@ -1150,7 +1150,7 @@ Rectangle {
         }
 
 
-	Rectangle {
+        Rectangle {
             id: graduateBar
 
             width: 10
@@ -1207,22 +1207,16 @@ Rectangle {
             height: rootRect.height - speedBox.height
             color: "#fff"
             anchors.top: parent.top
-
-            Behavior on height { SmoothedAnimation { duration: 500 } }
         }
-
-
-
-
 
         Rectangle {
             id: speedValueBar
             x: 0
             width: 7
-            height: (stateView.Speed/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            height: (stateView.Speed/maxSpeed)*(rootRect.height - speedBox.height)
+            visible: stateView.Speed >= 0
             color: "#4999c9"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: speedBox.height
+            anchors.bottom: speedBox.top
 
             Behavior on height { SmoothedAnimation { duration: 500 } }
         }
@@ -1232,7 +1226,7 @@ Rectangle {
             x: 0
             y: 0
             width: 7
-            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - restrictionBox.height - speedBox.height)
+            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - speedBox.height)
             color: "#c94949"
             anchors.top: parent.top
 

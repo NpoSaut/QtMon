@@ -26,7 +26,7 @@
     <Property type="int" name="Milage" def="0" description="Проиденное расстояние" />
     
     <!-- Светофорное -->
-    <Property type="int" name="Light" def="0" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
+    <Property type="int" name="Light" def="-2" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
     <Property type="int" name="AlsnFreqTarget" def="25" description="Целевая Частота АЛСН"/>
     <Property type="int" name="AlsnFreqFact" def="25" description="Фактическая Частота АЛСН" source="BVU_STATE_A"/>
 

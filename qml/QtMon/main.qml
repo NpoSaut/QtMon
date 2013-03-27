@@ -121,6 +121,9 @@ Rectangle {
 
             PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
             PropertyChanges { target: page1buttonInfo; anchors.rightMargin: 20; opacity: 0.05 }
+
+            PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
+            PropertyChanges { target: graduateBar; opacity: 0 }
         },
         State {
             name: "page2"
@@ -140,6 +143,9 @@ Rectangle {
         NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: page1buttonInfo; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: page1buttonInfo; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+
+        NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
+        NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
     }
 
     Rectangle {
@@ -714,8 +720,6 @@ Rectangle {
                 }
 
                 Image {
-                    x: 534
-                    y: 364
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: "Slices/Cross.png"
@@ -726,11 +730,12 @@ Rectangle {
 
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: -10
-                    anchors.horizontalCenter: parent.horizontalCenter
                     height: background.height
                     width: background.width
 
                     color: "#00000000"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
 
                     Image {
                         id: background
@@ -1132,14 +1137,15 @@ Rectangle {
             Image {
                 anchors.fill: parent
                 source: "Slices/Vigilance-Sign-Active-Overlay.png"
-                opacity: 0
+                property bool isActive: false;
+                opacity: 1.0 * isActive
                 Behavior on opacity { PropertyAnimation { duration: 70 } }
 
                 Timer {
                     interval: 400
-                    running: stateView.IsVigilanceRequired || (parent.opacity != 0)
+                    running: stateView.IsVigilanceRequired || (parent.isActive)
                     repeat: true
-                    onTriggered: parent.opacity = 1 - parent.opacity
+                    onTriggered: parent.isActive = !parent.isActive
                 }
             }
 
@@ -1168,6 +1174,8 @@ Rectangle {
                 model: Math.floor(maxSpeed/5) - 1
                 Row {
                     property int sp: (index + 1) * 5
+                    property bool nice: sp % 10 == 0
+
                     anchors.left: parent.left
                     anchors.leftMargin: 5
                     height: 14;
@@ -1176,21 +1184,34 @@ Rectangle {
                     //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
                     spacing: 0
 
-                    Rectangle { anchors.verticalCenter: parent.verticalCenter; height: 1; color: "#000000";
-                                width: 4 + 0.4*Math.floor(repeater.count / 6) * index; }
+                    Repeater {
+                        model: [ "#71000000", "#a8ffffff" ]
+                        Rectangle {
+                            anchors.verticalCenter: parent.verticalCenter;
+                            anchors.verticalCenterOffset: index
+                            anchors.left: parent.left
+                            anchors.leftMargin: index
+                            height: nice? 2:1;
+                            color: modelData;
+                            width: 4 + 0.4*Math.floor(repeater.count / 6) * index;
+                        }
+                    }
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height
-                        width: 18
+                        width: 14
                         color: "#00000000"
 
                         Repeater {
                             model: [ "#71000000", "#a8ffffff" ]
-                            Text { text: parent.parent.sp; font.family: "URW Gothic L"; font.pointSize: 10; font.bold: true
+                            Text {
+                                text: parent.parent.sp;
+                                font.family: "URW Gothic L";
+                                font.pointSize: 8;
                                 anchors.verticalCenterOffset: index-1
                                 anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.right
-                                anchors.rightMargin: 1-index
+                                anchors.left: parent.left
+                                anchors.leftMargin: index
                                 color: modelData
                             }
                         }
@@ -1207,6 +1228,7 @@ Rectangle {
             height: rootRect.height - speedBox.height
             color: "#fff"
             anchors.top: parent.top
+            opacity: graduateBar.opacity
         }
 
         Rectangle {
@@ -1217,6 +1239,7 @@ Rectangle {
             visible: stateView.Speed >= 0
             color: "#4999c9"
             anchors.bottom: speedBox.top
+            opacity: graduateBar.opacity
 
             Behavior on height { SmoothedAnimation { duration: 500 } }
         }
@@ -1229,24 +1252,31 @@ Rectangle {
             height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - speedBox.height)
             color: "#c94949"
             anchors.top: parent.top
+            opacity: graduateBar.opacity
 
             Behavior on height { SmoothedAnimation { duration: 500 } }
         }
 
         Rectangle {
-            anchors.bottom: parent.bottom
             width: 63
-            height: 63
+            height: 64
             color: "#00000000"
-            anchors.left: parent.left
             id: speedBox
-            y: 417
+            anchors.right: parent.left
+            anchors.bottom: parent.bottom
+
+            Image {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                source: "Slices/Speedbox-Label.png"
+            }
+
             Repeater {
                 model: [ "#ff30759e", "#d8ffffff" ]
                 Column {
                     y: index
                     anchors.right: parent.right
-                    anchors.rightMargin: 1-index
+                    anchors.rightMargin: 10-index
 
                     Text {
                         text: stateView.Speed >= 0 ? stateView.Speed.toFixed() : "--"

@@ -3338,19 +3338,6 @@
        y1="48.143646"
        x2="768.8269"
        y2="48.143646" />
-    <filter
-       color-interpolation-filters="sRGB"
-       inkscape:collect="always"
-       id="filter4909-3"
-       x="-0.17557126"
-       width="1.3511425"
-       y="-0.066750482"
-       height="1.1335011">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="5.3630793"
-         id="feGaussianBlur4911-4" />
-    </filter>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4793-9"
@@ -3463,8 +3450,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9983453"
-     inkscape:cx="441.53428"
-     inkscape:cy="235.38645"
+     inkscape:cx="439.88476"
+     inkscape:cy="222.51816"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -3502,7 +3489,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -5206,7 +5193,7 @@
     <g
        style="display:inline"
        id="g1211-4"
-       transform="matrix(-1,0,0,1,1314.6344,-1.2463489)">
+       transform="translate(-5.46802,-1.2463489)">
       <g
          transform="matrix(-1.1222869,0,0,0.37175375,1382.2162,409.31149)"
          style="fill:#000000;fill-opacity:1;display:inline"

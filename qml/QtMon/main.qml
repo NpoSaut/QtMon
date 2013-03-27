@@ -725,6 +725,23 @@ Rectangle {
                     source: "Slices/Cross.png"
                 }
 
+
+                Column {
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.topMargin: 15
+                    anchors.leftMargin: 15
+                    id: speedDebugColumn
+                    Repeater {
+                        model: [ stateView.SpeedFromSky, stateView.SpeedFromEarth ]
+                        Text {
+                            text: modelData
+                            font.pixelSize: 30
+                        }
+                    }
+                }
+
+
                 Rectangle {
                     id: hintBox
 

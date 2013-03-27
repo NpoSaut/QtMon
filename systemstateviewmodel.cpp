@@ -5,6 +5,9 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 {
     // fileds init start
     speedValue = 0;
+    speedIsValidValue = false;
+    speedFromSkyValue = 0;
+    speedFromEarthValue = 0;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
@@ -18,7 +21,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isEpvReadyValue = true;
     isEpvReleasedValue = false;
     milageValue = 0;
-    lightValue = 0;
+    lightValue = -2;
     alsnFreqTargetValue = 25;
     alsnFreqFactValue = 25;
     timeValue = "-:-";
@@ -44,6 +47,48 @@ void SystemStateViewModel::setSpeed(const double value)
     {
         speedValue = value;
         emit SpeedChanged();
+    }
+}
+
+// Корректность скорости
+const bool SystemStateViewModel::getSpeedIsValid() const
+{
+    return speedIsValidValue;
+}
+void SystemStateViewModel::setSpeedIsValid(const bool value)
+{
+    if (speedIsValidValue != value)
+    {
+        speedIsValidValue = value;
+        emit SpeedIsValidChanged();
+    }
+}
+
+// Текущая скорость по GPS
+const double SystemStateViewModel::getSpeedFromSky() const
+{
+    return speedFromSkyValue;
+}
+void SystemStateViewModel::setSpeedFromSky(const double value)
+{
+    if (speedFromSkyValue != value)
+    {
+        speedFromSkyValue = value;
+        emit SpeedFromSkyChanged();
+    }
+}
+
+// Текущая скорость от колеса
+const double SystemStateViewModel::getSpeedFromEarth() const
+{
+    return speedFromEarthValue;
+}
+void SystemStateViewModel::setSpeedFromEarth(const double value)
+{
+    if (speedFromEarthValue != value)
+    {
+        speedFromEarthValue = value;
+        emit SpeedFromEarthChanged();
     }
 }
 

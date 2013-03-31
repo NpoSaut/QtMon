@@ -155,8 +155,13 @@ public:
     // public properties getters end
 
 signals:
+    // Сигнал о нажатии кнопки Смены режима движения
+    void ChangeDrivemodeButtonPressed();
+    void ChangeDrivemodeButtonReleased();
+
     // Сигнал о нажатии кнопки Выключения Красного
     void DisableRedButtonPressed();
+    void DisableRedButtonReleased();
 
     // properties signals start
     void SpeedChanged();

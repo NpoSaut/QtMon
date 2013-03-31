@@ -80,7 +80,6 @@ Rectangle {
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
-            // !! Испустить сигнал отмены красного :-/ !!
             stateView.DisableRedButtonPressed();
         }
         // Страница дорожного режима
@@ -89,7 +88,8 @@ Rectangle {
         }
         // Alt: Режим движения
         else if (altMode && event.key == Qt.Key_F3) {
-            stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
+            //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
+            stateView.ChangeDrivemodeButtonPressed();
         }
         // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
@@ -101,6 +101,14 @@ Rectangle {
         // Выключение альтернативного режима клавиш
         if (event.key == Qt.Key_F4) {
             altMode = false;
+        }
+        // Alt: Отмена Красного
+        else if (altMode && event.key == Qt.Key_F2) {
+            stateView.DisableRedButtonReleased();
+        }
+        // Alt: Режим движения
+        else if (altMode && event.key == Qt.Key_F3) {
+            stateView.ChangeDrivemodeButtonReleased();
         }
     }
 
@@ -385,7 +393,8 @@ Rectangle {
                                        case 0: return "П";
                                        case 1: return "М";
                                        case 2: return "Р";
-                                       case 3: return"Д";
+                                       case 3: return "Д";
+                                       case 4: return "Т";
                                    }
                                 }
 
@@ -623,12 +632,14 @@ Rectangle {
                 anchors.bottomMargin: 10
 
                 Image {
-                    opacity: stateView.Direction==1 ? 1 : 0.05
-                    source: "Slices/Direction-Forward.png"
+                    source: stateView.Direction==1 ?
+                                "Slices/Direction-Forward.png" :
+                                "Slices/Direction-None.png";
                 }
                 Image {
-                    opacity: stateView.Direction==-1 ? 1 : 0.05
-                    source: "Slices/Direction-Back.png"
+                    source: stateView.Direction==1 ?
+                                "Slices/Direction-Back.png" :
+                                "Slices/Direction-None.png";
                 }
             }
 

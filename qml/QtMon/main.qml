@@ -726,22 +726,6 @@ Rectangle {
                 }
 
 
-                Column {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.topMargin: 15
-                    anchors.leftMargin: 15
-                    id: speedDebugColumn
-                    Repeater {
-                        model: [ stateView.SpeedFromSky, stateView.SpeedFromEarth ]
-                        Text {
-                            text: modelData
-                            font.pixelSize: 30
-                        }
-                    }
-                }
-
-
                 Rectangle {
                     id: hintBox
 
@@ -766,19 +750,6 @@ Rectangle {
                         anchors.topMargin: 3
                         anchors.left: parent.left
                         anchors.leftMargin: 16
-
-                        font.family: "URW Gothic L"; font.pixelSize: 14;
-                        color: "#2d2d2d";
-                    }
-
-                    Text {
-                        text: stateView.Date;
-                       //text: qsTr("21 декабря 2012");
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.horizontalCenterOffset: 5
 
                         font.family: "URW Gothic L"; font.pixelSize: 14;
                         color: "#2d2d2d";

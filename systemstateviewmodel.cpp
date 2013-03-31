@@ -22,8 +22,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isEpvReleasedValue = false;
     milageValue = 0;
     lightValue = -2;
-    alsnFreqTargetValue = 25;
-    alsnFreqFactValue = 25;
+    alsnFreqTargetValue = -1;
+    alsnFreqFactValue = -1;
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;

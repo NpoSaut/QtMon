@@ -91,7 +91,7 @@ can_frame can_encoder::encode_sys_key(key_state k_state, int key_code)
     return frame;
 }
 
-can_frame can_encoder::encode_mm_data(int speed)
+can_frame can_encoder::encode_mm_data(int speed, int milage)
 {
     can_frame frame;
     frame.can_id = 0x211;
@@ -100,13 +100,31 @@ can_frame can_encoder::encode_mm_data(int speed)
     frame.data[0] = 0;
     frame.data[1] = speed & 0b11111111;
     frame.data[2] = 0;
-    frame.data[3] = 0;
-    frame.data[4] = 0;
-    frame.data[5] = 0;
+    frame.data[3] = char(milage/256/256);
+    frame.data[4] = char(milage/256);
+    frame.data[5] = char(milage);
     frame.data[6] = 0;
     frame.data[7] = 0;
 
     return frame;
+}
+
+can_frame can_encoder::encode_ipd_state( double speed, int distance, bool reliable )
+{
+    can_frame frame;
+    frame.can_id = 0x0C4;
+    frame.can_dlc = 8;
+
+    distance = abs(distance);
+
+    frame.data[0] = reliable ? 0 : 1;
+    frame.data[1] = speed != 0 ? 4 : 0; // наличие движения
+    frame.data[2] = speed;
+    frame.data[3] = char(distance/256);
+    frame.data[4] = char(distance);
+    frame.data[5] = char(distance/256/256);
+    frame.data[6] = reliable ? 0 : 1;
+    frame.data[7] = 0;
 }
 
 
@@ -237,7 +255,7 @@ int can_decoder::decode_trafficlight_freq(struct can_frame* frame, int* trafficl
     else if (freq_code == 1)
         (*trafficlight_freq) = 75;
     else if (freq_code == 2)
-        (*trafficlight_freq) = 50;
+        (*trafficlight_freq) = 0;
     else if (freq_code == 3)
         (*trafficlight_freq) = 25;
 
@@ -291,7 +309,10 @@ int can_decoder::decode_driving_mode(struct can_frame* frame, int* driving_mode)
 {
     if ((*frame).can_id != 0x052) return -1;
 
-    (*driving_mode) = (int) (( (*frame).data[7] ) & 0b00000011 );
+    if ( (int) (( (*frame).data[1] ) & 0b01000000 ) )
+        (*driving_mode) = 4;
+    else
+        (*driving_mode) = (int) (( (*frame).data[7] ) & 0b00000011 );
 
     return 1;
 }
@@ -330,21 +351,23 @@ int can_decoder::decode_pressure_tc_tm(struct can_frame* frame, double* pressure
 // VDS_STATE_A
 int can_decoder::decode_ssps_mode(struct can_frame* frame, int* ssps_mode)
 {
-    if ((*frame).can_id != 0x2E0) return -1;
+    if ((*frame).can_id != 0x052) return -1;
 
-    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b00000001 );
+    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b01000000 );
 
     return 1;
 }
 
 
 
-void nmea::decode_nmea_message(QString message, struct gps_data* gd)
+bool nmea::decode_nmea_message(QString message, struct gps_data* gd)
 {
     if (message.mid(3,3) == "RMC")
     {
         decode_rmc(message, gd);
+        return true;
     }
+    else return false;
 }
 
 // $GPRMC,024607.000,V,5651.27857,N,06035.91777,E,0.0,0.0,241212,,,N*70
@@ -377,11 +400,7 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
     int dty = ("20" + fields.at(9).mid(4,2)).toInt();
 
     // Reliability
-    bool IsReliable = false;
-    if (fields.at(2) == "A")
-        IsReliable = true;
-    else if (fields.at(2) == "V")
-        IsReliable = false;
+    bool IsReliable = fields.at(2).toLower().contains("a");
 
     // Lattitude, degrees
     double latd = fields.at(3).mid(0,2).toDouble();
@@ -397,9 +416,10 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
     if (fields.at(6) == "W")
         lon = -lon;
 
-    // Velocity
-    QStringList v_list = fields.at(7).split("."); // И целая, и дробная части могут быть переменной длины.
-    double speed_kmh = ( v_list.at(0).toDouble() + v_list.at(1).toDouble() ) * 1.852;
+    // Velocityvoid
+    //QStringList v_list = fields.at(7).split("."); // И целая, и дробная части могут быть переменной длины.
+    //double speed_kmh = ( v_list.at(0).toDouble() + v_list.at(1).toDouble() ) * 1.852;
+    double speed_kmh = fields.at(7).toDouble() * 1.852;
 
     gd->lat = lat;
     gd->lon = lon;

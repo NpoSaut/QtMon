@@ -10,7 +10,7 @@ Rectangle {
 
     property int pageNum: 1
 
-    property double maxSpeed: 100
+    property double maxSpeed: 60
 
     function switchPage(i) {
         if (i == 1) {
@@ -80,7 +80,6 @@ Rectangle {
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
-            // !! Испустить сигнал отмены красного :-/ !!
             stateView.DisableRedButtonPressed();
         }
         // Страница дорожного режима
@@ -89,7 +88,8 @@ Rectangle {
         }
         // Alt: Режим движения
         else if (altMode && event.key == Qt.Key_F3) {
-            stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
+            //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
+            stateView.ChangeDrivemodeButtonPressed();
         }
         // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
@@ -101,6 +101,14 @@ Rectangle {
         // Выключение альтернативного режима клавиш
         if (event.key == Qt.Key_F4) {
             altMode = false;
+        }
+        // Alt: Отмена Красного
+        else if (altMode && event.key == Qt.Key_F2) {
+            stateView.DisableRedButtonReleased();
+        }
+        // Alt: Режим движения
+        else if (altMode && event.key == Qt.Key_F3) {
+            stateView.ChangeDrivemodeButtonReleased();
         }
     }
 
@@ -121,6 +129,9 @@ Rectangle {
 
             PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
             PropertyChanges { target: page1buttonInfo; anchors.rightMargin: 20; opacity: 0.05 }
+
+            PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
+            PropertyChanges { target: graduateBar; opacity: 0 }
         },
         State {
             name: "page2"
@@ -140,6 +151,9 @@ Rectangle {
         NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: page1buttonInfo; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
         NumberAnimation { target: page1buttonInfo; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
+
+        NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
+        NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
     }
 
     Rectangle {
@@ -163,16 +177,10 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
                 anchors.leftMargin: 0
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#6b6b6b"
-                    }
-
-                    GradientStop {
-                        position: 1
-                        color: "#2b2b2b"
-                    }
+                Image {
+                    source: "Slices/Background.png"
+                    anchors.top: parent.top
+                    anchors.left: rootRect.left
                 }
 
             Row {
@@ -207,7 +215,7 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("123км 400пк 00м")
+                               text: qsTr("--км --пк --м")
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14
@@ -237,7 +245,7 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("1ПР")
+                               text: qsTr("--")
                                color: "#ffffffff"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
@@ -267,7 +275,7 @@ Rectangle {
                               anchors.horizontalCenter: parent.horizontalCenter
                               anchors.verticalCenter: parent.verticalCenter
                               //text: qsTr("0.15")
-                              text: stateView.Acceleration
+                              text: stateView.Acceleration.toFixed(2)
                               color: "#ffffffff"
                               font.pixelSize: 14
                               font.family: "URW Gothic L"
@@ -385,7 +393,8 @@ Rectangle {
                                        case 0: return "П";
                                        case 1: return "М";
                                        case 2: return "Р";
-                                       case 3: return"Д";
+                                       case 3: return "Д";
+                                       case 4: return "Т";
                                    }
                                 }
 
@@ -426,7 +435,7 @@ Rectangle {
                 height: width
 
                 // Количество засечек
-                property int tickCount: 10
+                property int tickCount: maxSpeed / 5
 
                 property double minAngle: 1.25 * Math.PI
                 property double maxAngle: -0.25 * Math.PI
@@ -513,6 +522,7 @@ Rectangle {
                 // Стрелка спидометра
                 Image {
                     source: "Slices/Needle-Speed.png"
+                    visible: stateView.SpeedIsValid
 
                     rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
                     smooth: true
@@ -589,7 +599,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: stateView.Speed
+                        text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
                         color: "#fff"
 
                         font.pixelSize: 35
@@ -603,7 +613,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65
 
-                        text: stateView.SpeedRestriction
+                        text: stateView.SpeedRestriction.toFixed()
                         color: "#c94949"
 
                         font.pixelSize: 35
@@ -622,12 +632,14 @@ Rectangle {
                 anchors.bottomMargin: 10
 
                 Image {
-                    opacity: stateView.Direction==1 ? 1 : 0.05
-                    source: "Slices/Direction-Forward.png"
+                    source: stateView.Direction==1 ?
+                                "Slices/Direction-Forward.png" :
+                                "Slices/Direction-None.png";
                 }
                 Image {
-                    opacity: stateView.Direction==-1 ? 1 : 0.05
-                    source: "Slices/Direction-Back.png"
+                    source: stateView.Direction==1 ?
+                                "Slices/Direction-Back.png" :
+                                "Slices/Direction-None.png";
                 }
             }
 
@@ -699,7 +711,7 @@ Rectangle {
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
-                            source: "MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            source: "../../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
                             //asynchronous: true
 
                             Rectangle
@@ -719,23 +731,23 @@ Rectangle {
                 }
 
                 Image {
-                    x: 534
-                    y: 364
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                     source: "Slices/Cross.png"
                 }
+
 
                 Rectangle {
                     id: hintBox
 
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: -10
-                    anchors.horizontalCenter: parent.horizontalCenter
                     height: background.height
                     width: background.width
 
                     color: "#00000000"
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
 
                     Image {
                         id: background
@@ -755,22 +767,8 @@ Rectangle {
                     }
 
                     Text {
-                        text: stateView.Date;
-                       //text: qsTr("21 декабря 2012");
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.horizontalCenterOffset: 5
-
-                        font.family: "URW Gothic L"; font.pixelSize: 14;
-                        color: "#2d2d2d";
-                    }
-
-                    Text {
                         id: hintBoxMilageKm
-                        text: Math.round(stateView.Milage/1000) + qsTr('.')
-                                + Math.round(stateView.Milage/100)%10 + qsTr(" км")
+                        text: (stateView.Milage/1000).toFixed(1) + qsTr(" км")
 
                         anchors.top: parent.top
                         anchors.topMargin: 3
@@ -996,36 +994,6 @@ Rectangle {
                         font.pointSize: 20
                         font.family: "URW Gothic L"
                     }
-
-                    Row {
-                        id: page1buttonInfo
-                        spacing: 2
-                        anchors.right: parent.right
-                        Text {
-                            color: "#4999c9"
-                            text: stateView.Speed
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 17
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#ffffff"
-                            text: qsTr("/")
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            color: "#c94949"
-                            text: stateView.SpeedRestriction
-                            anchors.bottom: parent.bottom
-//                            font.bold: true
-                            font.pointSize: 14
-                            font.family: "URW Gothic L"
-                        }
-                    }
                 }
 
                 Column {
@@ -1168,20 +1136,165 @@ Rectangle {
             Image {
                 anchors.fill: parent
                 source: "Slices/Vigilance-Sign-Active-Overlay.png"
-                opacity: 0
+                property bool isActive: false;
+                opacity: 1.0 * isActive
                 Behavior on opacity { PropertyAnimation { duration: 70 } }
 
                 Timer {
                     interval: 400
-                    running: stateView.IsVigilanceRequired || (parent.opacity != 0)
+                    running: stateView.IsVigilanceRequired || (parent.isActive)
                     repeat: true
-                    onTriggered: parent.opacity = 1 - parent.opacity
+                    onTriggered: parent.isActive = !parent.isActive
                 }
             }
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+            }
+        }
+
+
+        Rectangle {
+            id: graduateBar
+
+            width: 10
+
+            color: "#00000000"
+            anchors.top: parent.top
+            anchors.topMargin: restrictionBox.height
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: speedBox.height
+            anchors.left: parent.left
+
+            Repeater
+            {
+                id: repeater
+                model: Math.floor(maxSpeed/5) - 1
+                Row {
+                    property int sp: (index + 1) * 5
+                    property bool nice: sp % 10 == 0
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    height: 14;
+                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
+                    visible: y > vigilanceSign.y + vigilanceSign.height
+                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
+                    spacing: 0
+
+                    Repeater {
+                        model: [ "#71000000", "#a8ffffff" ]
+                        Rectangle {
+                            anchors.verticalCenter: parent.verticalCenter;
+                            anchors.verticalCenterOffset: index
+                            anchors.left: parent.left
+                            anchors.leftMargin: index
+                            height: nice? 2:1;
+                            color: modelData;
+                            width: 4 + 0.4*Math.floor(repeater.count / 6) * index;
+                        }
+                    }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        width: 14
+                        color: "#00000000"
+
+                        Repeater {
+                            model: [ "#71000000", "#a8ffffff" ]
+                            Text {
+                                text: parent.parent.sp;
+                                font.family: "URW Gothic L";
+                                font.pointSize: 8;
+                                anchors.verticalCenterOffset: index-1
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.leftMargin: index
+                                color: modelData
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        Rectangle {
+            x: 0
+            y: 0
+            width: 7
+            height: rootRect.height - speedBox.height
+            color: "#fff"
+            anchors.top: parent.top
+            opacity: graduateBar.opacity
+        }
+
+        Rectangle {
+            id: speedValueBar
+            x: 0
+            width: 7
+            height: (stateView.Speed/maxSpeed)*(rootRect.height - speedBox.height)
+            visible: stateView.Speed >= 0
+            color: "#4999c9"
+            anchors.bottom: speedBox.top
+            opacity: graduateBar.opacity
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+        Rectangle {
+            id: restrictionBar
+            x: 0
+            y: 0
+            width: 7
+            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - speedBox.height)
+            color: "#c94949"
+            anchors.top: parent.top
+            opacity: graduateBar.opacity
+
+            Behavior on height { SmoothedAnimation { duration: 500 } }
+        }
+
+        Rectangle {
+            width: 63
+            height: 64
+            color: "#00000000"
+            id: speedBox
+            anchors.right: parent.left
+            anchors.bottom: parent.bottom
+
+            Image {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                source: "Slices/Speedbox-Label.png"
+            }
+
+            Repeater {
+                model: [ "#ff30759e", "#d8ffffff" ]
+                Column {
+                    y: index
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10-index
+
+                    Text {
+                        text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "--"
+                        anchors.right: parent.right
+                        height: 38
+                        color: modelData
+                        font.pointSize: 26
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                    Text {
+                        text: qsTr("км/ч")
+                        anchors.right: parent.right
+                        color: modelData
+                        font.pointSize: 11.2
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                    }
+                }
             }
         }
 

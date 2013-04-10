@@ -4,8 +4,11 @@
 #include <QDate>
 #include <QtCore/qmath.h>
 
+#include <QFile>
+#include <QTextStream>
+
 // Distance between coordinates in kilometers
-const double PI  =3.141592653589793238462;
+const double PI = 3.141592653589793238462;
 static double DistanceBetweenCoordinates(double lat1d, double lon1d, double lat2d, double lon2d)
 {
     // Sphere Earth
@@ -19,10 +22,11 @@ static double DistanceBetweenCoordinates(double lat1d, double lon1d, double lat2
 
     double num = qSqrt(qPow(qCos(lat2r) * qSin(deltalon), 2) + qPow(qCos(lat1r) * qSin(lat2r) - qSin(lat1r) * qCos(lat2r) * qCos(deltalon), 2));
     double denum = qSin(lat1r) * qSin(lat2r) + qCos(lat1r) * qCos(lat2r) * qCos(deltalon);
-    return qAtan(num / denum) * 6372.795;
+    return 1000 * qAtan(num / denum) * 6372.795;
 }
 
 iodrv::iodrv(SystemStateViewModel *systemState)
+    : distance_store_file("/media/milage.txt")
 {
     //!!!!! TODO: ВРЕМЕННО
     this->systemState = systemState;
@@ -32,9 +36,20 @@ iodrv::iodrv(SystemStateViewModel *systemState)
     write_socket_0 = -1;
     write_socket_1 = -1;
 
-    total_passed_distance = 0;
-    pgd.lat = 0;
+    if( distance_store_file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream distance_store_stream (&distance_store_file);
+        stored_passed_distance = distance_store_stream.readLine().toInt();
+        distance_store_file.close();
+    }
+    else
+    {
+        qDebug() << "Error open milage.txt!" << endl;
+        stored_passed_distance = 0;
+    }
+    total_passed_distance = stored_passed_distance;
 
+    pgd.lat = 0;
 
     c_speed = -1;
     c_speed_limit = -1;
@@ -51,7 +66,7 @@ iodrv::iodrv(SystemStateViewModel *systemState)
 
     c_pressure_tc = -1;
     c_pressure_tm = -1;
-    c_ssps_mode = -1;
+    c_ssps_mode = 1;
 
     p_speed = -1;
     p_speed_limit = -1;
@@ -120,43 +135,45 @@ int iodrv::init_sktcan(char* can_iface_name_0, char *can_iface_name_1)
 
     // Подготавливаем сокеты
 
-    printf("Инициализация сокета чтения can0\n"); fflush(stdout);
+    printf("Инициализация сокета чтения %s\n", iface_name_0); fflush(stdout);
     read_socket_0 = getSocket(iface_name_0);
     if(!read_socket_0)
     {
         return 0;
     }
-    printf("Сокет чтения can0 готов\n"); // TODO: Сообщение об общей готовности или ошибке должно быть в getSocket()
+    printf("Сокет чтения %s готов\n", iface_name_0); // TODO: Сообщение об общей готовности или ошибке должно быть в getSocket()
     fflush(stdout);
 
-    printf("Инициализация сокета записи can0\n"); fflush(stdout);
+    printf("Инициализация сокета записи %s\n", iface_name_0); fflush(stdout);
     write_socket_0 = getSocket(iface_name_0);
     if(!write_socket_0)
     {
         return 0;
     }
-    printf("Сокет записи can0 готов\n"); fflush(stdout);
+    printf("Сокет записи %s готов\n", iface_name_0); fflush(stdout);
 
-    printf("Инициализация сокета записи can1\n"); fflush(stdout);
+    printf("Инициализация сокета записи %s\n", iface_name_1); fflush(stdout);
     write_socket_1 = getSocket(iface_name_1);
     if(!write_socket_1)
     {
         return 0;
     }
-    printf("Сокет записи can1 готов\n"); fflush(stdout);
+    printf("Сокет записи %s готов\n", iface_name_1); fflush(stdout);
 
     return 1;
 }
 
 void iodrv::write_canmsg_async(int write_socket, can_frame* frame)
 {
-    //TODO: Передавать по значению и лочить вызов?
+    // TODO: Передавать по значению и лочить вызов?
     // Создавать новый сокет на отправку и закрывать его.
 
     // Операция будет атомарной на одном сокете, пока не израсходован его внутренний буфер, который как минимум 512 байт.
     // Учитывая размер can_frame и плотность их отправки, его исчерпание маловероятно.
 
-    QtConcurrent::run(write_can_frame, write_socket, frame);
+    //qDebug() << "cocure";
+    //QtConcurrent::run(write_can_frame, write_socket, *frame);
+    write_can_frame(write_socket, *frame);
 }
 
 void iodrv::read_canmsgs_loop()
@@ -191,11 +208,11 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_pressure_tc_tm(frame);
     decode_ssps_mode(frame);
 
-    if(gps_source == can)
-    {
-        decode_mm_lat_lon(frame);
-        decode_ipd_datetime(frame);
-    }
+//    if(gps_source == can)
+//    {
+//        decode_mm_lat_lon(frame);
+//        decode_ipd_datetime(frame);
+//    }
 }
 
 
@@ -208,11 +225,8 @@ int iodrv::decode_speed(struct can_frame* frame)
         case 1:
             if ((p_speed == -1) || (p_speed != -1 && p_speed != c_speed))
             {
-                if (c_ssps_mode == 0)
-                {
-                    emit signal_speed(c_speed);
-                }
-                //printf("Speed: %f\n", c_speed); fflush(stdout);
+                emit signal_speed_earth(c_speed);
+//                printf("Speed: %f\n", c_speed); fflush(stdout);
             }
             p_speed = c_speed;
             break;
@@ -294,29 +308,29 @@ int iodrv::decode_trafficlight_light(struct can_frame* frame)
     }
 }
 
+int trafficlight_freq_incorrect_count = 0;
 int iodrv::decode_trafficlight_freq(struct can_frame* frame)
 {
     switch (can_decoder::decode_trafficlight_freq(frame, &c_trafficlight_freq))
     {
         case 1:
-            /*if ((p_trafficlight_freq == -1) || (p_trafficlight_freq != -1 && p_trafficlight_freq != c_trafficlight_freq))
+            if ((p_trafficlight_freq == -1) || (p_trafficlight_freq != -1 && p_trafficlight_freq != c_trafficlight_freq))
             {
                 emit signal_trafficlight_freq(c_trafficlight_freq);
+                if (systemState->getAlsnFreqTarget() == -1) systemState->setAlsnFreqTarget(c_trafficlight_freq);
             }
-            p_trafficlight_freq = c_trafficlight_freq;*/
-            if ( p_trafficlight_freq == -1 )
+            if (systemState->getAlsnFreqTarget() != -1 && systemState->getAlsnFreqTarget() != c_trafficlight_freq)
             {
-                emit signal_trafficlight_freq(c_trafficlight_freq);
-            }
-            else if (target_trafficlight_freq == c_trafficlight_freq)
-            {
-                emit signal_trafficlight_freq(c_trafficlight_freq);
-            }
-            else
-            {
-                this->slot_f_key_down();
+                if (trafficlight_freq_incorrect_count >= 1)
+                {
+                  this->slot_f_key_down();
+//                this->slot_f_key_up(); // Если делать, то с задержкой
+                  trafficlight_freq_incorrect_count = 0;
+                }
+                else trafficlight_freq_incorrect_count ++;
             }
             p_trafficlight_freq = c_trafficlight_freq;
+
             break;
     }
 }
@@ -333,10 +347,27 @@ int iodrv::decode_passed_distance(struct can_frame* frame)
             p_passed_distance = c_passed_distance;*/
 
             // Общий одометр
-            if (c_ssps_mode == 0 && p_passed_distance != -1 && c_passed_distance != -1)
+            if ( c_ssps_mode == 0 &&
+                    p_passed_distance != -1 && c_passed_distance != -1)
             {
-                total_passed_distance += (c_passed_distance - p_passed_distance);
+                total_passed_distance += abs(c_passed_distance - p_passed_distance);
                 emit signal_passed_distance(total_passed_distance);
+
+                if ( (total_passed_distance - stored_passed_distance) >= 100 )
+                {
+                    if( distance_store_file.open(QIODevice::ReadWrite) )
+                    {
+                        QTextStream distance_store_stream (&distance_store_file);
+                        distance_store_stream << int(total_passed_distance) << endl;
+                        distance_store_stream.flush();
+                        distance_store_file.close();
+                        stored_passed_distance = total_passed_distance;
+                    }
+                    else
+                    {
+                        qDebug() << "Error open milage.txt!" << endl;
+                    }
+                }
             }
             p_passed_distance = c_passed_distance;
 
@@ -422,24 +453,19 @@ int iodrv::decode_driving_mode(struct can_frame* frame)
     switch (can_decoder::decode_driving_mode(frame, &c_driving_mode))
     {
         case 1:
-            /*if ((p_driving_mode == -1) || (p_driving_mode != -1 && p_driving_mode != c_driving_mode))
+            if ((p_driving_mode == -1) || (p_driving_mode != -1 && p_driving_mode != c_driving_mode))
             {
                 emit signal_driving_mode(c_driving_mode);
             }
-            p_driving_mode = c_driving_mode;*/
-            if ( p_driving_mode == -1 )
+            if (target_driving_mode != c_driving_mode)
             {
-                emit signal_driving_mode(c_driving_mode);
-            }
-            else if (target_driving_mode == c_driving_mode)
-            {
-                emit signal_driving_mode(c_driving_mode);
-            }
-            else
-            {
-                this->slot_rmp_key_down();
+                // Временно отключил подстраивание под заказной РМП
+                // т.к. возникли проблемы с различием наборов заказных
+                // и реальных режимов движения
+                //this->slot_rmp_key_down();
             }
             p_driving_mode = c_driving_mode;
+
             break;
     }
 }
@@ -474,7 +500,7 @@ int iodrv::decode_reg_tape_avl(struct can_frame* frame)
 
 int iodrv::decode_pressure_tc_tm(struct can_frame* frame)
 {
-    switch (can_decoder::decode_reg_tape_avl(frame, &c_reg_tape_avl))
+    switch (can_decoder::decode_pressure_tc_tm(frame, &c_pressure_tc, &c_pressure_tm))
     {
         case 1:
             if ((p_pressure_tc == -1) || (p_pressure_tc != -1 && p_pressure_tc != c_pressure_tc))
@@ -537,6 +563,7 @@ int iodrv::init_serial_port()
     return 1;
 #else
     printf("Отключена компиляция SerialPort; используйте WITH_SERIALPORT.\n"); fflush(stdout);
+
     return 1;
 #endif
 }
@@ -547,29 +574,15 @@ void iodrv::slot_serial_ready_read()
     if (serial_port.canReadLine())
     {
         gps_data gd;    // TODO: Сделать глобальной?
-        can_frame wframe_mmaltlon;
-        can_frame wframe_ipddate;
-        can_frame wframe_mmdata;
 
-        nmea::decode_nmea_message(QString(serial_port.readLine()), &gd);
+        QString nmeaMessage = QString(serial_port.readLine());
 
-        wframe_mmaltlon = can_encoder::encode_mm_alt_long(gd.lat, gd.lon, (bool)gd.is_reliable);
-        wframe_ipddate = can_encoder::encode_ipd_date(gd.year, gd.month, gd.day, gd.hours, gd.minutes, gd.seconds);
-        wframe_mmdata = can_encoder::encode_mm_data(qCeil(gd.speed));
-
-        write_canmsg_async(write_socket_0, &wframe_mmaltlon);
-        write_canmsg_async(write_socket_1, &wframe_mmaltlon);
-        write_canmsg_async(write_socket_0, &wframe_ipddate);
-        write_canmsg_async(write_socket_1, &wframe_ipddate);
-        write_canmsg_async(write_socket_0, &wframe_mmdata);
-        write_canmsg_async(write_socket_1, &wframe_mmdata);
-
-
-        //if (gd.is_reliable)
-        //{
-        //}
-
-            QString time = QString("%1:%2:%3").arg(gd.hours, 2, 10, QChar('0')).arg(gd.minutes, 2, 10, QChar('0')).arg(gd.seconds, 2, 10, QChar('0'));
+        if ( nmea::decode_nmea_message(nmeaMessage, &gd) )
+        {
+            int h = gd.hours + 4;
+            if (h < 0) h += 24;
+            if (h > 24) h -= 24;
+            QString time = QString("%1:%2:%3").arg(h, 2, 10, QChar('0')).arg(gd.minutes, 2, 10, QChar('0')).arg(gd.seconds, 2, 10, QChar('0'));
             emit signal_time(time);
 
             QString monthString[13] = {"n/a", "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
@@ -580,18 +593,61 @@ void iodrv::slot_serial_ready_read()
             emit signal_lat(gd.lat);
             emit signal_lon(gd.lon);
 
-        if (c_ssps_mode == 1)
-        {
-            emit signal_speed(gd.speed);
 
-            if (pgd.lat != 0)
+            static double speed_old = 0;
+
+            if (gd.speed < 1.2)
+                gd.speed = 0;
+
+            if (speed_old != -1000 && abs(speed_old - gd.speed) > 5)
+            {
+                gd.speed = speed_old;
+                speed_old = -1000;
+            }
+            else
+                speed_old = gd.speed;
+
+            emit signal_speed_sky(gd.is_reliable ? gd.speed : -1);
+
+            if ( c_ssps_mode == 1 &&
+                    pgd.lat != 0 )
             {
                 total_passed_distance += DistanceBetweenCoordinates(gd.lat, gd.lon, pgd.lat, pgd.lon);
+
+                if ( (total_passed_distance - stored_passed_distance) >= 100 )
+                {
+                    if( distance_store_file.open(QIODevice::ReadWrite) )
+                    {
+                        QTextStream distance_store_stream (&distance_store_file);
+                        distance_store_stream << int(total_passed_distance) << endl;
+                        distance_store_stream.flush();
+                        distance_store_file.close();
+                        stored_passed_distance = total_passed_distance;
+                    }
+                    else
+                    {
+                        qDebug() << "Error open milage.txt!" << endl;
+                    }
+                }
+
                 emit signal_passed_distance(total_passed_distance);
             }
-        }
 
-        pgd = gd;
+            pgd = gd;
+
+            // Отправка в CAN
+
+            wframe_mmaltlon = can_encoder::encode_mm_alt_long(gd.lat, gd.lon, (bool)gd.is_reliable);
+            wframe_ipddate = can_encoder::encode_ipd_date(gd.year, gd.month, gd.day, gd.hours, gd.minutes, gd.seconds);
+            wframe_mmdata = can_encoder::encode_mm_data(qRound(gd.speed), total_passed_distance);
+
+            write_canmsg_async(write_socket_0, &wframe_mmaltlon);
+            write_canmsg_async(write_socket_1, &wframe_mmaltlon);
+            write_canmsg_async(write_socket_0, &wframe_ipddate);
+            write_canmsg_async(write_socket_1, &wframe_ipddate);
+            write_canmsg_async(write_socket_0, &wframe_mmdata);
+            write_canmsg_async(write_socket_1, &wframe_mmdata);
+        }
     }
 #endif
 }
@@ -619,7 +675,7 @@ void iodrv::slot_f_key_down()
     write_canmsg_async(write_socket_0, &frame);
     write_canmsg_async(write_socket_1, &frame);
 
-    target_trafficlight_freq = systemState->getAlsnFreqTarget();
+    //target_trafficlight_freq = systemState->getAlsnFreqTarget();
 }
 
 void iodrv::slot_f_key_up()
@@ -658,5 +714,65 @@ void iodrv::slot_rmp_key_up()
     write_canmsg_async(write_socket_0, &frame);
     write_canmsg_async(write_socket_1, &frame);
 }
+
+
+SpeedAgregator::SpeedAgregator()
+    : currentSpeedFromEarth(0), currentSpeedFromSky(0), currentSpeedIsValid(false), onRails(false)
+    {}
+
+
+void SpeedAgregator::getSpeedFromSky (double speed)
+{
+    if ( currentSpeedFromSky != speed )
+        getNewSpeed( speed, currentSpeedFromEarth );
+}
+
+void SpeedAgregator::getSpeedFromEarth (double speed)
+{
+    if ( currentSpeedFromEarth != speed )
+        getNewSpeed( currentSpeedFromSky, speed );
+}
+
+void SpeedAgregator::setSpeedIsValid (bool isValid)
+{
+    if (currentSpeedIsValid != isValid)
+    {
+        currentSpeedIsValid = isValid;
+        emit speedIsValidChanged(isValid);
+    }
+}
+
+void SpeedAgregator::getIsOnRoad(bool isOnRoad)
+{
+    onRails = !isOnRoad;
+    getNewSpeed( currentSpeedFromSky, currentSpeedFromEarth );
+}
+
+void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
+{
+    currentSpeedFromEarth = speedFromEarth;
+//    if (speedFromSky >= 0) // достоверность
+        currentSpeedFromSky = speedFromSky;
+
+//    qDebug() << "Speed | " << currentSpeedFromSky << " | " << currentSpeedFromEarth;
+
+    if ( onRails )
+    {
+        qDebug() << "on rails: " << currentSpeedFromEarth;
+        setSpeedIsValid( !(
+                        currentSpeedFromSky > minSpeedSkyAccount &&
+                        abs(currentSpeedFromSky - currentSpeedFromEarth) > maxAllowDeltaSpeed
+                            )
+                );
+        emit speedChanged(currentSpeedFromEarth);
+    }
+    else
+    {
+        qDebug() << "no on rails: " << currentSpeedFromSky;
+        setSpeedIsValid( currentSpeedFromSky >= 0 );
+        emit speedChanged(currentSpeedFromSky);
+    }
+}
+
 
 #endif

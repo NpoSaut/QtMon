@@ -11,6 +11,9 @@
 #include "sktcan.h"
 #include "endecs.h"
 
+#include <QFile>
+#include <QTextStream>
+
 #ifdef WITH_SERIALPORT
 QT_USE_NAMESPACE_SERIALPORT
 #endif
@@ -36,13 +39,14 @@ public:
 signals:
     // Сигналы вызываются немедленно или у них есть внутренняя очередь, так что они могут передать изменённое значение?
     //Скорость и ограничения
-    void signal_speed(double speed);
+    void signal_speed_earth(double speed);
+    void signal_speed_sky(double speed);
     void signal_speed_limit(int speed_limit);
     void signal_target_speed(int target_speed);
     void signal_acceleration(double acceleration);
     //Состояние системы
-    void signal_epv_state(int epv_state);
-    void signal_epv_key(int epv_key);
+    void signal_epv_state(bool epv_state);
+    void signal_epv_key(bool epv_key);
     //Одометр
     void signal_passed_distance(int passed_distance);
     //Светофоры
@@ -50,13 +54,13 @@ signals:
     void signal_trafficlight_freq(int trafficlight_freq);
     //Движение
     void signal_driving_mode(int driving_mode);
-    void signal_vigilance(int vigilance);
+    void signal_vigilance(bool vigilance);
     void signal_movement_direction(int movement_direction);
-    void signal_reg_tape_avl(int reg_tape_avl);
+    void signal_reg_tape_avl(bool reg_tape_avl);
 
     void signal_pressure_tc(QString pressure_tc);
     void signal_pressure_tm(QString pressure_tm);
-    void signal_ssps_mode(int ssps_mode);
+    void signal_ssps_mode(bool ssps_mode);
 
 
     void signal_lat(double lat);
@@ -88,9 +92,15 @@ private:
     // TODO: Контролировать были ли сообщения отосланы и если нет, то что-нибудь делать.
     void write_canmsg_async(int socket, can_frame* frame);
 
+    QFile distance_store_file;
     double total_passed_distance;
+    double stored_passed_distance;
     gps_data pgd;
 
+    can_frame wframe_mmaltlon;
+    can_frame wframe_ipddate;
+    can_frame wframe_mmdata;
+    can_frame wframe_ipdstate;
 
     // По-хорошему, эти переменные и работающие с ними функции должны быть объявлены в нити, обрабатывающей read_can_message.
     double c_speed;
@@ -181,6 +191,34 @@ private:
 
     //!!!!! TODO: ВРЕМЕННО
     SystemStateViewModel *systemState;
+};
+
+class SpeedAgregator: public QObject
+{
+    Q_OBJECT
+public:
+    SpeedAgregator();
+
+    static const double minSpeedSkyAccount = 8;
+    static const double maxAllowDeltaSpeed = 4;
+
+public slots:
+    void getSpeedFromSky (double speed);
+    void getSpeedFromEarth (double speed);
+    void getIsOnRoad (bool isOnRoad);
+
+signals:
+    void speedChanged (double speed);
+    void speedIsValidChanged (bool isValid);
+
+private:
+    double currentSpeedFromSky;
+    double currentSpeedFromEarth;
+    bool currentSpeedIsValid;
+    bool onRails;
+
+    void getNewSpeed (double speedFromSky, double speedFromEarth);
+    void setSpeedIsValid (bool isValid);
 };
 
 #endif // IODRV_H

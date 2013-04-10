@@ -19,7 +19,8 @@ public:
     static can_frame encode_disp_state_a();
     static can_frame encode_disp_state_b();
     static can_frame encode_sys_key(key_state k_state, int key_code);
-    static can_frame encode_mm_data(int speed);
+    static can_frame encode_mm_data(int speed, int milage);
+    static can_frame encode_ipd_state( double speed, int distance, bool reliable );
 };
 
 class can_decoder
@@ -69,7 +70,7 @@ struct gps_data
 class nmea
 {
 public:
-    static void decode_nmea_message(QString message, struct gps_data* gd);
+    static bool decode_nmea_message(QString message, struct gps_data* gd);
     static void decode_rmc(QString message, struct gps_data* gd);
 };
 

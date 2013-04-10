@@ -12,6 +12,18 @@ class SystemStateViewModel : public QDeclarativeItem
     double speedValue;
     Q_PROPERTY(double Speed READ getSpeed WRITE setSpeed NOTIFY SpeedChanged)
 
+    // Корректность скорости
+    bool speedIsValidValue;
+    Q_PROPERTY(bool SpeedIsValid READ getSpeedIsValid WRITE setSpeedIsValid NOTIFY SpeedIsValidChanged)
+
+    // Текущая скорость по GPS
+    double speedFromSkyValue;
+    Q_PROPERTY(double SpeedFromSky READ getSpeedFromSky WRITE setSpeedFromSky NOTIFY SpeedFromSkyChanged)
+
+    // Текущая скорость от колеса
+    double speedFromEarthValue;
+    Q_PROPERTY(double SpeedFromEarth READ getSpeedFromEarth WRITE setSpeedFromEarth NOTIFY SpeedFromEarthChanged)
+
     // Ограничение скорости
     int speedRestrictionValue;
     Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
@@ -113,6 +125,9 @@ public:
 
     // public properties getters start
     const double getSpeed() const;
+    const bool getSpeedIsValid() const;
+    const double getSpeedFromSky() const;
+    const double getSpeedFromEarth() const;
     const int getSpeedRestriction() const;
     const int getTargetSpeed() const;
     const double getAcceleration() const;
@@ -140,11 +155,19 @@ public:
     // public properties getters end
 
 signals:
+    // Сигнал о нажатии кнопки Смены режима движения
+    void ChangeDrivemodeButtonPressed();
+    void ChangeDrivemodeButtonReleased();
+
     // Сигнал о нажатии кнопки Выключения Красного
     void DisableRedButtonPressed();
+    void DisableRedButtonReleased();
 
     // properties signals start
     void SpeedChanged();
+    void SpeedIsValidChanged();
+    void SpeedFromSkyChanged();
+    void SpeedFromEarthChanged();
     void SpeedRestrictionChanged();
     void TargetSpeedChanged();
     void AccelerationChanged();
@@ -174,6 +197,9 @@ signals:
 public slots:
     // public properties setters start
     void setSpeed(const double);
+    void setSpeedIsValid(const bool);
+    void setSpeedFromSky(const double);
+    void setSpeedFromEarth(const double);
     void setSpeedRestriction(const int);
     void setTargetSpeed(const int);
     void setAcceleration(const double);

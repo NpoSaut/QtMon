@@ -632,12 +632,12 @@ Rectangle {
                 anchors.bottomMargin: 10
 
                 Image {
-                    source: stateView.Direction==1 ?
+                    source: stateView.Direction == 1 ?
                                 "Slices/Direction-Forward.png" :
                                 "Slices/Direction-None.png";
                 }
                 Image {
-                    source: stateView.Direction==1 ?
+                    source: stateView.Direction == -1 ?
                                 "Slices/Direction-Back.png" :
                                 "Slices/Direction-None.png";
                 }

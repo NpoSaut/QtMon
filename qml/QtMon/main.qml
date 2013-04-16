@@ -518,8 +518,9 @@ Rectangle {
 
                 // Стрелка спидометра
                 Image {
-                    source: "Slices/Needle-Speed.png"
-                    visible: stateView.SpeedIsValid
+                    source: stateView.SpeedIsValid ?
+                                "Slices/Needle-Speed.png" :
+                                "Slices/Needle-Speed-Invalid.png"
 
                     rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
                     smooth: true
@@ -539,7 +540,6 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
 
                     property double r: parent.tableRadius + 4
-                    //property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
                     property double angle: speedometer.minAngle - stateView.TargetSpeed * speedometer.anglePerKph
 
                     anchors.verticalCenterOffset: - r * Math.sin(angle)

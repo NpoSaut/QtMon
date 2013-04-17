@@ -54,6 +54,19 @@ Rectangle {
     }
 
 
+    function getDriveModeLetter(driveModeIndex)
+    {
+        switch (stateView.DriveModeFact)
+        {
+            case 0: return "П";
+            case 1: return "М";
+            case 2: return "Р";
+            case 3: return "Д";
+            case 4: return "Т";
+        }
+    }
+
+
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
@@ -385,15 +398,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: { switch (stateView.DriveModeFact)
-                                   {
-                                       case 0: return "П";
-                                       case 1: return "М";
-                                       case 2: return "Р";
-                                       case 3: return "Д";
-                                       case 4: return "Т";
-                                   }
-                                }
+                           text: getDriveModeLetter(stateView.DriveModeFact)
 
                            color: "#ffffffff"
                            font.pixelSize: 14
@@ -1289,78 +1294,88 @@ Rectangle {
         }
 
 
-        ListView {
-            id: lightsPanel
-            x: 7
-            y: 123
-            width: 54
-            height: 280
-            anchors.horizontalCenterOffset: 15
-            interactive: false
-            anchors.horizontalCenter: parent.horizontalCenter
+        // Светофор
+        Image {
+            id: name
+            source: "Slices/Panel-Right-Lightbox-Bck.png"
+            anchors.right: parent.right
+            anchors.rightMargin: getDriveModeLetter(stateView.DriveModeFact) != "Т" ? -3 : -width
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 55
+            Behavior on anchors.rightMargin { SmoothedAnimation { duration: 1000 } }
 
-            currentIndex: 2
-
-            delegate: Item {
-                height: 55
+            ListView {
+                id: lightsPanel
                 width: 54
+                height: 280
+                interactive: false
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 8
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#00000000"
+                currentIndex: 2
 
-                    Image {
-                        id: lightOffImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-Off.png"
-                    }
-                    Image {
-                        id: lightOnImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-" + name + ".png"
-                        opacity: 0
-                    }
+                delegate: Item {
+                    height: 55
+                    width: 54
 
-                    state: stateView.Light == permissiveIndex ? "On" : "Off"
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "#00000000"
 
-                    states: [
-                        State {
-                            name: "On"
-                            PropertyChanges { target: lightOnImage; opacity: 1 }
-                            PropertyChanges { target: lightOffImage; opacity: 0 }
-                        },
-                        State {
-                            name: "Off"
+                        Image {
+                            id: lightOffImage
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/Light-Off.png"
                         }
-                    ]
+                        Image {
+                            id: lightOnImage
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/Light-" + name + ".png"
+                            opacity: 0
+                        }
 
-                    transitions: Transition {
-                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
+                        state: stateView.Light == permissiveIndex ? "On" : "Off"
+
+                        states: [
+                            State {
+                                name: "On"
+                                PropertyChanges { target: lightOnImage; opacity: 1 }
+                                PropertyChanges { target: lightOffImage; opacity: 0 }
+                            },
+                            State {
+                                name: "Off"
+                            }
+                        ]
+
+                        transitions: Transition {
+                            NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
+                        }
                     }
                 }
-            }
-            model: ListModel {
-                ListElement {
-                    name: "Green"
-                    permissiveIndex: 3
-                }
-                ListElement {
-                    name: "Yellow"
-                    permissiveIndex: 2
-                }
-                ListElement {
-                    name: "YellowRed"
-                    permissiveIndex: 1
-                }
-                ListElement {
-                    name: "Red"
-                    permissiveIndex: 0
-                }
-                ListElement {
-                    name: "White"
-                    permissiveIndex: -1
+                model: ListModel {
+                    ListElement {
+                        name: "Green"
+                        permissiveIndex: 3
+                    }
+                    ListElement {
+                        name: "Yellow"
+                        permissiveIndex: 2
+                    }
+                    ListElement {
+                        name: "YellowRed"
+                        permissiveIndex: 1
+                    }
+                    ListElement {
+                        name: "Red"
+                        permissiveIndex: 0
+                    }
+                    ListElement {
+                        name: "White"
+                        permissiveIndex: -1
+                    }
                 }
             }
         }

@@ -128,7 +128,6 @@ Rectangle {
             PropertyChanges { target: pagesContainer; y: 0 }
 
             PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
-            PropertyChanges { target: page1buttonInfo; anchors.rightMargin: 20; opacity: 0.05 }
 
             PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
             PropertyChanges { target: graduateBar; opacity: 0 }
@@ -149,8 +148,6 @@ Rectangle {
         NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
         NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
         NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: page1buttonInfo; properties: "opacity"; easing.type: Easing.InOutQuad; duration: 400 }
-        NumberAnimation { target: page1buttonInfo; properties: "anchors.rightMargin"; easing.type: Easing.OutQuad; duration: 800 }
 
         NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
@@ -180,7 +177,7 @@ Rectangle {
                 Image {
                     source: "Slices/Background.png"
                     anchors.top: parent.top
-                    anchors.left: rootRect.left
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
             Row {
@@ -1164,55 +1161,48 @@ Rectangle {
 
             color: "#00000000"
             anchors.top: parent.top
-            anchors.topMargin: restrictionBox.height
             anchors.bottom: parent.bottom
             anchors.bottomMargin: speedBox.height
             anchors.left: parent.left
 
-            Repeater
-            {
+            Repeater {
                 id: repeater
                 model: Math.floor(maxSpeed/5) - 1
-                Row {
+
+                Rectangle {
                     property int sp: (index + 1) * 5
                     property bool nice: sp % 10 == 0
 
                     anchors.left: parent.left
                     anchors.leftMargin: 5
-                    height: 14;
                     y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
                     visible: y > vigilanceSign.y + vigilanceSign.height
-                    //opacity: stateView.SpeedRestriction >= sp ? 1 : 0
-                    spacing: 0
+
+                    width: 20
+                    height: 14;
+                    color: "#00000000"
 
                     Repeater {
                         model: [ "#71000000", "#a8ffffff" ]
-                        Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter;
-                            anchors.verticalCenterOffset: index
+                        Row
+                        {
+                            anchors.verticalCenterOffset: index-1
+                            anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.leftMargin: index
-                            height: nice? 2:1;
-                            color: modelData;
-                            width: 4 + 0.4*Math.floor(repeater.count / 6) * index;
-                        }
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        height: parent.height
-                        width: 14
-                        color: "#00000000"
+                            spacing: 3
 
-                        Repeater {
-                            model: [ "#71000000", "#a8ffffff" ]
+                            Rectangle {
+                                anchors.verticalCenter: parent.verticalCenter;
+                                height: nice? 2:1;
+                                color: modelData;
+                                width: 6; // + 0.4*Math.floor(repeater.count / 6) * index;
+                            }
                             Text {
+                                anchors.verticalCenter: parent.verticalCenter;
                                 text: parent.parent.sp;
                                 font.family: "URW Gothic L";
                                 font.pointSize: 8;
-                                anchors.verticalCenterOffset: index-1
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.left: parent.left
-                                anchors.leftMargin: index
                                 color: modelData
                             }
                         }

@@ -201,7 +201,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
 
-                           text: qsTr("КООРДИНАТА")
+                           text: qsTr("ОДОМЕТР")
                            color: "#ffffff00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
@@ -215,7 +215,9 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("--км --пк --м")
+                               text: ((stateView.Milage / 1000) - ((stateView.Milage / 1000) % 1)) + "км " +
+                                     (((stateView.Milage % 1000 ) / 100) - (((stateView.Milage % 1000 ) / 100) % 1)) + "пк " +
+                                     (stateView.Milage % 100).toString() + "м"
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14

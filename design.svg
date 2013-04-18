@@ -14,13 +14,43 @@
    height="480"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48+devel r11698"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="design.svg"
    inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\all.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient4985">
+      <stop
+         id="stop4987"
+         offset="0"
+         style="stop-color:#66ff95;stop-opacity:1;" />
+      <stop
+         style="stop-color:#00d196;stop-opacity:1;"
+         offset="0.56542099"
+         id="stop4989" />
+      <stop
+         id="stop4991"
+         offset="1"
+         style="stop-color:#2d4c2f;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4975">
+      <stop
+         id="stop4977"
+         offset="0"
+         style="stop-color:#898989;stop-opacity:1" />
+      <stop
+         style="stop-color:#596151;stop-opacity:1;"
+         offset="0.55230701"
+         id="stop4979" />
+      <stop
+         id="stop4981"
+         offset="1"
+         style="stop-color:#438f0c;stop-opacity:1;" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient2080">
@@ -74,7 +104,6 @@
          id="stop2039" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient2025">
       <stop
          style="stop-color:#66ff66;stop-opacity:1"
@@ -3572,7 +3601,7 @@
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient2035"
+       xlink:href="#linearGradient2042"
        id="linearGradient2041"
        x1="4.3771367"
        y1="140.20663"
@@ -3601,7 +3630,7 @@
        gradientUnits="userSpaceOnUse" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient2025"
+       xlink:href="#linearGradient4985"
        id="radialGradient2024"
        gradientUnits="userSpaceOnUse"
        cx="7.9985161"
@@ -3646,6 +3675,25 @@
        x2="-7.2645378"
        y2="161.90877"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2042"
+       id="linearGradient4973"
+       gradientUnits="userSpaceOnUse"
+       x1="4.3771367"
+       y1="140.20663"
+       x2="12.74676"
+       y2="148.15729" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4975"
+       id="radialGradient4983"
+       gradientUnits="userSpaceOnUse"
+       cx="7.9985161"
+       cy="143.02379"
+       fx="7.9985161"
+       fy="143.02379"
+       r="5.5620909" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3654,8 +3702,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="18.226387"
+     inkscape:zoom="2.5"
+     inkscape:cx="47.706387"
      inkscape:cy="273.59546"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
@@ -3677,9 +3725,9 @@
      inkscape:snap-smooth-nodes="false"
      inkscape:snap-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="1912"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-nodes="true"
@@ -5775,10 +5823,10 @@
        sodipodi:cy="144.27586"
        sodipodi:cx="8.4993448"
        id="path2022"
-       style="fill:url(#radialGradient2024);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient2026);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:url(#radialGradient2024);fill-opacity:1.0;fill-rule:nonzero;stroke:url(#linearGradient2026);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        sodipodi:type="arc"
        transform="translate(0,17.765747)"
-       inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\drivemode-led-selected.png"
+       inkscape:export-filename="C:\Users\Plyusnin\Qt\QtMon\qml\QtMon\Slices\drivemode-led-selected.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -5788,10 +5836,10 @@
        sodipodi:cy="144.27586"
        sodipodi:cx="8.4993448"
        id="path2028"
-       style="fill:url(#radialGradient2030);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient2032);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:url(#radialGradient4983);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient4973);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        sodipodi:type="arc"
        transform="translate(0,54.298892)"
-       inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\drivemode-led-unselected-confirmed.png"
+       inkscape:export-filename="C:\Users\Plyusnin\Qt\QtMon\qml\QtMon\Slices\drivemode-led-unselected-confirmed.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path

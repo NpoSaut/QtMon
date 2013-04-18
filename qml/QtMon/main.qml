@@ -66,6 +66,18 @@ Rectangle {
         }
     }
 
+    Timer {
+        interval: 1500
+        running: true
+        repeat: true
+        onTriggered: {
+            if (stateView.DriveModeFact != stateView.DriveModeTarget)
+            {
+                stateView.DriveModeFact++;
+                if (stateView.DriveModeFact > 4) stateView.DriveModeFact = 0;
+            }
+        }
+    }
 
     focus: true
 
@@ -89,7 +101,9 @@ Rectangle {
         }
         // Страница железнодорожного режима
         else if (!altMode && event.key == Qt.Key_F2) {
-            stateView.PropertyView = false;
+            //stateView.PropertyView = false;
+            stateView.DriveModeTarget ++;
+            if (stateView.DriveModeTarget > 4) stateView.DriveModeTarget = 0;
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
@@ -102,7 +116,7 @@ Rectangle {
         // Alt: Режим движения
         else if (altMode && event.key == Qt.Key_F3) {
             //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
-            stateView.ChangeDrivemodeButtonPressed();
+            //stateView.ChangeDrivemodeButtonPressed();
         }
         // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
@@ -1003,7 +1017,7 @@ Rectangle {
                         anchors.leftMargin: 4
 
                         Repeater {
-                            model: [ "П", "М", "Д", "Р", "Т" ]
+                            model: [ "П", "М", "Р", "Д", "Т" ]
                             Row {
                                 height: 16
                                 spacing: 12
@@ -1014,7 +1028,7 @@ Rectangle {
                                             ".png"
                                 }
                                 Text {
-                                    color: "#ccc"
+                                    color: modelData != "Т" ? "#ccc" : "#ffffff00"
                                     text: modelData
                                 }
                             }

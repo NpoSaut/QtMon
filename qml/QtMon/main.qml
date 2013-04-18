@@ -198,7 +198,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
 
-                           text: qsTr("ОДОМЕТР")
+                           text: qsTr("ОРДИНАТА")
                            color: "#ffffff00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"

@@ -983,18 +983,42 @@ Rectangle {
                     anchors.topMargin: -1
                 }
 
-                Column {
+                // Содержимое кнопки смены режима движения
+                // (Кнопка РМП)
+                Rectangle {
                     id: page1buttonHeader
-                    anchors.right: parent.right
-                    anchors.rightMargin: 12
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: parent
                     visible: !altMode
+                    color: "#00000000"
 
-                    Text {
-                        color: "#ffffff"
-                        text: qsTr("Ж/Д")
-                        font.pointSize: 20
-                        font.family: "URW Gothic L"
+                    Image {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "Slices/drivemode-bck.png"
+                    }
+
+                    Column {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: 4
+
+                        Repeater {
+                            model: [ "П", "М", "Д", "Р", "Т" ]
+                            Row {
+                                height: 16
+                                spacing: 12
+                                Image {
+                                    source: "Slices/drivemode-led-" +
+                                            (getDriveModeLetter(stateView.DriveModeTarget) == modelData ? "" : "un") + "selected" +
+                                            (getDriveModeLetter(stateView.DriveModeFact) == modelData ? "-confirmed" : "") +
+                                            ".png"
+                                }
+                                Text {
+                                    color: "#ccc"
+                                    text: modelData
+                                }
+                            }
+                        }
                     }
                 }
 

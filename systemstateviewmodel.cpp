@@ -29,6 +29,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isRegistrationTapeActiveValue = false;
     driveModeTargetValue = 0;
     driveModeFactValue = 0;
+    ironWheelsValue = true;
     isVigilanceRequiredValue = true;
     directionValue = 0;
     propertyViewValue = false;
@@ -381,6 +382,19 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     {
         driveModeFactValue = value;
         emit DriveModeFactChanged();
+    }
+}
+
+const bool SystemStateViewModel::getIronWheels() const
+{
+    return ironWheelsValue;
+}
+void SystemStateViewModel::setIronWheels(const bool value)
+{
+    if (ironWheelsValue != value)
+    {
+        ironWheelsValue = value;
+        emit IronWheelsChanged();
     }
 }
 

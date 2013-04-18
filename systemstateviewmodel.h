@@ -106,6 +106,9 @@ class SystemStateViewModel : public QDeclarativeItem
     int driveModeFactValue;
     Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY DriveModeFactChanged)
 
+    bool ironWheelsValue;
+    Q_PROPERTY(bool IronWheels READ getIronWheels WRITE setIronWheels NOTIFY IronWheelsChanged)
+
     // Необходимость подтверждения бдительности
     bool isVigilanceRequiredValue;
     Q_PROPERTY(bool IsVigilanceRequired READ getIsVigilanceRequired WRITE setIsVigilanceRequired NOTIFY IsVigilanceRequiredChanged)
@@ -149,6 +152,7 @@ public:
     const bool getIsRegistrationTapeActive() const;
     const int getDriveModeTarget() const;
     const int getDriveModeFact() const;
+    const bool getIronWheels() const;
     const bool getIsVigilanceRequired() const;
     const int getDirection() const;
     const bool getPropertyView() const;
@@ -189,6 +193,7 @@ signals:
     void IsRegistrationTapeActiveChanged();
     void DriveModeTargetChanged();
     void DriveModeFactChanged();
+    void IronWheelsChanged();
     void IsVigilanceRequiredChanged();
     void DirectionChanged();
     void PropertyViewChanged();
@@ -221,6 +226,7 @@ public slots:
     void setIsRegistrationTapeActive(const bool);
     void setDriveModeTarget(const int);
     void setDriveModeFact(const int);
+    void setIronWheels(const bool);
     void setIsVigilanceRequired(const bool);
     void setDirection(const int);
     void setPropertyView(const bool);

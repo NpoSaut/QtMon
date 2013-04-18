@@ -56,7 +56,7 @@ Rectangle {
 
     function getDriveModeLetter(driveModeIndex)
     {
-        switch (stateView.DriveModeFact)
+        switch (driveModeIndex)
         {
             case 0: return "П";
             case 1: return "М";

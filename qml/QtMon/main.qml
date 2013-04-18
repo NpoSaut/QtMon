@@ -1007,13 +1007,16 @@ Rectangle {
                     visible: !altMode
                     color: "#00000000"
 
+                    // Фон области индикаторов режима
                     Image {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         source: "Slices/drivemode-bck.png"
                     }
 
+                    // Индикаторы режима движения
                     Column {
+                        id: drivemodeSwitch
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: 4
@@ -1032,6 +1035,50 @@ Rectangle {
                                 Text {
                                     color: modelData != "Т" ? "#ccc" : "#ffffff00"
                                     text: modelData
+                                }
+                            }
+                        }
+                    }
+
+                    // Индикаторы режима
+                    Column {
+                        anchors.verticalCenter: drivemodeSwitch.verticalCenter
+                        anchors.left: drivemodeSwitch.right
+                        anchors.leftMargin: 3
+                        spacing: 2
+
+                        Row {
+                            Image {
+                                source: "Slices/drivemode-wheels-mode-iron-active.png"
+                            }
+                            Image {
+                                anchors.bottom: parent.bottom
+                                source: "Slices/drivemode-wheels-indicator" +
+                                        (stateView.IronWheels ? "-active" : "") +
+                                        ".png"
+                                Image {
+                                    source: "Slices/drivemode-wheels-icon-iron.png"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                }
+                            }
+                        }
+
+                        Row {
+                            Image {
+                                source: "Slices/drivemode-wheels-mode-rubber" +
+                                        (!stateView.IronWheels ? "-active" : "") +
+                                        ".png"
+                            }
+                            Image {
+                                anchors.bottom: parent.bottom
+                                source: "Slices/drivemode-wheels-indicator" +
+                                        (!stateView.IronWheels ? "-active" : "") +
+                                        ".png"
+                                Image {
+                                    source: "Slices/drivemode-wheels-icon-rubber.png"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
                         }

@@ -150,11 +150,7 @@ Rectangle {
         State {
             name: "page1"
             when: (stateView.PropertyView == false)
-            PropertyChanges { target: page1indicator; width: 12 }
-            PropertyChanges { target: page2indicator; width: 6 }
             PropertyChanges { target: pagesContainer; y: 0 }
-
-            PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
 
             PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
             PropertyChanges { target: graduateBar; opacity: 0 }
@@ -162,19 +158,12 @@ Rectangle {
         State {
             name: "page2"
             when: (stateView.PropertyView == true)
-            PropertyChanges { target: page1indicator; width: 6 }
-            PropertyChanges { target: page2indicator; width: 12 }
             PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
-
-            PropertyChanges { target: page1buttonHeader; anchors.rightMargin: 22 }
-            //PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
         }
     ]
 
     transitions: Transition {
         NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
-        NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
-        NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
 
         NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
@@ -988,17 +977,6 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
 
-                Rectangle {
-                    id: page1indicator
-                    width: 6
-                    color: "#4999c9"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.top: parent.top
-                    anchors.topMargin: -1
-                }
-
                 // Содержимое кнопки смены режима движения
                 // (Кнопка РМП)
                 Rectangle {
@@ -1146,17 +1124,6 @@ Rectangle {
                     color: "#00000000"
                     anchors.right: parent.right
                     anchors.left: parent.left
-
-                    Rectangle {
-                        id: page2indicator
-                        width: 6
-                        color: "#4999c9"
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: -3
-                        anchors.top: parent.top
-                        anchors.topMargin: 1
-                    }
 
                     Column {
                         id: page2buttonHeader

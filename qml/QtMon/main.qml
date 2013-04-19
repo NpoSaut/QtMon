@@ -1020,21 +1020,32 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: 4
+                        spacing: 2
 
                         Repeater {
-                            model: [ "П", "М", "Р", "Д", "Т" ]
+                            model: [ "П", "М", "Р", "Д", " ", "Т" ]
                             Row {
-                                height: 16
+                                //height: 16
                                 spacing: 12
                                 Image {
+                                    visible: modelData != " "
                                     source: "Slices/drivemode-led-" +
                                             (getDriveModeLetter(stateView.DriveModeTarget) == modelData ? "" : "un") + "selected" +
                                             (getDriveModeLetter(stateView.DriveModeFact) == modelData ? "-confirmed" : "") +
                                             ".png"
                                 }
                                 Text {
+                                    visible: modelData != " "
                                     color: modelData != "Т" ? "#ccc" : "#ffffff00"
                                     text: modelData
+                                }
+
+                                // Заглушка - сепаратор
+                                Rectangle {
+                                    visible: modelData == " "
+                                    height: 3
+                                    width: 10
+                                    color: "#00000000"
                                 }
                             }
                         }

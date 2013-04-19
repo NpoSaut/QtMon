@@ -1042,7 +1042,8 @@ Rectangle {
                                 Image {
                                     source: "Slices/drivemode-wheels-mode-" +
                                             modelData +
-                                            "-active.png"
+                                            (!stateView.IronWheels || (modelData == "iron") ? "-active" : "") +
+                                            ".png"
                                 }
                                 Row {
                                     spacing: 3

@@ -13,12 +13,7 @@ Rectangle {
     property double maxSpeed: 60
 
     function switchPage(i) {
-        if (i == 1) {
-            rootRect.state = "page1";
-        }
-        if (i == 2) {
-            rootRect.state = "page2";
-        }
+        stateView.PropertyView = !stateView.PropertyView
     }
 
     function refreshAlsnState()
@@ -836,6 +831,7 @@ Rectangle {
         }
 
         Rectangle {
+            id: leftBorder
             width: 6
             color: "#4999c9"
             anchors.right: parent.right
@@ -1077,7 +1073,7 @@ Rectangle {
                         }
                     }
 
-                    // Подпись кнопки
+                    // Подпись кнопки РМП
                     Column {
                         anchors.top: parent.top
                         anchors.topMargin: 15
@@ -1126,17 +1122,47 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.left: parent.left
 
-                    Column {
+                    // Переключатель страниц
+                    Rectangle {
                         id: page2buttonHeader
-                        anchors.right: parent.right
-                        anchors.rightMargin: 14
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.fill: parent
+                        anchors.rightMargin: leftBorder.width
                         visible: !altMode
+                        clip: true
+                        color: "#00000000"
+
+                        Image {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.right
+                            source: "Slices/Panel-Left-PageSwitcher-FlipFlop.png"
+                            smooth: true
+
+                            rotation: { switch (stateView.PropertyView)
+                                          {
+                                            case true: return -90
+                                            case false: return 0
+                                          }}
+                            Behavior on rotation { SmoothedAnimation { duration: 1000 } }
+                        }
 
                         Text {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 15
+                            anchors.top: parent.top
+                            anchors.topMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Дорожный")
-                            font.pointSize: 18
+                            text: qsTr("Датчики")
+                            font.pointSize: 16
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 15
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 10
+                            color: "#ffffff"
+                            text: qsTr("Карта")
+                            font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
 

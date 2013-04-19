@@ -1058,40 +1058,65 @@ Rectangle {
                         anchors.leftMargin: 3
                         spacing: 2
 
-                        Row {
-                            Image {
-                                source: "Slices/drivemode-wheels-mode-iron-active.png"
-                            }
-                            Image {
-                                anchors.bottom: parent.bottom
-                                source: "Slices/drivemode-wheels-indicator" +
-                                        (stateView.IronWheels ? "-active" : "") +
-                                        ".png"
+                        Repeater {
+                            model: [ "iron", "rubber" ]
+                            Row {
                                 Image {
-                                    source: "Slices/drivemode-wheels-icon-iron.png"
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/drivemode-wheels-mode-" +
+                                            modelData +
+                                            "-active.png"
+                                }
+                                Row {
+                                    spacing: 3
+                                    anchors.bottom: parent.bottom
+                                    Image {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: "Slices/drivemode-wheels-indicator" +
+                                                (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
+                                                ".png"
+                                        Image {
+                                            source: "Slices/drivemode-wheels-icon-" +
+                                                    modelData +
+                                                    ".png"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                        }
+                                    }
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        color: "#ccc"
+                                        text: {
+                                            switch(modelData)
+                                            {
+                                                case "iron": return "Ж/Д"
+                                                case "rubber": return "Дорожный"
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
+                    }
 
-                        Row {
-                            Image {
-                                source: "Slices/drivemode-wheels-mode-rubber" +
-                                        (!stateView.IronWheels ? "-active" : "") +
-                                        ".png"
-                            }
-                            Image {
-                                anchors.bottom: parent.bottom
-                                source: "Slices/drivemode-wheels-indicator" +
-                                        (!stateView.IronWheels ? "-active" : "") +
-                                        ".png"
-                                Image {
-                                    source: "Slices/drivemode-wheels-icon-rubber.png"
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                }
-                            }
+                    // Подпись кнопки
+                    Column {
+                        anchors.top: parent.top
+                        anchors.topMargin: 15
+                        anchors.right: parent.right
+                        anchors.rightMargin: 22
+                        spacing: -4
+                        Text {
+                            anchors.right: parent.right
+                            color: "#ccc"
+                            text: "Режим"
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+                        Text {
+                            anchors.right: parent.right
+                            color: "#ccc"
+                            text: "движения"
+                            font.pixelSize: 14
                         }
                     }
                 }

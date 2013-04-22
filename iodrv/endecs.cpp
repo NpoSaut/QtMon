@@ -69,6 +69,17 @@ can_frame can_encoder::encode_disp_state_b()
     return frame;
 }
 
+can_frame can_encoder::encode_target_freq (int freq)
+{
+    can_frame frame;
+
+    frame.can_id = 0x410;
+    frame.can_dlc = 1;
+    frame.data[0] = freq;
+
+    return frame;
+}
+
 can_frame can_encoder::encode_sys_key(key_state k_state, int key_code)
 {
     can_frame frame;

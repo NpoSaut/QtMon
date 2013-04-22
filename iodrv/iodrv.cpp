@@ -308,9 +308,12 @@ int iodrv::decode_trafficlight_light(struct can_frame* frame)
     }
 }
 
-int trafficlight_freq_incorrect_count = 0;
+
 int iodrv::decode_trafficlight_freq(struct can_frame* frame)
 {
+    static int incorrect_count = 0;
+    static bool direct_freq_mode = true;
+
     switch (can_decoder::decode_trafficlight_freq(frame, &c_trafficlight_freq))
     {
         case 1:
@@ -319,15 +322,42 @@ int iodrv::decode_trafficlight_freq(struct can_frame* frame)
                 emit signal_trafficlight_freq(c_trafficlight_freq);
                 if (systemState->getAlsnFreqTarget() == -1) systemState->setAlsnFreqTarget(c_trafficlight_freq);
             }
-            if (systemState->getAlsnFreqTarget() != -1 && systemState->getAlsnFreqTarget() != c_trafficlight_freq)
+            if ( systemState->getAlsnFreqTarget() != -1 ) // Если установлена заданная частота
             {
-                if (trafficlight_freq_incorrect_count >= 1)
+                if ( systemState->getAlsnFreqTarget() != c_trafficlight_freq )
                 {
-                  this->slot_f_key_down();
-//                this->slot_f_key_up(); // Если делать, то с задержкой
-                  trafficlight_freq_incorrect_count = 0;
+                    if ( direct_freq_mode )
+                    {
+                        if ( incorrect_count == 0 )
+                            this->slot_send_target_freq ();
+
+                        if ( incorrect_count >= 2 )
+                        {
+                            direct_freq_mode = false;
+                            incorrect_count = 0;
+                        }
+                        else
+                            incorrect_count ++;
+                    }
+
+                    if ( !direct_freq_mode )
+                    {
+                        if (incorrect_count == 0)
+                        {
+                            this->slot_f_key_down ();
+                            // this->slot_f_key_up(); // Если делать, то с задержкой
+                        }
+
+                        if (incorrect_count >= 1)
+                            incorrect_count = 0;
+                        else
+                            incorrect_count ++;
+                    }
                 }
-                else trafficlight_freq_incorrect_count ++;
+                else
+                {
+                    incorrect_count == 0;
+                }
             }
             p_trafficlight_freq = c_trafficlight_freq;
 
@@ -667,6 +697,15 @@ void iodrv::slot_can_write_disp_state()
 
     can_frame frame_b = can_encoder::encode_disp_state_b();
     write_canmsg_async(write_socket_1, &frame_b);
+}
+
+void iodrv::slot_send_target_freq()
+{
+    can_frame frame = can_encoder::encode_target_freq( systemState->getAlsnFreqTarget () );
+    write_canmsg_async(write_socket_0, &frame);
+    write_canmsg_async(write_socket_1, &frame);
+
+    //target_trafficlight_freq = systemState->getAlsnFreqTarget();
 }
 
 void iodrv::slot_f_key_down()

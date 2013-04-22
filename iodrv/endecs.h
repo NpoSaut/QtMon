@@ -18,6 +18,7 @@ public:
     static can_frame encode_ipd_date(int year, int month, int day, int hours, int minutes, int seconds);
     static can_frame encode_disp_state_a();
     static can_frame encode_disp_state_b();
+    static can_frame encode_target_freq(int freq);
     static can_frame encode_sys_key(key_state k_state, int key_code);
     static can_frame encode_mm_data(int speed, int milage);
     static can_frame encode_ipd_state( double speed, int distance, bool reliable );

@@ -69,6 +69,7 @@ signals:
     void signal_date(QString date);
 
 public slots:
+    void slot_send_target_freq ();
     void slot_f_key_down();
     void slot_f_key_up();
     void slot_vk_key_down();

@@ -1038,7 +1038,7 @@ Rectangle {
                                 Image {
                                     source: "Slices/drivemode-wheels-mode-" +
                                             modelData +
-                                            (!stateView.IronWheels || (modelData == "iron") ? "-active" : "") +
+                                            (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
                                             ".png"
                                 }
                                 Row {

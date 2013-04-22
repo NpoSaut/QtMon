@@ -3859,11 +3859,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="143.07177"
-     inkscape:cy="218.59395"
+     inkscape:zoom="1"
+     inkscape:cx="57.32177"
+     inkscape:cy="320.9017"
      inkscape:document-units="px"
-     inkscape:current-layer="layer13"
+     inkscape:current-layer="layer12"
      showgrid="false"
      borderlayer="false"
      inkscape:snap-grids="true"
@@ -3882,9 +3882,9 @@
      inkscape:snap-smooth-nodes="false"
      inkscape:snap-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="1912"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-nodes="true"
@@ -3893,7 +3893,11 @@
      inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
-       id="grid5189" />
+       id="grid5189"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -5954,8 +5958,7 @@
      inkscape:groupmode="layer"
      id="layer12"
      inkscape:label="Управление РМП"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <g
        style="display:inline"
        id="g2088"
@@ -6042,7 +6045,7 @@
        inkscape:export-ydpi="90" />
     <g
        id="g5128"
-       inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\drivemode-wheels-mode-iron-active.png"
+       inkscape:export-filename="C:\Users\Plyusnin\Qt\QtMon\qml\QtMon\Slices\drivemode-wheels-mode-iron.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"
        transform="translate(19.332738,-1.5909903)">
@@ -6063,7 +6066,7 @@
          inkscape:connector-curvature="0"
          id="rect2038"
          d="m 43.6,200.4 -5.8,0 c -4.432,0 -8,-3.568 -8,-8 l 0,-53.53934"
-         style="fill:none;stroke:#c2c264;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline" />
+         style="fill:none;stroke:#c2c264;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1,4;stroke-dashoffset:5.1;display:inline;marker-start:none" />
     </g>
     <g
        id="g5133"

@@ -66,7 +66,7 @@ iodrv::iodrv(SystemStateViewModel *systemState)
 
     c_pressure_tc = -1;
     c_pressure_tm = -1;
-    c_ssps_mode = 1;
+    c_is_on_road = 1;
 
     p_speed = -1;
     p_speed_limit = -1;
@@ -83,7 +83,9 @@ iodrv::iodrv(SystemStateViewModel *systemState)
 
     p_pressure_tc = -1;
     p_pressure_tm = -1;
-    p_ssps_mode = -1;
+    p_is_on_road = -1;
+
+    c_ssps_mode = -1; p_ssps_mode = -1;
 
     c_lat = -1; c_lon = -1;
     c_ipd_hours = -1; c_ipd_mins = -1; c_ipd_secs = -1;
@@ -206,7 +208,7 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_reg_tape_avl(frame);
 
     decode_pressure_tc_tm(frame);
-    decode_ssps_mode(frame);
+    decode_is_on_road(frame);
 
 //    if(gps_source == can)
 //    {
@@ -347,7 +349,7 @@ int iodrv::decode_passed_distance(struct can_frame* frame)
             p_passed_distance = c_passed_distance;*/
 
             // Общий одометр
-            if ( c_ssps_mode == 0 &&
+            if ( c_is_on_road == 0 &&
                     p_passed_distance != -1 && c_passed_distance != -1)
             {
                 total_passed_distance += abs(c_passed_distance - p_passed_distance);
@@ -527,8 +529,23 @@ int iodrv::decode_ssps_mode(struct can_frame* frame)
             if ((p_ssps_mode == -1) || (p_ssps_mode != -1 && p_ssps_mode != c_ssps_mode))
             {
                 emit signal_ssps_mode(c_ssps_mode);
+                emit signal_iron_wheels((bool)c_ssps_mode);
             }
             p_ssps_mode = c_ssps_mode;
+            break;
+    }
+}
+
+int iodrv::decode_is_on_road(struct can_frame* frame)
+{
+    switch (can_decoder::decode_is_on_road(frame, &c_is_on_road))
+    {
+        case 1:
+            if ((p_is_on_road == -1) || (p_is_on_road != -1 && p_is_on_road != c_is_on_road))
+            {
+                emit signal_is_on_road(c_is_on_road);
+            }
+            p_is_on_road = c_is_on_road;
             break;
     }
 }
@@ -542,7 +559,7 @@ int iodrv::init_serial_port()
     // В каком место разместить соединение сигнала и слота?
     connect(&serial_port, SIGNAL(readyRead()), this, SLOT(slot_serial_ready_read()));
 
-    QList<SerialPortInfo> spinfo = SerialPortInfo::availablePorts();
+    QList<QSerialPortInfo> spinfo = QSerialPortInfo::availablePorts();
     if (spinfo.count() == 0)
     {
         fprintf(stderr, "Не найдено ни одного последовательного порта\n"); fflush(stderr);
@@ -551,12 +568,12 @@ int iodrv::init_serial_port()
     }
 
     //serial_port.setPort(spinfo.at(0));
-    serial_port.setPort("/dev/ttySAC1");
-    serial_port.setDataBits(SerialPort::Data8);
-    serial_port.setRate(SerialPort::Rate115200);
-    serial_port.setParity(SerialPort::NoParity);
-    serial_port.setStopBits(SerialPort::OneStop);
-    serial_port.setFlowControl(SerialPort::NoFlowControl);
+    serial_port.setPortName("/dev/ttySAC1");
+    serial_port.setDataBits(QSerialPort::Data8);
+    serial_port.setBaudRate(QSerialPort::Baud115200);
+    serial_port.setParity(QSerialPort::NoParity);
+    serial_port.setStopBits(QSerialPort::OneStop);
+    serial_port.setFlowControl(QSerialPort::NoFlowControl);
 
     serial_port.open(QIODevice::ReadOnly);
 
@@ -609,7 +626,7 @@ void iodrv::slot_serial_ready_read()
 
             emit signal_speed_sky(gd.is_reliable ? gd.speed : -1);
 
-            if ( c_ssps_mode == 1 &&
+            if ( c_is_on_road == 1 &&
                     pgd.lat != 0 )
             {
                 total_passed_distance += DistanceBetweenCoordinates(gd.lat, gd.lon, pgd.lat, pgd.lon);
@@ -705,7 +722,7 @@ void iodrv::slot_rmp_key_down()
     write_canmsg_async(write_socket_0, &frame);
     write_canmsg_async(write_socket_1, &frame);
 
-    this->target_driving_mode = systemState->getDriveModeTarget();
+    //this->target_driving_mode = systemState->getDriveModeTarget();
 }
 
 void iodrv::slot_rmp_key_up()
@@ -773,6 +790,102 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
         emit speedChanged(currentSpeedFromSky);
     }
 }
+
+
+
+rmp_key_handler::rmp_key_handler()
+{
+    previous_ssps_mode = 0;
+    actual_ssps_mode = 0;
+    previous_driving_mode = 0;
+    actual_driving_mode = 0;
+    target_driving_mode = 0;
+}
+
+int rmp_key_handler::get_next_driving_mode(int actual_driving_mode, int actual_ssps_mode)
+{
+    int next_driving_mode = 0;
+
+    switch(actual_driving_mode)
+    {
+        case 0:
+            next_driving_mode = 1;
+            break;
+        case 1:
+            next_driving_mode = 2;
+            break;
+        case 2:
+            next_driving_mode = 3;
+            break;
+        case 3:
+            if (actual_ssps_mode == 0)
+            {
+                next_driving_mode = 4;
+            }
+            else
+            if (actual_ssps_mode == 1)
+            {
+                next_driving_mode = 0;
+            }
+            break;
+        case 4:
+            next_driving_mode = 0;
+            break;
+    }
+
+    return next_driving_mode;
+}
+
+void rmp_key_handler::request_driving_mode(int driving_mode)
+{
+    // Проверять, возможно ли запросить такой режим относительно положения катков? В каком месте?
+    target_driving_mode = driving_mode;
+    emit target_driving_mode_changed(target_driving_mode);
+    emit rmp_key_pressed_send();
+}
+
+void rmp_key_handler::request_next_driving_mode()
+{
+    target_driving_mode = get_next_driving_mode(actual_driving_mode, actual_ssps_mode);
+    emit target_driving_mode_changed(target_driving_mode);
+    emit rmp_key_pressed_send();
+}
+
+void rmp_key_handler::driving_mode_received(int driving_mode)
+{
+    previous_driving_mode = actual_driving_mode;
+    actual_driving_mode = driving_mode;
+
+    if (actual_driving_mode != previous_driving_mode)
+    {
+        emit actual_driving_mode_changed(actual_driving_mode);
+    }
+
+    if (actual_driving_mode != target_driving_mode)
+    {
+        emit rmp_key_pressed_send();
+    }
+}
+
+void rmp_key_handler::rmp_key_pressed()
+{
+    request_next_driving_mode();
+}
+
+void rmp_key_handler::ssps_mode_received(int ssps_mode)
+{
+    previous_ssps_mode = actual_ssps_mode;
+    actual_ssps_mode = ssps_mode;
+
+    if (actual_ssps_mode != previous_ssps_mode)
+    {
+        if (actual_ssps_mode == 1 && actual_driving_mode == 4)
+        {
+            request_driving_mode(0);
+        }
+    }
+}
+
 
 
 #endif

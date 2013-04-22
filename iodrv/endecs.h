@@ -45,7 +45,10 @@ public:
     static int decode_reg_tape_avl(struct can_frame* frame, int* reg_tape_avl);
 
     static int decode_pressure_tc_tm(struct can_frame* frame, double* pressure_tc, double* pressure_tm);
+
     static int decode_ssps_mode(struct can_frame* frame, int* ssps_mode);
+
+    static int decode_is_on_road(struct can_frame* frame, int* is_on_road);
 };
 
 

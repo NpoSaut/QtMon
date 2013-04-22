@@ -635,6 +635,64 @@ Rectangle {
             }
 
             Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 45
+                anchors.left: parent.left
+                anchors.leftMargin: 30
+                anchors.right: parent.right
+                anchors.rightMargin: 30
+                height: 50
+
+                opacity: warningLabel.text != "" ? 1 : 0
+                Behavior on opacity { PropertyAnimation { duration: 150 } }
+
+                radius: 5
+                color: "#303030"
+                border.color: "#222"
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 1
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: 1
+                    height: parent.height
+                    width: parent.width
+
+                    radius: parent.radius
+                    z: parent.z - 1
+                    color: "#00000000"
+                    border.color: "#80606060"
+                }
+
+                Text {
+                    id: warningLabel
+                    color: "#ff6200"
+                    font.family: "URW Gothic L";
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 40
+
+                    text:
+                    {
+                        if (!stateView.IsEpvReady) return "Ключ ЭПК выключен"
+                        if (stateView.IsEpvReleased) return "Срыв ЭПК"
+                        return "";
+                    }
+
+                    property bool isActive: false;
+                    opacity: 1.0 * isActive
+                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                    Timer {
+                        interval: 400
+                        running: parent.text != "" || parent.isActive
+                        repeat: true
+                        onTriggered: parent.isActive = !parent.isActive
+                    }
+                }
+            }
+
+            // Информационная строка
+            Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10

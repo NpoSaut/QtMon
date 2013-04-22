@@ -61,19 +61,6 @@ Rectangle {
         }
     }
 
-    Timer {
-        interval: 1500
-        running: true
-        repeat: true
-        onTriggered: {
-            if (stateView.DriveModeFact != stateView.DriveModeTarget)
-            {
-                stateView.DriveModeFact++;
-                if (stateView.DriveModeFact > 4) stateView.DriveModeFact = 0;
-            }
-        }
-    }
-
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
@@ -94,11 +81,9 @@ Rectangle {
             else
                 stateView.AlsnFreqTarget = 25;
         }
-        // Страница железнодорожного режима
+        // Кнопка смены режима движения (РМП)
         else if (!altMode && event.key == Qt.Key_F2) {
-            //stateView.PropertyView = false;
-            stateView.DriveModeTarget ++;
-            if (stateView.DriveModeTarget > 4) stateView.DriveModeTarget = 0;
+            stateView.ChangeDrivemodeButtonPressed();
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
@@ -106,9 +91,9 @@ Rectangle {
         }
         // Страница дорожного режима
         else if (!altMode && event.key == Qt.Key_F3) {
-            stateView.PropertyView = true;
+            stateView.PropertyView = !stateView.PropertyView;
         }
-        // Alt: Режим движения
+        // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
             //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
             //stateView.ChangeDrivemodeButtonPressed();
@@ -124,13 +109,17 @@ Rectangle {
         if (event.key == Qt.Key_F4) {
             altMode = false;
         }
+        // Отпускание кнопки РМП
+        else if (!altMode && event.key == Qt.Key_F2) {
+            stateView.ChangeDrivemodeButtonReleased();
+        }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
             stateView.DisableRedButtonReleased();
         }
-        // Alt: Режим движения
+        // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
-            stateView.ChangeDrivemodeButtonReleased();
+            //stateView.ChangeDrivemodeButtonReleased();
         }
     }
 
@@ -1151,7 +1140,7 @@ Rectangle {
                             anchors.top: parent.top
                             anchors.topMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Датчики")
+                            text: qsTr("Карта")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
@@ -1161,7 +1150,7 @@ Rectangle {
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Карта")
+                            text: qsTr("Датчики")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
@@ -1173,7 +1162,8 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        visible: altMode
+                        //visible: altMode
+                        visible: false
 
                         Text {
                             color: "#ffffff"

@@ -630,16 +630,36 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 90
+                spacing: 5
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 30
 
+                // Направление вперёд
                 Image {
                     source: stateView.Direction == 1 ?
                                 "Slices/Direction-Forward.png" :
                                 "Slices/Direction-None.png";
                 }
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 60
+                    height: 22
+                    radius: 2
+                    color: stateView.Direction == 0 ? "#4999c9" : "#00000000"
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "STOP"
+                        color: "#fff"
+                        font.pixelSize: 16
+                        font.bold: true
+                        visible: stateView.Direction == 0
+                    }
+                }
+
+                // Направление назад
                 Image {
                     source: stateView.Direction == -1 ?
                                 "Slices/Direction-Back.png" :

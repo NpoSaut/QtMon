@@ -138,12 +138,12 @@ can_frame can_encoder::encode_ipd_state( double speed, int distance, bool reliab
 // 0 - A != B
 // 1 - success
 
-// IPD_STATE_A
+// SAUT_INFO_A
 int can_decoder::decode_speed(struct can_frame* frame, double* speed)
 {
-    /*if ((*frame).can_id != 0x0C4) return -1;
+    if ((*frame).can_id != 0x233) return -1;
 
-    (*speed) =(double)(   ( ((int)( (*frame).data[1] & 0b000000001 )) << 8 ) + (int)((*frame).data[2])   );*/
+    /*(*speed) =(double)(   ( ((int)( (*frame).data[1] & 0b000000001 )) << 8 ) + (int)((*frame).data[2])   );*/
 
     // SAUT_INFO_A
     /*double s1 = (double)((*frame).data[0]);
@@ -355,9 +355,19 @@ int can_decoder::decode_pressure_tc_tm(struct can_frame* frame, double* pressure
 // VDS_STATE_A
 int can_decoder::decode_ssps_mode(struct can_frame* frame, int* ssps_mode)
 {
+    if ((*frame).can_id != 0x2E0) return -1;
+
+    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b00000001 );
+
+    return 1;
+}
+
+// MCO_STATE_A
+int can_decoder::decode_is_on_road(struct can_frame* frame, int* is_on_road)
+{
     if ((*frame).can_id != 0x052) return -1;
 
-    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b01000000 );
+    (*is_on_road) = (int) (( (*frame).data[1] ) & 0b01000000 );
 
     return 1;
 }

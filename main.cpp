@@ -16,6 +16,7 @@ SystemStateViewModel *systemState ;
 #ifdef WITH_CAN
 iodrv* iodriver;
 SpeedAgregator* speedAgregator;
+rmp_key_handler* rmp_key_hdlr;
 #endif
 
 
@@ -140,9 +141,25 @@ void getParamsFromConsole ()
             systemState->setAlsnFreqTarget( cmd.at(1).toInt() );
             out << "AlsnFreqTarget: " << systemState->getAlsnFreqTarget() << endl;
         }
+        else if (cmd.at(0) == "epv")
+        {
+            systemState->setIsEpvReady( cmd.at(1) == "1" );
+            out << "IsEpvReady: " << systemState->getIsEpvReady() << endl;
+        }
+        else if (cmd.at(0) == "dm")
+        {
+            systemState->setDriveModeFact( cmd.at(1).toInt() );
+            out << "DriveModeFact: " << systemState->getDriveModeFact() << endl;
+        }
+        else if (cmd.at(0) == "iw")
+        {
+            systemState->setIronWheels( cmd.at(1) == "1" );
+            out << "Iron Wheels: " << systemState->getIronWheels() << endl;
+        }
         else
         {
-            out << "! unknown command. Try this: s r map property g c a" << endl;
+            out << "! unknown command. Try this:" << endl;
+            out << "iw {1/0} IronWheels" << endl;
         }
     }
 }
@@ -176,6 +193,24 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     iodriver = new iodrv(systemState);
     speedAgregator = new SpeedAgregator();
 
+    // Создание и подключение «обработчиков»
+    // -> Отбработчик нажатия РМП <-
+    rmp_key_hdlr = new rmp_key_handler();
+
+    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), rmp_key_hdlr, SLOT(rmp_key_pressed()));
+    QObject::connect(iodriver, SIGNAL(signal_ssps_mode(int)), rmp_key_hdlr, SLOT(ssps_mode_received(int)));
+    QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), rmp_key_hdlr, SLOT(driving_mode_received(int)));
+
+    QObject::connect(rmp_key_hdlr, SIGNAL(target_driving_mode_changed(int)), systemState, SLOT(setDriveModeTarget(int)));
+    QObject::connect(rmp_key_hdlr, SIGNAL(actual_driving_mode_changed(int)), systemState, SLOT(setDriveModeFact(int)));
+    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
+    // <- Отбработчик нажатия РМП ->
+
+    // Переносить ли эти события из iodrv в обработчики
+    QObject::connect(iodriver, SIGNAL(signal_iron_wheels(bool)), systemState, SLOT(setIronWheels(bool)));
+
+
+
     // Для отладки
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeedFromEarth(double)));
     QObject::connect(iodriver, SIGNAL(signal_speed_sky(double)), systemState, SLOT(setSpeedFromSky(double)));
@@ -183,7 +218,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Скорость и ограничения
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), speedAgregator, SLOT(getSpeedFromEarth(double)));
     QObject::connect(iodriver, SIGNAL(signal_speed_sky(double)), speedAgregator, SLOT(getSpeedFromSky(double)));
-    QObject::connect(iodriver, SIGNAL(signal_ssps_mode(bool)), speedAgregator, SLOT(getIsOnRoad(bool)));
+    QObject::connect(iodriver, SIGNAL(signal_is_on_road(bool)), speedAgregator, SLOT(getIsOnRoad(bool)));
     QObject::connect(speedAgregator, SIGNAL(speedChanged(double)), systemState, SLOT(setSpeed(double)));
     QObject::connect(speedAgregator, SIGNAL(speedIsValidChanged(bool)), systemState, SLOT(setSpeedIsValid(bool)));
     QObject::connect(iodriver, SIGNAL(signal_speed_limit(int)), systemState, SLOT(setSpeedRestriction(int)));
@@ -198,7 +233,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_light(int)), systemState, SLOT(setLight(int)));
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq(int)), systemState, SLOT(setAlsnFreqFact(int)));
 
-    QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), systemState, SLOT(setDriveModeFact(int)));
+    //QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), systemState, SLOT(setDriveModeFact(int)));
     QObject::connect(iodriver, SIGNAL(signal_vigilance(bool)), systemState, SLOT(setIsVigilanceRequired(bool)));
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));
     QObject::connect(iodriver, SIGNAL(signal_reg_tape_avl(bool)), systemState, SLOT(setIsRegistrationTapeActive(bool)));
@@ -210,14 +245,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_lon(double)), systemState, SLOT(setLongitude(double)));
     QObject::connect(iodriver, SIGNAL(signal_time(QString)), systemState, SLOT(setTime(QString)));
     QObject::connect(iodriver, SIGNAL(signal_date(QString)), systemState, SLOT(setDate(QString)));
-    QObject::connect(iodriver, SIGNAL(signal_ssps_mode(bool)), systemState, SLOT(setPropertyView(bool)));
+    QObject::connect(iodriver, SIGNAL(signal_is_on_road(bool)), systemState, SLOT(setPropertyView(bool)));
 
     //QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged()), iodriver, SLOT(slot_f_key_down()));
     QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
     QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
-    //QObject::connect(systemState, SIGNAL(DriveModeTargetChanged()), iodriver, SLOT(slot_rmp_key_down()));   ChangeDrivemodeButtonPressed
-    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), iodriver, SLOT(slot_rmp_key_down()));
-    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonReleased()), iodriver, SLOT(slot_rmp_key_up()));
+    //QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), iodriver, SLOT(slot_rmp_key_down()));
+    //QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonReleased()), iodriver, SLOT(slot_rmp_key_up()));
 
     // TODO: QObject::connect(systemState, SIGNAL(), iodriver, SLOT(slot_vk_key_up()));
     // TODO: QObject::connect(systemState, SIGNAL(), iodriver, SLOT(slot_rmp_key_up()));

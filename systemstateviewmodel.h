@@ -113,6 +113,10 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isVigilanceRequiredValue;
     Q_PROPERTY(bool IsVigilanceRequired READ getIsVigilanceRequired WRITE setIsVigilanceRequired NOTIFY IsVigilanceRequiredChanged)
 
+    // Тяга включена
+    bool isTractionOnValue;
+    Q_PROPERTY(bool IsTractionOn READ getIsTractionOn WRITE setIsTractionOn NOTIFY IsTractionOnChanged)
+
     // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
@@ -154,6 +158,7 @@ public:
     const int getDriveModeFact() const;
     const bool getIronWheels() const;
     const bool getIsVigilanceRequired() const;
+    const bool getIsTractionOn() const;
     const int getDirection() const;
     const bool getPropertyView() const;
     // public properties getters end
@@ -195,6 +200,7 @@ signals:
     void DriveModeFactChanged();
     void IronWheelsChanged();
     void IsVigilanceRequiredChanged();
+    void IsTractionOnChanged();
     void DirectionChanged();
     void PropertyViewChanged();
     // properties signals end
@@ -228,6 +234,7 @@ public slots:
     void setDriveModeFact(const int);
     void setIronWheels(const bool);
     void setIsVigilanceRequired(const bool);
+    void setIsTractionOn(const bool);
     void setDirection(const int);
     void setPropertyView(const bool);
     // public properties setters end

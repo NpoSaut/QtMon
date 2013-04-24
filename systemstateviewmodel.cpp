@@ -31,6 +31,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     driveModeFactValue = 0;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;
+    isTractionOnValue = false;
     directionValue = 0;
     propertyViewValue = false;
     // fileds init end
@@ -409,6 +410,20 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
     {
         isVigilanceRequiredValue = value;
         emit IsVigilanceRequiredChanged();
+    }
+}
+
+// Тяга включена
+const bool SystemStateViewModel::getIsTractionOn() const
+{
+    return isTractionOnValue;
+}
+void SystemStateViewModel::setIsTractionOn(const bool value)
+{
+    if (isTractionOnValue != value)
+    {
+        isTractionOnValue = value;
+        emit IsTractionOnChanged();
     }
 }
 

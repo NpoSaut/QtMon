@@ -587,6 +587,19 @@ Rectangle {
 
                     color: "#4999c9"
 
+                    // Индикатор отсутствия тяги вокруг кругляша скорости
+                    Rectangle {
+                        property int thick: 3
+                        z: parent.z - 5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: "#fff"
+                        width: parent.width + thick*2
+                        height: width
+                        radius: width/2
+                        visible: !stateView.IsTractionOn
+                    }
+
                     // Текущая скорость
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter

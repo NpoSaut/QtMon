@@ -1241,8 +1241,8 @@ Rectangle {
 
                             rotation: { switch (pageNum)
                                           {
-                                            case 0: return -90
-                                            case 1: return 0
+                                            case 0: return 0
+                                            case 1: return -90
                                           }}
                             Behavior on rotation { SmoothedAnimation { duration: 1000 } }
                         }

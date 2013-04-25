@@ -6,14 +6,12 @@ Rectangle {
     height: 480
     id: rootRect
 
-    state: "page1"
-
-    property int pageNum: 1
+    property int pageNum: 0
 
     property double maxSpeed: 60
 
-    function switchPage(i) {
-        stateView.PropertyView = !stateView.PropertyView
+    function switchPage() {
+        pageNum = 1 - pageNum
     }
 
     function refreshAlsnState()
@@ -92,7 +90,7 @@ Rectangle {
         }
         // Страница дорожного режима
         else if (!altMode && event.key == Qt.Key_F3) {
-            stateView.PropertyView = !stateView.PropertyView;
+            switchPage();
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
@@ -128,13 +126,17 @@ Rectangle {
     SystemStateView {
         id: stateView
         objectName: "stateView"
-    }
 
+        onDriveModeFactChanged: {
+            if (stateView.DriveModeFact == stateView.DriveModeTarget)
+                pageNum = getDriveModeLetter(stateView.DriveModeFact) == "Т" ? 1 : 0
+        }
+    }
 
     states: [
         State {
             name: "page1"
-            when: (stateView.PropertyView == false)
+            when: pageNum == 0
             PropertyChanges { target: pagesContainer; y: 0 }
 
             PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
@@ -142,7 +144,7 @@ Rectangle {
         },
         State {
             name: "page2"
-            when: (stateView.PropertyView == true)
+            when: pageNum == 1
             PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
         }
     ]
@@ -1237,10 +1239,10 @@ Rectangle {
                             source: "Slices/Panel-Left-PageSwitcher-FlipFlop.png"
                             smooth: true
 
-                            rotation: { switch (stateView.PropertyView)
+                            rotation: { switch (pageNum)
                                           {
-                                            case true: return -90
-                                            case false: return 0
+                                            case 0: return -90
+                                            case 1: return 0
                                           }}
                             Behavior on rotation { SmoothedAnimation { duration: 1000 } }
                         }

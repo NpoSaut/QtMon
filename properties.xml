@@ -42,8 +42,8 @@
     <Property type="bool" name="IsRegistrationTapeActive" def="false" description="Наличие кассеты регистрации" source="AMR_STATE_1" />
 
     <!-- Режим движения -->
-    <Property type="int" name="DriveModeTarget" def="0" description="Целевой Режим движения" />
-    <Property type="int" name="DriveModeFact" def="-1" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" />
+    <Property type="int" name="DriveModeTarget" def="0" description="Целевой Режим движения" signalsafe="true" />
+    <Property type="int" name="DriveModeFact" def="-1" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" signalsafe="true" />
     <Property type="bool" name="IronWheels" def="true" />
 
     <!-- Бдительность -->
@@ -54,7 +54,6 @@
     <Property type="int" name="Direction" def="0" description="Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)" source="IPD_STATE" />
 
     <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
-    
-    <Property type="bool" name="PropertyView" def="false" description="Неведомо чудо" />
+
   </Properties>
 </Task>

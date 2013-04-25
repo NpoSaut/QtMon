@@ -33,7 +33,6 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
-    propertyViewValue = false;
     // fileds init end
 }
 
@@ -368,7 +367,7 @@ void SystemStateViewModel::setDriveModeTarget(const int value)
     if (driveModeTargetValue != value)
     {
         driveModeTargetValue = value;
-        emit DriveModeTargetChanged();
+        emit driveModeTargetChanged();
     }
 }
 
@@ -382,7 +381,7 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     if (driveModeFactValue != value)
     {
         driveModeFactValue = value;
-        emit DriveModeFactChanged();
+        emit driveModeFactChanged();
     }
 }
 
@@ -438,20 +437,6 @@ void SystemStateViewModel::setDirection(const int value)
     {
         directionValue = value;
         emit DirectionChanged();
-    }
-}
-
-// Неведомо чудо
-const bool SystemStateViewModel::getPropertyView() const
-{
-    return propertyViewValue;
-}
-void SystemStateViewModel::setPropertyView(const bool value)
-{
-    if (propertyViewValue != value)
-    {
-        propertyViewValue = value;
-        emit PropertyViewChanged();
     }
 }
 

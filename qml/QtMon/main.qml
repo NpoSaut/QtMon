@@ -633,7 +633,7 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 5
+                spacing: 30
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
                 anchors.bottomMargin: 30
@@ -646,10 +646,10 @@ Rectangle {
                 }
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 60
-                    height: 22
-                    radius: 2
-                    color: stateView.Direction == 0 ? "#4999c9" : "#00000000"
+                    height: 16
+                    width: height
+                    radius: height / 2
+                    color: stateView.Direction == 0 ? "#fff" : "#00000000"
 
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -658,7 +658,7 @@ Rectangle {
                         color: "#fff"
                         font.pixelSize: 16
                         font.bold: true
-                        visible: stateView.Direction == 0
+                        visible: false
                     }
                 }
 

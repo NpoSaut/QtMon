@@ -190,11 +190,11 @@ int can_decoder::decode_acceleration(struct can_frame* frame, double* accelerati
 
 
 // MCO_STATE_A
-int can_decoder::decode_epv_state(struct can_frame* frame, int* epv_state)
+int can_decoder::decode_epv_released(struct can_frame* frame, int* epv_state)
 {
     if ((*frame).can_id != 0x050) return -1;
 
-    (*epv_state) = (int) ( ( (*frame).data[5] >> 5 ) & 0b00000001 );
+    (*epv_state) = (int) ( ! ( ( (*frame).data[5] >> 5 ) & 0b00000001 ));
 
     return 1;
 }
@@ -216,21 +216,24 @@ int can_decoder::decode_movement_direction(struct can_frame* frame, int* movemen
 {
     if ((*frame).can_id != 0x0C4) return -1;
 
-//    int stop_flag = (int) (( (*frame).data[1] >> 2 ) & 0b00000001 );
+    int stop_flag = (int) (( (*frame).data[1] >> 2 ) & 0b00000001 );
     int direction = (int) (( (*frame).data[1] >> 7 ) & 0b00000001 );
 
     // return -1 = назад, 0 = стоим, +1 = вперёд
-//    if (stop_flag == 0) // Стоим
-//    {
-//        (*movement_direction) = 0;
-//    }
-    if (direction == 1) // Едем вперёд
+    if (stop_flag == 0) // Стоим
     {
-        (*movement_direction) = 1;
+        (*movement_direction) = 0;
     }
-    else if (direction == 0) // Едем назад
+    else // Едем
     {
-        (*movement_direction) = -1;
+        if (direction == 0) // Едем вперёд
+        {
+            (*movement_direction) = 1;
+        }
+        else if (direction == 1) // Едем назад
+        {
+            (*movement_direction) = -1;
+        }
     }
 
     return 1;
@@ -367,6 +370,7 @@ int can_decoder::decode_traction(struct can_frame* frame, int* in_traction)
 {
     if ((*frame).can_id != 0x050) return -1;
 
+    // Инвертирую для удобства.
     (*in_traction) = (int) ( ! (( (*frame).data[0] >> 5 ) & 0b00000001 ) );
 
     return 1;

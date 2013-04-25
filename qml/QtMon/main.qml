@@ -53,6 +53,7 @@ Rectangle {
     {
         switch (driveModeIndex)
         {
+            case -1: return "";
             case 0: return "П";
             case 1: return "М";
             case 2: return "Р";
@@ -1076,10 +1077,10 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: 4
-                        spacing: 2
+                        spacing: 4
 
                         Repeater {
-                            model: [ "П", "М", "Р", "Д", " ", "Т" ]
+                            model: [ "П", "М", "Р", " ", "Т" ]
                             Row {
                                 //height: 16
                                 spacing: 12
@@ -1112,7 +1113,7 @@ Rectangle {
                         anchors.verticalCenter: drivemodeSwitch.verticalCenter
                         anchors.left: drivemodeSwitch.right
                         anchors.leftMargin: 3
-                        spacing: 2
+                        spacing: 4
 
                         Repeater {
                             model: [ "iron", "rubber" ]

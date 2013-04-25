@@ -53,6 +53,7 @@ Rectangle {
     {
         switch (driveModeIndex)
         {
+            case -1: return "";
             case 0: return "П";
             case 1: return "М";
             case 2: return "Р";
@@ -632,16 +633,36 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 90
+                spacing: 5
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 30
 
+                // Направление вперёд
                 Image {
                     source: stateView.Direction == 1 ?
                                 "Slices/Direction-Forward.png" :
                                 "Slices/Direction-None.png";
                 }
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 60
+                    height: 22
+                    radius: 2
+                    color: stateView.Direction == 0 ? "#4999c9" : "#00000000"
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "STOP"
+                        color: "#fff"
+                        font.pixelSize: 16
+                        font.bold: true
+                        visible: stateView.Direction == 0
+                    }
+                }
+
+                // Направление назад
                 Image {
                     source: stateView.Direction == -1 ?
                                 "Slices/Direction-Back.png" :
@@ -684,12 +705,12 @@ Rectangle {
                     font.family: "URW Gothic L";
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 40
+                    font.pixelSize: 36
 
                     text:
                     {
-                        if (!stateView.IsEpvReady) return "Ключ ЭПК выключен"
-                        if (stateView.IsEpvReleased) return "Срыв ЭПК"
+                        if (!stateView.IsEpvReady) return "Система отключена"
+                        if (stateView.IsEpvReleased) return "Экстренное торможение"
                         return "";
                     }
 
@@ -1056,10 +1077,10 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: 4
-                        spacing: 2
+                        spacing: 4
 
                         Repeater {
-                            model: [ "П", "М", "Р", "Д", " ", "Т" ]
+                            model: [ "П", "М", "Р", " ", "Т" ]
                             Row {
                                 //height: 16
                                 spacing: 12
@@ -1092,7 +1113,7 @@ Rectangle {
                         anchors.verticalCenter: drivemodeSwitch.verticalCenter
                         anchors.left: drivemodeSwitch.right
                         anchors.leftMargin: 3
-                        spacing: 2
+                        spacing: 4
 
                         Repeater {
                             model: [ "iron", "rubber" ]

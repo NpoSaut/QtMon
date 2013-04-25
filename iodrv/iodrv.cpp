@@ -753,7 +753,7 @@ void iodrv::slot_rmp_key_up()
 
 
 SpeedAgregator::SpeedAgregator()
-    : currentSpeedFromEarth(0), currentSpeedFromSky(0), currentSpeedIsValid(false), onRails(false)
+    : currentSpeedFromEarth(0), currentSpeedFromSky(0), currentSpeedIsValid(false), onRails(true)
     {}
 
 
@@ -778,10 +778,10 @@ void SpeedAgregator::setSpeedIsValid (bool isValid)
     }
 }
 
-void SpeedAgregator::getIsOnRoad(bool isOnRoad)
+void SpeedAgregator::getIsOnRoad(bool isOnRoad) // На УАЗ всегда берём скорость от колеса
 {
-    onRails = !isOnRoad;
-    getNewSpeed( currentSpeedFromSky, currentSpeedFromEarth );
+//    onRails = !isOnRoad;
+//    getNewSpeed( currentSpeedFromSky, currentSpeedFromEarth );
 }
 
 void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)

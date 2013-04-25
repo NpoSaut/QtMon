@@ -6,7 +6,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init start
     speedValue = 0;
     speedIsValidValue = false;
-    speedFromSkyValue = 0;
+    speedFromSkyValue = -1;
     speedFromEarthValue = 0;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;

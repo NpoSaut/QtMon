@@ -382,6 +382,8 @@ Rectangle {
                Row {
                    anchors.top: parent.top
                    anchors.topMargin: 18
+
+                   // Буква режима движения
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -398,6 +400,7 @@ Rectangle {
                        }
                    }
 
+                   // Яйца
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -408,6 +411,20 @@ Rectangle {
                            anchors.verticalCenter: parent.verticalCenter
                            source: "Slices/Registration-Type.png"
                            opacity: stateView.IsRegistrationTapeActive ? 1 : 0
+                       }
+                   }
+
+                   // Сигнал с небес (достоверность GPS)
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 21
+                       height: 20
+                       Image {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           source: "Slices/icon-gps-valid.png"
+                           opacity: stateView.SpeedFromSky >= 0 ? 1 : 0
                        }
                    }
                }

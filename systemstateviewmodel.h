@@ -100,11 +100,11 @@ class SystemStateViewModel : public QDeclarativeItem
 
     // Целевой Режим движения
     int driveModeTargetValue;
-    Q_PROPERTY(int DriveModeTarget READ getDriveModeTarget WRITE setDriveModeTarget NOTIFY DriveModeTargetChanged)
+    Q_PROPERTY(int DriveModeTarget READ getDriveModeTarget WRITE setDriveModeTarget NOTIFY driveModeTargetChanged)
 
     // Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
     int driveModeFactValue;
-    Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY DriveModeFactChanged)
+    Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY driveModeFactChanged)
 
     bool ironWheelsValue;
     Q_PROPERTY(bool IronWheels READ getIronWheels WRITE setIronWheels NOTIFY IronWheelsChanged)
@@ -120,10 +120,6 @@ class SystemStateViewModel : public QDeclarativeItem
     // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
-
-    // Неведомо чудо
-    bool propertyViewValue;
-    Q_PROPERTY(bool PropertyView READ getPropertyView WRITE setPropertyView NOTIFY PropertyViewChanged)
 
     // private properties end
 
@@ -160,7 +156,6 @@ public:
     const bool getIsVigilanceRequired() const;
     const bool getIsTractionOn() const;
     const int getDirection() const;
-    const bool getPropertyView() const;
     // public properties getters end
 
 signals:
@@ -196,13 +191,12 @@ signals:
     void TimeChanged();
     void DateChanged();
     void IsRegistrationTapeActiveChanged();
-    void DriveModeTargetChanged();
-    void DriveModeFactChanged();
+    void driveModeTargetChanged();
+    void driveModeFactChanged();
     void IronWheelsChanged();
     void IsVigilanceRequiredChanged();
     void IsTractionOnChanged();
     void DirectionChanged();
-    void PropertyViewChanged();
     // properties signals end
 
 public slots:
@@ -236,7 +230,6 @@ public slots:
     void setIsVigilanceRequired(const bool);
     void setIsTractionOn(const bool);
     void setDirection(const int);
-    void setPropertyView(const bool);
     // public properties setters end
     
 };

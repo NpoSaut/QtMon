@@ -53,6 +53,7 @@ Rectangle {
     {
         switch (driveModeIndex)
         {
+            case -1: return "";
             case 0: return "П";
             case 1: return "М";
             case 2: return "Р";

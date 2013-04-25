@@ -28,7 +28,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
     driveModeTargetValue = 0;
-    driveModeFactValue = 0;
+    driveModeFactValue = -1;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;

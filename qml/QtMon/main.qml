@@ -702,12 +702,12 @@ Rectangle {
                     font.family: "URW Gothic L";
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 40
+                    font.pixelSize: 36
 
                     text:
                     {
-                        if (!stateView.IsEpvReady) return "Ключ ЭПК выключен"
-                        if (stateView.IsEpvReleased) return "Срыв ЭПК"
+                        if (!stateView.IsEpvReady) return "Система отключена"
+                        if (stateView.IsEpvReleased) return "Экстренное торможение"
                         return "";
                     }
 

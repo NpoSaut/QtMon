@@ -668,7 +668,7 @@ Rectangle {
                     height: 16
                     width: height
                     radius: height / 2
-                    color: stateView.Direction == 0 ? "#fff" : "#00000000"
+                    color: "#00000000"
 
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter

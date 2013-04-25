@@ -6,7 +6,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init start
     speedValue = 0;
     speedIsValidValue = false;
-    speedFromSkyValue = 0;
+    speedFromSkyValue = -1;
     speedFromEarthValue = 0;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
@@ -28,7 +28,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
     driveModeTargetValue = 0;
-    driveModeFactValue = 0;
+    driveModeFactValue = -1;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;

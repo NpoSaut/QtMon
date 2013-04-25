@@ -53,6 +53,7 @@ Rectangle {
     {
         switch (driveModeIndex)
         {
+            case -1: return "";
             case 0: return "П";
             case 1: return "М";
             case 2: return "Р";
@@ -381,6 +382,8 @@ Rectangle {
                Row {
                    anchors.top: parent.top
                    anchors.topMargin: 18
+
+                   // Буква режима движения
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -397,6 +400,7 @@ Rectangle {
                        }
                    }
 
+                   // Яйца
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -407,6 +411,20 @@ Rectangle {
                            anchors.verticalCenter: parent.verticalCenter
                            source: "Slices/Registration-Type.png"
                            opacity: stateView.IsRegistrationTapeActive ? 1 : 0
+                       }
+                   }
+
+                   // Сигнал с небес (достоверность GPS)
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 21
+                       height: 20
+                       Image {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           source: "Slices/icon-gps-valid.png"
+                           opacity: stateView.SpeedFromSky >= 0 ? 1 : 0
                        }
                    }
                }
@@ -632,7 +650,7 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 5
+                spacing: 30
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
                 anchors.bottomMargin: 30
@@ -645,10 +663,10 @@ Rectangle {
                 }
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 60
-                    height: 22
-                    radius: 2
-                    color: stateView.Direction == 0 ? "#4999c9" : "#00000000"
+                    height: 16
+                    width: height
+                    radius: height / 2
+                    color: stateView.Direction == 0 ? "#fff" : "#00000000"
 
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -657,7 +675,7 @@ Rectangle {
                         color: "#fff"
                         font.pixelSize: 16
                         font.bold: true
-                        visible: stateView.Direction == 0
+                        visible: false
                     }
                 }
 

@@ -4,7 +4,7 @@
     <!-- Скорость и ограничения -->
     <Property type="double" name="Speed" def="0" description="Текущая скорость" source="IPD_STATE" />
     <Property type="bool" name="SpeedIsValid" def="false" description="Корректность скорости" />
-    <Property type="double" name="SpeedFromSky" def="0" description="Текущая скорость по GPS" />
+    <Property type="double" name="SpeedFromSky" def="-1" description="Текущая скорость по GPS" />
     <Property type="double" name="SpeedFromEarth" def="0" description="Текущая скорость от колеса" />
 
     <Property type="int" name="SpeedRestriction" def="40" description="Ограничение скорости" source="MCO_STATE" />
@@ -43,7 +43,7 @@
 
     <!-- Режим движения -->
     <Property type="int" name="DriveModeTarget" def="0" description="Целевой Режим движения" />
-    <Property type="int" name="DriveModeFact" def="0" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" />
+    <Property type="int" name="DriveModeFact" def="-1" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" />
     <Property type="bool" name="IronWheels" def="true" />
 
     <!-- Бдительность -->

@@ -457,11 +457,12 @@ int iodrv::decode_driving_mode(struct can_frame* frame)
     switch (can_decoder::decode_driving_mode(frame, &c_driving_mode))
     {
         case 1:
-            if ((p_driving_mode == -1) || (p_driving_mode != -1 && p_driving_mode != c_driving_mode))
-            {
-                emit signal_driving_mode(c_driving_mode);
-                //printf("driving_mode %d\n", c_driving_mode); fflush(stdout);
-            }
+            emit signal_driving_mode(c_driving_mode);
+//            if ((p_driving_mode == -1) || (p_driving_mode != -1 && p_driving_mode != c_driving_mode))
+//            {
+
+//                //printf("driving_mode %d\n", c_driving_mode); fflush(stdout);
+//            }
 //            if (target_driving_mode != c_driving_mode)
 //            {
 //                // Временно отключил подстраивание под заказной РМП
@@ -738,7 +739,7 @@ void iodrv::slot_rmp_key_down()
 {
     can_frame frame = can_encoder::encode_sys_key(is_pressed, 0x16);
     write_canmsg_async(write_socket_0, &frame);
-    write_canmsg_async(write_socket_1, &frame);
+    //write_canmsg_async(write_socket_1, &frame);
 
     //this->target_driving_mode = systemState->getDriveModeTarget();
 }
@@ -752,7 +753,7 @@ void iodrv::slot_rmp_key_up()
 
 
 SpeedAgregator::SpeedAgregator()
-    : currentSpeedFromEarth(0), currentSpeedFromSky(0), currentSpeedIsValid(false), onRails(false)
+    : currentSpeedFromEarth(-1), currentSpeedFromSky(-1), currentSpeedIsValid(false), onRails(true)
     {}
 
 
@@ -793,7 +794,7 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
 
     if ( onRails )
     {
-        qDebug() << "on rails: " << currentSpeedFromEarth;
+//        qDebug() << "on rails: " << currentSpeedFromEarth;
         setSpeedIsValid( !(
                         currentSpeedFromSky > minSpeedSkyAccount &&
                         abs(currentSpeedFromSky - currentSpeedFromEarth) > maxAllowDeltaSpeed
@@ -803,7 +804,7 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
     }
     else
     {
-        qDebug() << "no on rails: " << currentSpeedFromSky;
+//        qDebug() << "no on rails: " << currentSpeedFromSky;
         setSpeedIsValid( currentSpeedFromSky >= 0 );
         emit speedChanged(currentSpeedFromSky);
     }
@@ -818,6 +819,10 @@ rmp_key_handler::rmp_key_handler()
     previous_driving_mode = 0;
     actual_driving_mode = 0;
     target_driving_mode = 0;
+
+    req_count = 0;
+
+    start = true;
 }
 
 int rmp_key_handler::get_next_driving_mode(int driving_mode, int ssps_mode)
@@ -833,9 +838,6 @@ int rmp_key_handler::get_next_driving_mode(int driving_mode, int ssps_mode)
             next_driving_mode = 2;
             break;
         case 2:
-            next_driving_mode = 3;
-            break;
-        case 3:
             if (ssps_mode == 0)
             {
                 next_driving_mode = 4;
@@ -859,14 +861,16 @@ void rmp_key_handler::request_driving_mode(int driving_mode)
     // Проверять, возможно ли запросить такой режим относительно положения катков? В каком месте?
     target_driving_mode = driving_mode;
     emit target_driving_mode_changed(target_driving_mode);
-    //emit rmp_key_pressed_send();
+
+    req_count = 0;
 }
 
 void rmp_key_handler::request_next_driving_mode()
 {
     target_driving_mode = get_next_driving_mode(target_driving_mode, actual_ssps_mode);
     emit target_driving_mode_changed(target_driving_mode);
-    //emit rmp_key_pressed_send();
+
+    req_count = 0;
 }
 
 void rmp_key_handler::driving_mode_received(int driving_mode)
@@ -874,14 +878,22 @@ void rmp_key_handler::driving_mode_received(int driving_mode)
     previous_driving_mode = actual_driving_mode;
     actual_driving_mode = driving_mode;
 
-    if (actual_driving_mode != previous_driving_mode)
-    {
+//    if (actual_driving_mode != previous_driving_mode)
+//    {
         emit actual_driving_mode_changed(actual_driving_mode);
-    }
+//    }
 
     if (actual_driving_mode != target_driving_mode)
     {
-        emit rmp_key_pressed_send();
+        if (req_count == 0)
+        {
+            emit rmp_key_pressed_send();
+            req_count = 1;
+        }
+        else if (req_count == 1)
+        {
+            req_count = 0;
+        }
     }
 }
 
@@ -896,11 +908,21 @@ void rmp_key_handler::ssps_mode_received(int ssps_mode)
     previous_ssps_mode = actual_ssps_mode;
     actual_ssps_mode = ssps_mode;
 
-    if (actual_ssps_mode != previous_ssps_mode)
+    if ( (actual_ssps_mode != previous_ssps_mode) || start)
     {
         if (actual_ssps_mode == 1 && actual_driving_mode == 4)
         {
             request_driving_mode(0);
+        }
+
+        if (actual_ssps_mode == 0)
+        {
+            request_driving_mode(4);
+        }
+
+        if (start)
+        {
+            start = false;
         }
     }
 }

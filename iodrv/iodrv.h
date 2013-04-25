@@ -260,8 +260,11 @@ private:
     int previous_driving_mode;
     int actual_driving_mode;
     int target_driving_mode;
+    int req_count;
     void request_next_driving_mode();
     void request_driving_mode(int driving_mode);
+
+    bool start;
 
 public slots:
     // Interface

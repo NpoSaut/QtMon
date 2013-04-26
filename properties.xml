@@ -55,5 +55,9 @@
 
     <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
 
+    <!-- Строки предупреждений -->
+    <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
+    <Property type="QString" name="InfoText" def="&quot;&quot;" description="Текст низкоприоритетного сообщения"/>
+
   </Properties>
 </Task>

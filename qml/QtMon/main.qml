@@ -728,8 +728,10 @@ Rectangle {
 
                     text:
                     {
+                        if (stateView.WarningText != "") return stateView.WarningText
                         if (!stateView.IsEpvReady) return "Система отключена"
                         if (stateView.IsEpvReleased) return "Экстренное торможение"
+                        if (stateView.InfoText != "") return stateView.InfoText
                         return "";
                     }
 

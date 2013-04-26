@@ -33,6 +33,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
+    warningTextValue = "";
+    infoTextValue = "";
     // fileds init end
 }
 
@@ -437,6 +439,34 @@ void SystemStateViewModel::setDirection(const int value)
     {
         directionValue = value;
         emit DirectionChanged();
+    }
+}
+
+// Текст высокоприоритетного сообщения
+const QString SystemStateViewModel::getWarningText() const
+{
+    return warningTextValue;
+}
+void SystemStateViewModel::setWarningText(const QString value)
+{
+    if (warningTextValue != value)
+    {
+        warningTextValue = value;
+        emit WarningTextChanged();
+    }
+}
+
+// Текст низкоприоритетного сообщения
+const QString SystemStateViewModel::getInfoText() const
+{
+    return infoTextValue;
+}
+void SystemStateViewModel::setInfoText(const QString value)
+{
+    if (infoTextValue != value)
+    {
+        infoTextValue = value;
+        emit InfoTextChanged();
     }
 }
 

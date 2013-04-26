@@ -121,6 +121,14 @@ class SystemStateViewModel : public QDeclarativeItem
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
 
+    // Текст высокоприоритетного сообщения
+    QString warningTextValue;
+    Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
+
+    // Текст низкоприоритетного сообщения
+    QString infoTextValue;
+    Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
+
     // private properties end
 
 public:
@@ -156,6 +164,8 @@ public:
     const bool getIsVigilanceRequired() const;
     const bool getIsTractionOn() const;
     const int getDirection() const;
+    const QString getWarningText() const;
+    const QString getInfoText() const;
     // public properties getters end
 
 signals:
@@ -197,6 +207,8 @@ signals:
     void IsVigilanceRequiredChanged();
     void IsTractionOnChanged();
     void DirectionChanged();
+    void WarningTextChanged();
+    void InfoTextChanged();
     // properties signals end
 
 public slots:
@@ -230,6 +242,8 @@ public slots:
     void setIsVigilanceRequired(const bool);
     void setIsTractionOn(const bool);
     void setDirection(const int);
+    void setWarningText(const QString);
+    void setInfoText(const QString);
     // public properties setters end
     
 };

@@ -545,7 +545,7 @@ int iodrv::decode_traction(struct can_frame* frame)
 {
     static int msg_counter = 0;
     static QString notification = "";
-    const QString notification_text = "Установите ручной тормоз";
+    const QString notification_text = "Установи ручной тормоз";
 
     switch (can_decoder::decode_traction(frame, &c_in_traction))
     {

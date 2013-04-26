@@ -724,7 +724,7 @@ Rectangle {
                     font.family: "URW Gothic L";
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 36
+                    font.pixelSize: 32
 
                     text:
                     {
@@ -1265,7 +1265,7 @@ Rectangle {
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Датчики")
+                            text: qsTr("   Панель\n приборов")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }

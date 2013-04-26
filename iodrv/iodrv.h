@@ -66,6 +66,8 @@ signals:
     void signal_traction(bool in_traction);
     void signal_iron_wheels(bool iron_wheels);
 
+    void signal_notification_show(QString notification);
+
     void signal_lat(double lat);
     void signal_lon(double lon);
     void signal_time(QString time);

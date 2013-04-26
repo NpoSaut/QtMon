@@ -543,9 +543,34 @@ int iodrv::decode_ssps_mode(struct can_frame* frame)
 
 int iodrv::decode_traction(struct can_frame* frame)
 {
+    static int msg_counter = 0;
+    static QString notification = "";
+    const QString notification_text = "Установите ручной тормоз";
+
     switch (can_decoder::decode_traction(frame, &c_in_traction))
     {
         case 1:
+        if (c_movement_direction == 0 && c_ssps_mode == 1 && c_in_traction == 1)
+        {
+            if (msg_counter++ >= 20)
+            {
+                if (notification != notification_text)
+                {
+                    notification = notification_text;
+                    emit signal_notification_show(notification);
+                }
+            }
+        }
+        else
+        {
+            msg_counter = 0;
+            if (notification != "")
+            {
+                notification = "";
+                emit signal_notification_show(notification);
+            }
+        }
+
             if ((p_in_traction == -1) || (p_in_traction != -1 && p_in_traction != c_in_traction))
             {
                 emit signal_traction((bool)c_in_traction);

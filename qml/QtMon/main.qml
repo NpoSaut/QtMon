@@ -67,39 +67,65 @@ Rectangle {
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
-        if (event.key == Qt.Key_F1) {
-            // Send CAN requset to change ALSN freq
+        if (!inputMode)
+        {
+            if (event.key == Qt.Key_F1) {
+                // Send CAN requset to change ALSN freq
 
-            // Emulation
-            if (stateView.AlsnFreqTarget == 25 )
-                stateView.AlsnFreqTarget = 50;
-            else if ( stateView.AlsnFreqTarget == 50 )
-                stateView.AlsnFreqTarget = 75;
-            else if ( stateView.AlsnFreqTarget == 75 )
-                stateView.AlsnFreqTarget = 25;
-            else
-                stateView.AlsnFreqTarget = 25;
+                // Emulation
+                if (stateView.AlsnFreqTarget == 25 )
+                    stateView.AlsnFreqTarget = 50;
+                else if ( stateView.AlsnFreqTarget == 50 )
+                    stateView.AlsnFreqTarget = 75;
+                else if ( stateView.AlsnFreqTarget == 75 )
+                    stateView.AlsnFreqTarget = 25;
+                else
+                    stateView.AlsnFreqTarget = 25;
+            }
+            // Кнопка смены режима движения (РМП)
+            else if (!altMode && event.key == Qt.Key_F2) {
+                stateView.ChangeDrivemodeButtonPressed();
+            }
+            // Alt: Отмена Красного
+            else if (altMode && event.key == Qt.Key_F2) {
+                stateView.DisableRedButtonPressed();
+            }
+            // Страница дорожного режима
+            else if (!altMode && event.key == Qt.Key_F3) {
+                switchPage();
+            }
+            // Alt: пустой
+            else if (altMode && event.key == Qt.Key_F3) {
+                inputMode = true
+            }
+            // Включение альтернативного режим клавиш
+            else if (event.key == Qt.Key_F4) {
+                altMode = true;
+            }
         }
-        // Кнопка смены режима движения (РМП)
-        else if (!altMode && event.key == Qt.Key_F2) {
-            stateView.ChangeDrivemodeButtonPressed();
-        }
-        // Alt: Отмена Красного
-        else if (altMode && event.key == Qt.Key_F2) {
-            stateView.DisableRedButtonPressed();
-        }
-        // Страница дорожного режима
-        else if (!altMode && event.key == Qt.Key_F3) {
-            switchPage();
-        }
-        // Alt: пустой
-        else if (altMode && event.key == Qt.Key_F3) {
-            //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
-            //stateView.ChangeDrivemodeButtonPressed();
-        }
-        // Включение альтернативного режим клавиш
-        else if (event.key == Qt.Key_F4) {
-            altMode = true;
+        else
+        {
+            if (event.key == Qt.Key_F1)
+            {
+                inputCursorIndex++;
+                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+            }
+            if (event.key == Qt.Key_F2)
+            {
+                var input = inputPositions
+                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % 10
+                inputPositions = input;
+            }
+            if (event.key == Qt.Key_F3)
+            {
+                var input = inputPositions
+                input[inputCursorIndex] = (input[inputCursorIndex] + 9) % 10
+                inputPositions = input;
+            }
+            if (event.key == Qt.Key_F4)
+            {
+                inputMode = false
+            }
         }
     }
 
@@ -118,7 +144,6 @@ Rectangle {
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
-            //stateView.ChangeDrivemodeButtonReleased();
         }
     }
 
@@ -155,6 +180,11 @@ Rectangle {
         NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
     }
+
+    property bool inputMode: false
+    property int inputCursorIndex: 0
+    property int inputPositionsCount: 6
+    property variant inputPositions: [0, 0, 0, 0, 0, 0]
 
     Rectangle {
         id: pagesArea
@@ -893,6 +923,38 @@ Rectangle {
             onPressed: swipePressed(mouseY)
             onReleased: swipeReleased(mouseY)
         }
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#e0202020"
+            border.color: "#f03050ff"
+            width: 300
+            height: 70
+            visible: inputMode
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 3
+                Repeater {
+                    model: inputPositions
+                    Rectangle {
+                        //anchors.verticalCenter: parent.verticalCenter
+                        color: "#d0ffffff"
+                        border.color: inputCursorIndex == index ? "#ffff0000" : "#ff000000"
+                        border.width: inputCursorIndex == index ? 2 : 1
+                        width: 30
+                        height: 50
+                        Text {
+                            text: modelData
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 36
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
@@ -1277,12 +1339,11 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        //visible: altMode
-                        visible: false
+                        visible: altMode
 
                         Text {
                             color: "#ffffff"
-                            text: qsTr("Режим\nдвижения")
+                            text: qsTr("Ввод\nпараметров")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }

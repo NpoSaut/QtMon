@@ -914,18 +914,6 @@ Rectangle {
             source: "Slices/Panel-Left.png"
         }
 
-        // Очень плохо, что это здесь находится!!!
-        Image {
-            id: alsnSwitchBackgroundCircle
-            anchors.right: parent.left
-            anchors.rightMargin: -60
-            anchors.top: parent.top
-            anchors.topMargin: -height/2 + 60
-
-            fillMode: "Tile"
-            source: "Slices/alsn-switch.png"
-        }
-
         Image {
             x: -14
             y: 104
@@ -954,119 +942,141 @@ Rectangle {
                 anchors.left: parent.left
 
                 Rectangle {
-                    id: alsnTextBox
+                    anchors.fill: parent
+                    visible: !altMode
                     color: "#00000000"
-                    anchors.left: alsnSwitch.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -3
-                    height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
-                    width: alsnTextBoxLine.width
+                    clip: true
 
-                    Text {
-                        id: alsnTextBoxText
-                        anchors.left: parent.left
 
-                        text: qsTr("АЛСН")
-                        color: "#ffdddddd"
-                        font.pixelSize: 18
-                        font.family: "URW Gothic L"
-                        font.bold: true
+                    Image {
+                        id: alsnSwitchBackgroundCircle
+                        anchors.right: parent.left
+                        anchors.rightMargin: -60
+                        anchors.top: parent.top
+                        anchors.topMargin: -height/2 + 60
+
+                        fillMode: "Tile"
+                        source: "Slices/alsn-switch.png"
                     }
+
+
                     Rectangle {
-                        id: alsnTextBoxLine
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxText.bottom
-                        width: 60
-                        height: 2
-                        color: "#ffdddddd"
+                        id: alsnTextBox
+                        color: "#00000000"
+                        anchors.left: alsnSwitch.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: -3
+                        height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
+                        width: alsnTextBoxLine.width
 
-                    }
-                    Text {
-                        id: alsnTextBoxFreq
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxLine.bottom
 
-                        text: qsTr("частота")
-                        color: "#ffdddddd"
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
+                        Text {
+                            id: alsnTextBoxText
+                            anchors.left: parent.left
 
-                Rectangle {
-                    id: alsnSwitch
-                    color: "#00000000"
-
-                    anchors.top: parent.top
-                    anchors.topMargin: -height/2 + 60
-                    anchors.right: parent.left
-                    anchors.rightMargin: -60
-                    width: alsnSwitchBackgroundCircle.width
-                    height: alsnSwitchBackgroundCircle.height
-
-                    property real radius: 100
-                    property real angle: 15
-                    property string objColor: "#ddd"
-                    property string objHighlightColor: "#f22"
-
-                    Repeater
-                    {
-                        model: [25, 50, 75]
-
+                            text: qsTr("АЛСН")
+                            color: "#ffdddddd"
+                            font.pixelSize: 18
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
                         Rectangle {
-                            property real myRot: (1 - index) * alsnSwitch.angle
-                            property int freq: modelData
-
-                            x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
-                            y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
-                            rotation: myRot
-
-                            color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
-                            width: 2
+                            id: alsnTextBoxLine
+                            anchors.left: parent.left
+                            anchors.top: alsnTextBoxText.bottom
+                            width: 60
                             height: 2
-                            smooth: true
+                            color: "#ffdddddd"
 
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.left
-                                anchors.rightMargin: 4
+                        }
+                        Text {
+                            id: alsnTextBoxFreq
+                            anchors.left: parent.left
+                            anchors.top: alsnTextBoxLine.bottom
 
-                                text: parent.freq
-                                font.pixelSize: 14
-                                font.family: "URW Gothic L"
-                                color: alsnSwitch.objColor
+                            text: qsTr("частота")
+                            color: "#ffdddddd"
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
+                    }
+
+                    Rectangle {
+                        id: alsnSwitch
+                        color: "#00000000"
+
+                        anchors.top: parent.top
+                        anchors.topMargin: -height/2 + 60
+                        anchors.right: parent.left
+                        anchors.rightMargin: -60
+                        width: alsnSwitchBackgroundCircle.width
+                        height: alsnSwitchBackgroundCircle.height
+
+                        property real radius: 100
+                        property real angle: 15
+                        property string objColor: "#ddd"
+                        property string objHighlightColor: "#f22"
+
+                        Repeater
+                        {
+                            model: [25, 50, 75]
+
+                            Rectangle {
+                                property real myRot: (1 - index) * alsnSwitch.angle
+                                property int freq: modelData
+
+                                x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                                y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                                rotation: myRot
+
+                                color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
+                                width: 2
+                                height: 2
                                 smooth: true
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.right: parent.left
+                                    anchors.rightMargin: 4
+
+                                    text: parent.freq
+                                    font.pixelSize: 14
+                                    font.family: "URW Gothic L"
+                                    color: alsnSwitch.objColor
+                                    smooth: true
+                                }
                             }
                         }
-                    }
 
-                    states: [
-                        State {
-                            name: "alsn0"
-                            when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
-                            PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn25"
-                            when: (stateView.AlsnFreqTarget == 25)
-                            PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn50"
-                            when: (stateView.AlsnFreqTarget == 50)
-                            PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn75"
-                            when: (stateView.AlsnFreqTarget == 75)
-                            PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                        states: [
+                            State {
+                                name: "alsn0"
+                                when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
+                                PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn25"
+                                when: (stateView.AlsnFreqTarget == 25)
+                                PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn50"
+                                when: (stateView.AlsnFreqTarget == 50)
+                                PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn75"
+                                when: (stateView.AlsnFreqTarget == 75)
+                                PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                            }
+                        ]
+
+                        transitions: Transition {
+                            NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
                         }
-                    ]
-
-                    transitions: Transition {
-                        NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
                     }
+
                 }
             }
 

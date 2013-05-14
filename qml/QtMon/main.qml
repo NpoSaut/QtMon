@@ -1078,6 +1078,40 @@ Rectangle {
                     }
 
                 }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: "#00000000"
+                    visible: altMode
+
+                    Column {
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: 4
+                        Repeater {
+                            model: ["АБ", "ПАБ", "ВК", "БР"]
+                            Image {
+                                source: "Slices/autolock-label.png"
+                                anchors.left: parent.left
+                                anchors.leftMargin: -20
+
+                                Text {
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 5
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: modelData
+                                    font.pixelSize: 14
+                                }
+                                Image {
+                                    source: "Slices/autolock-label-shadow.png"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    z: parent.z - 1
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
 
             Rectangle {

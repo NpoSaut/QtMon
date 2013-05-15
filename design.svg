@@ -3876,18 +3876,6 @@
        y2="21.264472"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(-7.0710677,0)" />
-    <filter
-       inkscape:collect="always"
-       id="filter5104"
-       x="-0.091494251"
-       width="1.1829885"
-       y="-0.1929957"
-       height="1.3859914">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.8195809"
-         id="feGaussianBlur5106" />
-    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3897,8 +3885,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284271"
-     inkscape:cx="23.580953"
-     inkscape:cy="443.59065"
+     inkscape:cx="-37.053454"
+     inkscape:cy="401.16424"
      inkscape:document-units="px"
      inkscape:current-layer="layer14"
      showgrid="false"
@@ -3944,7 +3932,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -5908,32 +5896,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer14"
-     inkscape:label="Автоблокировка">
-    <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\autolock-label-shadow.png"
-       ry="4.9497476"
-       rx="4.9497476"
-       y="7.2991128"
-       x="-14.849243"
-       height="22.627417"
-       width="47.72971"
-       id="rect5086"
-       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.80000000999999998;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter5104);opacity:0.20233463" />
-    <rect
-       style="fill:url(#linearGradient5042);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.80000000999999998;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect5032"
-       width="47.72971"
-       height="22.627417"
-       x="-14.849243"
-       y="7.2991128"
-       rx="4.9497476"
-       ry="4.9497476"
-       inkscape:export-filename="C:\Users\plyusnin.SAUT\Qt\QtMon\qml\QtMon\Slices\autolock-label.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-  </g>
+     inkscape:label="Автоблокировка" />
   <g
      inkscape:groupmode="layer"
      id="layer3"

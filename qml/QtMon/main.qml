@@ -67,7 +67,7 @@ Rectangle {
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
-        if (event.key == Qt.Key_F1) {
+        if (!altMode && event.key == Qt.Key_F1) {
             // Send CAN requset to change ALSN freq
 
             // Emulation
@@ -79,6 +79,9 @@ Rectangle {
                 stateView.AlsnFreqTarget = 25;
             else
                 stateView.AlsnFreqTarget = 25;
+        }
+        else if (altMode && event.key == Qt.Key_F1) {
+            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
         }
         // Кнопка смены режима движения (РМП)
         else if (!altMode && event.key == Qt.Key_F2) {
@@ -943,7 +946,6 @@ Rectangle {
 
                 Rectangle {
                     anchors.fill: parent
-                    visible: !altMode
                     color: "#00000000"
                     clip: true
 
@@ -1077,37 +1079,66 @@ Rectangle {
                         }
                     }
 
-                }
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#00000000"
-                    visible: altMode
-
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
+                    Row {
+                        id: autolockSelector
+                        anchors.horizontalCenter: alsnTextBox.horizontalCenter
+                        anchors.horizontalCenterOffset: 3
+                        anchors.bottom: alsnTextBox.top
+                        anchors.bottomMargin: 16
                         spacing: 4
-                        Repeater {
-                            model: ["АБ", "ПАБ", "ВК", "БР"]
-                            Image {
-                                source: "Slices/autolock-label.png"
-                                anchors.left: parent.left
-                                anchors.leftMargin: -20
+                        property int itemWidth: 26
 
+                        Repeater {
+                            model: ["АБ", "ПАБ", "ЗАБ"]
+                            Rectangle {
+                                property bool isConfirmed: index == stateView.AutolockTypeFact
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: autolockSelector.itemWidth
+                                height: 14
+                                radius: 2
+                                color: isConfirmed ? "#ccc" : "#00000000"
                                 Text {
-                                    anchors.right: parent.right
-                                    anchors.rightMargin: 5
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: modelData
-                                    font.pixelSize: 14
-                                }
-                                Image {
-                                    source: "Slices/autolock-label-shadow.png"
                                     anchors.verticalCenter: parent.verticalCenter
                                     anchors.horizontalCenter: parent.horizontalCenter
-                                    z: parent.z - 1
+                                    text: modelData
+                                    font.pixelSize: 10
+                                    color: parent.isConfirmed ? "#333" : "#ccc"
                                 }
                             }
+                        }
+                    }
+                    Rectangle {
+                        id: autolockSelectorCursor
+                        anchors.top: autolockSelector.bottom
+                        anchors.left: autolockSelector.left
+                        anchors.topMargin: 4
+                        anchors.leftMargin: autolockSelector.itemWidth * (0.5 + stateView.AutolockTypeTarget) + autolockSelector.spacing * stateView.AutolockTypeTarget
+
+                        property bool show: altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget
+
+                        Image {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            source: "Slices/autolock-cursor.png"
+                            scale: parent.show ? 0.25 : 2
+                            Behavior on scale { PropertyAnimation { duration: 100 } }
+                            smooth: true
+                        }
+                        //opacity: stateView.AutolockTypeFact != stateView.AutolockTypeTarget ? 1 : 0
+
+                        opacity: show ? 1 : 0
+                        Behavior on opacity { PropertyAnimation { duration: 100 } }
+                        Behavior on anchors.leftMargin { PropertyAnimation { duration: 170 } }
+                    }
+                    Timer {
+                        interval: 1000
+                        running: true
+                        repeat: true
+                        onTriggered:
+                        {
+                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
+                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
                         }
                     }
                 }

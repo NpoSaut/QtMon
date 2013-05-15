@@ -6,7 +6,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init start
     speedValue = 0;
     speedIsValidValue = false;
-    speedFromSkyValue = 0;
+    speedFromSkyValue = -1;
     speedFromEarthValue = 0;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
@@ -28,11 +28,13 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
     driveModeTargetValue = 0;
-    driveModeFactValue = 0;
+    driveModeFactValue = -1;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;
+    isTractionOnValue = false;
     directionValue = 0;
-    propertyViewValue = false;
+    warningTextValue = "";
+    infoTextValue = "";
     // fileds init end
 }
 
@@ -367,7 +369,7 @@ void SystemStateViewModel::setDriveModeTarget(const int value)
     if (driveModeTargetValue != value)
     {
         driveModeTargetValue = value;
-        emit DriveModeTargetChanged();
+        emit driveModeTargetChanged();
     }
 }
 
@@ -381,7 +383,7 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     if (driveModeFactValue != value)
     {
         driveModeFactValue = value;
-        emit DriveModeFactChanged();
+        emit driveModeFactChanged();
     }
 }
 
@@ -412,6 +414,20 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
     }
 }
 
+// Тяга включена
+const bool SystemStateViewModel::getIsTractionOn() const
+{
+    return isTractionOnValue;
+}
+void SystemStateViewModel::setIsTractionOn(const bool value)
+{
+    if (isTractionOnValue != value)
+    {
+        isTractionOnValue = value;
+        emit IsTractionOnChanged();
+    }
+}
+
 // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
 const int SystemStateViewModel::getDirection() const
 {
@@ -426,17 +442,31 @@ void SystemStateViewModel::setDirection(const int value)
     }
 }
 
-// Неведомо чудо
-const bool SystemStateViewModel::getPropertyView() const
+// Текст высокоприоритетного сообщения
+const QString SystemStateViewModel::getWarningText() const
 {
-    return propertyViewValue;
+    return warningTextValue;
 }
-void SystemStateViewModel::setPropertyView(const bool value)
+void SystemStateViewModel::setWarningText(const QString value)
 {
-    if (propertyViewValue != value)
+    if (warningTextValue != value)
     {
-        propertyViewValue = value;
-        emit PropertyViewChanged();
+        warningTextValue = value;
+        emit WarningTextChanged();
+    }
+}
+
+// Текст низкоприоритетного сообщения
+const QString SystemStateViewModel::getInfoText() const
+{
+    return infoTextValue;
+}
+void SystemStateViewModel::setInfoText(const QString value)
+{
+    if (infoTextValue != value)
+    {
+        infoTextValue = value;
+        emit InfoTextChanged();
     }
 }
 

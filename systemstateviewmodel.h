@@ -100,11 +100,11 @@ class SystemStateViewModel : public QDeclarativeItem
 
     // Целевой Режим движения
     int driveModeTargetValue;
-    Q_PROPERTY(int DriveModeTarget READ getDriveModeTarget WRITE setDriveModeTarget NOTIFY DriveModeTargetChanged)
+    Q_PROPERTY(int DriveModeTarget READ getDriveModeTarget WRITE setDriveModeTarget NOTIFY driveModeTargetChanged)
 
     // Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
     int driveModeFactValue;
-    Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY DriveModeFactChanged)
+    Q_PROPERTY(int DriveModeFact READ getDriveModeFact WRITE setDriveModeFact NOTIFY driveModeFactChanged)
 
     bool ironWheelsValue;
     Q_PROPERTY(bool IronWheels READ getIronWheels WRITE setIronWheels NOTIFY IronWheelsChanged)
@@ -113,13 +113,21 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isVigilanceRequiredValue;
     Q_PROPERTY(bool IsVigilanceRequired READ getIsVigilanceRequired WRITE setIsVigilanceRequired NOTIFY IsVigilanceRequiredChanged)
 
+    // Тяга включена
+    bool isTractionOnValue;
+    Q_PROPERTY(bool IsTractionOn READ getIsTractionOn WRITE setIsTractionOn NOTIFY IsTractionOnChanged)
+
     // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
 
-    // Неведомо чудо
-    bool propertyViewValue;
-    Q_PROPERTY(bool PropertyView READ getPropertyView WRITE setPropertyView NOTIFY PropertyViewChanged)
+    // Текст высокоприоритетного сообщения
+    QString warningTextValue;
+    Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
+
+    // Текст низкоприоритетного сообщения
+    QString infoTextValue;
+    Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
 
     // private properties end
 
@@ -154,8 +162,10 @@ public:
     const int getDriveModeFact() const;
     const bool getIronWheels() const;
     const bool getIsVigilanceRequired() const;
+    const bool getIsTractionOn() const;
     const int getDirection() const;
-    const bool getPropertyView() const;
+    const QString getWarningText() const;
+    const QString getInfoText() const;
     // public properties getters end
 
 signals:
@@ -191,12 +201,14 @@ signals:
     void TimeChanged();
     void DateChanged();
     void IsRegistrationTapeActiveChanged();
-    void DriveModeTargetChanged();
-    void DriveModeFactChanged();
+    void driveModeTargetChanged();
+    void driveModeFactChanged();
     void IronWheelsChanged();
     void IsVigilanceRequiredChanged();
+    void IsTractionOnChanged();
     void DirectionChanged();
-    void PropertyViewChanged();
+    void WarningTextChanged();
+    void InfoTextChanged();
     // properties signals end
 
 public slots:
@@ -228,8 +240,10 @@ public slots:
     void setDriveModeFact(const int);
     void setIronWheels(const bool);
     void setIsVigilanceRequired(const bool);
+    void setIsTractionOn(const bool);
     void setDirection(const int);
-    void setPropertyView(const bool);
+    void setWarningText(const QString);
+    void setInfoText(const QString);
     // public properties setters end
     
 };

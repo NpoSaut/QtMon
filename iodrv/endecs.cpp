@@ -138,12 +138,12 @@ can_frame can_encoder::encode_ipd_state( double speed, int distance, bool reliab
 // 0 - A != B
 // 1 - success
 
-// IPD_STATE_A
+// SAUT_INFO_A
 int can_decoder::decode_speed(struct can_frame* frame, double* speed)
 {
-    /*if ((*frame).can_id != 0x0C4) return -1;
+    if ((*frame).can_id != 0x233) return -1;
 
-    (*speed) =(double)(   ( ((int)( (*frame).data[1] & 0b000000001 )) << 8 ) + (int)((*frame).data[2])   );*/
+    /*(*speed) =(double)(   ( ((int)( (*frame).data[1] & 0b000000001 )) << 8 ) + (int)((*frame).data[2])   );*/
 
     // SAUT_INFO_A
     /*double s1 = (double)((*frame).data[0]);
@@ -152,8 +152,8 @@ int can_decoder::decode_speed(struct can_frame* frame, double* speed)
     (*speed) = s1 + s2 + s3;*/
 
     int i0 = ((int)((*frame).data[0]) << 8) + ((int)((*frame).data[1]));
-    int i1 =( ((int)((*frame).data[1] & 0b00000001 )) << 15 ) + (i0 >> 1);
-    (*speed) = ((double)i0)/128;
+    int i1 = ((i0 & 0b00000001) << 15) + (i0 >> 1);
+    (*speed) = ((double)i1)/128;
 
     return 1;
 }
@@ -189,12 +189,12 @@ int can_decoder::decode_acceleration(struct can_frame* frame, double* accelerati
 }
 
 
-// MCO_STATE_A
-int can_decoder::decode_epv_state(struct can_frame* frame, int* epv_state)
+// MCO_LIMITS_A
+int can_decoder::decode_epv_released(struct can_frame* frame, int* epv_state)
 {
-    if ((*frame).can_id != 0x050) return -1;
+    if ((*frame).can_id != 0x052) return -1;
 
-    (*epv_state) = (int) ( ( (*frame).data[5] >> 5 ) & 0b00000001 );
+    (*epv_state) = (int) ( ! ( ( (*frame).data[7] >> 7 ) & 0b00000001 ));
 
     return 1;
 }
@@ -216,21 +216,24 @@ int can_decoder::decode_movement_direction(struct can_frame* frame, int* movemen
 {
     if ((*frame).can_id != 0x0C4) return -1;
 
-//    int stop_flag = (int) (( (*frame).data[1] >> 2 ) & 0b00000001 );
+    int stop_flag = (int) (( (*frame).data[1] >> 2 ) & 0b00000001 );
     int direction = (int) (( (*frame).data[1] >> 7 ) & 0b00000001 );
 
     // return -1 = назад, 0 = стоим, +1 = вперёд
-//    if (stop_flag == 0) // Стоим
-//    {
-//        (*movement_direction) = 0;
-//    }
-    if (direction == 1) // Едем вперёд
+    if (stop_flag == 0) // Стоим
     {
-        (*movement_direction) = 1;
+        (*movement_direction) = 0;
     }
-    else if (direction == 0) // Едем назад
+    else // Едем
     {
-        (*movement_direction) = -1;
+        if (direction == 0) // Едем вперёд
+        {
+            (*movement_direction) = 1;
+        }
+        else if (direction == 1) // Едем назад
+        {
+            (*movement_direction) = -1;
+        }
     }
 
     return 1;
@@ -271,7 +274,16 @@ int can_decoder::decode_passed_distance(struct can_frame* frame, int* passed_dis
 {
     if ((*frame).can_id != 0x0C4) return -1;
 
-    (*passed_distance) = (((int) (*frame).data[5]) << 16) + (((int) (*frame).data[3]) << 8) + ((int) (*frame).data[4]);
+    struct IntByBytes
+    {
+        int byte1: 8;
+        int byte2: 8;
+        int byte3: 8;
+        int byte4: 8;
+    };
+
+    IntByBytes dist = {frame->data[4], frame->data[3], frame->data[5], (frame->data[5] & (1 << 7)) ? 0xFF : 0};
+    (*passed_distance) = *((int *) &dist);
 
     return 1;
 }
@@ -355,9 +367,30 @@ int can_decoder::decode_pressure_tc_tm(struct can_frame* frame, double* pressure
 // VDS_STATE_A
 int can_decoder::decode_ssps_mode(struct can_frame* frame, int* ssps_mode)
 {
+    if ((*frame).can_id != 0x2E0) return -1;
+
+    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b00000001 );
+
+    return 1;
+}
+
+// MCO_STATE_A
+int can_decoder::decode_traction(struct can_frame* frame, int* in_traction)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    // Инвертирую для удобства.
+    (*in_traction) = (int) ( ! (( (*frame).data[0] >> 5 ) & 0b00000001 ) );
+
+    return 1;
+}
+
+// MCO_LIMITS_A
+int can_decoder::decode_is_on_road(struct can_frame* frame, int* is_on_road)
+{
     if ((*frame).can_id != 0x052) return -1;
 
-    (*ssps_mode) = (int) (( (*frame).data[1] ) & 0b01000000 );
+    (*is_on_road) = (int) (( (*frame).data[1] ) & 0b01000000 );
 
     return 1;
 }

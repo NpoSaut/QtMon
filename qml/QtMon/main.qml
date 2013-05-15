@@ -6,19 +6,12 @@ Rectangle {
     height: 480
     id: rootRect
 
-    state: "page1"
-
-    property int pageNum: 1
+    property int pageNum: 0
 
     property double maxSpeed: 60
 
-    function switchPage(i) {
-        if (i == 1) {
-            rootRect.state = "page1";
-        }
-        if (i == 2) {
-            rootRect.state = "page2";
-        }
+    function switchPage() {
+        pageNum = 1 - pageNum
     }
 
     function refreshAlsnState()
@@ -54,6 +47,19 @@ Rectangle {
     }
 
 
+    function getDriveModeLetter(driveModeIndex)
+    {
+        switch (driveModeIndex)
+        {
+            case -1: return "";
+            case 0: return "П";
+            case 1: return "М";
+            case 2: return "Р";
+            case 3: return "Д";
+            case 4: return "Т";
+        }
+    }
+
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
@@ -74,9 +80,9 @@ Rectangle {
             else
                 stateView.AlsnFreqTarget = 25;
         }
-        // Страница железнодорожного режима
+        // Кнопка смены режима движения (РМП)
         else if (!altMode && event.key == Qt.Key_F2) {
-            stateView.PropertyView = false;
+            stateView.ChangeDrivemodeButtonPressed();
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
@@ -84,12 +90,12 @@ Rectangle {
         }
         // Страница дорожного режима
         else if (!altMode && event.key == Qt.Key_F3) {
-            stateView.PropertyView = true;
+            switchPage();
         }
-        // Alt: Режим движения
+        // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
             //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
-            stateView.ChangeDrivemodeButtonPressed();
+            //stateView.ChangeDrivemodeButtonPressed();
         }
         // Включение альтернативного режим клавиш
         else if (event.key == Qt.Key_F4) {
@@ -102,13 +108,17 @@ Rectangle {
         if (event.key == Qt.Key_F4) {
             altMode = false;
         }
+        // Отпускание кнопки РМП
+        else if (!altMode && event.key == Qt.Key_F2) {
+            stateView.ChangeDrivemodeButtonReleased();
+        }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
             stateView.DisableRedButtonReleased();
         }
-        // Alt: Режим движения
+        // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
-            stateView.ChangeDrivemodeButtonReleased();
+            //stateView.ChangeDrivemodeButtonReleased();
         }
     }
 
@@ -116,38 +126,31 @@ Rectangle {
     SystemStateView {
         id: stateView
         objectName: "stateView"
-    }
 
+        onDriveModeFactChanged: {
+            if (stateView.DriveModeFact == stateView.DriveModeTarget)
+                pageNum = getDriveModeLetter(stateView.DriveModeFact) == "Т" ? 1 : 0
+        }
+    }
 
     states: [
         State {
             name: "page1"
-            when: (stateView.PropertyView == false)
-            PropertyChanges { target: page1indicator; width: 12 }
-            PropertyChanges { target: page2indicator; width: 6 }
+            when: pageNum == 0
             PropertyChanges { target: pagesContainer; y: 0 }
-
-            PropertyChanges { target: page2buttonHeader; anchors.rightMargin: 22 }
 
             PropertyChanges { target: speedBox; anchors.bottomMargin: -100 }
             PropertyChanges { target: graduateBar; opacity: 0 }
         },
         State {
             name: "page2"
-            when: (stateView.PropertyView == true)
-            PropertyChanges { target: page1indicator; width: 6 }
-            PropertyChanges { target: page2indicator; width: 12 }
+            when: pageNum == 1
             PropertyChanges { target: pagesContainer; y: -1 * pagesArea.height }
-
-            PropertyChanges { target: page1buttonHeader; anchors.rightMargin: 22 }
-            //PropertyChanges { target: page2buttonInfo; anchors.rightMargin: -20; opacity: 0.00 }
         }
     ]
 
     transitions: Transition {
         NumberAnimation { target: pagesContainer; properties: "y"; easing.type: Easing.InOutQuad; duration: 500 }
-        NumberAnimation { targets: [page1indicator, page2indicator]; properties: "width"; easing.type: Easing.InOutQuad; duration: 200 }
-        NumberAnimation { targets: [page1buttonHeader, page2buttonHeader]; properties: "anchors.rightMargin"; easing.type: Easing.InOutQuad; duration: 400 }
 
         NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
@@ -303,7 +306,8 @@ Rectangle {
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
                              anchors.verticalCenter: parent.verticalCenter
-                             text: qsTr(stateView.PressureTC + " МПа")
+                             //text: qsTr(stateView.PressureTC + " МПа")
+                             text: qsTr("--")
                              color: "#ffffffff"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
@@ -332,7 +336,8 @@ Rectangle {
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr(stateView.PressureTM + " МПа")
+                            //text: qsTr(stateView.PressureTM + " МПа")
+                            text: qsTr("--")
                             color: "#ffffffff"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -379,6 +384,8 @@ Rectangle {
                Row {
                    anchors.top: parent.top
                    anchors.topMargin: 18
+
+                   // Буква режима движения
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -387,15 +394,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: { switch (stateView.DriveModeFact)
-                                   {
-                                       case 0: return "П";
-                                       case 1: return "М";
-                                       case 2: return "Р";
-                                       case 3: return "Д";
-                                       case 4: return "Т";
-                                   }
-                                }
+                           text: getDriveModeLetter(stateView.DriveModeFact)
 
                            color: "#ffffffff"
                            font.pixelSize: 14
@@ -403,6 +402,7 @@ Rectangle {
                        }
                    }
 
+                   // Яйца
                    Rectangle {
                        color: "#20000000"
                        border.color: "#ffffff00"
@@ -413,6 +413,20 @@ Rectangle {
                            anchors.verticalCenter: parent.verticalCenter
                            source: "Slices/Registration-Type.png"
                            opacity: stateView.IsRegistrationTapeActive ? 1 : 0
+                       }
+                   }
+
+                   // Сигнал с небес (достоверность GPS)
+                   Rectangle {
+                       color: "#20000000"
+                       border.color: "#ffffff00"
+                       width: 21
+                       height: 20
+                       Image {
+                           anchors.horizontalCenter: parent.horizontalCenter
+                           anchors.verticalCenter: parent.verticalCenter
+                           source: "Slices/icon-gps-valid.png"
+                           opacity: stateView.SpeedFromSky >= 0 ? 1 : 0
                        }
                    }
                }
@@ -520,8 +534,9 @@ Rectangle {
 
                 // Стрелка спидометра
                 Image {
-                    source: "Slices/Needle-Speed.png"
-                    visible: stateView.SpeedIsValid
+                    source: stateView.SpeedIsValid ?
+                                "Slices/Needle-Speed.png" :
+                                "Slices/Needle-Speed-Invalid.png"
 
                     rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
                     smooth: true
@@ -541,7 +556,6 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
 
                     property double r: parent.tableRadius + 4
-                    //property double angle: speedometer.minAngle - (stateView.SpeedRestriction - 20) * speedometer.anglePerKph
                     property double angle: speedometer.minAngle - stateView.TargetSpeed * speedometer.anglePerKph
 
                     anchors.verticalCenterOffset: - r * Math.sin(angle)
@@ -593,6 +607,19 @@ Rectangle {
 
                     color: "#4999c9"
 
+                    // Индикатор отсутствия тяги вокруг кругляша скорости
+                    Rectangle {
+                        property int thick: 3
+                        z: parent.z - 5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: "#fff"
+                        width: parent.width + thick*2
+                        height: width
+                        radius: width/2
+                        visible: !stateView.IsTractionOn
+                    }
+
                     // Текущая скорость
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -625,16 +652,36 @@ Rectangle {
 
             // Треугольники направления движения
             Row {
-                spacing: 90
+                spacing: 30
                 anchors.horizontalCenter: speedometer.horizontalCenter
                 anchors.bottom: speedometer.bottom
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 30
 
+                // Направление вперёд
                 Image {
                     source: stateView.Direction == 1 ?
                                 "Slices/Direction-Forward.png" :
                                 "Slices/Direction-None.png";
                 }
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 16
+                    width: height
+                    radius: height / 2
+                    color: "#00000000"
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "STOP"
+                        color: "#fff"
+                        font.pixelSize: 16
+                        font.bold: true
+                        visible: false
+                    }
+                }
+
+                // Направление назад
                 Image {
                     source: stateView.Direction == -1 ?
                                 "Slices/Direction-Back.png" :
@@ -642,6 +689,66 @@ Rectangle {
                 }
             }
 
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 45
+                anchors.left: parent.left
+                anchors.leftMargin: 30
+                anchors.right: parent.right
+                anchors.rightMargin: 30
+                height: 50
+
+                opacity: warningLabel.text != "" ? 1 : 0
+                Behavior on opacity { PropertyAnimation { duration: 150 } }
+
+                radius: 5
+                color: "#303030"
+                border.color: "#222"
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 1
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: 1
+                    height: parent.height
+                    width: parent.width
+
+                    radius: parent.radius
+                    z: parent.z - 1
+                    color: "#00000000"
+                    border.color: "#80606060"
+                }
+
+                Text {
+                    id: warningLabel
+                    color: "#ff6200"
+                    font.family: "URW Gothic L";
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 36
+
+                    text:
+                    {
+                        if (stateView.WarningText != "") return stateView.WarningText
+                        if (!stateView.IsEpvReady) return "Система отключена"
+                        if (stateView.IsEpvReleased) return "Экстренное торможение"
+                        if (stateView.InfoText != "") return stateView.InfoText
+                        return "";
+                    }
+
+                    property bool isActive: false;
+                    opacity: 1.0 * isActive
+                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                    Timer {
+                        interval: 400
+                        running: parent.text != "" || parent.isActive
+                        repeat: true
+                        onTriggered: parent.isActive = !parent.isActive
+                    }
+                }
+            }
+
+            // Информационная строка
             Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom
@@ -828,6 +935,7 @@ Rectangle {
         }
 
         Rectangle {
+            id: leftBorder
             width: 6
             color: "#4999c9"
             anchors.right: parent.right
@@ -969,29 +1077,126 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.left: parent.left
 
+                // Содержимое кнопки смены режима движения
+                // (Кнопка РМП)
                 Rectangle {
-                    id: page1indicator
-                    width: 6
-                    color: "#4999c9"
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.top: parent.top
-                    anchors.topMargin: -1
-                }
-
-                Column {
                     id: page1buttonHeader
-                    anchors.right: parent.right
-                    anchors.rightMargin: 12
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: parent
                     visible: !altMode
+                    color: "#00000000"
 
-                    Text {
-                        color: "#ffffff"
-                        text: qsTr("Ж/Д")
-                        font.pointSize: 20
-                        font.family: "URW Gothic L"
+                    // Фон области индикаторов режима
+                    Image {
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "Slices/drivemode-bck.png"
+                    }
+
+                    // Индикаторы режима движения
+                    Column {
+                        id: drivemodeSwitch
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: 4
+                        spacing: 4
+
+                        Repeater {
+                            model: [ "П", "М", "Р", " ", "Т" ]
+                            Row {
+                                //height: 16
+                                spacing: 12
+                                Image {
+                                    visible: modelData != " "
+                                    source: "Slices/drivemode-led-" +
+                                            (getDriveModeLetter(stateView.DriveModeTarget) == modelData ? "" : "un") + "selected" +
+                                            (getDriveModeLetter(stateView.DriveModeFact) == modelData ? "-confirmed" : "") +
+                                            ".png"
+                                }
+                                Text {
+                                    visible: modelData != " "
+                                    color: modelData != "Т" ? "#ccc" : "#ffffff00"
+                                    text: modelData
+                                }
+
+                                // Заглушка - сепаратор
+                                Rectangle {
+                                    visible: modelData == " "
+                                    height: 3
+                                    width: 10
+                                    color: "#00000000"
+                                }
+                            }
+                        }
+                    }
+
+                    // Индикаторы режима
+                    Column {
+                        anchors.verticalCenter: drivemodeSwitch.verticalCenter
+                        anchors.left: drivemodeSwitch.right
+                        anchors.leftMargin: 3
+                        spacing: 4
+
+                        Repeater {
+                            model: [ "iron", "rubber" ]
+                            Row {
+                                Image {
+                                    source: "Slices/drivemode-wheels-mode-" +
+                                            modelData +
+                                            (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
+                                            ".png"
+                                }
+                                Row {
+                                    spacing: 3
+                                    anchors.bottom: parent.bottom
+                                    Image {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: "Slices/drivemode-wheels-indicator" +
+                                                (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
+                                                ".png"
+                                        Image {
+                                            source: "Slices/drivemode-wheels-icon-" +
+                                                    modelData +
+                                                    ".png"
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                        }
+                                    }
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        color: "#ccc"
+                                        text: {
+                                            switch(modelData)
+                                            {
+                                                case "iron": return "Ж/Д"
+                                                case "rubber": return "Дорожный"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Подпись кнопки РМП
+                    Column {
+                        anchors.top: parent.top
+                        anchors.topMargin: 15
+                        anchors.right: parent.right
+                        anchors.rightMargin: 22
+                        spacing: -4
+                        Text {
+                            anchors.right: parent.right
+                            color: "#ccc"
+                            text: "Режим"
+                            font.pixelSize: 20
+                            font.bold: true
+                        }
+                        Text {
+                            anchors.right: parent.right
+                            color: "#ccc"
+                            text: "движения"
+                            font.pixelSize: 14
+                        }
                     }
                 }
 
@@ -1021,28 +1226,47 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.left: parent.left
 
+                    // Переключатель страниц
                     Rectangle {
-                        id: page2indicator
-                        width: 6
-                        color: "#4999c9"
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: -3
-                        anchors.top: parent.top
-                        anchors.topMargin: 1
-                    }
-
-                    Column {
                         id: page2buttonHeader
-                        anchors.right: parent.right
-                        anchors.rightMargin: 14
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.fill: parent
+                        anchors.rightMargin: leftBorder.width
                         visible: !altMode
+                        clip: true
+                        color: "#00000000"
+
+                        Image {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.right
+                            source: "Slices/Panel-Left-PageSwitcher-FlipFlop.png"
+                            smooth: true
+
+                            rotation: { switch (pageNum)
+                                          {
+                                            case 0: return 0
+                                            case 1: return -90
+                                          }}
+                            Behavior on rotation { SmoothedAnimation { duration: 1000 } }
+                        }
 
                         Text {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 15
+                            anchors.top: parent.top
+                            anchors.topMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Дорожный")
-                            font.pointSize: 18
+                            text: qsTr("Карта")
+                            font.pointSize: 16
+                            font.family: "URW Gothic L"
+                        }
+                        Text {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 15
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 10
+                            color: "#ffffff"
+                            text: qsTr("Датчики")
+                            font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
 
@@ -1053,7 +1277,8 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        visible: altMode
+                        //visible: altMode
+                        visible: false
 
                         Text {
                             color: "#ffffff"
@@ -1291,78 +1516,88 @@ Rectangle {
         }
 
 
-        ListView {
-            id: lightsPanel
-            x: 7
-            y: 123
-            width: 54
-            height: 280
-            anchors.horizontalCenterOffset: 15
-            interactive: false
-            anchors.horizontalCenter: parent.horizontalCenter
+        // Светофор
+        Image {
+            id: name
+            source: "Slices/Panel-Right-Lightbox-Bck.png"
+            anchors.right: parent.right
+            anchors.rightMargin: getDriveModeLetter(stateView.DriveModeFact) != "Т" ? -3 : -width
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 55
+            Behavior on anchors.rightMargin { SmoothedAnimation { duration: 1000 } }
 
-            currentIndex: 2
-
-            delegate: Item {
-                height: 55
+            ListView {
+                id: lightsPanel
                 width: 54
+                height: 280
+                interactive: false
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 8
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: "#00000000"
+                currentIndex: 2
 
-                    Image {
-                        id: lightOffImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-Off.png"
-                    }
-                    Image {
-                        id: lightOnImage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/Light-" + name + ".png"
-                        opacity: 0
-                    }
+                delegate: Item {
+                    height: 55
+                    width: 54
 
-                    state: stateView.Light == permissiveIndex ? "On" : "Off"
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "#00000000"
 
-                    states: [
-                        State {
-                            name: "On"
-                            PropertyChanges { target: lightOnImage; opacity: 1 }
-                            PropertyChanges { target: lightOffImage; opacity: 0 }
-                        },
-                        State {
-                            name: "Off"
+                        Image {
+                            id: lightOffImage
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/Light-Off.png"
                         }
-                    ]
+                        Image {
+                            id: lightOnImage
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/Light-" + name + ".png"
+                            opacity: 0
+                        }
 
-                    transitions: Transition {
-                        NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
+                        state: stateView.Light == permissiveIndex ? "On" : "Off"
+
+                        states: [
+                            State {
+                                name: "On"
+                                PropertyChanges { target: lightOnImage; opacity: 1 }
+                                PropertyChanges { target: lightOffImage; opacity: 0 }
+                            },
+                            State {
+                                name: "Off"
+                            }
+                        ]
+
+                        transitions: Transition {
+                            NumberAnimation { targets: [lightOnImage, lightOffImage]; properties: "opacity"; easing.type: Easing.InQuad; duration: 300 }
+                        }
                     }
                 }
-            }
-            model: ListModel {
-                ListElement {
-                    name: "Green"
-                    permissiveIndex: 3
-                }
-                ListElement {
-                    name: "Yellow"
-                    permissiveIndex: 2
-                }
-                ListElement {
-                    name: "YellowRed"
-                    permissiveIndex: 1
-                }
-                ListElement {
-                    name: "Red"
-                    permissiveIndex: 0
-                }
-                ListElement {
-                    name: "White"
-                    permissiveIndex: -1
+                model: ListModel {
+                    ListElement {
+                        name: "Green"
+                        permissiveIndex: 3
+                    }
+                    ListElement {
+                        name: "Yellow"
+                        permissiveIndex: 2
+                    }
+                    ListElement {
+                        name: "YellowRed"
+                        permissiveIndex: 1
+                    }
+                    ListElement {
+                        name: "Red"
+                        permissiveIndex: 0
+                    }
+                    ListElement {
+                        name: "White"
+                        permissiveIndex: -1
+                    }
                 }
             }
         }

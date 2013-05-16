@@ -1131,16 +1131,16 @@ Rectangle {
                         Behavior on opacity { PropertyAnimation { duration: 100 } }
                         Behavior on anchors.leftMargin { PropertyAnimation { duration: 170 } }
                     }
-                    Timer {
-                        interval: 1000
-                        running: true
-                        repeat: true
-                        onTriggered:
-                        {
-                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
-                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
-                        }
-                    }
+//                    Timer {
+//                        interval: 1000
+//                        running: true
+//                        repeat: true
+//                        onTriggered:
+//                        {
+//                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
+//                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
+//                        }
+//                    }
                 }
 
             }

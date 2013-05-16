@@ -68,6 +68,9 @@ iodrv::iodrv(SystemStateViewModel *systemState)
     c_pressure_tm = -1;
     c_is_on_road = 1;
 
+    c_autolock_type = -1;
+    c_autolock_type_target = -1;
+
     p_speed = -1;
     p_speed_limit = -1;
     p_target_speed = -1;
@@ -84,6 +87,9 @@ iodrv::iodrv(SystemStateViewModel *systemState)
     p_pressure_tc = -1;
     p_pressure_tm = -1;
     p_is_on_road = -1;
+
+    p_autolock_type = -1;
+    p_autolock_type_target = -1;
 
     c_ssps_mode = -1; p_ssps_mode = -1;
 
@@ -207,6 +213,8 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_movement_direction(frame);
     decode_reg_tape_avl(frame);
 
+    decode_autolock_type(frame);
+
     decode_pressure_tc_tm(frame);
     decode_ssps_mode(frame);
     decode_traction(frame);
@@ -249,6 +257,44 @@ int iodrv::decode_speed_limit(struct can_frame* frame)
             p_speed_limit = c_speed_limit;
             break;
     }
+}
+
+int iodrv::decode_autolock_type(struct can_frame* frame)
+{
+    switch (can_decoder::decode_autolock_type(frame, &c_autolock_type))
+    {
+        case 1:
+            if ((p_autolock_type == -1) || (p_autolock_type != -1 && p_autolock_type != c_autolock_type))
+            {
+                emit signal_autolock_type(c_autolock_type);
+            }
+
+            if (c_autolock_type_target == p_autolock_type_target && c_autolock_type_target != c_autolock_type)
+            {
+
+                systemState->setWarningText ("!! " + QString::number(c_autolock_type, 'f', 2) + " " +
+                                              QString::number(p_autolock_type_target, 'f', 2) + " " +
+                                             QString::number(c_autolock_type_target, 'f', 2) + " !!" );
+                this->set_autolock_type(c_autolock_type_target);
+            }
+            else
+            {
+
+                systemState->setWarningText ( QString::number(c_autolock_type, 'f', 2) + " " +
+                                              QString::number(p_autolock_type_target, 'f', 2) + " " +
+                                              QString::number(c_autolock_type_target, 'f', 2) );
+            }
+
+            p_autolock_type_target = c_autolock_type_target;
+            p_autolock_type = c_autolock_type;
+            break;
+    }
+}
+
+int iodrv::set_autolock_type(int autolock_type)
+{
+    can_frame frame = can_encoder::encode_autolock_set_message (autolock_type);
+    write_canmsg_async (write_socket_0, &frame);
 }
 
 int iodrv::decode_target_speed(struct can_frame* frame)
@@ -751,6 +797,11 @@ void iodrv::slot_rmp_key_up()
     write_canmsg_async(write_socket_1, &frame);
 }
 
+void iodrv::slot_autolock_type_target_changed ()
+{
+    c_autolock_type_target = systemState->getAutolockTypeTarget ();
+}
+
 
 SpeedAgregator::SpeedAgregator()
     : currentSpeedFromEarth(-1), currentSpeedFromSky(-1), currentSpeedIsValid(false), onRails(true)
@@ -795,11 +846,7 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
     if ( onRails )
     {
 //        qDebug() << "on rails: " << currentSpeedFromEarth;
-        setSpeedIsValid( !(
-                        currentSpeedFromSky > minSpeedSkyAccount &&
-                        abs(currentSpeedFromSky - currentSpeedFromEarth) > maxAllowDeltaSpeed
-                            )
-                );
+        setSpeedIsValid( true );
         emit speedChanged(currentSpeedFromEarth);
     }
     else

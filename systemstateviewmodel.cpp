@@ -24,6 +24,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     lightValue = -2;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
+    autolockTypeTargetValue = -1;
+    autolockTypeFactValue = -1;
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
@@ -314,6 +316,34 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
     {
         alsnFreqFactValue = value;
         emit AlsnFreqFactChanged();
+    }
+}
+
+// Целевой тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeTarget() const
+{
+    return autolockTypeTargetValue;
+}
+void SystemStateViewModel::setAutolockTypeTarget(const int value)
+{
+    if (autolockTypeTargetValue != value)
+    {
+        autolockTypeTargetValue = value;
+        emit AutolockTypeTargetChanged();
+    }
+}
+
+// Фактический тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeFact() const
+{
+    return autolockTypeFactValue;
+}
+void SystemStateViewModel::setAutolockTypeFact(const int value)
+{
+    if (autolockTypeFactValue != value)
+    {
+        autolockTypeFactValue = value;
+        emit AutolockTypeFactChanged();
     }
 }
 

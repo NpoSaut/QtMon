@@ -21,6 +21,7 @@ public:
     static can_frame encode_sys_key(key_state k_state, int key_code);
     static can_frame encode_mm_data(int speed, int milage);
     static can_frame encode_ipd_state( double speed, int distance, bool reliable );
+    static can_frame encode_autolock_set_message (int autolock_type);
 };
 
 class can_decoder
@@ -50,6 +51,8 @@ public:
     static int decode_traction(struct can_frame* frame, int* in_traction);
 
     static int decode_is_on_road(struct can_frame* frame, int* is_on_road);
+
+    static int decode_autolock_type(struct can_frame* frame, int* autolock_type);
 };
 
 

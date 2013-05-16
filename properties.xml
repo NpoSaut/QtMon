@@ -33,6 +33,8 @@
     <Property type="int" name="Light" def="-2" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
     <Property type="int" name="AlsnFreqTarget" def="-1" description="Целевая Частота АЛСН"/>
     <Property type="int" name="AlsnFreqFact" def="-1" description="Фактическая Частота АЛСН" source="BVU_STATE_A"/>
+    <Property type="int" name="AutolockTypeTarget" def="-1" description="Целевой тип автоблокировки"/>
+    <Property type="int" name="AutolockTypeFact" def="-1" description="Фактический тип автоблокировки" source="MCO_MODE"/>
 
     <!-- Дата и время -->
     <Property type="QString" name="Time" def="&quot;-:-&quot;" description="Время" />

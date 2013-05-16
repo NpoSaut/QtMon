@@ -86,6 +86,14 @@ class SystemStateViewModel : public QDeclarativeItem
     int alsnFreqFactValue;
     Q_PROPERTY(int AlsnFreqFact READ getAlsnFreqFact WRITE setAlsnFreqFact NOTIFY AlsnFreqFactChanged)
 
+    // Целевой тип автоблокировки
+    int autolockTypeTargetValue;
+    Q_PROPERTY(int AutolockTypeTarget READ getAutolockTypeTarget WRITE setAutolockTypeTarget NOTIFY AutolockTypeTargetChanged)
+
+    // Фактический тип автоблокировки
+    int autolockTypeFactValue;
+    Q_PROPERTY(int AutolockTypeFact READ getAutolockTypeFact WRITE setAutolockTypeFact NOTIFY AutolockTypeFactChanged)
+
     // Время
     QString timeValue;
     Q_PROPERTY(QString Time READ getTime WRITE setTime NOTIFY TimeChanged)
@@ -155,6 +163,8 @@ public:
     const int getLight() const;
     const int getAlsnFreqTarget() const;
     const int getAlsnFreqFact() const;
+    const int getAutolockTypeTarget() const;
+    const int getAutolockTypeFact() const;
     const QString getTime() const;
     const QString getDate() const;
     const bool getIsRegistrationTapeActive() const;
@@ -198,6 +208,8 @@ signals:
     void LightChanged();
     void AlsnFreqTargetChanged();
     void AlsnFreqFactChanged();
+    void AutolockTypeTargetChanged();
+    void AutolockTypeFactChanged();
     void TimeChanged();
     void DateChanged();
     void IsRegistrationTapeActiveChanged();
@@ -233,6 +245,8 @@ public slots:
     void setLight(const int);
     void setAlsnFreqTarget(const int);
     void setAlsnFreqFact(const int);
+    void setAutolockTypeTarget(const int);
+    void setAutolockTypeFact(const int);
     void setTime(const QString);
     void setDate(const QString);
     void setIsRegistrationTapeActive(const bool);

@@ -14,6 +14,8 @@ Rectangle {
         pageNum = 1 - pageNum
     }
 
+    property int guryanovId: 0
+
     function refreshAlsnState()
     {
         alsnSelector.state = "alsn0"
@@ -104,6 +106,11 @@ Rectangle {
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
                 altMode = true;
+
+                var input = inputPositions
+                for (var i = 0; i < inputPositions.length; i++)
+                    input[input.length - i - 1] = Math.floor(guryanovId / Math.pow(10, i)) % 10;
+                inputPositions = input;
             }
         }
         else
@@ -128,6 +135,10 @@ Rectangle {
             if (event.key == Qt.Key_F4)
             {
                 inputMode = false
+                guryanovId = 0;
+                for (var i = 0; i < inputPositions.length; i++)
+                    guryanovId += Math.pow(10, i) * inputPositions[inputPositions.length - i - 1];
+                driverIdSegments = inputPositions;
             }
         }
     }
@@ -188,6 +199,7 @@ Rectangle {
     property int inputCursorIndex: 0
     property int inputPositionsCount: 6
     property variant inputPositions: [0, 0, 0, 0, 0, 0]
+    property variant driverIdSegments: [0, 0, 0, 0, 0, 0]
 
     Rectangle {
         id: pagesArea
@@ -1735,6 +1747,36 @@ Rectangle {
                         permissiveIndex: -1
                     }
                 }
+            }
+        }
+
+        Column {
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: 5
+            anchors.rightMargin: 10
+            Text {
+                text: "Номер машиниста"
+                font.pixelSize: 10
+                color: "#ccc"
+            }
+            Row {
+                Repeater {
+                    model: driverIdSegments
+                    Text {
+                        text: modelData
+                        font.pixelSize: 25
+                        font.family: "URW Gothic L"
+                        color: "#ccc"
+                    }
+                }
+            }
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 4
+                radius: 2
+                color: "#ccc"
             }
         }
 

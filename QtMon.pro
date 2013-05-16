@@ -1,5 +1,5 @@
 # Add more folders to ship with the application, here
-folder_01.source = qml/QtMon/
+folder_01.source = qml/QtMon
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
@@ -37,9 +37,10 @@ HEADERS += \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h
 
-CONFIG += console \
-    serialport
+CONFIG += console
 
 #QMAKE_CXXFLAGS += -std=c++11
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
+
+unix:!macx:!symbian|win32: LIBS += -lQtSerialPort

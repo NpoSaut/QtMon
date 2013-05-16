@@ -15,7 +15,7 @@
 #include <QTextStream>
 
 #ifdef WITH_SERIALPORT
-QT_USE_NAMESPACE_SERIALPORT
+QT_USE_NAMESPACE
 #endif
 
 enum gps_data_source
@@ -37,7 +37,8 @@ public:
     int start(char* can_iface_name_0, char* can_iface_name_1, gps_data_source gps_datasource = gps);
 
 signals:
-    // Сигналы вызываются немедленно или у них есть внутренняя очередь, так что они могут передать изменённое значение?
+    // Сигналы вызываются немедленно или у них есть внутренняя очередь, так что они могут передать изменённое значение
+
     //Скорость и ограничения
     void signal_speed_earth(double speed);
     void signal_speed_sky(double speed);
@@ -45,7 +46,7 @@ signals:
     void signal_target_speed(int target_speed);
     void signal_acceleration(double acceleration);
     //Состояние системы
-    void signal_epv_state(bool epv_state);
+    void signal_epv_released(bool epv_state);
     void signal_epv_key(bool epv_key);
     //Одометр
     void signal_passed_distance(int passed_distance);
@@ -58,10 +59,14 @@ signals:
     void signal_movement_direction(int movement_direction);
     void signal_reg_tape_avl(bool reg_tape_avl);
 
+    void signal_autolock_type(int autolock_type);
+
     void signal_pressure_tc(QString pressure_tc);
     void signal_pressure_tm(QString pressure_tm);
-    void signal_ssps_mode(bool ssps_mode);
-
+    void signal_is_on_road(bool is_on_road);
+    void signal_ssps_mode(int ssps_mode);
+    void signal_traction(bool in_traction);
+    void signal_iron_wheels(bool iron_wheels);
 
     void signal_lat(double lat);
     void signal_lon(double lon);
@@ -75,6 +80,7 @@ public slots:
     void slot_vk_key_up();
     void slot_rmp_key_down();
     void slot_rmp_key_up();
+    void slot_autolock_type_target_changed();
 
 private slots:
     void slot_serial_ready_read();
@@ -119,9 +125,12 @@ private:
     int c_vigilance;
     int c_reg_tape_avl;
 
+    int c_autolock_type;
+    int c_autolock_type_target;
+
     double c_pressure_tc;
     double c_pressure_tm;
-    int c_ssps_mode;
+    int c_is_on_road;
 
 
     double p_speed;
@@ -140,9 +149,15 @@ private:
     int p_vigilance;
     int p_reg_tape_avl;
 
+    int p_autolock_type;
+    int p_autolock_type_target;
+
     double p_pressure_tc;
     double p_pressure_tm;
-    int p_ssps_mode;
+    int p_is_on_road;
+
+    int c_ssps_mode; int p_ssps_mode;
+    int c_in_traction; int p_in_traction;
 
 
     int decode_speed(struct can_frame* frame);
@@ -163,12 +178,20 @@ private:
     int decode_reg_tape_avl(struct can_frame* frame);
 
     int decode_pressure_tc_tm(struct can_frame* frame);
+
     int decode_ssps_mode(struct can_frame* frame);
+    int decode_traction(struct can_frame* frame);
+
+    int decode_is_on_road(struct can_frame* frame);
+
+    int decode_autolock_type(struct can_frame* frame);
+    int set_autolock_type(int autolock_type);
 
     int process_can_messages(struct can_frame* frame);
 
+
 #ifdef WITH_SERIALPORT
-    SerialPort serial_port;
+    QSerialPort serial_port;
 #endif
     int init_serial_port();
 
@@ -219,6 +242,58 @@ private:
 
     void getNewSpeed (double speedFromSky, double speedFromEarth);
     void setSpeedIsValid (bool isValid);
+};
+
+
+
+
+/*class rmp_revolver : public QObject
+{
+    //Q_OBJECT
+
+public:
+    //void request_driving_mode(int requesting_driving_mode, int current_ssps_mode);
+
+
+//private:
+};*/
+
+class rmp_key_handler : public QObject
+{
+    Q_OBJECT
+
+public:
+    rmp_key_handler();
+
+private:
+    int get_next_driving_mode(int driving_mode, int ssps_mode);
+
+    int previous_ssps_mode;
+    int actual_ssps_mode;
+    int previous_driving_mode;
+    int actual_driving_mode;
+    int target_driving_mode;
+    int req_count;
+    void request_next_driving_mode();
+    void request_driving_mode(int driving_mode);
+
+    bool start;
+
+public slots:
+    // Interface
+    void rmp_key_pressed();
+    // IO
+    void ssps_mode_received(int actual_ssps_mode);
+    void driving_mode_received(int driving_mode);
+
+signals:
+    // Interface
+    void target_driving_mode_changed(int driving_mode);
+    void actual_driving_mode_changed(int driving_mode);
+    // Interface, IO
+    // void driving_mode_request_failed();
+    // IO
+    void rmp_key_pressed_send();
 };
 
 #endif // IODRV_H

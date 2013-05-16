@@ -21,6 +21,7 @@ public:
     static can_frame encode_sys_key(key_state k_state, int key_code);
     static can_frame encode_mm_data(int speed, int milage);
     static can_frame encode_ipd_state( double speed, int distance, bool reliable );
+    static can_frame encode_autolock_set_message (int autolock_type);
 };
 
 class can_decoder
@@ -35,7 +36,7 @@ public:
     static int decode_trafficlight_light(struct can_frame* frame, int* trafficlight_light);
     static int decode_trafficlight_freq(struct can_frame* frame, int* trafficlight_freq);
     static int decode_passed_distance(struct can_frame* frame, int* passed_distance);
-    static int decode_epv_state(struct can_frame* frame, int* epv_state);
+    static int decode_epv_released(struct can_frame* frame, int* epv_state);
     static int decode_epv_key(struct can_frame* frame, int* epv_key);
     static int decode_mm_lat_lon(struct can_frame* frame, double* lat, double* lon);
     static int decode_ipd_date(struct can_frame* frame, int* ipd_year, int* ipd_month, int* ipd_day, int* ipd_hours, int* ipd_minutes, int* ipd_seconds);
@@ -45,7 +46,13 @@ public:
     static int decode_reg_tape_avl(struct can_frame* frame, int* reg_tape_avl);
 
     static int decode_pressure_tc_tm(struct can_frame* frame, double* pressure_tc, double* pressure_tm);
+
     static int decode_ssps_mode(struct can_frame* frame, int* ssps_mode);
+    static int decode_traction(struct can_frame* frame, int* in_traction);
+
+    static int decode_is_on_road(struct can_frame* frame, int* is_on_road);
+
+    static int decode_autolock_type(struct can_frame* frame, int* autolock_type);
 };
 
 

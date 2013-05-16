@@ -6,7 +6,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init start
     speedValue = 0;
     speedIsValidValue = false;
-    speedFromSkyValue = 0;
+    speedFromSkyValue = -1;
     speedFromEarthValue = 0;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
@@ -24,14 +24,19 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     lightValue = -2;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
+    autolockTypeTargetValue = -1;
+    autolockTypeFactValue = -1;
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
     driveModeTargetValue = 0;
-    driveModeFactValue = 0;
+    driveModeFactValue = -1;
+    ironWheelsValue = true;
     isVigilanceRequiredValue = true;
+    isTractionOnValue = false;
     directionValue = 0;
-    propertyViewValue = false;
+    warningTextValue = "";
+    infoTextValue = "";
     // fileds init end
 }
 
@@ -314,6 +319,34 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
     }
 }
 
+// Целевой тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeTarget() const
+{
+    return autolockTypeTargetValue;
+}
+void SystemStateViewModel::setAutolockTypeTarget(const int value)
+{
+    if (autolockTypeTargetValue != value)
+    {
+        autolockTypeTargetValue = value;
+        emit AutolockTypeTargetChanged();
+    }
+}
+
+// Фактический тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeFact() const
+{
+    return autolockTypeFactValue;
+}
+void SystemStateViewModel::setAutolockTypeFact(const int value)
+{
+    if (autolockTypeFactValue != value)
+    {
+        autolockTypeFactValue = value;
+        emit AutolockTypeFactChanged();
+    }
+}
+
 // Время
 const QString SystemStateViewModel::getTime() const
 {
@@ -366,7 +399,7 @@ void SystemStateViewModel::setDriveModeTarget(const int value)
     if (driveModeTargetValue != value)
     {
         driveModeTargetValue = value;
-        emit DriveModeTargetChanged();
+        emit driveModeTargetChanged();
     }
 }
 
@@ -380,7 +413,20 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     if (driveModeFactValue != value)
     {
         driveModeFactValue = value;
-        emit DriveModeFactChanged();
+        emit driveModeFactChanged();
+    }
+}
+
+const bool SystemStateViewModel::getIronWheels() const
+{
+    return ironWheelsValue;
+}
+void SystemStateViewModel::setIronWheels(const bool value)
+{
+    if (ironWheelsValue != value)
+    {
+        ironWheelsValue = value;
+        emit IronWheelsChanged();
     }
 }
 
@@ -398,6 +444,20 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
     }
 }
 
+// Тяга включена
+const bool SystemStateViewModel::getIsTractionOn() const
+{
+    return isTractionOnValue;
+}
+void SystemStateViewModel::setIsTractionOn(const bool value)
+{
+    if (isTractionOnValue != value)
+    {
+        isTractionOnValue = value;
+        emit IsTractionOnChanged();
+    }
+}
+
 // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
 const int SystemStateViewModel::getDirection() const
 {
@@ -412,17 +472,31 @@ void SystemStateViewModel::setDirection(const int value)
     }
 }
 
-// Неведомо чудо
-const bool SystemStateViewModel::getPropertyView() const
+// Текст высокоприоритетного сообщения
+const QString SystemStateViewModel::getWarningText() const
 {
-    return propertyViewValue;
+    return warningTextValue;
 }
-void SystemStateViewModel::setPropertyView(const bool value)
+void SystemStateViewModel::setWarningText(const QString value)
 {
-    if (propertyViewValue != value)
+    if (warningTextValue != value)
     {
-        propertyViewValue = value;
-        emit PropertyViewChanged();
+        warningTextValue = value;
+        emit WarningTextChanged();
+    }
+}
+
+// Текст низкоприоритетного сообщения
+const QString SystemStateViewModel::getInfoText() const
+{
+    return infoTextValue;
+}
+void SystemStateViewModel::setInfoText(const QString value)
+{
+    if (infoTextValue != value)
+    {
+        infoTextValue = value;
+        emit InfoTextChanged();
     }
 }
 

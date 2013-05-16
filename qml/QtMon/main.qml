@@ -63,7 +63,7 @@ Rectangle {
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
-    property bool altMode: true
+    property bool altMode: false
 
     Keys.onPressed: {
         // Переключение частоты АЛСН

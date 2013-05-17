@@ -67,6 +67,8 @@ Rectangle {
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
     property bool altMode: false
 
+    property bool inputCursorPressed: false
+
     Keys.onPressed: {
         // Переключение частоты АЛСН
         if (!inputMode)
@@ -117,6 +119,7 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
+                inputCursorPressed = true;
                 inputCursorIndex++;
                 if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
             }
@@ -158,6 +161,10 @@ Rectangle {
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
+        }
+        if (event.key == Qt.Key_F1)
+        {
+            inputCursorPressed = false;
         }
     }
 
@@ -939,37 +946,6 @@ Rectangle {
             onReleased: swipeReleased(mouseY)
         }
 
-        Rectangle {
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: "#e0202020"
-            border.color: "#f03050ff"
-            width: 300
-            height: 70
-            visible: inputMode
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 3
-                Repeater {
-                    model: inputPositions
-                    Rectangle {
-                        //anchors.verticalCenter: parent.verticalCenter
-                        color: "#d0ffffff"
-                        border.color: inputCursorIndex == index ? "#ffff0000" : "#ff000000"
-                        border.width: inputCursorIndex == index ? 2 : 1
-                        width: 30
-                        height: 50
-                        Text {
-                            text: modelData
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: 36
-                        }
-                    }
-                }
-            }
-        }
     }
 
 
@@ -1780,6 +1756,78 @@ Rectangle {
             }
         }
 
+    }
+
+
+    Rectangle {
+        anchors.fill: rootRect
+        color: "#ccc"
+        opacity: inputMode ? 0.5 : 0
+        Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+    }
+
+    Column {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: inputMode ? 0 : -width
+        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 300 } }
+        spacing: 20
+        Repeater {
+            model: ["Выб.", "+", "-", "OK"]
+            Rectangle {
+                height: (rootRect.height) / 4 - 20
+                width: height
+                //radius: width / 2
+                radius: 5
+                color: "#e0202020"
+                border.color: "#f03050ff"
+                anchors.horizontalCenter: parent.left
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.horizontalCenter
+                    anchors.leftMargin: 4
+                    text: modelData
+                    font.pixelSize: 14
+                    font.bold: true
+                    color: "#ccc"
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        anchors.top: parent.top
+        anchors.topMargin: -5
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: "#e0202020"
+        border.color: "#f03050ff"
+        width: 300
+        height: 75
+        radius: 5
+        visible: inputMode
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 3
+            Repeater {
+                model: inputPositions
+                Rectangle {
+                    //anchors.verticalCenter: parent.verticalCenter
+                    color: "#d0ffffff"
+                    border.color: inputCursorIndex == index ? "#ffff0000" : "#ff000000"
+                    border.width: inputCursorIndex == index ? 2 : 1
+                    Behavior on border.width { SmoothedAnimation { duration: 50 } }
+                    width: 30
+                    height: 50
+                    Text {
+                        text: modelData
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 36
+                    }
+                }
+            }
+        }
     }
 
 }

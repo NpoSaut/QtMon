@@ -53,4 +53,4 @@ CONFIG += console
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
 
-unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
+#unix:!macx:!symbian|win32: LIBS += -lQtSerialPort

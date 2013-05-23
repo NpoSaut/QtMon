@@ -309,8 +309,7 @@ Rectangle {
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
                              anchors.verticalCenter: parent.verticalCenter
-                             //text: qsTr(stateView.PressureTC + " МПа")
-                             text: qsTr("--")
+                             text: qsTr(stateView.PressureTC + " МПа")
                              color: "#ffffffff"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
@@ -339,8 +338,7 @@ Rectangle {
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            //text: qsTr(stateView.PressureTM + " МПа")
-                            text: qsTr("--")
+                            text: qsTr(stateView.PressureTM + " МПа")
                             color: "#ffffffff"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -1115,7 +1113,7 @@ Rectangle {
                         anchors.topMargin: 4
                         anchors.leftMargin: autolockSelector.itemWidth * (0.5 + stateView.AutolockTypeTarget) + autolockSelector.spacing * stateView.AutolockTypeTarget
 
-                        property bool show: altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget
+                        property bool show: (altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget) && stateView.AutolockTypeTarget >= 0
 
                         Image {
                             anchors.verticalCenter: parent.verticalCenter

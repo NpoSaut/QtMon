@@ -2,6 +2,7 @@
 
 using namespace Navigation;
 
-RouteSection::RouteSection()
+RouteSection::RouteSection(int id)
 {
+    RouteSection::id = id;
 }

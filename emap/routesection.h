@@ -12,8 +12,13 @@ namespace Navigation
 class RouteSection
 {
 public:
-    RouteSection();
+    RouteSection(int id);
     std::vector<KilometerPost> Posts;
+
+    inline bool operator == (const RouteSection &s)    { return id == s.id; }
+    inline bool operator != (const RouteSection &s)    { return !(*this == s); }
+
+    int id;
 };
 
 }

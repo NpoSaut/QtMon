@@ -23,8 +23,8 @@ SOURCES += main.cpp \
     electroincmap.cpp \
     emap/kilometerpost.cpp \
     emap/routesection.cpp \
-    emap/object.cpp \
-    emap/rail.cpp
+    emap/rail.cpp \
+    emap/railobject.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -45,8 +45,8 @@ HEADERS += \
     emap/kilometerpost.h \
     emap/routesection.h \
     emap/almanac.h \
-    emap/object.h \
-    emap/rail.h
+    emap/rail.h \
+    emap/railobject.h
 
 CONFIG += console
 

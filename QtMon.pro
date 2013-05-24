@@ -22,9 +22,9 @@ SOURCES += main.cpp \
     iodrv/iodrv.cpp \
     electroincmap.cpp \
     emap/kilometerpost.cpp \
-    emap/greentrack.cpp \
-    emap/trackobject.cpp \
-    emap/routesection.cpp
+    emap/routesection.cpp \
+    emap/object.cpp \
+    emap/rail.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -43,13 +43,14 @@ HEADERS += \
     iodrv/iodrv.h \
     electroincmap.h \
     emap/kilometerpost.h \
-    emap/greentrack.h \
-    emap/trackobject.h \
-    emap/routesection.h
+    emap/routesection.h \
+    emap/almanac.h \
+    emap/object.h \
+    emap/rail.h
 
 CONFIG += console
 
-#QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++0x
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
 

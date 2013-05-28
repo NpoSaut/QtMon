@@ -3,6 +3,8 @@
 
 #include <QDeclarativeItem>
 
+#include "iodrv/modulesactivity.h"
+
 class SystemStateViewModel : public QDeclarativeItem
 {
     Q_OBJECT
@@ -69,6 +71,10 @@ class SystemStateViewModel : public QDeclarativeItem
     // Признак срыва ЭПК
     bool isEpvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
+
+    // Активность модулей
+    QString modulesActivityStringValue;
+    Q_PROPERTY(QString ModulesActivityString READ getModulesActivityString WRITE setModulesActivityString NOTIFY ModulesActivityStringChanged)
 
     // Проиденное расстояние
     int milageValue;
@@ -159,6 +165,7 @@ public:
     const bool getIsPressureOk() const;
     const bool getIsEpvReady() const;
     const bool getIsEpvReleased() const;
+    const QString getModulesActivityString() const;
     const int getMilage() const;
     const int getLight() const;
     const int getAlsnFreqTarget() const;
@@ -204,6 +211,7 @@ signals:
     void IsPressureOkChanged();
     void IsEpvReadyChanged();
     void IsEpvReleasedChanged();
+    void ModulesActivityStringChanged();
     void MilageChanged();
     void LightChanged();
     void AlsnFreqTargetChanged();
@@ -241,6 +249,7 @@ public slots:
     void setIsPressureOk(const bool);
     void setIsEpvReady(const bool);
     void setIsEpvReleased(const bool);
+    void setModulesActivityString(const QString);
     void setMilage(const int);
     void setLight(const int);
     void setAlsnFreqTarget(const int);

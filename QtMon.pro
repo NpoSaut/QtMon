@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     emap/routesection.cpp \
     emap/rail.cpp \
     emap/railobject.cpp \
-    emap/emaptarget.cpp
+    emap/emaptarget.cpp \
+    iodrv/emapcanemitter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -49,7 +50,8 @@ HEADERS += \
     emap/rail.h \
     emap/railobject.h \
     packing.h \
-    emap/emaptarget.h
+    emap/emaptarget.h \
+    iodrv/emapcanemitter.h
 
 CONFIG += console
 

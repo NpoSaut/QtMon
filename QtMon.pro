@@ -19,7 +19,14 @@ SOURCES += main.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
     iodrv/sktcan.cpp \
-    iodrv/iodrv.cpp
+    iodrv/iodrv.cpp \
+    electroincmap.cpp \
+    emap/kilometerpost.cpp \
+    emap/routesection.cpp \
+    emap/rail.cpp \
+    emap/railobject.cpp \
+    emap/emaptarget.cpp \
+    iodrv/emapcanemitter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -35,11 +42,20 @@ HEADERS += \
     iodrv/sktcan.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
-    iodrv/iodrv.h
+    iodrv/iodrv.h \
+    electroincmap.h \
+    emap/kilometerpost.h \
+    emap/routesection.h \
+    emap/almanac.h \
+    emap/rail.h \
+    emap/railobject.h \
+    packing.h \
+    emap/emaptarget.h \
+    iodrv/emapcanemitter.h
 
 CONFIG += console
 
-#QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++0x
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
 

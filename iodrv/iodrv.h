@@ -3,16 +3,15 @@
 #ifndef IODRV_H
 #define IODRV_H
 
-//!!!!! TODO: ВРЕМЕННО
-#include "systemstateviewmodel.h"
-
+#include <QFile>
+#include <QTextStream>
 
 #include "iodrvmain.h"
 #include "sktcan.h"
 #include "endecs.h"
 
-#include <QFile>
-#include <QTextStream>
+//!!!!! TODO: ВРЕМЕННО
+#include "systemstateviewmodel.h"
 
 #ifdef WITH_SERIALPORT
 QT_USE_NAMESPACE
@@ -81,6 +80,8 @@ public slots:
     void slot_rmp_key_down();
     void slot_rmp_key_up();
     void slot_autolock_type_target_changed();
+    void slot_write_can0_message(can_frame frame);
+    void slot_write_can1_message(can_frame frame);
 
 private slots:
     void slot_serial_ready_read();
@@ -222,8 +223,8 @@ class SpeedAgregator: public QObject
 public:
     SpeedAgregator();
 
-    static const double minSpeedSkyAccount = 8;
-    static const double maxAllowDeltaSpeed = 4;
+    static constexpr double minSpeedSkyAccount = 8;
+    static constexpr double maxAllowDeltaSpeed = 4;
 
 public slots:
     void getSpeedFromSky (double speed);

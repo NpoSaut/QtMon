@@ -5,6 +5,7 @@
 #include <QString>
 
 #include "almanac.h"
+#include "packing.h"
 
 namespace Navigation
 {
@@ -14,7 +15,11 @@ class RailObject
 
 public:
     RailObject ()
-        : parentRail (nullptr), ordinate (0)
+        : parentRail (nullptr), ordinate (0),
+          alsnFreq(0), alsEn(false), length(0), speedRestriction(0),
+          conditionallyAllowForFreightTrain(false), radioChannel(false),
+          pullforthForFreightTrain(false), pullforthForPassengerTrain(false),
+          name ()
     {}
 
     static RailObject *loadFrom (QByteArray rawData, int offset, int index);
@@ -55,24 +60,25 @@ private:
     bool pullforthForPassengerTrain;
     QString name;
 
+    PACKED (
     struct RawObjectData
     {
-        unsigned int type                       :8;     // 1
-        unsigned int length                     :16;    // 2
-        unsigned int                            :8;     // 3
+        unsigned char type                      :8;     // 1
+        unsigned short length                   :16;    // 2
+        unsigned char                           :8;     // 3
 
-        unsigned int                            :4;     // 4
-        unsigned int pullforthForFreightTrain   :1;
-        unsigned int alsEn                      :1;
-        unsigned int pullforthForPassengerTrain :1;
-        unsigned int radioOrConditionallyAllow  :1;
+        unsigned char                           :4;     // 4
+        bool pullforthForFreightTrain           :1;
+        bool alsEn                              :1;
+        bool pullforthForPassengerTrain         :1;
+        bool radioOrConditionallyAllow          :1;
 
-        unsigned int speedRestriction           :8;     // 5
-        unsigned int alsnFreq                   :8;     // 6
+        unsigned char speedRestriction          :8;     // 5
+        unsigned char alsnFreq                  :8;     // 6
         unsigned int ordinate                   :8*3;   // 7
         char         name                       [8];
-    } __attribute__((packed));
-    static constexpr size_t rawObjectDataSize = 20;
+    });
+    static const int rawObjectDataSize = 20;
 };
 
 }

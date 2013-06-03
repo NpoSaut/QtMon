@@ -24,9 +24,12 @@ public:
     void setKilometerPost (KilometerPost *kilometerPost) { Rail::kilometerPost = kilometerPost; }
     KilometerPost *getKilometerPost () const { return kilometerPost; }
 
+    KilometerIncreaseDirectoin direction;
+
     const vector<RailObject *> &getObjects () const { return objects; }
     unsigned int getNumber () const { return number; }
     bool isExist () const { return existence; }
+    static KilometerIncreaseDirectoin getDirectoin(int railNumber);
 
 private:
     KilometerPost *kilometerPost;
@@ -34,12 +37,13 @@ private:
     unsigned int number;
     bool existence;
 
+    PACKED(
     struct RawRailData
     {
-        unsigned int number                 :8      ;
-        unsigned int childObjectsCount      :8      ;
+        char number                         :8      ;
+        char childObjectsCount              :8      ;
         unsigned int childObjectsAddress    :3*8    ;
-    } __attribute__((packed));
+    });
     static const int RawRailDataSize = 5;
 };
 

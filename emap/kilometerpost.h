@@ -13,8 +13,6 @@ namespace Navigation
 {
 
 enum KilometerPostPosition { kpp_start = 1, kpp_middle = 0, kpp_end = 2 };
-enum KilometerIncreaseDirectoin { kid_increase = 1, kid_decrease = -1 };
-
 class KilometerPost
 {
 public:
@@ -30,6 +28,7 @@ public:
     KilometerIncreaseDirectoin direction;
     std::map<int, Rail *> rails;
 
+    double distanceTo(KilometerPost p2);
     double distanceTo(double to_lat, double to_lon);
     double estimateDistanceTo(KilometerPost p2);
     double estimateDistanceTo(double to_lat, double to_lon);

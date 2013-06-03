@@ -5,15 +5,22 @@
 
 #include "kilometerpost.h"
 #include "rail.h"
+#include "packing.h"
 
 using namespace Navigation;
 
 
 // Представление километрового столба
 KilometerPost::KilometerPost()
+    : lat(0), lon(0), ordinate(0), sectionId(0),
+      position(), direction(), rails()
 {
 }
 
+double KilometerPost::distanceTo(KilometerPost p2)
+{
+    return distanceTo(p2.lat, p2.lon);
+}
 double KilometerPost::distanceTo(double to_lat, double to_lon)
 {
     return distanceBetween(lat, lon, to_lat, to_lon);
@@ -35,6 +42,7 @@ double KilometerPost::radian(double gradus)
 }
 
 // Структура, описывающая формат хранение электронного столба
+PACKED(
 struct GreenPost
 {
     unsigned int ordinate            :8*3;
@@ -45,7 +53,7 @@ struct GreenPost
     unsigned int latitudeCode        :8*4;
     unsigned int longitudeCode       :8*4;
     unsigned int trackAddress        :8*3;
-} __attribute__((packed));
+});
 const int GreenPostSize = 15;
 
 KilometerPost *KilometerPost::loadFrom(const QByteArray& data, int offset, int index)

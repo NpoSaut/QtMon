@@ -35,7 +35,8 @@ HEADERS += \
     iodrv/sktcan.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
-    iodrv/iodrv.h
+    iodrv/iodrv.h \
+    masqarade.h
 
 CONFIG += console
 
@@ -43,4 +44,4 @@ CONFIG += console
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
 
-unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
+#unix:!macx:!symbian|win32: LIBS += -lQtSerialPort

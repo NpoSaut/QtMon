@@ -358,8 +358,7 @@ Rectangle {
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
                              anchors.verticalCenter: parent.verticalCenter
-                             //text: qsTr(stateView.PressureTC + " МПа")
-                             text: qsTr("--")
+                             text: qsTr(stateView.PressureTC + " МПа")
                              color: "#ffffffff"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
@@ -388,8 +387,7 @@ Rectangle {
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            //text: qsTr(stateView.PressureTM + " МПа")
-                            text: qsTr("--")
+                            text: qsTr(stateView.PressureTM + " МПа")
                             color: "#ffffffff"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"

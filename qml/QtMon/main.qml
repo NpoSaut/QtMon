@@ -205,8 +205,8 @@ Rectangle {
     property bool inputMode: false
     property int inputCursorIndex: 0
     property int inputPositionsCount: 6
-    property variant inputPositions: [0, 0, 0, 0, 0, 0]
-    property variant driverIdSegments: [0, 0, 0, 0, 0, 0]
+    property variant inputPositions: [0, 0, 0, 0, 0, 0, 0, 0]
+    property variant driverIdSegments: [0, 0, 0, 0, 0, 0, 0, 0]
 
     Rectangle {
         id: pagesArea
@@ -1723,45 +1723,17 @@ Rectangle {
                 }
             }
         }
-
-        Column {
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.bottomMargin: 5
-            anchors.rightMargin: 10
-            Text {
-                text: "Номер машиниста"
-                font.pixelSize: 10
-                color: "#ccc"
-            }
-            Row {
-                Repeater {
-                    model: driverIdSegments
-                    Text {
-                        text: modelData
-                        font.pixelSize: 25
-                        font.family: "URW Gothic L"
-                        color: "#ccc"
-                    }
-                }
-            }
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 4
-                radius: 2
-                color: "#ccc"
-            }
-        }
-
     }
 
 
     Rectangle {
         anchors.fill: rootRect
-        color: "#ccc"
-        opacity: inputMode ? 0.5 : 0
-        Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+        color: "#00000000"
+        Image {
+            source: "Slices/InputMode-Background.png"
+            opacity: inputMode ? 1 : 0
+            Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+        }
     }
 
     Column {
@@ -1769,63 +1741,318 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: inputMode ? 0 : -width
         Behavior on anchors.leftMargin { SmoothedAnimation { duration: 300 } }
-        spacing: 20
         Repeater {
-            model: ["Выб.", "+", "-", "OK"]
+            model: ["Изм.", ">", "<", "OK"]
             Rectangle {
-                height: (rootRect.height) / 4 - 20
-                width: height
-                //radius: width / 2
-                radius: 5
-                color: "#e0202020"
-                border.color: "#f03050ff"
-                anchors.horizontalCenter: parent.left
-                Text {
+                height: (rootRect.height) / 4
+                width: 77
+                anchors.left: parent.left
+                color: "#00000000"
+                Image{
+                    anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 4
-                    text: modelData
-                    font.pixelSize: 14
-                    font.bold: true
-                    color: "#ccc"
+                    source: "Slices/InputMode-Button.png"
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16
+                        text: modelData
+                        font.pixelSize: 24
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                    }
                 }
             }
         }
     }
 
     Rectangle {
+        id: inputModeParentField
         anchors.top: parent.top
-        anchors.topMargin: -5
+        anchors.topMargin: 0
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "#e0202020"
-        border.color: "#f03050ff"
-        width: 300
+        color: "#00000000"
+        width: 420
         height: 75
-        radius: 5
         visible: inputMode
-        Row {
+
+        Image{
+            anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: 3
-            Repeater {
-                model: inputPositions
-                Rectangle {
-                    //anchors.verticalCenter: parent.verticalCenter
-                    color: "#d0ffffff"
-                    border.color: inputCursorIndex == index ? "#ffff0000" : "#ff000000"
-                    border.width: inputCursorIndex == index ? 2 : 1
-                    Behavior on border.width { SmoothedAnimation { duration: 50 } }
-                    width: 30
-                    height: 50
-                    Text {
-                        text: modelData
+            source: "Slices/InputMode-Field.png"
+        }
+
+        Column{
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 24
+            spacing: 26
+
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 50
+                Rectangle{
+                    id: inputModeRail
+                    width: 60
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
                         anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: 36
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Путь")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: 3
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id: inputModeMachinist
+                    width: 80
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Машинист")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: 4
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id: inputModeTrain
+                    width: 80
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Поезд")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: 4
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 60
+
+                Rectangle{
+                    id: inputModeLengthWagon
+                    width: 60
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize:16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Вагонов")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: 3
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id: inputModeLengthAxle
+                    width: 60
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize:16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Осей")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: 3
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id: inputModeMass
+                    width: 80
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Масса")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: 4
+                            Image {
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: modelData
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
+
+
     }
 
 }

@@ -38,7 +38,8 @@ HEADERS += \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \
     masqarade.h \
-    iodrv/canframe.h
+    iodrv/canframe.h \
+    lowlevel.h
 
 CONFIG += console
 

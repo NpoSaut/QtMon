@@ -67,7 +67,6 @@ Rectangle {
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
     property bool altMode: false
 
-    property bool inputCursorPressed: false
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
@@ -119,21 +118,19 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
-                inputCursorPressed = true;
-                inputCursorIndex++;
-                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
-            }
-            if (event.key == Qt.Key_F2)
-            {
                 var input = inputPositions
                 input[inputCursorIndex] = (input[inputCursorIndex] + 1) % 10
                 inputPositions = input;
             }
+            if (event.key == Qt.Key_F2)
+            {
+                inputCursorIndex++;
+                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+            }
             if (event.key == Qt.Key_F3)
             {
-                var input = inputPositions
-                input[inputCursorIndex] = (input[inputCursorIndex] + 9) % 10
-                inputPositions = input;
+                inputCursorIndex--;
+                if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
             }
             if (event.key == Qt.Key_F4)
             {
@@ -162,10 +159,7 @@ Rectangle {
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
         }
-        if (event.key == Qt.Key_F1)
-        {
-            inputCursorPressed = false;
-        }
+
     }
 
 
@@ -204,9 +198,9 @@ Rectangle {
 
     property bool inputMode: false
     property int inputCursorIndex: 0
-    property int inputPositionsCount: 6
-    property variant inputPositions: [0, 0, 0, 0, 0, 0, 0, 0]
-    property variant driverIdSegments: [0, 0, 0, 0, 0, 0, 0, 0]
+    property variant inputPositions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+//    property variant inputPositions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    property variant driverIdSegments: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     Rectangle {
         id: pagesArea
@@ -1794,7 +1788,9 @@ Rectangle {
                 spacing: 50
                 Rectangle{
                     id: inputModeRail
-                    width: 60
+                    property int startPosition: 0
+                    property int positionsCount: 3
+                    width: 20*positionsCount
                     height: 54
                     color: "#00000000"
 
@@ -1815,18 +1811,35 @@ Rectangle {
                         height: 30
                         spacing: 0
                         Repeater {
-                            model: 3
+                            model: parent.parent.positionsCount
                             Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-Cursor.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }
@@ -1835,7 +1848,9 @@ Rectangle {
 
                 Rectangle{
                     id: inputModeMachinist
-                    width: 80
+                    property int startPosition: 3
+                    property int positionsCount: 4
+                    width: 20*positionsCount
                     height: 54
                     color: "#00000000"
 
@@ -1856,18 +1871,35 @@ Rectangle {
                         height: 30
                         spacing: 0
                         Repeater {
-                            model: 4
+                            model: parent.parent.positionsCount
                             Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-Cursor.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }
@@ -1876,7 +1908,9 @@ Rectangle {
 
                 Rectangle{
                     id: inputModeTrain
-                    width: 80
+                    property int startPosition: 7
+                    property int positionsCount: 4
+                    width: 20*positionsCount
                     height: 54
                     color: "#00000000"
 
@@ -1897,18 +1931,35 @@ Rectangle {
                         height: 30
                         spacing: 0
                         Repeater {
-                            model: 4
+                            model: parent.parent.positionsCount
                             Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-Cursor.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }
@@ -1922,7 +1973,9 @@ Rectangle {
 
                 Rectangle{
                     id: inputModeLengthWagon
-                    width: 60
+                    property int startPosition: 11
+                    property int positionsCount: 3
+                    width: 20*positionsCount
                     height: 64
                     color: "#00000000"
 
@@ -1943,20 +1996,37 @@ Rectangle {
                         height: 26
                         spacing: 0
                         Repeater {
-                            model: 3
+                            model: parent.parent.positionsCount
                             Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-CursorSmall.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }
@@ -1965,7 +2035,9 @@ Rectangle {
 
                 Rectangle{
                     id: inputModeLengthAxle
-                    width: 60
+                    property int startPosition: 14
+                    property int positionsCount: 3
+                    width: 20*positionsCount
                     height: 64
                     color: "#00000000"
 
@@ -1986,20 +2058,37 @@ Rectangle {
                         height: 26
                         spacing: 0
                         Repeater {
-                            model: 3
+                            model: parent.parent.positionsCount
                             Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-CursorSmall.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }
@@ -2008,7 +2097,9 @@ Rectangle {
 
                 Rectangle{
                     id: inputModeMass
-                    width: 80
+                    property int startPosition: 17
+                    property int positionsCount: 4
+                    width: 20*positionsCount
                     height: 64
                     color: "#00000000"
 
@@ -2029,20 +2120,37 @@ Rectangle {
                         height: 26
                         spacing: 0
                         Repeater {
-                            model: 4
+                            model: parent.parent.positionsCount
                             Image {
+                                 property int myCursorIndex: parent.parent.startPosition+index
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
-                                    text: modelData
+                                    text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
                                     color: "#ff474747"
+                                }
+                                Image {
+                                    anchors.bottom: parent.bottom
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    source: "Slices/InputMode-CursorSmall.png"
+                                    property bool isActive: false;
+                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
+                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                                    Timer {
+                                        interval: 400
+                                        running: inputCursorIndex == parent.parent.myCursorIndex
+                                        repeat: true
+                                        onTriggered: parent.isActive = !parent.isActive
+                                        onRunningChanged: parent.isActive = true
+                                    }
                                 }
                             }
                         }

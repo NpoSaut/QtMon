@@ -4412,26 +4412,6 @@
        y1="25.5"
        x2="492"
        y2="-24.5" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6720"
-       id="linearGradient6727"
-       x1="211"
-       y1="101"
-       x2="205"
-       y2="107"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="repeat"
-       gradientTransform="matrix(1.0048077,0,0,0.86875,-1.9278846,12.20625)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6735"
-       id="linearGradient6742"
-       x1="401.5"
-       y1="164.25"
-       x2="401.5"
-       y2="155.44843"
-       gradientUnits="userSpaceOnUse" />
     <filter
        inkscape:collect="always"
        id="filter6770"
@@ -4443,18 +4423,6 @@
          inkscape:collect="always"
          stdDeviation="1.9571423"
          id="feGaussianBlur6772" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       id="filter6774"
-       x="-0.016799399"
-       width="1.0335988"
-       y="-0.10103811"
-       height="1.2020762">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="2.9258953"
-         id="feGaussianBlur6776" />
     </filter>
     <linearGradient
        inkscape:collect="always"
@@ -4477,15 +4445,6 @@
        y1="101"
        x2="205"
        y2="107" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6735"
-       id="linearGradient6800"
-       gradientUnits="userSpaceOnUse"
-       x1="401.5"
-       y1="164.25"
-       x2="401.5"
-       y2="155.44843" />
     <filter
        inkscape:collect="always"
        id="filter6840">
@@ -4503,8 +4462,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="414.5751"
-     inkscape:cy="336.13078"
+     inkscape:cx="400"
+     inkscape:cy="286.36187"
      inkscape:document-units="px"
      inkscape:current-layer="layer15"
      showgrid="false"
@@ -7719,27 +7678,27 @@
     <text
        xml:space="preserve"
        style="font-size:35.2223587px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;font-family:Sans"
-       x="241.89331"
+       x="229.89331"
        y="150.02795"
        id="text5190"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5192"
-         x="241.89331"
+         x="229.89331"
          y="150.02795"
-         style="font-size:15.85006142px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#e0e0e0;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">Осей</tspan></text>
+         style="font-size:15.85006142px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#e0e0e0;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">Выгонов</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5194"
        y="150.02795"
-       x="360.03815"
+       x="372.03815"
        style="font-size:35.2223587px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#e0e0e0;fill-opacity:1;stroke:none;font-family:Sans"
        xml:space="preserve"><tspan
          style="font-size:15.85006142px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#e0e0e0;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
          y="150.02795"
-         x="360.03815"
+         x="372.03815"
          id="tspan5196"
-         sodipodi:role="line">Выгонов</tspan></text>
+         sodipodi:role="line">Осей</tspan></text>
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -7862,6 +7821,24 @@
        inkscape:export-filename="/home/anton/Qt/QtMon/qml/QtMon/Slices/InputMode-InputPosition.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <path
+       style="fill:#ac1414;fill-opacity:1;stroke:none"
+       d="m 242,49.375 9.875,4.375 -19.75,0 z"
+       id="rect6844"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#464646;fill-opacity:1;stroke:none;font-family:Sans"
+       x="235"
+       y="47"
+       id="text6854"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan6856"
+         x="235"
+         y="47"
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;letter-spacing:5.82999991999999967px;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold;fill:#464646;fill-opacity:1">123</tspan></text>
   </g>
   <g
      inkscape:label="Кайма"

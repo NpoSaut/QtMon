@@ -14,8 +14,6 @@ Rectangle {
         pageNum = 1 - pageNum
     }
 
-    property int guryanovId: 0
-
     function refreshAlsnState()
     {
         alsnSelector.state = "alsn0"
@@ -67,6 +65,20 @@ Rectangle {
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
     property bool altMode: false
 
+    function fillInputParameter(offset, length)
+    {
+        var res = 0;
+        for (var i = 0; i < length; i++)
+            res += Math.pow(10, length - i - 1) * inputPositions[offset + i];
+        return res;
+    }
+    function fillInputArray(arra, offset, length, val)
+    {
+        for (var i = 0; i < length; i++)
+            arra[offset + i] = Math.floor(val / Math.pow(10, length - i - 1)) % 10;
+
+        return arra;
+    }
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
@@ -103,23 +115,38 @@ Rectangle {
             // Alt: пустой
             else if (altMode && event.key == Qt.Key_F3) {
                 inputMode = true
+
+                var _offset = 0;
+
+                var input = inputPositions
+
+                input = fillInputArray(input, _offset, 2, stateView.TrackNumber < 16 ? stateView.TrackNumber :  stateView.TrackNumber - 15);   _offset += 2;
+                input = fillInputArray(input, _offset, 1, Math.floor(stateView.TrackNumber / 16)); _offset += 1;
+                input = fillInputArray(input, _offset, 4, stateView.MachinistNumber);    _offset += 4;
+                input = fillInputArray(input, _offset, 4, stateView.TrainNumber);        _offset += 4;
+                input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
+                input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
+                input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
+
+                inputPositions = input;
+                inputCursorIndex = 1;
             }
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
                 altMode = true;
-
-                var input = inputPositions
-                for (var i = 0; i < inputPositions.length; i++)
-                    input[input.length - i - 1] = Math.floor(guryanovId / Math.pow(10, i)) % 10;
-                inputPositions = input;
             }
         }
         else
         {
             if (event.key == Qt.Key_F1)
             {
-                var input = inputPositions
-                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % 10
+                var input = inputPositions;
+                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
+                if (inputCursorIndex == 1 && input[0] == 1)
+                {
+                    input[1] = input[1] % 6;
+                }
+
                 inputPositions = input;
             }
             if (event.key == Qt.Key_F2)
@@ -135,10 +162,20 @@ Rectangle {
             if (event.key == Qt.Key_F4)
             {
                 inputMode = false
-                guryanovId = 0;
-                for (var i = 0; i < inputPositions.length; i++)
-                    guryanovId += Math.pow(10, i) * inputPositions[inputPositions.length - i - 1];
-                driverIdSegments = inputPositions;
+
+                var _offset = 0;
+
+                stateView.TrackNumber     =  fillInputParameter(_offset, 2);  _offset += 2;
+                if (fillInputParameter(_offset, 1) % 2) stateView.TrackNumber += 15; _offset += 1;
+                stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
+                stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
+                stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+
+                if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+
+                console.debug(stateView.TrackNumber);
             }
         }
     }
@@ -198,9 +235,8 @@ Rectangle {
 
     property bool inputMode: false
     property int inputCursorIndex: 0
-    property variant inputPositions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-//    property variant inputPositions: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    property variant driverIdSegments: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
 
     Rectangle {
         id: pagesArea
@@ -293,7 +329,9 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("--")
+                               text:  (stateView.TrackNumber < 16) ?
+                                          stateView.TrackNumber      + " П" :
+                                          stateView.TrackNumber - 15 + " Н"
                                color: "#ffffffff"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
@@ -1786,6 +1824,8 @@ Rectangle {
             Row{
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 50
+
+                // Ввод номера пути
                 Rectangle{
                     id: inputModeRail
                     property int startPosition: 0
@@ -1846,6 +1886,7 @@ Rectangle {
                     }
                 }
 
+                // Ввод номера машиниста
                 Rectangle{
                     id: inputModeMachinist
                     property int startPosition: 3
@@ -1906,6 +1947,7 @@ Rectangle {
                     }
                 }
 
+                // Ввод номера поезда
                 Rectangle{
                     id: inputModeTrain
                     property int startPosition: 7
@@ -1971,6 +2013,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 60
 
+                // Ввод количества вагонов
                 Rectangle{
                     id: inputModeLengthWagon
                     property int startPosition: 11
@@ -2033,6 +2076,7 @@ Rectangle {
                     }
                 }
 
+                // ввод количества осей
                 Rectangle{
                     id: inputModeLengthAxle
                     property int startPosition: 14
@@ -2095,6 +2139,7 @@ Rectangle {
                     }
                 }
 
+                // ввод массы состава
                 Rectangle{
                     id: inputModeMass
                     property int startPosition: 17

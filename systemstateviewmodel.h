@@ -137,6 +137,30 @@ class SystemStateViewModel : public QDeclarativeItem
     QString infoTextValue;
     Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
 
+    // Номер пути
+    int trackNumberValue;
+    Q_PROPERTY(int TrackNumber READ getTrackNumber WRITE setTrackNumber NOTIFY TrackNumberChanged)
+
+    // Номер машиниста
+    int machinistNumberValue;
+    Q_PROPERTY(int MachinistNumber READ getMachinistNumber WRITE setMachinistNumber NOTIFY MachinistNumberChanged)
+
+    // Номер поезда
+    int trainNumberValue;
+    Q_PROPERTY(int TrainNumber READ getTrainNumber WRITE setTrainNumber NOTIFY TrainNumberChanged)
+
+    // Длина поезда в условных вагонах
+    int wagonCountValue;
+    Q_PROPERTY(int WagonCount READ getWagonCount WRITE setWagonCount NOTIFY WagonCountChanged)
+
+    // Длина поезда в осях
+    int axlesCountValue;
+    Q_PROPERTY(int AxlesCount READ getAxlesCount WRITE setAxlesCount NOTIFY AxlesCountChanged)
+
+    // Масса поезда
+    int trainMassValue;
+    Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
+
     // private properties end
 
 public:
@@ -176,6 +200,12 @@ public:
     const int getDirection() const;
     const QString getWarningText() const;
     const QString getInfoText() const;
+    const int getTrackNumber() const;
+    const int getMachinistNumber() const;
+    const int getTrainNumber() const;
+    const int getWagonCount() const;
+    const int getAxlesCount() const;
+    const int getTrainMass() const;
     // public properties getters end
 
 signals:
@@ -221,6 +251,12 @@ signals:
     void DirectionChanged();
     void WarningTextChanged();
     void InfoTextChanged();
+    void TrackNumberChanged();
+    void MachinistNumberChanged();
+    void TrainNumberChanged();
+    void WagonCountChanged();
+    void AxlesCountChanged();
+    void TrainMassChanged();
     // properties signals end
 
 public slots:
@@ -258,6 +294,12 @@ public slots:
     void setDirection(const int);
     void setWarningText(const QString);
     void setInfoText(const QString);
+    void setTrackNumber(const int);
+    void setMachinistNumber(const int);
+    void setTrainNumber(const int);
+    void setWagonCount(const int);
+    void setAxlesCount(const int);
+    void setTrainMass(const int);
     // public properties setters end
     
 };

@@ -41,7 +41,8 @@ HEADERS += \
     iodrv/iodrv.h \
     masqarade.h \
     iodrv/canframe.h \
-    iodrv/cookies.h
+    iodrv/cookies.h \
+    lowleve.h
 
 CONFIG += console
 

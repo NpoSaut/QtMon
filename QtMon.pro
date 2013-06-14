@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
     iodrv/sktcan.cpp \
-    iodrv/iodrv.cpp
+    iodrv/iodrv.cpp \
+    iodrv/canframe.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -36,7 +37,8 @@ HEADERS += \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \
-    masqarade.h
+    masqarade.h \
+    iodrv/canframe.h
 
 CONFIG += console
 

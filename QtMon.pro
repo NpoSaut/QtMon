@@ -20,6 +20,7 @@ SOURCES += main.cpp \
     iodrv/endecs.cpp \
     iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
+    iodrv/canframe.cpp \
     iodrv/cookies.cpp
 
 
@@ -39,6 +40,7 @@ HEADERS += \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \
     masqarade.h \
+    iodrv/canframe.h \
     iodrv/cookies.h
 
 CONFIG += console

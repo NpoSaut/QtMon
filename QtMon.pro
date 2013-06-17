@@ -42,11 +42,11 @@ HEADERS += \
     masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \
-    lowleve.h
+    lowlevel.h
 
 CONFIG += console
 
-#QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++0x
 
 #DEFINES += QT_NO_CAST_FROM_ASCII
 

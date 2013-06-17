@@ -1322,8 +1322,8 @@ Rectangle {
                                         text: {
                                             switch(modelData)
                                             {
-                                                case "iron": return "Ж/Д"
-                                                case "rubber": return "Дорожный"
+                                                case "iron": return "Опущены"
+                                                case "rubber": return "Подняты"
                                             }
                                         }
                                     }

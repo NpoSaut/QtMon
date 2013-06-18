@@ -1857,7 +1857,9 @@ Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: "Slices/InputMode-InputPosition.png"
                                 Text {
-                                    text: inputPositions[parent.myCursorIndex]
+                                    text: (parent.myCursorIndex != 2) ?
+                                              (inputPositions[parent.myCursorIndex])
+                                            : ( inputPositions[parent.myCursorIndex] == 1 ? qsTr("Н") : qsTr("П") )
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 24

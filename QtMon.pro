@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
     iodrv/canframe.cpp \
-    iodrv/cookies.cpp
+    iodrv/cookies.cpp \
+    iodrv/can.cpp
 
 
 # Please do not modify the following two lines. Required for deployment.
@@ -42,7 +43,8 @@ HEADERS += \
     masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \
-    lowlevel.h
+    lowlevel.h \
+    iodrv/can.h
 
 CONFIG += console
 

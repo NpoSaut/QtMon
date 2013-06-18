@@ -140,6 +140,8 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
+                inputBlinker.restart();
+
                 var input = inputPositions;
                 input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
                 if (inputCursorIndex == 1 && input[0] == 1)
@@ -153,11 +155,13 @@ Rectangle {
             {
                 inputCursorIndex++;
                 if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+                inputBlinker.restart();
             }
             if (event.key == Qt.Key_F3)
             {
                 inputCursorIndex--;
                 if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
+                inputBlinker.restart();
             }
             if (event.key == Qt.Key_F4)
             {
@@ -237,6 +241,17 @@ Rectangle {
     property int inputCursorIndex: 0
     property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+
+
+    Timer {
+        id: inputBlinker
+        property bool blink: false
+        interval: 400
+        running: true
+        repeat: true
+        onTriggered: blink = !blink
+        onRunningChanged: blink = true
+    }
 
     Rectangle {
         id: pagesArea
@@ -1854,8 +1869,9 @@ Rectangle {
                             model: parent.parent.positionsCount
                             Image {
                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 Text {
                                     text: (parent.myCursorIndex != 2) ?
                                               (inputPositions[parent.myCursorIndex])
@@ -1865,23 +1881,7 @@ Rectangle {
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-Cursor.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }
@@ -1917,8 +1917,9 @@ Rectangle {
                             model: parent.parent.positionsCount
                             Image {
                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 Text {
                                     text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -1926,23 +1927,7 @@ Rectangle {
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-Cursor.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }
@@ -1978,8 +1963,9 @@ Rectangle {
                             model: parent.parent.positionsCount
                             Image {
                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 Text {
                                     text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -1987,23 +1973,7 @@ Rectangle {
                                     font.pixelSize: 24
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-Cursor.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }
@@ -2044,8 +2014,9 @@ Rectangle {
                             model: parent.parent.positionsCount
                             Image {
                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
@@ -2055,23 +2026,7 @@ Rectangle {
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-CursorSmall.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }
@@ -2107,8 +2062,9 @@ Rectangle {
                             model: parent.parent.positionsCount
                             Image {
                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
@@ -2118,23 +2074,7 @@ Rectangle {
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-CursorSmall.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }
@@ -2169,9 +2109,10 @@ Rectangle {
                         Repeater {
                             model: parent.parent.positionsCount
                             Image {
-                                 property int myCursorIndex: parent.parent.startPosition+index
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: "Slices/InputMode-InputPosition.png"
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
                                 Text {
@@ -2181,23 +2122,7 @@ Rectangle {
                                     font.pixelSize: 21
                                     font.family: "URW Gothic L"
                                     font.bold: true
-                                    color: "#ff474747"
-                                }
-                                Image {
-                                    anchors.bottom: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    source: "Slices/InputMode-CursorSmall.png"
-                                    property bool isActive: false;
-                                    opacity:  1.0 * (inputCursorIndex == parent.myCursorIndex) * isActive
-                                    Behavior on opacity { PropertyAnimation { duration: 70 } }
-
-                                    Timer {
-                                        interval: 400
-                                        running: inputCursorIndex == parent.parent.myCursorIndex
-                                        repeat: true
-                                        onTriggered: parent.isActive = !parent.isActive
-                                        onRunningChanged: parent.isActive = true
-                                    }
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
                                 }
                             }
                         }

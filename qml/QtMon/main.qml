@@ -144,9 +144,13 @@ Rectangle {
 
                 var input = inputPositions;
                 input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
-                if (inputCursorIndex == 1 && input[0] == 1)
+                if ((inputCursorIndex == 1) && input[0] == 1)
                 {
                     input[1] = input[1] % 6;
+                }
+                if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+                {
+                    input[1] = 5;
                 }
 
                 inputPositions = input;

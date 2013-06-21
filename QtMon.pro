@@ -51,7 +51,8 @@ HEADERS += \
     emap/railobject.h \
     packing.h \
     emap/emaptarget.h \
-    iodrv/emapcanemitter.h
+    iodrv/emapcanemitter.h\
+    masqarade.h
 
 CONFIG += console
 

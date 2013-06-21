@@ -21,8 +21,14 @@ class ElectroincMap : public QObject
 
 
 private:
+    bool mapLoaded;
+    bool xReceived;
+
+    bool isLocated;
+    void setIsLocated(bool val);
+
     bool firstEnter;
-    vector<KilometerPost *> allPosts;
+    list<KilometerPost *> allPosts;
     list<RouteSection *> sections;
 
     list<KilometerPost *> nearPosts;
@@ -31,9 +37,13 @@ private:
     double departX;
 
     list<KilometerPost *> getPostsInArea(double lat, double lon, double radius);
-    list<KilometerPost *> getPostsInArea(vector<KilometerPost *> &source, double lat, double lon, double radius);
+    list<KilometerPost *> getPostsInArea(list<KilometerPost *> &source, double lat, double lon, double radius);
 
     double x;
+    double l;
+
+    double lat1, lon1;
+
     int trackNumber;
 
     class ApproachingPoint
@@ -79,12 +89,14 @@ private:
 
     vector<EMapTarget> getNextObjects(const KilometerPost *startPost, double startPostX, int count = 10);
 
-    /**
-     * @brief getMyRail Находит путь, на котором ты окажешься
-     * @param post      Столб, для которого ты хочешь найти путь
-     * @return          Ссылку на путь, по которому поедешь, если он есть. Иначе null
-     */
     Rail *getMyRail(const KilometerPost *post);
+
+    KilometerPost *getCurrentKilometer();
+
+    int myDirection() { return getDirection (trackNumber, getCurrentKilometer()); }
+    static int getDirection(int trackNumber, KilometerPost *kilometer);
+
+    void checkOrdinate();
 
     int closestObjectX;
     void checkObjects();
@@ -93,12 +105,15 @@ public:
     explicit ElectroincMap(QObject *parent = 0);
     void load(QString fileName);
 
+    double ordinate;
+
 signals:
     void onPostDetected(KilometerPost post, double x);
     void onUpcomingTargets(std::vector<EMapTarget>);
+    void isLocatedChanged();
 
 public slots:
-    void setMetrometer(double value);
+    void setMetrometer(int value);
     void setTrackNumber(int value);
     void checkMap(double lat, double lon);
 };

@@ -6,7 +6,7 @@ using namespace Navigation;
 
 QTextDecoder *cp1251Decoder = QTextCodec::codecForName("CP1251")->makeDecoder ();
 
-RailObject *RailObject::loadFrom(QByteArray rawData, int offset, int index)
+RailObject *RailObject::loadFrom(const QByteArray &rawData, int offset, int index)
 {
     RawObjectData &data = *((RawObjectData *) (rawData.data () + offset + index * rawObjectDataSize));
     RailObject *obj = new RailObject();
@@ -57,6 +57,7 @@ RailObject *RailObject::loadFrom(QByteArray rawData, int offset, int index)
     case Switch:
         obj->alsEn = data.alsEn;
         obj->alsnFreq = data.alsnFreq;
+        obj->name = cp1251Decoder->toUnicode (data.name, 8).trimmed ();
         break;
     case Tks:
         obj->alsEn = data.alsEn;

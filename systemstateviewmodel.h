@@ -251,7 +251,7 @@ signals:
     void DirectionChanged();
     void WarningTextChanged();
     void InfoTextChanged();
-    void TrackNumberChanged();
+    void TrackNumberChanged(int trackNumber);
     void MachinistNumberChanged();
     void TrainNumberChanged();
     void WagonCountChanged();

@@ -516,7 +516,7 @@ void SystemStateViewModel::setTrackNumber(const int value)
     if (trackNumberValue != value)
     {
         trackNumberValue = value;
-        emit TrackNumberChanged();
+        emit TrackNumberChanged(value);
     }
 }
 

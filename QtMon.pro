@@ -16,13 +16,13 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    iodrv/can.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
     iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
     iodrv/canframe.cpp \
-    iodrv/cookies.cpp \
-    iodrv/can.cpp
+    iodrv/cookies.cpp
 
 
 # Please do not modify the following two lines. Required for deployment.
@@ -35,6 +35,7 @@ OTHER_FILES += \
     properties.xml
 
 HEADERS += \
+    iodrv/can.h \
     systemstateviewmodel.h \
     iodrv/sktcan.h \
     iodrv/endecs.h \
@@ -43,8 +44,7 @@ HEADERS += \
     masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \
-    lowlevel.h \
-    iodrv/can.h
+    lowlevel.h
 
 CONFIG += console
 

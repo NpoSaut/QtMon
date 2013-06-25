@@ -60,6 +60,26 @@ Rectangle {
         }
     }
 
+    function getTargetKindName(kindId)
+    {
+        switch (kindId)
+        {
+            case -1: return "";
+            case 1: return "Светофор";
+            case 2: return "Станция";
+            case 3: return "Оп. место";
+            case 4: return "Мост";
+            case 5: return "Переезд";
+            case 6: return "Платформа";
+            case 7: return "Туннель";
+            case 8: return "Стрелка";
+            case 9: return "ТКС";
+            case 10: return "ГПУ САУТ";
+            case 11: return "Тупик";
+        }
+
+    }
+
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
@@ -749,18 +769,54 @@ Rectangle {
                 }
             }
 
-            // Информационная строка
+            // Ближайшая цель
             Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.rightMargin: 200
                 anchors.leftMargin: 10
                 border.color: "#ffffff00"
-                //width: 100
                 height: 25
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: stateView.NextTargetKind > 0 ?
+                            getTargetKindName(stateView.NextTargetKind) + " " +
+                            "\"" + stateView.NextTargetName + "\" " +
+                            "через " + stateView.NextTargetDisstance + "м"
+                            : "нет данных о цели" ;
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "URW Gothic L"
+                }
+            }
+
+            // Конфигурация
+            Rectangle {
+                color: "#20000000"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.right
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: -180
+                border.color: "#ffffff00"
+                height: 25
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 5
+                    text: "-------"
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "URW Gothic L"
+                }
             }
 
 

@@ -1,20 +1,21 @@
+#include <iostream>
+
 #include <QApplication>
-#include "qmlapplicationviewer.h"
-#include "systemstateviewmodel.h"
-#include "qtconcurrentrun.h"
 #include <QTextStream>
 #include <QTextCodec>
+#include <QtConcurrentRun>
 
+#include "systemstateviewmodel.h"
+#include "qmlapplicationviewer.h"
+#include "iodrv/can.h"
+#ifdef WITH_CAN
+#include "iodrv/iodrv.h"
+#endif
 #include "masqarade.h"
 #ifdef WIN32
     HANDLE winConsoleandler;
 #endif
-
-#ifdef WITH_CAN
-#include "iodrv/iodrv.h"
-#endif
-
-#include <iostream>
+#include "iodrv/cookies.h"
 
 SystemStateViewModel *systemState ;
 
@@ -179,6 +180,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // -> Отбработчик нажатия РМП <-
     rmp_key_hdlr = new rmp_key_handler();
 
+    // Передача сообщения в новый CAN-класс
+    QObject::connect (iodriver, SIGNAL(signal_new_message(const can_frame*)), &canDev, SLOT(receiveFromIoDrv(const can_frame*)));
+    QObject::connect (&canDev, SIGNAL(transmitToIoDrv(const can_frame*)), iodriver, SLOT(slot_send_message(const can_frame*)));
+
     QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), rmp_key_hdlr, SLOT(rmp_key_pressed()));
     QObject::connect(iodriver, SIGNAL(signal_ssps_mode(int)), rmp_key_hdlr, SLOT(ssps_mode_received(int)));
     QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), rmp_key_hdlr, SLOT(driving_mode_received(int)));
@@ -236,8 +241,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Автоблокировка
     QObject::connect(iodriver, SIGNAL(signal_autolock_type_target(int)), systemState, SLOT(setAutolockTypeTarget(int)));
 
+    // Ввод параметров
+    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies.trackNumberInMph, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies.machinistNumber, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies.trainNumber, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies.lengthInWheels, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies.lengthInWagons, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies.mass, SLOT(setVaule(int)));
 
-    iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps : can);
+    iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
 
 #else
     QtConcurrent::run(getParamsFromConsole);

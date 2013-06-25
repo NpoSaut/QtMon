@@ -37,6 +37,12 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     directionValue = 0;
     warningTextValue = "";
     infoTextValue = "";
+    trackNumberValue = 0;
+    machinistNumberValue = 0;
+    trainNumberValue = 0;
+    wagonCountValue = 1;
+    axlesCountValue = 4;
+    trainMassValue = 0;
     // fileds init end
 }
 
@@ -497,6 +503,90 @@ void SystemStateViewModel::setInfoText(const QString value)
     {
         infoTextValue = value;
         emit InfoTextChanged(value);
+    }
+}
+
+// Номер пути
+const int SystemStateViewModel::getTrackNumber() const
+{
+    return trackNumberValue;
+}
+void SystemStateViewModel::setTrackNumber(const int value)
+{
+    if (trackNumberValue != value)
+    {
+        trackNumberValue = value;
+        emit TrackNumberChanged(value);
+    }
+}
+
+// Номер машиниста
+const int SystemStateViewModel::getMachinistNumber() const
+{
+    return machinistNumberValue;
+}
+void SystemStateViewModel::setMachinistNumber(const int value)
+{
+    if (machinistNumberValue != value)
+    {
+        machinistNumberValue = value;
+        emit MachinistNumberChanged(value);
+    }
+}
+
+// Номер поезда
+const int SystemStateViewModel::getTrainNumber() const
+{
+    return trainNumberValue;
+}
+void SystemStateViewModel::setTrainNumber(const int value)
+{
+    if (trainNumberValue != value)
+    {
+        trainNumberValue = value;
+        emit TrainNumberChanged(value);
+    }
+}
+
+// Длина поезда в условных вагонах
+const int SystemStateViewModel::getWagonCount() const
+{
+    return wagonCountValue;
+}
+void SystemStateViewModel::setWagonCount(const int value)
+{
+    if (wagonCountValue != value)
+    {
+        wagonCountValue = value;
+        emit WagonCountChanged(value);
+    }
+}
+
+// Длина поезда в осях
+const int SystemStateViewModel::getAxlesCount() const
+{
+    return axlesCountValue;
+}
+void SystemStateViewModel::setAxlesCount(const int value)
+{
+    if (axlesCountValue != value)
+    {
+        axlesCountValue = value;
+        emit AxlesCountChanged(value);
+    }
+}
+
+// Масса поезда
+const int SystemStateViewModel::getTrainMass() const
+{
+    return trainMassValue;
+}
+void SystemStateViewModel::setTrainMass(const int value)
+{
+    if (trainMassValue != value)
+    {
+        trainMassValue = value;
+        emit TrainMassChanged(value);
     }
 }
 

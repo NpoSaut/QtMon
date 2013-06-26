@@ -7,7 +7,7 @@
 
 #include "systemstateviewmodel.h"
 #include "qmlapplicationviewer.h"
-#include "iodrv/can.h"
+//#include "iodrv/can.h"
 #ifdef WITH_CAN
 #include "iodrv/iodrv.h"
 #endif
@@ -15,7 +15,10 @@
 #ifdef WIN32
     HANDLE winConsoleandler;
 #endif
+
+#if defined WITH_CAN
 #include "iodrv/cookies.h"
+#endif
 
 SystemStateViewModel *systemState ;
 
@@ -267,7 +270,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies.mass.requestValue ();
 
 #else
-    QtConcurrent::run(getParamsFromConsole);
+//    QtConcurrent::run(getParamsFromConsole);
 #endif
 
     return app->exec();

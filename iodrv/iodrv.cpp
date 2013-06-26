@@ -1,11 +1,12 @@
 #if defined WITH_CAN || defined WITH_SERIAL
 
-#include "iodrv.h"
 #include <QDate>
 #include <QtCore/qmath.h>
 
 #include <QFile>
 #include <QTextStream>
+
+#include "iodrv.h"
 
 // Distance between coordinates in kilometers
 const double PI = 3.141592653589793238462;
@@ -109,7 +110,7 @@ int iodrv::start(char* can_iface_name_0, char *can_iface_name_1, gps_data_source
     gps_source = gps_datasource;
 
     // Инициализация сокетов
-    if (init_sktcan(can_iface_name_0, can_iface_name_1) == 0)
+    if (init_sktcan("can0", "can0") == 0)
     {
         //printf("Инициализация сокетов не удалась\n"); fflush(stdout);
         return 0;
@@ -181,7 +182,10 @@ void iodrv::write_canmsg_async(int write_socket, can_frame* frame)
 
     //qDebug() << "cocure";
     //QtConcurrent::run(write_can_frame, write_socket, *frame);
-    write_can_frame(write_socket, *frame);
+    if ( frame->can_id == 0x422 )
+    {
+        write_can_frame(write_socket, *frame);
+    }
 }
 
 void iodrv::read_canmsgs_loop()
@@ -208,6 +212,7 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_trafficlight_light(frame);
     decode_trafficlight_freq(frame);
     decode_passed_distance(frame);
+    decode_orig_passed_distance (frame);
     decode_epv_state(frame);
     decode_epv_key(frame);
 
@@ -225,7 +230,7 @@ int iodrv::process_can_messages(struct can_frame *frame)
 
 //    if(gps_source == gps_data_source_can)
 //    {
-//        decode_mm_lat_lon(frame);
+        decode_mm_lat_lon(frame);
 //        decode_ipd_datetime(frame);
 //    }
 }
@@ -422,6 +427,16 @@ int iodrv::decode_passed_distance(struct can_frame* frame)
     }
 }
 
+int iodrv::decode_orig_passed_distance(can_frame *frame)
+{
+    switch (can_decoder::decode_orig_passed_distance (frame, &c_orig_passed_distance))
+    {
+    case 1:
+        emit signal_orig_passed_distance(c_orig_passed_distance);
+        break;
+    }
+}
+
 int iodrv::decode_epv_state(struct can_frame* frame)
 {
     switch (can_decoder::decode_epv_released(frame, &c_epv_state))
@@ -455,16 +470,16 @@ int iodrv::decode_mm_lat_lon(struct can_frame* frame)
     switch (can_decoder::decode_mm_lat_lon(frame, &c_lat, &c_lon))
     {
         case 1:
-            if ((p_lat == -1) || (p_lat != -1 && p_lat != c_lat))
+            if (((p_lat == -1) || (p_lat != -1 && p_lat != c_lat)) ||
+                ((p_lon == -1) || (p_lon != -1 && p_lon != c_lon)))
             {
                 emit signal_lat(c_lat);
-            }
-            if ((p_lon == -1) || (p_lon != -1 && p_lon != c_lon))
-            {
                 emit signal_lon(c_lon);
             }
+            emit signal_lat_lon (c_lat, c_lon);
             p_lat = c_lat;
             p_lon = c_lon;
+
 //            printf("Coord: lat = %f, lon = %f\n", c_lat, c_lon); fflush(stdout);
             break;
     }
@@ -830,6 +845,16 @@ void iodrv::slot_autolock_type_target_changed (int value)
     c_autolock_type_target = value;
 }
 
+void iodrv::slot_write_can0_message(can_frame frame)
+{
+    write_canmsg_async (write_socket_0, &frame);
+}
+
+void iodrv::slot_write_can1_message(can_frame frame)
+{
+    write_canmsg_async (write_socket_1, &frame);
+}
+
 
 SpeedAgregator::SpeedAgregator()
     : currentSpeedFromEarth(-1), currentSpeedFromSky(-1), currentSpeedIsValid(false), onRails(true)
@@ -1005,3 +1030,4 @@ void rmp_key_handler::ssps_mode_received(int ssps_mode)
 
 
 #endif
+

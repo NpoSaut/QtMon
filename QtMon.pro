@@ -21,9 +21,15 @@ SOURCES += main.cpp \
     iodrv/endecs.cpp \
     iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
+    electroincmap.cpp \
+    emap/kilometerpost.cpp \
+    emap/routesection.cpp \
+    emap/rail.cpp \
+    emap/railobject.cpp \
+    emap/emaptarget.cpp \
+    iodrv/emapcanemitter.cpp\
     iodrv/canframe.cpp \
     iodrv/cookies.cpp
-
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -41,6 +47,15 @@ HEADERS += \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \
+    electroincmap.h \
+    emap/kilometerpost.h \
+    emap/routesection.h \
+    emap/almanac.h \
+    emap/rail.h \
+    emap/railobject.h \
+    packing.h \
+    emap/emaptarget.h \
+    iodrv/emapcanemitter.h\
     masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \

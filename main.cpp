@@ -1,28 +1,38 @@
 #include <iostream>
+#include <math.h>
 
 #include <QApplication>
+#include <QtConcurrentRun>
 #include <QTextStream>
 #include <QTextCodec>
-#include <QtConcurrentRun>
+#include <QString>
+#include <QStringList>
+#include <qmlapplicationviewer.h>
 
 #include "systemstateviewmodel.h"
-#include "qmlapplicationviewer.h"
-#include "iodrv/can.h"
-#ifdef WITH_CAN
-#include "iodrv/iodrv.h"
-#endif
+#include "electroincmap.h"
+
 #include "masqarade.h"
 #ifdef WIN32
     HANDLE winConsoleandler;
 #endif
+
+#include "iodrv/can.h"
+#ifdef WITH_CAN
+#include "iodrv/iodrv.h"
 #include "iodrv/cookies.h"
+#include "iodrv/emapcanemitter.h"
+#endif
+
 
 SystemStateViewModel *systemState ;
+Navigation::ElectroincMap* elMap;
 
 #ifdef WITH_CAN
 iodrv* iodriver;
 SpeedAgregator* speedAgregator;
 rmp_key_handler* rmp_key_hdlr;
+EMapCanEmitter* emapCanEmitter;
 #endif
 
 void getParamsFromConsole ()
@@ -169,12 +179,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
+    elMap = new Navigation::ElectroincMap();
 
 #ifdef WITH_CAN
     //QtConcurrent::run(getParamsFromCan);
     //Здесь подключаюсь я.
     iodriver = new iodrv(systemState);
     speedAgregator = new SpeedAgregator();
+    emapCanEmitter = new EMapCanEmitter();
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
@@ -192,6 +204,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(rmp_key_hdlr, SIGNAL(target_driving_mode_changed(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(rmp_key_hdlr, SIGNAL(actual_driving_mode_changed(int)), systemState, SLOT(setDriveModeFact(int)));
     QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
+//    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
     // <- Отбработчик нажатия РМП ->
 
     // Переносить ли эти события из iodrv в обработчики
@@ -225,6 +238,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect(iodriver, SIGNAL(signal_autolock_type(int)), systemState, SLOT(setAutolockTypeFact(int)));
     QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged(int)), iodriver, SLOT(slot_autolock_type_target_changed(int)));
+//    QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged()), iodriver, SLOT(slot_autolock_type_target_changed()));
 
     QObject::connect(iodriver, SIGNAL(signal_pressure_tc(QString)), systemState, SLOT(setPressureTC(QString)));
     QObject::connect(iodriver, SIGNAL(signal_pressure_tm(QString)), systemState, SLOT(setPressureTM(QString)));
@@ -259,6 +273,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&cookies.lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
     QObject::connect (&cookies.mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
 
+//    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
+//    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
+
+    // Электронная карта
+    QObject::connect (iodriver, SIGNAL(signal_passed_distance(int)), elMap, SLOT(setMetrometer(int)));
+    QObject::connect (iodriver, SIGNAL(signal_lat_lon(double,double)), elMap, SLOT(checkMap(double,double)));
+    QObject::connect (elMap, SIGNAL(onUpcomingTargets(std::vector<EMapTarget>)), emapCanEmitter, SLOT(setObjectsList(std::vector<EMapTarget>)));
+    QObject::connect (emapCanEmitter, SIGNAL(sendNextObjectToCan(can_frame)), iodriver, SLOT(slot_write_can0_message(can_frame)));
+
     iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
 
     cookies.trackNumberInMph.requestValue ();
@@ -271,6 +294,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #else
     QtConcurrent::run(getParamsFromConsole);
 #endif
+
+    qDebug() << "Loading map...";
+    elMap->load ("./map.gps");
+    qDebug() << "Map loaded.";
+    qDebug() << "Set track number 2";
+    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
+//    elMap->setTrackNumber(2);
+    qDebug () << "Track number seted to 2";
+
+//    elMap->setMetrometer (0);
+//    elMap->checkMap (56.7942, 59.4909);
 
     return app->exec();
 }

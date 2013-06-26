@@ -153,6 +153,30 @@ class SystemStateViewModel : public QDeclarativeItem
     QString infoTextValue;
     Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
 
+    // Номер пути
+    int trackNumberValue;
+    Q_PROPERTY(int TrackNumber READ getTrackNumber WRITE setTrackNumber NOTIFY TrackNumberChanged)
+
+    // Номер машиниста
+    int machinistNumberValue;
+    Q_PROPERTY(int MachinistNumber READ getMachinistNumber WRITE setMachinistNumber NOTIFY MachinistNumberChanged)
+
+    // Номер поезда
+    int trainNumberValue;
+    Q_PROPERTY(int TrainNumber READ getTrainNumber WRITE setTrainNumber NOTIFY TrainNumberChanged)
+
+    // Длина поезда в условных вагонах
+    int wagonCountValue;
+    Q_PROPERTY(int WagonCount READ getWagonCount WRITE setWagonCount NOTIFY WagonCountChanged)
+
+    // Длина поезда в осях
+    int axlesCountValue;
+    Q_PROPERTY(int AxlesCount READ getAxlesCount WRITE setAxlesCount NOTIFY AxlesCountChanged)
+
+    // Масса поезда
+    int trainMassValue;
+    Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
+
     // private properties end
 
 public:
@@ -196,6 +220,12 @@ public:
     const int getNextTargetDisstance() const;
     const QString getWarningText() const;
     const QString getInfoText() const;
+    const int getTrackNumber() const;
+    const int getMachinistNumber() const;
+    const int getTrainNumber() const;
+    const int getWagonCount() const;
+    const int getAxlesCount() const;
+    const int getTrainMass() const;
     // public properties getters end
 
 signals:
@@ -208,43 +238,49 @@ signals:
     void DisableRedButtonReleased();
 
     // properties signals start
-    void SpeedChanged();
-    void SpeedIsValidChanged();
-    void SpeedFromSkyChanged();
-    void SpeedFromEarthChanged();
-    void SpeedRestrictionChanged();
-    void TargetSpeedChanged();
-    void AccelerationChanged();
-    void PressureTCChanged();
-    void PressureTMChanged();
-    void LongitudeChanged();
-    void LatitudeChanged();
-    void SystemWarningLevelChanged();
-    void FullSetWarningLevelChanged();
-    void IsPressureOkChanged();
-    void IsEpvReadyChanged();
-    void IsEpvReleasedChanged();
-    void MilageChanged();
-    void LightChanged();
-    void AlsnFreqTargetChanged();
-    void AlsnFreqFactChanged();
-    void AutolockTypeTargetChanged();
-    void AutolockTypeFactChanged();
-    void TimeChanged();
-    void DateChanged();
-    void IsRegistrationTapeActiveChanged();
-    void driveModeTargetChanged();
-    void driveModeFactChanged();
-    void IronWheelsChanged();
-    void IsVigilanceRequiredChanged();
-    void IsTractionOnChanged();
-    void DirectionChanged();
-    void OrdinateChanged();
-    void NextTargetKindChanged();
-    void NextTargetNameChanged();
-    void NextTargetDisstanceChanged();
-    void WarningTextChanged();
-    void InfoTextChanged();
+    void SpeedChanged(const double value);
+    void SpeedIsValidChanged(const bool value);
+    void SpeedFromSkyChanged(const double value);
+    void SpeedFromEarthChanged(const double value);
+    void SpeedRestrictionChanged(const int value);
+    void TargetSpeedChanged(const int value);
+    void AccelerationChanged(const double value);
+    void PressureTCChanged(const QString value);
+    void PressureTMChanged(const QString value);
+    void LongitudeChanged(const double value);
+    void LatitudeChanged(const double value);
+    void SystemWarningLevelChanged(const int value);
+    void FullSetWarningLevelChanged(const int value);
+    void IsPressureOkChanged(const bool value);
+    void IsEpvReadyChanged(const bool value);
+    void IsEpvReleasedChanged(const bool value);
+    void MilageChanged(const int value);
+    void LightChanged(const int value);
+    void AlsnFreqTargetChanged(const int value);
+    void AlsnFreqFactChanged(const int value);
+    void AutolockTypeTargetChanged(const int value);
+    void AutolockTypeFactChanged(const int value);
+    void TimeChanged(const QString value);
+    void DateChanged(const QString value);
+    void IsRegistrationTapeActiveChanged(const bool value);
+    void driveModeTargetChanged(const int value);
+    void driveModeFactChanged(const int value);
+    void IronWheelsChanged(const bool value);
+    void IsVigilanceRequiredChanged(const bool value);
+    void IsTractionOnChanged(const bool value);
+    void DirectionChanged(const int value);
+    void OrdinateChanged(const int value);
+    void NextTargetKindChanged(const int value);
+    void NextTargetNameChanged(const QString value);
+    void NextTargetDisstanceChanged(const int value);
+    void WarningTextChanged(const QString value);
+    void InfoTextChanged(const QString value);
+    void TrackNumberChanged(const int value);
+    void MachinistNumberChanged(const int value);
+    void TrainNumberChanged(const int value);
+    void WagonCountChanged(const int value);
+    void AxlesCountChanged(const int value);
+    void TrainMassChanged(const int value);
     // properties signals end
 
 public slots:
@@ -286,6 +322,12 @@ public slots:
     void setNextTargetDisstance(const int);
     void setWarningText(const QString);
     void setInfoText(const QString);
+    void setTrackNumber(const int);
+    void setMachinistNumber(const int);
+    void setTrainNumber(const int);
+    void setWagonCount(const int);
+    void setAxlesCount(const int);
+    void setTrainMass(const int);
     // public properties setters end
     
 };

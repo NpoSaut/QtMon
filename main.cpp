@@ -6,7 +6,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include <QString>
-#include <QStringList>
+#include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
 #include "systemstateviewmodel.h"
@@ -23,7 +23,6 @@
 #include "iodrv/cookies.h"
 #include "iodrv/emapcanemitter.h"
 #endif
-
 
 SystemStateViewModel *systemState ;
 Navigation::ElectroincMap* elMap;
@@ -290,7 +289,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies.mass.requestValue ();
 
 #else
-    QtConcurrent::run(getParamsFromConsole);
+//    QtConcurrent::run(getParamsFromConsole);
 #endif
 
     qDebug() << "Loading map...";

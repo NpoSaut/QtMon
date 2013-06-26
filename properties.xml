@@ -61,5 +61,13 @@
     <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
     <Property type="QString" name="InfoText" def="&quot;&quot;" description="Текст низкоприоритетного сообщения"/>
 
+    <!-- Ввод данных -->
+    <Property type="int" name="TrackNumber" def="0" description="Номер пути" />
+    <Property type="int" name="MachinistNumber" def="0" description="Номер машиниста" />
+    <Property type="int" name="TrainNumber" def="0" description="Номер поезда" />
+    <Property type="int" name="WagonCount" def="1" description="Длина поезда в условных вагонах" />
+    <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
+    <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
+
   </Properties>
 </Task>

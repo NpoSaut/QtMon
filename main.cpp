@@ -274,10 +274,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
 
     // Электронная карта
-    QObject::connect (iodriver, SIGNAL(signal_orig_passed_distance(int)), elMap, SLOT(setMetrometer(int)));
+    QObject::connect (iodriver, SIGNAL(signal_passed_distance(int)), elMap, SLOT(setMetrometer(int)));
     QObject::connect (iodriver, SIGNAL(signal_lat_lon(double,double)), elMap, SLOT(checkMap(double,double)));
     QObject::connect (elMap, SIGNAL(onUpcomingTargets(std::vector<EMapTarget>)), emapCanEmitter, SLOT(setObjectsList(std::vector<EMapTarget>)));
-    QObject::connect (emapCanEmitter, SIGNAL(sendNextObjectToCan(can_frame)), iodriver, SLOT(slot_write_can0_message(can_frame)));
+    QObject::connect (emapCanEmitter, SIGNAL(sendNextObjectToCan(CanFrame)), iodriver, SLOT(slot_send_message(CanFrame)));
 
     iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
 
@@ -295,12 +295,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qDebug() << "Loading map...";
     elMap->load ("./map.gps");
     qDebug() << "Map loaded.";
-    qDebug() << "Set track number 2";
-    elMap->setTrackNumber(2);
-    qDebug () << "Track number seted to 2";
-
-//    elMap->setMetrometer (0);
-//    elMap->checkMap (56.7942, 59.4909);
+    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
 
     return app->exec();
 }

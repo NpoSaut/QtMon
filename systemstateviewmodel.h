@@ -142,8 +142,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(QString NextTargetName READ getNextTargetName WRITE setNextTargetName NOTIFY NextTargetNameChanged)
 
     // Расстояние до ближайшей цели
-    int nextTargetDisstanceValue;
-    Q_PROPERTY(int NextTargetDisstance READ getNextTargetDisstance WRITE setNextTargetDisstance NOTIFY NextTargetDisstanceChanged)
+    int nextTargetDistanceValue;
+    Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
 
     // Текст высокоприоритетного сообщения
     QString warningTextValue;
@@ -217,7 +217,7 @@ public:
     const int getOrdinate() const;
     const int getNextTargetKind() const;
     const QString getNextTargetName() const;
-    const int getNextTargetDisstance() const;
+    const int getNextTargetDistance() const;
     const QString getWarningText() const;
     const QString getInfoText() const;
     const int getTrackNumber() const;
@@ -272,7 +272,7 @@ signals:
     void OrdinateChanged(const int value);
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
-    void NextTargetDisstanceChanged(const int value);
+    void NextTargetDistanceChanged(const int value);
     void WarningTextChanged(const QString value);
     void InfoTextChanged(const QString value);
     void TrackNumberChanged(const int value);
@@ -319,7 +319,7 @@ public slots:
     void setOrdinate(const int);
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
-    void setNextTargetDisstance(const int);
+    void setNextTargetDistance(const int);
     void setWarningText(const QString);
     void setInfoText(const QString);
     void setTrackNumber(const int);

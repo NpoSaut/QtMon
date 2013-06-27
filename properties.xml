@@ -59,7 +59,7 @@
     <Property type="int" name="Ordinate" def="0" description="Текущая ордината" />
     <Property type="int" name="NextTargetKind" def="-1" description="Тип ближайшей цели" />
     <Property type="QString" name="NextTargetName" def="&quot;&quot;" description="Название ближайшей цели" />
-    <Property type="int" name="NextTargetDisstance" def="0" description="Расстояние до ближайшей цели" />
+    <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
 
     <!-- Строки предупреждений -->
     <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>

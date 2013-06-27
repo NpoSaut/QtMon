@@ -38,7 +38,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     ordinateValue = 0;
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
-    nextTargetDisstanceValue = 0;
+    nextTargetDistanceValue = 0;
     warningTextValue = "";
     infoTextValue = "";
     trackNumberValue = 0;
@@ -525,16 +525,16 @@ void SystemStateViewModel::setNextTargetName(const QString value)
 }
 
 // Расстояние до ближайшей цели
-const int SystemStateViewModel::getNextTargetDisstance() const
+const int SystemStateViewModel::getNextTargetDistance() const
 {
-    return nextTargetDisstanceValue;
+    return nextTargetDistanceValue;
 }
-void SystemStateViewModel::setNextTargetDisstance(const int value)
+void SystemStateViewModel::setNextTargetDistance(const int value)
 {
-    if (nextTargetDisstanceValue != value)
+    if (nextTargetDistanceValue != value)
     {
-        nextTargetDisstanceValue = value;
-        emit NextTargetDisstanceChanged(value);
+        nextTargetDistanceValue = value;
+        emit NextTargetDistanceChanged(value);
     }
 }
 

@@ -20,6 +20,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isPressureOkValue = true;
     isEpvReadyValue = true;
     isEpvReleasedValue = false;
+    modulesActivityStringValue = "------------";
     milageValue = 0;
     lightValue = -2;
     alsnFreqTargetValue = -1;
@@ -266,6 +267,20 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
     {
         isEpvReleasedValue = value;
         emit IsEpvReleasedChanged(value);
+    }
+}
+
+// Активность модулей
+const QString SystemStateViewModel::getModulesActivityString() const
+{
+    return modulesActivityStringValue;
+}
+void SystemStateViewModel::setModulesActivityString(const QString value)
+{
+    if (modulesActivityStringValue != value)
+    {
+        modulesActivityStringValue = value;
+        emit ModulesActivityStringChanged(value);
     }
 }
 

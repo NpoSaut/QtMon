@@ -192,9 +192,14 @@ Rectangle {
                 inputMode = false
 
                 var _offset = 0;
-
-                stateView.TrackNumber     =  fillInputParameter(_offset, 2);  _offset += 2;
-                if (fillInputParameter(_offset, 1) % 2) stateView.TrackNumber += 15; _offset += 1;
+                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                }
+                else
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                }
                 stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
                 stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
                 stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
@@ -202,8 +207,6 @@ Rectangle {
                 stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
 
                 if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
-
-                console.debug(stateView.TrackNumber);
             }
         }
     }
@@ -912,10 +915,10 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.leftMargin: 5
-                    text: "-------"
+                    text:qsTr("Конф.: ") + stateView.ModulesActivityString
                     color: "#ffffffff"
                     font.pixelSize: 14
-                    font.family: "URW Gothic L"
+                    font.family: "Nimbus Mono L"
                 }
             }
 

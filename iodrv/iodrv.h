@@ -56,6 +56,7 @@ signals:
     void signal_modules_activity(QString modulesActivity);
     //Одометр
     void signal_passed_distance(int passed_distance);
+    void signal_orig_passed_distance(int orig_passed_distance);
     //Светофоры
     void signal_trafficlight_light(int trafficlight_light);
     void signal_trafficlight_freq(int trafficlight_freq);
@@ -77,6 +78,7 @@ signals:
 
     void signal_lat(double lat);
     void signal_lon(double lon);
+    void signal_lat_lon(double lat, double lon);
     void signal_time(QString time);
     void signal_date(QString date);
 
@@ -127,6 +129,7 @@ private:
     int c_trafficlight_light;
     int c_trafficlight_freq;
     int c_passed_distance;
+    int c_orig_passed_distance;
     int c_epv_state;
     int c_epv_key;
     ModulesActivity c_modulesActivity;
@@ -178,6 +181,7 @@ private:
     int decode_trafficlight_light(struct can_frame* frame);
     int decode_trafficlight_freq(struct can_frame* frame);
     int decode_passed_distance(struct can_frame* frame);
+    int decode_orig_passed_distance (struct can_frame* frame);
     int decode_epv_state(struct can_frame* frame);
     int decode_epv_key(struct can_frame* frame);
     int decode_modules_activity(struct can_frame* frame);

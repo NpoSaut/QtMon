@@ -889,8 +889,8 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     text: stateView.NextTargetKind > 0 ?
                             getTargetKindName(stateView.NextTargetKind) + " " +
-                            "\"" + stateView.NextTargetName + "\" " +
-                            "через " + stateView.NextTargetDisstance + "м"
+                            stateView.NextTargetName +
+                            "через " + stateView.NextTargetDistance + "м"
                             : "нет данных о цели" ;
                     color: "#ffffffff"
                     font.pixelSize: 14

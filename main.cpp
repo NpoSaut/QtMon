@@ -226,6 +226,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Состояние системы
     QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
+    QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
     //Светофоры
@@ -296,6 +297,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     elMap->load ("./map.gps");
     qDebug() << "Map loaded.";
 
+//    elMap->setTrackNumber (1);
     QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
     QObject::connect (elMap, SIGNAL(ordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
     QObject::connect (elMap, SIGNAL(ordinateChanged(int)), emapCanEmitter, SLOT(setOrdinate(int)));

@@ -152,22 +152,27 @@ void ElectroincMap::checkMap(double lat, double lon)
     if (firstEnter)
     {
         // Находим ближайший километровый столб (за исключением "столба отправления")
-        KilometerPost *closestPost = nullptr;
+        KilometerPost *closestTargetPost = nullptr;
+        KilometerPost *closestDepartPost = nullptr;
         double closestDist = 1e20;
         foreach (KilometerPost *p, nearPosts)
         {
-            if (p != departPost && p->position == kpp_middle)
+            KilometerPost *dp = projectNextPost(p, true);
+            //if (p != departPost && p->position == kpp_middle)
+            if (dp != nullptr)
             {
-                double d = p->distanceTo(lat, lon);
+                double d = p->distanceTo(lat, lon) + dp->distanceTo (lat, lon);
                 if (d < closestDist)
                 {
-                    closestPost = p;
+                    closestTargetPost = p;
+                    closestDepartPost = dp;
                     closestDist = d;
                 }
             }
         }
-        targetPost = closestPost;
-        departPost = projectNextPost(targetPost, true);
+        targetPost = closestTargetPost;
+        departPost = closestDepartPost;
+        //departPost = projectNextPost(targetPost, true);
         departX = x - departPost->distanceTo(lat, lon);
         setIsLocated (true);
 
@@ -181,7 +186,7 @@ void ElectroincMap::checkMap(double lat, double lon)
         nextPosts.remove(departPost);   // Удаляем оттуда столб отправления (на него мы не можем ехать)
     syncPostApproaches(nextPosts);      // синхронизируем список приближений
 
-    // Вычисляем приближения для всех точек
+   // Вычисляем приближения для всех точек
     foreach(PostApproach *pa, postApproaches)
     {
         // Добавляем текущую точку приближения
@@ -202,6 +207,9 @@ void ElectroincMap::checkMap(double lat, double lon)
     else { CPRINTF(CL_YELLOW_L, "%5.0f", targetPost->ordinate); }
     printf(" appr: ");
     CPRINTF(CL_GREEN_L, "%5.2f", targetPostApproach->approachingSpeed);
+    printf(" (");
+    CPRINTF(CL_GREEN, "%3.1f", targetPostApproach->minimalApproach);
+    printf(")");
     printf("\n");
 
     // Смотрим, не нужно ли соскачить со столба
@@ -209,6 +217,7 @@ void ElectroincMap::checkMap(double lat, double lon)
             (targetPostApproach->approachingSpeed < 0 &&    // Соскакиваем, если мы удаляемся от столба
              targetPostApproach->minimalApproach > 150))    // И максимальное приближение было более 150 метров
     {
+        CPRINTF(CL_YELLOW, "      Loosing post\n");
         targetPostApproach = findBestApproach();
         targetPost = targetPostApproach->post;
 
@@ -216,7 +225,7 @@ void ElectroincMap::checkMap(double lat, double lon)
         if (p == nullptr) setIsLocated(false);
         else departPost = p;
 
-        CPRINTF(CL_YELLOW_L, "      CHECKED TO [%8.0f  -->  %8.0f]", departPost->ordinate, targetPost->ordinate);
+        CPRINTF(CL_YELLOW_L, "      CHECKED TO [%8.0f  -->  %8.0f]\n", departPost->ordinate, targetPost->ordinate);
     }
 
 
@@ -307,7 +316,7 @@ ElectroincMap::PostApproach *ElectroincMap::findBestApproach()
 // Получает список ближайих целей
 vector<EMapTarget> ElectroincMap::getNextObjects(const KilometerPost *startPost, double startPostX, int count)
 {
-    const int backBuffer = 300;
+    const int backBuffer = 0;
     vector<EMapTarget> res;
     double currentPostX = startPostX;
     const KilometerPost *currentPost = startPost;
@@ -318,6 +327,7 @@ vector<EMapTarget> ElectroincMap::getNextObjects(const KilometerPost *startPost,
     do
     {
         Rail *currentRail = getMyRail(currentPost);
+        if (currentRail == nullptr) break;
 //        CPRINTF(CL_GREEN_L, "    Проверяем КП %5.0f", currentPost->ordinate);
 //        printf(" X:");
 //        CPRINTF(CL_VIOLET_L, " %5.0f\n", currentPostX);
@@ -389,6 +399,8 @@ void ElectroincMap::checkObjects()
 //    CPRINTF(CL_CYAN_L, "%5.0f", currentKilometer->ordinate);
 //    CPRINTF(CL_CYAN, " departX %.0f м\n", departX);
 //    CPRINTF(CL_RED_L, "     d = %.0f м\n", departPost->ordinate - currentKilometer->ordinate);
+
+
     vector<EMapTarget> targets = getNextObjects(currentKilometer, departX + (departPost->ordinate - currentKilometer->ordinate));
     foreach (EMapTarget t, targets) {
         CPRINTF(CL_GREEN , "     TARGET");
@@ -460,7 +472,7 @@ void ElectroincMap::syncPostApproaches(list<KilometerPost *> posts)
 
 KilometerPost *ElectroincMap::projectNextPost(const KilometerPost *forPost, bool goBack)
 {
-    int direction = forPost->direction * getMyRail(forPost)->direction * (goBack ? -1 : 1);
+    int direction = forPost->direction * Rail::getDirectoin (trackNumber) * (goBack ? -1 : 1);
     KilometerPost *res = nullptr;
     double shiftToRes = 1e20;
     foreach(KilometerPost *kp, nearPosts)
@@ -481,22 +493,23 @@ KilometerPost *ElectroincMap::projectNextPost(const KilometerPost *forPost, bool
 
 vector<ElectroincMap::ApproachingPoint> ElectroincMap::PostApproach::getExtremumApproaches()
 {
-    vector<ElectroincMap::ApproachingPoint> res;
+//    vector<ElectroincMap::ApproachingPoint> res;
 
-    ElectroincMap::ApproachingPoint prev_ap(1e20, 1e20);
-    D_foreach(aPoints, ElectroincMap::ApproachingPoint, itr)
-    {
-        ElectroincMap::ApproachingPoint ap = *itr;
-        if (ap.r == minimalApproach)
-        {
-            res.push_back(prev_ap);
-            res.push_back(ap);
-            res.push_back(*(++itr));
-        }
-        prev_ap = ap;
-    }
+//    ElectroincMap::ApproachingPoint prev_ap(1e20, 1e20);
+//    D_foreach(aPoints, ElectroincMap::ApproachingPoint, itr)
+//    {
+//        ElectroincMap::ApproachingPoint ap = *itr;
+//        if (ap.r == minimalApproach)
+//        {
+//            res.push_back(prev_ap);
+//            res.push_back(ap);
+//            res.push_back(*(++itr));
+//        }
+//        prev_ap = ap;
+//    }
 
-    return res;
+//    return res;
+    return minPoints;
 }
 
 double ElectroincMap::PostApproach::parabolizeX(vector<ElectroincMap::ApproachingPoint> aprs)
@@ -508,7 +521,7 @@ double ElectroincMap::PostApproach::parabolizeX(vector<ElectroincMap::Approachin
 
 
 
-const double approachIncreaseLimit = 30; // м
+const double approachIncreaseLimit = 15; // м
 bool ElectroincMap::PostApproach::pushApproaching(ElectroincMap::ApproachingPoint ap)
 {
     foreach (ApproachingPoint iap, aPoints) {
@@ -523,16 +536,44 @@ bool ElectroincMap::PostApproach::pushApproaching(ElectroincMap::ApproachingPoin
 
     approachingSpeed = estimateApproaching();
 
-    // Проверяем, ближе ли эта точка к столбу чем другие
-    if (ap.r < minimalApproach)
+    if (minCandidateActualCount == 3)
     {
-        minimalApproach = ap.r;
+        minCandidate[0] = minCandidate[1];
+        minCandidate[1] = minCandidate[2];
+    } else minCandidateActualCount++;
+    minCandidate[minCandidateActualCount - 1] = ap;
+
+    if (ap.r < minimalApproach) minimalApproach = ap.r;
+
+    CPRINTF(CL_BLUE, "   adding post with r: %5.1f\n", ap.r);
+    if (minCandidateActualCount == 3 && minCandidate[0].r >= minCandidate[1].r && minCandidate[2].r >= minCandidate[1].r)
+    {
+        CPRINTF(CL_GREEN, "   \nlocal minimum detected with r: %5.1f\n", minCandidate[1].r);
+        if (minCandidate[1].r < minimalApproach)
+        {
+            CPRINTF(CL_GREEN_L, "   global minimum detected with r: %5.1f\n", minCandidate[1].r);
+            minPoints.clear ();
+            minPoints.push_back (minCandidate[0]);
+            minPoints.push_back (minCandidate[1]);
+            minPoints.push_back (minCandidate[2]);
+        }
     }
-    // Если мы не приближаемся к столбу - проверяем, не отдалились ли мы от его а "достоверное" расстояние
-    else
-    {
+
+    if (minPoints.size () == 3)
         achived = ap.r - minimalApproach >= approachIncreaseLimit;
-    }
+
+//    // Проверяем, ближе ли эта точка к столбу чем другие
+//    if (ap.r < minimalApproach)
+//    {
+//        minimalApproach = ap.r;
+//    }
+//    // Если мы не приближаемся к столбу - проверяем, не отдалились ли мы от его а "достоверное" расстояние
+//    else
+//    {
+//        achived = ap.r - minimalApproach >= approachIncreaseLimit;
+//    }
+
+
     return achived;
 }
 

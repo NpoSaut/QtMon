@@ -135,6 +135,22 @@ class SystemStateViewModel : public QDeclarativeItem
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
 
+    // Текущая ордината
+    int ordinateValue;
+    Q_PROPERTY(int Ordinate READ getOrdinate WRITE setOrdinate NOTIFY OrdinateChanged)
+
+    // Тип ближайшей цели
+    int nextTargetKindValue;
+    Q_PROPERTY(int NextTargetKind READ getNextTargetKind WRITE setNextTargetKind NOTIFY NextTargetKindChanged)
+
+    // Название ближайшей цели
+    QString nextTargetNameValue;
+    Q_PROPERTY(QString NextTargetName READ getNextTargetName WRITE setNextTargetName NOTIFY NextTargetNameChanged)
+
+    // Расстояние до ближайшей цели
+    int nextTargetDistanceValue;
+    Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
+
     // Текст высокоприоритетного сообщения
     QString warningTextValue;
     Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
@@ -205,6 +221,10 @@ public:
     const bool getIsVigilanceRequired() const;
     const bool getIsTractionOn() const;
     const int getDirection() const;
+    const int getOrdinate() const;
+    const int getNextTargetKind() const;
+    const QString getNextTargetName() const;
+    const int getNextTargetDistance() const;
     const QString getWarningText() const;
     const QString getInfoText() const;
     const int getTrackNumber() const;
@@ -257,6 +277,10 @@ signals:
     void IsVigilanceRequiredChanged(const bool value);
     void IsTractionOnChanged(const bool value);
     void DirectionChanged(const int value);
+    void OrdinateChanged(const int value);
+    void NextTargetKindChanged(const int value);
+    void NextTargetNameChanged(const QString value);
+    void NextTargetDistanceChanged(const int value);
     void WarningTextChanged(const QString value);
     void InfoTextChanged(const QString value);
     void TrackNumberChanged(const int value);
@@ -301,6 +325,10 @@ public slots:
     void setIsVigilanceRequired(const bool);
     void setIsTractionOn(const bool);
     void setDirection(const int);
+    void setOrdinate(const int);
+    void setNextTargetKind(const int);
+    void setNextTargetName(const QString);
+    void setNextTargetDistance(const int);
     void setWarningText(const QString);
     void setInfoText(const QString);
     void setTrackNumber(const int);

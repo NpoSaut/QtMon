@@ -3,6 +3,7 @@
 #include <QByteArray>
 
 #include "endecs.h"
+#include "lowlevel.h"
 
 
 
@@ -337,6 +338,23 @@ int can_decoder::decode_passed_distance(struct can_frame* frame, int* passed_dis
     return 1;
 }
 
+// MY_DEBUG_A
+int can_decoder::decode_orig_passed_distance(struct can_frame* frame, int* x)
+{
+    if ((*frame).can_id != 0x0C4) return -1; // 0x1888
+
+    struct IntByBytes
+    {
+        int byte1: 8;
+        int byte2: 8;
+        int byte3: 8;
+        int byte4: 8;
+    };
+
+    (*x) = Complex<int32_t> ({frame->data[4], frame->data[3], frame->data[5], (frame->data[5] & (1 << 7)) ? 0xFF : 0});
+
+    return 1;
+}
 
 // MM_ALT_LONG
 int can_decoder::decode_mm_lat_lon(struct can_frame* frame, double* lat, double* lon)

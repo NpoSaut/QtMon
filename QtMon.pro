@@ -22,8 +22,8 @@ SOURCES += main.cpp \
     iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
     iodrv/canframe.cpp \
-    iodrv/cookies.cpp
-
+    iodrv/cookies.cpp \
+    iodrv/modulesactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -44,7 +44,8 @@ HEADERS += \
     masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \
-    lowlevel.h
+    lowlevel.h \
+    iodrv/modulesactivity.h
 
 CONFIG += console
 

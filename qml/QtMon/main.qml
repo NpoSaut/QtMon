@@ -864,6 +864,16 @@ Rectangle {
                 border.color: "#ffffff00"
                 //width: 100
                 height: 25
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Конфигурация: ") + stateView.ModulesActivityString
+
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "Nimbus Mono L"
+                }
             }
 
 

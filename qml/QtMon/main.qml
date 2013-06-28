@@ -172,7 +172,7 @@ Rectangle {
                 inputMode = false
 
                 var _offset = 0;
-                if (inputPositions[2] % 2 == 0)
+                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
                 {
                     stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
                 }

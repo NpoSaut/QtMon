@@ -887,7 +887,7 @@ Rectangle {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    text: stateView.NextTargetKind > 0 ?
+                    text: (stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
                             getTargetKindName(stateView.NextTargetKind) + " " +
                             stateView.NextTargetName +
                             "через " + stateView.NextTargetDistance + "м"

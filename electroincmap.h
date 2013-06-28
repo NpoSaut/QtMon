@@ -49,6 +49,9 @@ private:
     class ApproachingPoint
     {
     public:
+        ApproachingPoint()
+            : x(0), r(1e20)
+        { }
         ApproachingPoint(double x, double r)
             : x(x), r(r)
         { }
@@ -63,7 +66,10 @@ private:
         PostApproach(KilometerPost *post)
             : post(post),
               achived(false),
-              minimalApproach(1e20)
+              minimalApproach(1e20),
+              aPoints(),
+              minPoints(),
+              minCandidateActualCount(0)
         { }
 
         KilometerPost *post;
@@ -72,7 +78,11 @@ private:
         double getX();
         double minimalApproach;
         double approachingSpeed;
+        double lastApproach;
         list<ApproachingPoint> aPoints;
+        int minCandidateActualCount;
+        ApproachingPoint minCandidate[3];
+        vector<ApproachingPoint> minPoints;
     private:
         double parabolizeX(vector<ApproachingPoint> aprs);
         vector<ApproachingPoint> getExtremumApproaches();
@@ -112,8 +122,9 @@ public:
 signals:
     void onPostDetected(KilometerPost post, double x);
     void onUpcomingTargets(std::vector<EMapTarget>);
-    void isLocatedChanged();
-    void ordinateChanged();
+    void isLocatedChanged(bool value);
+    void ordinateChanged(int value);
+    void activityChanged(bool active);
 
 public slots:
     void setMetrometer(int value);

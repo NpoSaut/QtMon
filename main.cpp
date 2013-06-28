@@ -6,7 +6,7 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include <QString>
-#include <QStringList>
+#include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
 #include "systemstateviewmodel.h"
@@ -226,6 +226,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Состояние системы
     QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
+    QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
     //Светофоры
@@ -280,7 +281,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (iodriver, SIGNAL(signal_passed_distance(int)), elMap, SLOT(setMetrometer(int)));
     QObject::connect (iodriver, SIGNAL(signal_lat_lon(double,double)), elMap, SLOT(checkMap(double,double)));
     QObject::connect (elMap, SIGNAL(onUpcomingTargets(std::vector<EMapTarget>)), emapCanEmitter, SLOT(setObjectsList(std::vector<EMapTarget>)));
-    QObject::connect (emapCanEmitter, SIGNAL(sendNextObjectToCan(can_frame)), iodriver, SLOT(slot_write_can0_message(can_frame)));
 
     iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
 
@@ -298,13 +298,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qDebug() << "Loading map...";
     elMap->load ("./map.gps");
     qDebug() << "Map loaded.";
-    qDebug() << "Set track number 2";
-    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
-//    elMap->setTrackNumber(2);
-    qDebug () << "Track number seted to 2";
 
-//    elMap->setMetrometer (0);
-//    elMap->checkMap (56.7942, 59.4909);
+//    elMap->setTrackNumber (1);
+    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
+    QObject::connect (elMap, SIGNAL(ordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
+    QObject::connect (elMap, SIGNAL(ordinateChanged(int)), emapCanEmitter, SLOT(setOrdinate(int)));
+    QObject::connect (elMap, SIGNAL(activityChanged(bool)), emapCanEmitter, SLOT(setActivity(bool)));
+    QObject::connect (emapCanEmitter, SIGNAL(targetDistanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
+    QObject::connect (emapCanEmitter, SIGNAL(targetNameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
+    QObject::connect (emapCanEmitter, SIGNAL(targetTypeChanged(int)), systemState, SLOT(setNextTargetKind(int)));
 
     return app->exec();
 }

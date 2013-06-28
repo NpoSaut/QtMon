@@ -4,7 +4,6 @@
 #include <QtCore/qmath.h>
 
 #include <QFile>
-#include <QTextStream>
 
 #include "iodrv.h"
 
@@ -27,7 +26,8 @@ static double DistanceBetweenCoordinates(double lat1d, double lon1d, double lat2
 }
 
 iodrv::iodrv(SystemStateViewModel *systemState)
-    : distance_store_file("/media/milage.txt")
+    : distance_store_file("/media/milage.txt"),
+      c_modulesActivity(), p_modulesActivity()
 {
     //!!!!! TODO: ВРЕМЕННО
     this->systemState = systemState;
@@ -110,7 +110,7 @@ int iodrv::start(char* can_iface_name_0, char *can_iface_name_1, gps_data_source
     gps_source = gps_datasource;
 
     // Инициализация сокетов
-    if (init_sktcan("can0", "can0") == 0)
+    if (init_sktcan("can0", "can1") == 0)
     {
         //printf("Инициализация сокетов не удалась\n"); fflush(stdout);
         return 0;
@@ -182,10 +182,7 @@ void iodrv::write_canmsg_async(int write_socket, can_frame* frame)
 
     //qDebug() << "cocure";
     //QtConcurrent::run(write_can_frame, write_socket, *frame);
-    if ( frame->can_id == 0x422 )
-    {
-        write_can_frame(write_socket, *frame);
-    }
+    write_can_frame(write_socket, *frame);
 }
 
 void iodrv::read_canmsgs_loop()
@@ -215,6 +212,7 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_orig_passed_distance (frame);
     decode_epv_state(frame);
     decode_epv_key(frame);
+    decode_modules_activity(frame);
 
     decode_driving_mode(frame);
     decode_vigilance(frame);
@@ -465,6 +463,20 @@ int iodrv::decode_epv_key(struct can_frame* frame)
     }
 }
 
+int iodrv::decode_modules_activity(can_frame *frame)
+{
+    switch (can_decoder::decode_modules_activity (frame, &c_modulesActivity))
+    {
+        case 1:
+        if ((p_modulesActivity.isCollected() == false) || (p_modulesActivity.isCollected() == true && p_modulesActivity != c_modulesActivity))
+            {
+                emit signal_modules_activity (c_modulesActivity.toString ());
+            }
+            p_modulesActivity = c_modulesActivity;
+            break;
+    }
+}
+
 int iodrv::decode_mm_lat_lon(struct can_frame* frame)
 {
     switch (can_decoder::decode_mm_lat_lon(frame, &c_lat, &c_lon))
@@ -476,7 +488,7 @@ int iodrv::decode_mm_lat_lon(struct can_frame* frame)
                 emit signal_lat(c_lat);
                 emit signal_lon(c_lon);
             }
-            emit signal_lat_lon (c_lat, c_lon);
+//            emit signal_lat_lon (c_lat, c_lon);
             p_lat = c_lat;
             p_lon = c_lon;
 
@@ -711,7 +723,7 @@ void iodrv::slot_serial_ready_read()
 
             emit signal_lat(gd.lat);
             emit signal_lon(gd.lon);
-
+            emit signal_lat_lon (gd.lat, gd.lon);
 
             static double speed_old = 0;
 
@@ -844,17 +856,6 @@ void iodrv::slot_autolock_type_target_changed (int value)
 {
     c_autolock_type_target = value;
 }
-
-void iodrv::slot_write_can0_message(can_frame frame)
-{
-    write_canmsg_async (write_socket_0, &frame);
-}
-
-void iodrv::slot_write_can1_message(can_frame frame)
-{
-    write_canmsg_async (write_socket_1, &frame);
-}
-
 
 SpeedAgregator::SpeedAgregator()
     : currentSpeedFromEarth(-1), currentSpeedFromSky(-1), currentSpeedIsValid(false), onRails(true)

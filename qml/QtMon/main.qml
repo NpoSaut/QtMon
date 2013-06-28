@@ -60,6 +60,26 @@ Rectangle {
         }
     }
 
+    function getTargetKindName(kindId)
+    {
+        switch (kindId)
+        {
+            case -1: return "";
+            case 1: return "Светофор";
+            case 2: return "Станция";
+            case 3: return "Оп. место";
+            case 4: return "Мост";
+            case 5: return "Переезд";
+            case 6: return "Платформа";
+            case 7: return "Туннель";
+            case 8: return "Стрелка";
+            case 9: return "ТКС";
+            case 10: return "ГПУ САУТ";
+            case 11: return "Тупик";
+        }
+
+    }
+
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
@@ -172,9 +192,14 @@ Rectangle {
                 inputMode = false
 
                 var _offset = 0;
-
-                stateView.TrackNumber     =  fillInputParameter(_offset, 2);  _offset += 2;
-                if (fillInputParameter(_offset, 1) % 2) stateView.TrackNumber += 15; _offset += 1;
+                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                }
+                else
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                }
                 stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
                 stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
                 stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
@@ -182,8 +207,6 @@ Rectangle {
                 stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
 
                 if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
-
-                console.debug(stateView.TrackNumber);
             }
         }
     }
@@ -316,9 +339,9 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: ((stateView.Milage / 1000) - ((stateView.Milage / 1000) % 1)) + "км " +
-                                     (((stateView.Milage % 1000 ) / 100) - (((stateView.Milage % 1000 ) / 100) % 1)) + "пк " +
-                                     (stateView.Milage % 100).toString() + "м"
+                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
+                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
+                                     (stateView.Ordinate % 100).toString() + "м"
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14
@@ -849,18 +872,54 @@ Rectangle {
                 }
             }
 
-            // Информационная строка
+            // Ближайшая цель
             Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.rightMargin: 200
                 anchors.leftMargin: 10
                 border.color: "#ffffff00"
-                //width: 100
                 height: 25
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: stateView.NextTargetKind > 0 ?
+                            getTargetKindName(stateView.NextTargetKind) + " " +
+                            stateView.NextTargetName +
+                            "через " + stateView.NextTargetDistance + "м"
+                            : "нет данных о цели" ;
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "URW Gothic L"
+                }
+            }
+
+            // Конфигурация
+            Rectangle {
+                color: "#20000000"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.right
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: -180
+                border.color: "#ffffff00"
+                height: 25
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 5
+                    text:qsTr("Конф.: ") + stateView.ModulesActivityString
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "Nimbus Mono L"
+                }
             }
 
 

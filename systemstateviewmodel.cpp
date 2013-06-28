@@ -20,6 +20,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isPressureOkValue = true;
     isEpvReadyValue = true;
     isEpvReleasedValue = false;
+    modulesActivityStringValue = "------------";
     milageValue = 0;
     lightValue = -2;
     alsnFreqTargetValue = -1;
@@ -35,6 +36,10 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
+    ordinateValue = 0;
+    nextTargetKindValue = -1;
+    nextTargetNameValue = "";
+    nextTargetDistanceValue = 0;
     warningTextValue = "";
     infoTextValue = "";
     trackNumberValue = 0;
@@ -269,6 +274,20 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
     }
 }
 
+// Активность модулей
+const QString SystemStateViewModel::getModulesActivityString() const
+{
+    return modulesActivityStringValue;
+}
+void SystemStateViewModel::setModulesActivityString(const QString value)
+{
+    if (modulesActivityStringValue != value)
+    {
+        modulesActivityStringValue = value;
+        emit ModulesActivityStringChanged(value);
+    }
+}
+
 // Проиденное расстояние
 const int SystemStateViewModel::getMilage() const
 {
@@ -475,6 +494,62 @@ void SystemStateViewModel::setDirection(const int value)
     {
         directionValue = value;
         emit DirectionChanged(value);
+    }
+}
+
+// Текущая ордината
+const int SystemStateViewModel::getOrdinate() const
+{
+    return ordinateValue;
+}
+void SystemStateViewModel::setOrdinate(const int value)
+{
+    if (ordinateValue != value)
+    {
+        ordinateValue = value;
+        emit OrdinateChanged(value);
+    }
+}
+
+// Тип ближайшей цели
+const int SystemStateViewModel::getNextTargetKind() const
+{
+    return nextTargetKindValue;
+}
+void SystemStateViewModel::setNextTargetKind(const int value)
+{
+    if (nextTargetKindValue != value)
+    {
+        nextTargetKindValue = value;
+        emit NextTargetKindChanged(value);
+    }
+}
+
+// Название ближайшей цели
+const QString SystemStateViewModel::getNextTargetName() const
+{
+    return nextTargetNameValue;
+}
+void SystemStateViewModel::setNextTargetName(const QString value)
+{
+    if (nextTargetNameValue != value)
+    {
+        nextTargetNameValue = value;
+        emit NextTargetNameChanged(value);
+    }
+}
+
+// Расстояние до ближайшей цели
+const int SystemStateViewModel::getNextTargetDistance() const
+{
+    return nextTargetDistanceValue;
+}
+void SystemStateViewModel::setNextTargetDistance(const int value)
+{
+    if (nextTargetDistanceValue != value)
+    {
+        nextTargetDistanceValue = value;
+        emit NextTargetDistanceChanged(value);
     }
 }
 

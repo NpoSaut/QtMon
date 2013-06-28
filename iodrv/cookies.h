@@ -1,6 +1,9 @@
 #ifndef COOKIES_H
 #define COOKIES_H
 
+// Временно: чтобы под виндоус у Жени компилировалось
+#if defined WITH_CAN
+
 #include <QObject>
 #include <QElapsedTimer>
 #include <QTimer>
@@ -63,10 +66,15 @@ private:
     void applyNewValue (int newValue);
     void applyNewValidity (bool newValid);
 
+    // Посылает в CAN команду на запись значения
+    void writeValueRequestSend ();
+
     int index;
     int value;
     bool valid;
     bool forceUpdate;
+    bool writeActive;
+    int writeValue;
     QElapsedTimer lastUpdateTimer;
     QTimer answerWaitTimer;
 };
@@ -134,5 +142,7 @@ public slots:
 };
 
 extern Cookies cookies;
+
+#endif // WITH_CAN
 
 #endif // COOKIES_H

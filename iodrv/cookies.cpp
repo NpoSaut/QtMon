@@ -1,8 +1,11 @@
+// Временно: чтобы под виндоус у Жени компилировалось
+#if defined WITH_CAN
+
 #include "lowlevel.h"
 #include "cookies.h"
 
 Cookie::Cookie(int index)
-    : QObject(), answerWaitTimer(), index (index)
+    : QObject(), answerWaitTimer(), index (index), valid (false), forceUpdate (false), writeActive (false)
 {
     QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(loadData(CanFrame)));
 
@@ -63,9 +66,17 @@ bool Cookie::loadDataWithControl(const CanFrame &frame)
             {
                 if ( byte[4] == 1 ) // Код ошибки: устройство занято
                 {
-                    // Повторяем запрос
-                    CanFrame frame( 0x0E01, std::vector<unsigned char> (1,index) );
-                    canDev.transmitMessage (frame);
+                    if ( writeActive )
+                    {
+                        // Повторяем запись
+                        writeValueRequestSend ();
+                    }
+                    else
+                    {
+                        // Повторяем запрос
+                        CanFrame frame( 0x0E01, std::vector<unsigned char> (1,index) );
+                        canDev.transmitMessage (frame);
+                    }
 
                     if ( !answerWaitTimer.isActive () ) // Не перезапускать таймер, если уже запущен
                         answerWaitTimer.start ();
@@ -89,9 +100,11 @@ return false;
 
 void Cookie::applyNewValue(int newValue)
 {
-    if ( newValue != value || forceUpdate )
+    if ( newValue != value || forceUpdate || writeActive )
     {
         forceUpdate = false;
+        writeActive = false;
+
         value = newValue;
         emit onChange (value);
     }
@@ -99,21 +112,22 @@ void Cookie::applyNewValue(int newValue)
 
 void Cookie::applyNewValidity(bool newValid)
 {
-    if ( newValid != valid || forceUpdate )
+    if ( newValid != valid || forceUpdate  || writeActive )
     {
         forceUpdate = false;
+        writeActive = false;
+
         valid = newValid;
         emit onValidChange (valid);
     }
 }
 
-
-void Cookie::setVaule(int value)
+void Cookie::writeValueRequestSend()
 {
     std::vector<unsigned char> data(5);
     data[0] = index;
 
-    Complex<uint32_t> valueByte = value;
+    Complex<int32_t> valueByte = writeValue;
     data[1] = valueByte[3];
     data[2] = valueByte[2];
     data[3] = valueByte[1];
@@ -121,6 +135,15 @@ void Cookie::setVaule(int value)
 
     CanFrame frame( 0x6205, data ); // INPUT_DATA id: 0x310
     canDev.transmitMessage (frame);
+}
+
+void Cookie::setVaule(int value)
+{
+    writeValue = value;
+
+    writeValueRequestSend ();
+
+    writeActive = true;
     answerWaitTimer.start ();
 }
 
@@ -181,3 +204,5 @@ Cookies::Cookies(QObject *parent)
 }
 
 Cookies cookies;
+
+#endif // WITH_CAN

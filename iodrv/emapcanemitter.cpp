@@ -1,6 +1,8 @@
 #if defined WITH_CAN
 
+#include "lowlevel.h"
 #include "emapcanemitter.h"
+
 #include <QDebug>
 
 using namespace std;
@@ -9,18 +11,23 @@ using namespace Navigation;
 EMapCanEmitter::EMapCanEmitter(QObject *parent) :
     QObject(parent),
     timer(parent), // Частота выдача в can объекта. Должна быть 100 мс, но из-за проблем со временем 50 -TiME-
-    step (0)
+    sendingObjects(), receivedObjects(),
+    step (0), targetNumber(0), targetDistance(0), active(false)
 {
     timer.setInterval (50);
     timer.start ();
     QObject::connect (&timer, SIGNAL(timeout()), this, SLOT(engine()));
+
+    // Получение данных о текущей цели из ЦО
+    QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getTargetDistanceFromMcoState(CanFrame)));
+    QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getTargetNumberFromMcoLimits(CanFrame)));
 }
 
 EMapCanEmitter::CanMessageData EMapCanEmitter::encodeEMapTarget(const EMapTarget& t, int targetNumber)
 {
     CanMessageData canMessage;
 
-    canMessage.errors = 0;
+    canMessage.errors = (active ? 0 : 1);
     canMessage.number = targetNumber;
     canMessage.type = t.object->getType ();
     canMessage.xLow = t.x & 0xFF;
@@ -43,46 +50,93 @@ EMapCanEmitter::CanMessageData EMapCanEmitter::encodeEMapTarget(const EMapTarget
 
 void EMapCanEmitter::engine()
 {
-    if (step == 0)
+    CanFrame canFrame (0x43E8, std::vector<unsigned char>(8)); // MM_STATE
+    if (step < sendingObjects.size ())
     {
+        CanMessageData canMessage = encodeEMapTarget(sendingObjects[step], step);
+        canFrame.setData (std::vector<unsigned char>((unsigned char *)(&canMessage), (unsigned char *)(&canMessage) + 8) );
+    }
+    else
+    {
+        std::vector<unsigned char> data (8);
+        data[0] = (active ? 0 : 1);
+        data[1] = step; // Пустой объект
+        canFrame.setData (data);
+    }
+    canDev.transmitMessage (canFrame);
+
+    if (++step == 10)
+    {
+        step = 0;
+
+//        // Вывод названия ближайщей цели
+//        if ( targetNumber < sendingObjects.size () )
+//          if (active)
+//            canDev.transmitMessage (
+//                        CanFrame (0xC068,
+//                                  std::vector<unsigned char> ( sendingObjects[targetNumber].object->getName().toAscii().data(),
+//                                                               sendingObjects[targetNumber].object->getName().toAscii().data() + 8) )
+//                                     );
+
+        // Обновление списка целей
         mutex.lock ();
         sendingObjects = receivedObjects;
         mutex.unlock ();
     }
-
-    if (step < sendingObjects.size ())
-//    if (step < sendingObjects.size () && step == 0)
-    {
-        can_frame canFrame;
-        canFrame.can_id = 0x422; // 0x8448
-//        canFrame.can_id = 0x21F; // 0x43E8
-        canFrame.can_dlc = 8;
-
-        CanMessageData &canMessage = *((CanMessageData *) &canFrame.data);
-        canMessage = encodeEMapTarget(sendingObjects[step], step); // Это просто очень плохо
-
-//        qDebug() << "target: " << sendingObjects[step].x << " .." << canFrame.data[2] << " " << canFrame.data[3];
-
-        emit sendNextObjectToCan (canFrame);
-
-        // Вывод названия цели
-        if (step == 0)
-        {
-            canFrame.can_id = 0x603; // 0xC068
-            canFrame.can_dlc = 8;
-            memcpy (&canFrame.data, sendingObjects[step].object->getName().toAscii().data(), 8);
-
-            emit sendNextObjectToCan (canFrame);
-        }
-    }
-
-    if (++step == 10)
-        step = 0;
 }
 
-void EMapCanEmitter::setObjectsList(const vector<EMapTarget> &objects)
+void EMapCanEmitter::getTargetDistanceFromMcoState(CanFrame canFrame)
+{
+    if ( canFrame.getDescriptor () == 0x0A08 )
+    {
+        unsigned newTargetDistance = (unsigned(canFrame.getData ()[3] & 0x1F) << 8) + canFrame.getData ()[4];
+        qDebug() << "MCO_STATE: " << newTargetDistance;
+        if ( newTargetDistance != targetDistance )
+        {
+            targetDistance = newTargetDistance;
+            emit targetDistanceChanged (targetDistance);
+        }
+    }
+}
+
+void EMapCanEmitter::getTargetNumberFromMcoLimits(CanFrame canFrame)
+{
+    if ( canFrame.getDescriptor () == 0x0A48 )
+    {
+        unsigned newTargetNumber = canFrame.getData ()[6] >> 4;
+        if ( newTargetNumber != targetNumber )
+        {
+            targetNumber = newTargetNumber;
+            if ( targetNumber < sendingObjects.size () )
+            {
+                emit targetNameChanged (sendingObjects[targetNumber].object->getName());
+                emit targetTypeChanged (sendingObjects[targetNumber].object->getType());
+            }
+            else
+            {
+                emit targetNameChanged ("");
+                emit targetTypeChanged (0);
+            }
+        }
+    }
+}
+
+void EMapCanEmitter::setObjectsList(const vector<EMapTarget> objects)
 {
     receivedObjects = objects;
+}
+
+void EMapCanEmitter::setOrdinate(int ordinate)
+{
+    canDev.transmitMessage (
+                CanFrame (0xC0A3, // MM_COORD
+                          ByteArray<3> (ordinate).msbFirst() )
+                );
+}
+
+void EMapCanEmitter::setActivity(bool active)
+{
+    this->active = active;
 }
 
 #endif

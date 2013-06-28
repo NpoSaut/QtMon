@@ -13,6 +13,7 @@
 #include "sktcan.h"
 #include "endecs.h"
 #include "canframe.h"
+#include "modulesactivity.h"
 
 
 #ifdef WITH_SERIALPORT
@@ -52,6 +53,7 @@ signals:
     //Состояние системы
     void signal_epv_released(bool epv_state);
     void signal_epv_key(bool epv_key);
+    void signal_modules_activity(QString modulesActivity);
     //Одометр
     void signal_passed_distance(int passed_distance);
     void signal_orig_passed_distance(int orig_passed_distance);
@@ -92,8 +94,6 @@ public slots:
     void slot_rmp_key_down();
     void slot_rmp_key_up();
     void slot_autolock_type_target_changed(int value);
-    void slot_write_can0_message(can_frame frame);
-    void slot_write_can1_message(can_frame frame);
 
 private slots:
     void slot_serial_ready_read();
@@ -134,6 +134,7 @@ private:
     int c_orig_passed_distance;
     int c_epv_state;
     int c_epv_key;
+    ModulesActivity c_modulesActivity;
 
     int c_driving_mode;
     int c_vigilance;
@@ -157,6 +158,7 @@ private:
     int p_passed_distance;
     int p_epv_state;
     int p_epv_key;
+    ModulesActivity p_modulesActivity;
 
     int p_driving_mode;
     int p_vigilance;
@@ -184,6 +186,7 @@ private:
     int decode_orig_passed_distance (struct can_frame* frame);
     int decode_epv_state(struct can_frame* frame);
     int decode_epv_key(struct can_frame* frame);
+    int decode_modules_activity(struct can_frame* frame);
     int decode_mm_lat_lon(struct can_frame* frame);
     int decode_ipd_datetime(struct can_frame* frame);
     int decode_driving_mode(struct can_frame* frame);

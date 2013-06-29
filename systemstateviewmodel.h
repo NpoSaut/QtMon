@@ -3,6 +3,8 @@
 
 #include <QDeclarativeItem>
 
+#include "iodrv/modulesactivity.h"
+
 class SystemStateViewModel : public QDeclarativeItem
 {
     Q_OBJECT
@@ -70,6 +72,10 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isEpvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
 
+    // Активность модулей
+    QString modulesActivityStringValue;
+    Q_PROPERTY(QString ModulesActivityString READ getModulesActivityString WRITE setModulesActivityString NOTIFY ModulesActivityStringChanged)
+
     // Проиденное расстояние
     int milageValue;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
@@ -129,6 +135,22 @@ class SystemStateViewModel : public QDeclarativeItem
     int directionValue;
     Q_PROPERTY(int Direction READ getDirection WRITE setDirection NOTIFY DirectionChanged)
 
+    // Текущая ордината
+    int ordinateValue;
+    Q_PROPERTY(int Ordinate READ getOrdinate WRITE setOrdinate NOTIFY OrdinateChanged)
+
+    // Тип ближайшей цели
+    int nextTargetKindValue;
+    Q_PROPERTY(int NextTargetKind READ getNextTargetKind WRITE setNextTargetKind NOTIFY NextTargetKindChanged)
+
+    // Название ближайшей цели
+    QString nextTargetNameValue;
+    Q_PROPERTY(QString NextTargetName READ getNextTargetName WRITE setNextTargetName NOTIFY NextTargetNameChanged)
+
+    // Расстояние до ближайшей цели
+    int nextTargetDistanceValue;
+    Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
+
     // Текст высокоприоритетного сообщения
     QString warningTextValue;
     Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
@@ -136,6 +158,30 @@ class SystemStateViewModel : public QDeclarativeItem
     // Текст низкоприоритетного сообщения
     QString infoTextValue;
     Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
+
+    // Номер пути
+    int trackNumberValue;
+    Q_PROPERTY(int TrackNumber READ getTrackNumber WRITE setTrackNumber NOTIFY TrackNumberChanged)
+
+    // Номер машиниста
+    int machinistNumberValue;
+    Q_PROPERTY(int MachinistNumber READ getMachinistNumber WRITE setMachinistNumber NOTIFY MachinistNumberChanged)
+
+    // Номер поезда
+    int trainNumberValue;
+    Q_PROPERTY(int TrainNumber READ getTrainNumber WRITE setTrainNumber NOTIFY TrainNumberChanged)
+
+    // Длина поезда в условных вагонах
+    int wagonCountValue;
+    Q_PROPERTY(int WagonCount READ getWagonCount WRITE setWagonCount NOTIFY WagonCountChanged)
+
+    // Длина поезда в осях
+    int axlesCountValue;
+    Q_PROPERTY(int AxlesCount READ getAxlesCount WRITE setAxlesCount NOTIFY AxlesCountChanged)
+
+    // Масса поезда
+    int trainMassValue;
+    Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
 
     // private properties end
 
@@ -159,6 +205,7 @@ public:
     const bool getIsPressureOk() const;
     const bool getIsEpvReady() const;
     const bool getIsEpvReleased() const;
+    const QString getModulesActivityString() const;
     const int getMilage() const;
     const int getLight() const;
     const int getAlsnFreqTarget() const;
@@ -174,8 +221,18 @@ public:
     const bool getIsVigilanceRequired() const;
     const bool getIsTractionOn() const;
     const int getDirection() const;
+    const int getOrdinate() const;
+    const int getNextTargetKind() const;
+    const QString getNextTargetName() const;
+    const int getNextTargetDistance() const;
     const QString getWarningText() const;
     const QString getInfoText() const;
+    const int getTrackNumber() const;
+    const int getMachinistNumber() const;
+    const int getTrainNumber() const;
+    const int getWagonCount() const;
+    const int getAxlesCount() const;
+    const int getTrainMass() const;
     // public properties getters end
 
 signals:
@@ -188,39 +245,50 @@ signals:
     void DisableRedButtonReleased();
 
     // properties signals start
-    void SpeedChanged();
-    void SpeedIsValidChanged();
-    void SpeedFromSkyChanged();
-    void SpeedFromEarthChanged();
-    void SpeedRestrictionChanged();
-    void TargetSpeedChanged();
-    void AccelerationChanged();
-    void PressureTCChanged();
-    void PressureTMChanged();
-    void LongitudeChanged();
-    void LatitudeChanged();
-    void SystemWarningLevelChanged();
-    void FullSetWarningLevelChanged();
-    void IsPressureOkChanged();
-    void IsEpvReadyChanged();
-    void IsEpvReleasedChanged();
-    void MilageChanged();
-    void LightChanged();
-    void AlsnFreqTargetChanged();
-    void AlsnFreqFactChanged();
-    void AutolockTypeTargetChanged();
-    void AutolockTypeFactChanged();
-    void TimeChanged();
-    void DateChanged();
-    void IsRegistrationTapeActiveChanged();
-    void driveModeTargetChanged();
-    void driveModeFactChanged();
-    void IronWheelsChanged();
-    void IsVigilanceRequiredChanged();
-    void IsTractionOnChanged();
-    void DirectionChanged();
-    void WarningTextChanged();
-    void InfoTextChanged();
+    void SpeedChanged(const double value);
+    void SpeedIsValidChanged(const bool value);
+    void SpeedFromSkyChanged(const double value);
+    void SpeedFromEarthChanged(const double value);
+    void SpeedRestrictionChanged(const int value);
+    void TargetSpeedChanged(const int value);
+    void AccelerationChanged(const double value);
+    void PressureTCChanged(const QString value);
+    void PressureTMChanged(const QString value);
+    void LongitudeChanged(const double value);
+    void LatitudeChanged(const double value);
+    void SystemWarningLevelChanged(const int value);
+    void FullSetWarningLevelChanged(const int value);
+    void IsPressureOkChanged(const bool value);
+    void IsEpvReadyChanged(const bool value);
+    void IsEpvReleasedChanged(const bool value);
+    void ModulesActivityStringChanged(const QString value);
+    void MilageChanged(const int value);
+    void LightChanged(const int value);
+    void AlsnFreqTargetChanged(const int value);
+    void AlsnFreqFactChanged(const int value);
+    void AutolockTypeTargetChanged(const int value);
+    void AutolockTypeFactChanged(const int value);
+    void TimeChanged(const QString value);
+    void DateChanged(const QString value);
+    void IsRegistrationTapeActiveChanged(const bool value);
+    void driveModeTargetChanged(const int value);
+    void driveModeFactChanged(const int value);
+    void IronWheelsChanged(const bool value);
+    void IsVigilanceRequiredChanged(const bool value);
+    void IsTractionOnChanged(const bool value);
+    void DirectionChanged(const int value);
+    void OrdinateChanged(const int value);
+    void NextTargetKindChanged(const int value);
+    void NextTargetNameChanged(const QString value);
+    void NextTargetDistanceChanged(const int value);
+    void WarningTextChanged(const QString value);
+    void InfoTextChanged(const QString value);
+    void TrackNumberChanged(const int value);
+    void MachinistNumberChanged(const int value);
+    void TrainNumberChanged(const int value);
+    void WagonCountChanged(const int value);
+    void AxlesCountChanged(const int value);
+    void TrainMassChanged(const int value);
     // properties signals end
 
 public slots:
@@ -241,6 +309,7 @@ public slots:
     void setIsPressureOk(const bool);
     void setIsEpvReady(const bool);
     void setIsEpvReleased(const bool);
+    void setModulesActivityString(const QString);
     void setMilage(const int);
     void setLight(const int);
     void setAlsnFreqTarget(const int);
@@ -256,8 +325,18 @@ public slots:
     void setIsVigilanceRequired(const bool);
     void setIsTractionOn(const bool);
     void setDirection(const int);
+    void setOrdinate(const int);
+    void setNextTargetKind(const int);
+    void setNextTargetName(const QString);
+    void setNextTargetDistance(const int);
     void setWarningText(const QString);
     void setInfoText(const QString);
+    void setTrackNumber(const int);
+    void setMachinistNumber(const int);
+    void setTrainNumber(const int);
+    void setWagonCount(const int);
+    void setAxlesCount(const int);
+    void setTrainMass(const int);
     // public properties setters end
     
 };

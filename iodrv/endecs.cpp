@@ -1,6 +1,10 @@
 #if defined WITH_CAN || defined WITH_SERIAL
 
+#include <QByteArray>
+
 #include "endecs.h"
+#include "lowlevel.h"
+
 
 
 can_frame can_encoder::encode_mm_alt_long(double lat, double lon, bool reliability)
@@ -244,6 +248,17 @@ int can_decoder::decode_epv_key(struct can_frame* frame, int* epv_key)
     return 1;
 }
 
+// MCO_STATE_A
+int can_decoder::decode_modules_activity(can_frame *frame, ModulesActivity *modulesActivity)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    (*modulesActivity) = ModulesActivity::loadFromMcoState (
+                QByteArray(reinterpret_cast<const char *> (frame->data), frame->can_dlc) );
+
+    return 1;
+}
+
 
 
 // IPD_STATE_A
@@ -323,6 +338,23 @@ int can_decoder::decode_passed_distance(struct can_frame* frame, int* passed_dis
     return 1;
 }
 
+// MY_DEBUG_A
+int can_decoder::decode_orig_passed_distance(struct can_frame* frame, int* x)
+{
+    if ((*frame).can_id != 0x0C4) return -1; // 0x1888
+
+    struct IntByBytes
+    {
+        int byte1: 8;
+        int byte2: 8;
+        int byte3: 8;
+        int byte4: 8;
+    };
+
+    (*x) = Complex<int32_t> ({frame->data[4], frame->data[3], frame->data[5], (frame->data[5] & (1 << 7)) ? 0xFF : 0});
+
+    return 1;
+}
 
 // MM_ALT_LONG
 int can_decoder::decode_mm_lat_lon(struct can_frame* frame, double* lat, double* lon)
@@ -507,3 +539,4 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
 }
 
 #endif
+

@@ -25,6 +25,7 @@
     <Property type="bool" name="IsPressureOk" def="true" description="Давление в норме" />
     <Property type="bool" name="IsEpvReady" def="true" description="Готовность ЭПК" />
     <Property type="bool" name="IsEpvReleased" def="false" description="Признак срыва ЭПК" /> 
+    <Property type="QString" name="ModulesActivityString" def="&quot;------------&quot;" description="Активность модулей" />
 
     <!-- Одометр -->
     <Property type="int" name="Milage" def="0" description="Проиденное расстояние" />
@@ -56,10 +57,22 @@
     <Property type="int" name="Direction" def="0" description="Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)" source="IPD_STATE" />
 
     <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
+    <Property type="int" name="Ordinate" def="0" description="Текущая ордината" />
+    <Property type="int" name="NextTargetKind" def="-1" description="Тип ближайшей цели" />
+    <Property type="QString" name="NextTargetName" def="&quot;&quot;" description="Название ближайшей цели" />
+    <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
 
     <!-- Строки предупреждений -->
     <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
     <Property type="QString" name="InfoText" def="&quot;&quot;" description="Текст низкоприоритетного сообщения"/>
+
+    <!-- Ввод данных -->
+    <Property type="int" name="TrackNumber" def="0" description="Номер пути" />
+    <Property type="int" name="MachinistNumber" def="0" description="Номер машиниста" />
+    <Property type="int" name="TrainNumber" def="0" description="Номер поезда" />
+    <Property type="int" name="WagonCount" def="1" description="Длина поезда в условных вагонах" />
+    <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
+    <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
 
   </Properties>
 </Task>

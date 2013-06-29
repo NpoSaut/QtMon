@@ -109,10 +109,10 @@ Rectangle {
 
                 // Emulation
                 if (stateView.AlsnFreqTarget == 25 )
-                    stateView.AlsnFreqTarget = 50;
-                else if ( stateView.AlsnFreqTarget == 50 )
                     stateView.AlsnFreqTarget = 75;
                 else if ( stateView.AlsnFreqTarget == 75 )
+                    stateView.AlsnFreqTarget = 50;
+                else if ( stateView.AlsnFreqTarget == 50 )
                     stateView.AlsnFreqTarget = 25;
                 else
                     stateView.AlsnFreqTarget = 25;

@@ -60,46 +60,157 @@ Rectangle {
         }
     }
 
+    function getTargetKindName(kindId)
+    {
+        switch (kindId)
+        {
+            case -1: return "";
+            case 1: return "Светофор";
+            case 2: return "Станция";
+            case 3: return "Оп. место";
+            case 4: return "Мост";
+            case 5: return "Переезд";
+            case 6: return "Платформа";
+            case 7: return "Туннель";
+            case 8: return "Стрелка";
+            case 9: return "ТКС";
+            case 10: return "ГПУ САУТ";
+            case 11: return "Тупик";
+        }
+
+    }
+
     focus: true
 
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
     property bool altMode: false
 
-    Keys.onPressed: {
-        // Переключение частоты АЛСН
-        if (event.key == Qt.Key_F1) {
-            // Send CAN requset to change ALSN freq
+    function fillInputParameter(offset, length)
+    {
+        var res = 0;
+        for (var i = 0; i < length; i++)
+            res += Math.pow(10, length - i - 1) * inputPositions[offset + i];
+        return res;
+    }
+    function fillInputArray(arra, offset, length, val)
+    {
+        for (var i = 0; i < length; i++)
+            arra[offset + i] = Math.floor(val / Math.pow(10, length - i - 1)) % 10;
 
-            // Emulation
-            if (stateView.AlsnFreqTarget == 25 )
-                stateView.AlsnFreqTarget = 50;
-            else if ( stateView.AlsnFreqTarget == 50 )
-                stateView.AlsnFreqTarget = 75;
-            else if ( stateView.AlsnFreqTarget == 75 )
-                stateView.AlsnFreqTarget = 25;
-            else
-                stateView.AlsnFreqTarget = 25;
+        return arra;
+    }
+
+    Keys.onPressed: {
+        // Отладка зависания кнопок
+        console.debug("-------KNOPKA--------------------NAZHATA------FROM-QML--------------------");
+
+        // Переключение частоты АЛСН
+        if (!inputMode)
+        {
+        	if (!altMode && event.key == Qt.Key_F1) {
+	            // Send CAN requset to change ALSN freq
+
+                // Emulation
+                if (stateView.AlsnFreqTarget == 25 )
+                    stateView.AlsnFreqTarget = 50;
+                else if ( stateView.AlsnFreqTarget == 50 )
+                    stateView.AlsnFreqTarget = 75;
+                else if ( stateView.AlsnFreqTarget == 75 )
+                    stateView.AlsnFreqTarget = 25;
+                else
+                    stateView.AlsnFreqTarget = 25;
+	        }
+    	    else if (altMode && event.key == Qt.Key_F1) {
+	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
+            }
+            // Кнопка смены режима движения (РМП)
+            else if (!altMode && event.key == Qt.Key_F2) {
+                stateView.ChangeDrivemodeButtonPressed();
+            }
+            // Alt: Отмена Красного
+            else if (altMode && event.key == Qt.Key_F2) {
+                stateView.DisableRedButtonPressed();
+            }
+            // Страница дорожного режима
+            else if (!altMode && event.key == Qt.Key_F3) {
+                switchPage();
+            }
+            // Alt: пустой
+            else if (altMode && event.key == Qt.Key_F3) {
+                inputMode = true
+
+                var _offset = 0;
+
+                var input = inputPositions
+
+                input = fillInputArray(input, _offset, 2, stateView.TrackNumber < 16 ? stateView.TrackNumber :  stateView.TrackNumber - 15);   _offset += 2;
+                input = fillInputArray(input, _offset, 1, Math.floor(stateView.TrackNumber / 16)); _offset += 1;
+                input = fillInputArray(input, _offset, 4, stateView.MachinistNumber);    _offset += 4;
+                input = fillInputArray(input, _offset, 4, stateView.TrainNumber);        _offset += 4;
+                input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
+                input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
+                input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
+
+                inputPositions = input;
+                inputCursorIndex = 1;
+            }
+            // Включение альтернативного режим клавиш
+            else if (event.key == Qt.Key_F4) {
+                altMode = true;
+            }
         }
-        // Кнопка смены режима движения (РМП)
-        else if (!altMode && event.key == Qt.Key_F2) {
-            stateView.ChangeDrivemodeButtonPressed();
-        }
-        // Alt: Отмена Красного
-        else if (altMode && event.key == Qt.Key_F2) {
-            stateView.DisableRedButtonPressed();
-        }
-        // Страница дорожного режима
-        else if (!altMode && event.key == Qt.Key_F3) {
-            switchPage();
-        }
-        // Alt: пустой
-        else if (altMode && event.key == Qt.Key_F3) {
-            //stateView.DriveModeTarget = 1 - stateView.DriveModeTarget;
-            //stateView.ChangeDrivemodeButtonPressed();
-        }
-        // Включение альтернативного режим клавиш
-        else if (event.key == Qt.Key_F4) {
-            altMode = true;
+        else
+        {
+            if (event.key == Qt.Key_F1)
+            {
+                inputBlinker.restart();
+
+                var input = inputPositions;
+                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
+                if ((inputCursorIndex == 1) && input[0] == 1)
+                {
+                    input[1] = input[1] % 6;
+                }
+                if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+                {
+                    input[1] = 5;
+                }
+
+                inputPositions = input;
+            }
+            if (event.key == Qt.Key_F2)
+            {
+                inputCursorIndex++;
+                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+                inputBlinker.restart();
+            }
+            if (event.key == Qt.Key_F3)
+            {
+                inputCursorIndex--;
+                if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
+                inputBlinker.restart();
+            }
+            if (event.key == Qt.Key_F4)
+            {
+                inputMode = false
+
+                var _offset = 0;
+                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                }
+                else
+                {
+                    stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                }
+                stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
+                stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
+                stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+
+                if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+            }
         }
     }
 
@@ -118,8 +229,8 @@ Rectangle {
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
-            //stateView.ChangeDrivemodeButtonReleased();
         }
+
     }
 
 
@@ -154,6 +265,22 @@ Rectangle {
 
         NumberAnimation { target: speedBox; properties: "anchors.bottomMargin"; easing.type: Easing.OutQuad; duration: 300 }
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
+    }
+
+    property bool inputMode: false
+    property int inputCursorIndex: 0
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+
+
+    Timer {
+        id: inputBlinker
+        property bool blink: false
+        interval: 400
+        running: true
+        repeat: true
+        onTriggered: blink = !blink
+        onRunningChanged: blink = true
     }
 
     Rectangle {
@@ -215,9 +342,9 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: ((stateView.Milage / 1000) - ((stateView.Milage / 1000) % 1)) + "км " +
-                                     (((stateView.Milage % 1000 ) / 100) - (((stateView.Milage % 1000 ) / 100) % 1)) + "пк " +
-                                     (stateView.Milage % 100).toString() + "м"
+                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
+                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
+                                     (stateView.Ordinate % 100).toString() + "м"
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14
@@ -247,7 +374,9 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: qsTr("--")
+                               text:  (stateView.TrackNumber < 16) ?
+                                          stateView.TrackNumber      + " П" :
+                                          stateView.TrackNumber - 15 + " Н"
                                color: "#ffffffff"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
@@ -306,8 +435,7 @@ Rectangle {
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
                              anchors.verticalCenter: parent.verticalCenter
-                             //text: qsTr(stateView.PressureTC + " МПа")
-                             text: qsTr("--")
+                             text: qsTr(stateView.PressureTC + " МПа")
                              color: "#ffffffff"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
@@ -336,8 +464,7 @@ Rectangle {
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            //text: qsTr(stateView.PressureTM + " МПа")
-                            text: qsTr("--")
+                            text: qsTr(stateView.PressureTM + " МПа")
                             color: "#ffffffff"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -748,18 +875,54 @@ Rectangle {
                 }
             }
 
-            // Информационная строка
+            // Ближайшая цель
             Rectangle {
                 color: "#20000000"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.rightMargin: 200
                 anchors.leftMargin: 10
                 border.color: "#ffffff00"
-                //width: 100
                 height: 25
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: (stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
+                            getTargetKindName(stateView.NextTargetKind) + " " +
+                            stateView.NextTargetName +
+                            "через " + stateView.NextTargetDistance + "м"
+                            : "нет данных о цели" ;
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "URW Gothic L"
+                }
+            }
+
+            // Конфигурация
+            Rectangle {
+                color: "#20000000"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                anchors.left: parent.right
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.leftMargin: -180
+                border.color: "#ffffff00"
+                height: 25
+
+                Text {
+                    anchors.left: parent.left
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 5
+                    text:qsTr("Конф.: ") + stateView.ModulesActivityString
+                    color: "#ffffffff"
+                    font.pixelSize: 14
+                    font.family: "Nimbus Mono L"
+                }
             }
 
 
@@ -893,6 +1056,7 @@ Rectangle {
             onPressed: swipePressed(mouseY)
             onReleased: swipeReleased(mouseY)
         }
+
     }
 
 
@@ -912,18 +1076,6 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.top: parent.top
             source: "Slices/Panel-Left.png"
-        }
-
-        // Очень плохо, что это здесь находится!!!
-        Image {
-            id: alsnSwitchBackgroundCircle
-            anchors.right: parent.left
-            anchors.rightMargin: -60
-            anchors.top: parent.top
-            anchors.topMargin: -height/2 + 60
-
-            fillMode: "Tile"
-            source: "Slices/alsn-switch.png"
         }
 
         Image {
@@ -954,120 +1106,204 @@ Rectangle {
                 anchors.left: parent.left
 
                 Rectangle {
-                    id: alsnTextBox
+                    anchors.fill: parent
                     color: "#00000000"
-                    anchors.left: alsnSwitch.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -3
-                    height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
-                    width: alsnTextBoxLine.width
+                    clip: true
 
-                    Text {
-                        id: alsnTextBoxText
-                        anchors.left: parent.left
 
-                        text: qsTr("АЛСН")
-                        color: "#ffdddddd"
-                        font.pixelSize: 18
-                        font.family: "URW Gothic L"
-                        font.bold: true
+                    Image {
+                        id: alsnSwitchBackgroundCircle
+                        anchors.right: parent.left
+                        anchors.rightMargin: -60
+                        anchors.top: parent.top
+                        anchors.topMargin: -height/2 + 60
+
+                        fillMode: "Tile"
+                        source: "Slices/alsn-switch.png"
                     }
+
+
                     Rectangle {
-                        id: alsnTextBoxLine
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxText.bottom
-                        width: 60
-                        height: 2
-                        color: "#ffdddddd"
+                        id: alsnTextBox
+                        color: "#00000000"
+                        anchors.left: alsnSwitch.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: -3
+                        height: alsnTextBoxText.height + alsnTextBoxLine.height + alsnTextBoxFreq.height
+                        width: alsnTextBoxLine.width
 
-                    }
-                    Text {
-                        id: alsnTextBoxFreq
-                        anchors.left: parent.left
-                        anchors.top: alsnTextBoxLine.bottom
 
-                        text: qsTr("частота")
-                        color: "#ffdddddd"
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
+                        Text {
+                            id: alsnTextBoxText
+                            anchors.left: parent.left
 
-                Rectangle {
-                    id: alsnSwitch
-                    color: "#00000000"
-
-                    anchors.top: parent.top
-                    anchors.topMargin: -height/2 + 60
-                    anchors.right: parent.left
-                    anchors.rightMargin: -60
-                    width: alsnSwitchBackgroundCircle.width
-                    height: alsnSwitchBackgroundCircle.height
-
-                    property real radius: 100
-                    property real angle: 15
-                    property string objColor: "#ddd"
-                    property string objHighlightColor: "#f22"
-
-                    Repeater
-                    {
-                        model: [25, 50, 75]
-
+                            text: qsTr("АЛСН")
+                            color: "#ffdddddd"
+                            font.pixelSize: 18
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
                         Rectangle {
-                            property real myRot: (1 - index) * alsnSwitch.angle
-                            property int freq: modelData
-
-                            x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
-                            y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
-                            rotation: myRot
-
-                            color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
-                            width: 2
+                            id: alsnTextBoxLine
+                            anchors.left: parent.left
+                            anchors.top: alsnTextBoxText.bottom
+                            width: 60
                             height: 2
-                            smooth: true
+                            color: "#ffdddddd"
 
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.left
-                                anchors.rightMargin: 4
+                        }
+                        Text {
+                            id: alsnTextBoxFreq
+                            anchors.left: parent.left
+                            anchors.top: alsnTextBoxLine.bottom
 
-                                text: parent.freq
-                                font.pixelSize: 14
-                                font.family: "URW Gothic L"
-                                color: alsnSwitch.objColor
+                            text: qsTr("частота")
+                            color: "#ffdddddd"
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
+                    }
+
+                    Rectangle {
+                        id: alsnSwitch
+                        color: "#00000000"
+
+                        anchors.top: parent.top
+                        anchors.topMargin: -height/2 + 60
+                        anchors.right: parent.left
+                        anchors.rightMargin: -60
+                        width: alsnSwitchBackgroundCircle.width
+                        height: alsnSwitchBackgroundCircle.height
+
+                        property real radius: 100
+                        property real angle: 15
+                        property string objColor: "#ddd"
+                        property string objHighlightColor: "#f22"
+
+                        Repeater
+                        {
+                            model: [25, 50, 75]
+
+                            Rectangle {
+                                property real myRot: (1 - index) * alsnSwitch.angle
+                                property int freq: modelData
+
+                                x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                                y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                                rotation: myRot
+
+                                color: stateView.AlsnFreqFact == freq ? alsnSwitch.objHighlightColor : alsnSwitch.objColor
+                                width: 2
+                                height: 2
                                 smooth: true
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.right: parent.left
+                                    anchors.rightMargin: 4
+
+                                    text: parent.freq
+                                    font.pixelSize: 14
+                                    font.family: "URW Gothic L"
+                                    color: alsnSwitch.objColor
+                                    smooth: true
+                                }
+                            }
+                        }
+
+                        states: [
+                            State {
+                                name: "alsn0"
+                                when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
+                                PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn25"
+                                when: (stateView.AlsnFreqTarget == 25)
+                                PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn50"
+                                when: (stateView.AlsnFreqTarget == 50)
+                                PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "alsn75"
+                                when: (stateView.AlsnFreqTarget == 75)
+                                PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                            }
+                        ]
+
+                        transitions: Transition {
+                            NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
+                        }
+                    }
+
+
+                    Row {
+                        id: autolockSelector
+                        anchors.horizontalCenter: alsnTextBox.horizontalCenter
+                        anchors.horizontalCenterOffset: 3
+                        anchors.bottom: alsnTextBox.top
+                        anchors.bottomMargin: 16
+                        spacing: 4
+                        property int itemWidth: 26
+
+                        Repeater {
+                            model: ["АБ", "ПАБ", "ЗАБ"]
+                            Rectangle {
+                                property bool isConfirmed: index == stateView.AutolockTypeFact
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: autolockSelector.itemWidth
+                                height: 14
+                                radius: 2
+                                color: isConfirmed ? "#ccc" : "#00000000"
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    text: modelData
+                                    font.pixelSize: 10
+                                    color: parent.isConfirmed ? "#333" : "#ccc"
+                                }
                             }
                         }
                     }
+                    Rectangle {
+                        id: autolockSelectorCursor
+                        anchors.top: autolockSelector.bottom
+                        anchors.left: autolockSelector.left
+                        anchors.topMargin: 4
+                        anchors.leftMargin: autolockSelector.itemWidth * (0.5 + stateView.AutolockTypeTarget) + autolockSelector.spacing * stateView.AutolockTypeTarget
 
-                    states: [
-                        State {
-                            name: "alsn0"
-                            when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
-                            PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn25"
-                            when: (stateView.AlsnFreqTarget == 25)
-                            PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn50"
-                            when: (stateView.AlsnFreqTarget == 50)
-                            PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
-                        },
-                        State {
-                            name: "alsn75"
-                            when: (stateView.AlsnFreqTarget == 75)
-                            PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                        property bool show: (altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget) && stateView.AutolockTypeTarget >= 0
+
+                        Image {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            source: "Slices/autolock-cursor.png"
+                            scale: parent.show ? 0.25 : 2
+                            Behavior on scale { PropertyAnimation { duration: 100 } }
+                            smooth: true
                         }
-                    ]
+                        //opacity: stateView.AutolockTypeFact != stateView.AutolockTypeTarget ? 1 : 0
 
-                    transitions: Transition {
-                        NumberAnimation { target: alsnSwitch; properties: "rotation"; easing.type: Easing.InOutQuad; duration: 200 }
+                        opacity: show ? 1 : 0
+                        Behavior on opacity { PropertyAnimation { duration: 100 } }
+                        Behavior on anchors.leftMargin { PropertyAnimation { duration: 170 } }
                     }
+//                    Timer {
+//                        interval: 1000
+//                        running: true
+//                        repeat: true
+//                        onTriggered:
+//                        {
+//                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
+//                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
+//                        }
+//                    }
                 }
+
             }
 
             Rectangle {
@@ -1167,8 +1403,8 @@ Rectangle {
                                         text: {
                                             switch(modelData)
                                             {
-                                                case "iron": return "Ж/Д"
-                                                case "rubber": return "Дорожный"
+                                                case "iron": return "Опущены"
+                                                case "rubber": return "Подняты"
                                             }
                                         }
                                     }
@@ -1277,12 +1513,11 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        //visible: altMode
-                        visible: false
+                        visible: altMode
 
                         Text {
                             color: "#ffffff"
-                            text: qsTr("Режим\nдвижения")
+                            text: qsTr("Ввод\nпараметров")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
@@ -1601,6 +1836,368 @@ Rectangle {
                 }
             }
         }
+    }
+
+
+    Rectangle {
+        anchors.fill: rootRect
+        color: "#00000000"
+        Image {
+            source: "Slices/InputMode-Background.png"
+            opacity: inputMode ? 1 : 0
+            Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+        }
+    }
+
+    Column {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: inputMode ? 0 : -width
+        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 300 } }
+        Repeater {
+            model: ["Изм.", ">", "<", "OK"]
+            Rectangle {
+                height: (rootRect.height) / 4
+                width: 77
+                anchors.left: parent.left
+                color: "#00000000"
+                Image{
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "Slices/InputMode-Button.png"
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16
+                        text: modelData
+                        font.pixelSize: 24
+                        font.family: "URW Gothic L"
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                    }
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: inputModeParentField
+        anchors.top: parent.top
+        anchors.topMargin: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        color: "#00000000"
+        width: 420
+        height: 75
+        visible: inputMode
+
+        Image{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "Slices/InputMode-Field.png"
+        }
+
+        Column{
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 24
+            spacing: 26
+
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 50
+
+                // Ввод номера пути
+                Rectangle{
+                    id: inputModeRail
+                    property int startPosition: 0
+                    property int positionsCount: 3
+                    width: 20*positionsCount
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Путь")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: (parent.myCursorIndex != 2) ?
+                                              (inputPositions[parent.myCursorIndex])
+                                            : ( inputPositions[parent.myCursorIndex] == 1 ? qsTr("Н") : qsTr("П") )
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Ввод номера машиниста
+                Rectangle{
+                    id: inputModeMachinist
+                    property int startPosition: 3
+                    property int positionsCount: 4
+                    width: 20*positionsCount
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Машинист")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Ввод номера поезда
+                Rectangle{
+                    id: inputModeTrain
+                    property int startPosition: 7
+                    property int positionsCount: 4
+                    width: 20*positionsCount
+                    height: 54
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Поезд")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 30
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 24
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Row{
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 60
+
+                // Ввод количества вагонов
+                Rectangle{
+                    id: inputModeLengthWagon
+                    property int startPosition: 11
+                    property int positionsCount: 3
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize:16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Вагонов")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ввод количества осей
+                Rectangle{
+                    id: inputModeLengthAxle
+                    property int startPosition: 14
+                    property int positionsCount: 3
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize:16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Осей")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ввод массы состава
+                Rectangle{
+                    id: inputModeMass
+                    property int startPosition: 17
+                    property int positionsCount: 4
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Масса")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
 
     }
 

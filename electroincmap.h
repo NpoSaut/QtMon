@@ -39,6 +39,7 @@ private:
     list<KilometerPost *> getPostsInArea(double lat, double lon, double radius);
     list<KilometerPost *> getPostsInArea(list<KilometerPost *> &source, double lat, double lon, double radius);
 
+    double _prewX;
     double x;
     double l;
 
@@ -113,6 +114,8 @@ private:
 
     double ordinate;
 
+    int trainLength;
+
 public:
     explicit ElectroincMap(QObject *parent = 0);
     void load(QString fileName);
@@ -127,9 +130,18 @@ signals:
     void activityChanged(bool active);
 
 public slots:
+    // Устанавливает текущее значение проиденного пути
     void setMetrometer(int value);
+    void resetMetrometer(int value);
+
+    // Устанавливает текущий номер пути
     void setTrackNumber(int value);
+
+    // Задаёт текущие координаты и запускает процесс привязки
     void checkMap(double lat, double lon);
+
+    // Задаёт длину состава (в метрах)
+    void setTrainLength(int value);
 };
 
 }

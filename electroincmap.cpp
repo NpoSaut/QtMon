@@ -23,9 +23,10 @@ using namespace std;
 ElectroincMap::ElectroincMap(QObject *parent) :
     QObject(parent),
     firstEnter(true),
-    x(0), ordinate(0),
+    x(0), _prewX(0), ordinate(0),
     departPost(nullptr), targetPost(nullptr),
-    xReceived(false), mapLoaded(false), isLocated(false)
+    xReceived(false), mapLoaded(false), isLocated(false),
+    trainLength(0)
 { }
 
 
@@ -90,11 +91,16 @@ double ElectroincMap::getOrdinate()
 
 void ElectroincMap::setMetrometer(int value)
 {
-    if (value != x)
-        x = value;
+    x += value - _prewX;
+    _prewX = value;
     checkOrdinate();
     xReceived = true;
-//    CPRINTF(CL_BLUE_L, "x = %7.0f\n", x);
+        CPRINTF(CL_CYAN_L, "x = %7.0f %7.0f %7.0f\n", x, _prewX, value);
+}
+
+void ElectroincMap::resetMetrometer(int value)
+{
+    _prewX = 0;
 }
 
 void ElectroincMap::setTrackNumber(int value)
@@ -102,8 +108,12 @@ void ElectroincMap::setTrackNumber(int value)
     if (value != trackNumber)
     {
         trackNumber = value;
-
         emit activityChanged (trackNumber != 0);
+        if (trackNumber == 0)
+        {
+            setIsLocated(false);
+            firstEnter = true;
+        }
     }
 }
 
@@ -277,6 +287,11 @@ void ElectroincMap::checkMap(double lat, double lon)
     checkObjects();
 }
 
+void ElectroincMap::setTrainLength(int value)
+{
+    trainLength = value;
+}
+
 ElectroincMap::PostApproach *ElectroincMap::findBestApproach()
 {
     double targetWeigth = 1e20;
@@ -321,7 +336,6 @@ ElectroincMap::PostApproach *ElectroincMap::findBestApproach()
 // Получает список ближайих целей
 vector<EMapTarget> ElectroincMap::getNextObjects(const KilometerPost *startPost, double startPostX, int count)
 {
-    const int backBuffer = 0;
     vector<EMapTarget> res;
     double currentPostX = startPostX;
     const KilometerPost *currentPost = startPost;
@@ -343,7 +357,7 @@ vector<EMapTarget> ElectroincMap::getNextObjects(const KilometerPost *startPost,
             // Вычисляем координату X объекта
             int objectX = (int)(currentPostX + currentRail->direction * currentPost->direction * (o->getOrdinate() - currentPost->ordinate));
 //            CPRINTF(CL_GREEN, " %5d [%4d]", o->getOrdinate(), objectX);
-            if (objectX >= x - backBuffer)       // Добавляем объект в список только если его координата X больше текущей
+            if (objectX + o->getLength() >= x - trainLength)       // Добавляем объект в список только если его координата X больше текущей
             {
 //                CPRINTF(CL_GREEN, "*");
                 EMapTarget target(o, objectX);
@@ -498,22 +512,6 @@ KilometerPost *ElectroincMap::projectNextPost(const KilometerPost *forPost, bool
 
 vector<ElectroincMap::ApproachingPoint> ElectroincMap::PostApproach::getExtremumApproaches()
 {
-//    vector<ElectroincMap::ApproachingPoint> res;
-
-//    ElectroincMap::ApproachingPoint prev_ap(1e20, 1e20);
-//    D_foreach(aPoints, ElectroincMap::ApproachingPoint, itr)
-//    {
-//        ElectroincMap::ApproachingPoint ap = *itr;
-//        if (ap.r == minimalApproach)
-//        {
-//            res.push_back(prev_ap);
-//            res.push_back(ap);
-//            res.push_back(*(++itr));
-//        }
-//        prev_ap = ap;
-//    }
-
-//    return res;
     return minPoints;
 }
 
@@ -553,7 +551,8 @@ bool ElectroincMap::PostApproach::pushApproaching(ElectroincMap::ApproachingPoin
 
     //CPRINTF(CL_WHITE_L, " r: %5.1f ", ap.r);
     if (minCandidateActualCount == 3 &&
-            minCandidate[0].r > minCandidate[1].r &&
+            (minCandidate[1].x - minCandidate[0].x) * (minCandidate[2].x - minCandidate[1].x) > 0 &&   // Проверяем, чтобы точки шли по порядку (в смылсе x)
+            minCandidate[0].r > minCandidate[1].r &&                                                   // И чтобы они образовывали минимум
             minCandidate[2].r > minCandidate[1].r)
     {
         bool a = false;

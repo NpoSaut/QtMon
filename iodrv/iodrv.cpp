@@ -702,7 +702,7 @@ int iodrv::init_serial_port()
 void iodrv::slot_serial_ready_read()
 {
 #ifdef WITH_SERIALPORT
-    if (serial_port.canReadLine())
+    while (serial_port.canReadLine())
     {
         gps_data gd;    // TODO: Сделать глобальной?
 
@@ -893,22 +893,10 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
 {
     currentSpeedFromEarth = speedFromEarth;
 //    if (speedFromSky >= 0) // достоверность
-        currentSpeedFromSky = speedFromSky;
+        currentSpeedFromSky = 55;
 
-//    qDebug() << "Speed | " << currentSpeedFromSky << " | " << currentSpeedFromEarth;
-
-    if ( onRails )
-    {
-//        qDebug() << "on rails: " << currentSpeedFromEarth;
-        setSpeedIsValid( true );
-        emit speedChanged(currentSpeedFromEarth);
-    }
-    else
-    {
-//        qDebug() << "no on rails: " << currentSpeedFromSky;
-        setSpeedIsValid( currentSpeedFromSky >= 0 );
-        emit speedChanged(currentSpeedFromSky);
-    }
+    emit speedChanged (speedFromEarth);
+    setSpeedIsValid (true);
 }
 
 

@@ -3,16 +3,18 @@
 #ifndef IODRV_H
 #define IODRV_H
 
+#include <QFile>
+#include <QTextStream>
+
 //!!!!! TODO: ВРЕМЕННО
 #include "systemstateviewmodel.h"
-
 
 #include "iodrvmain.h"
 #include "sktcan.h"
 #include "endecs.h"
+#include "canframe.h"
+#include "modulesactivity.h"
 
-#include <QFile>
-#include <QTextStream>
 
 #ifdef WITH_SERIALPORT
 QT_USE_NAMESPACE
@@ -20,8 +22,8 @@ QT_USE_NAMESPACE
 
 enum gps_data_source
 {
-    gps,
-    can
+    gps_data_source_gps,
+    gps_data_source_can
 };
 
 class iodrv : public QObject
@@ -34,10 +36,13 @@ public:
 
 
 public:
-    int start(char* can_iface_name_0, char* can_iface_name_1, gps_data_source gps_datasource = gps);
+    int start(char* can_iface_name_0, char* can_iface_name_1, gps_data_source gps_datasource = gps_data_source_gps);
 
 signals:
     // Сигналы вызываются немедленно или у них есть внутренняя очередь, так что они могут передать изменённое значение
+
+    // Все сообщения
+    void signal_new_message(CanFrame frame);
 
     //Скорость и ограничения
     void signal_speed_earth(double speed);
@@ -48,8 +53,10 @@ signals:
     //Состояние системы
     void signal_epv_released(bool epv_state);
     void signal_epv_key(bool epv_key);
+    void signal_modules_activity(QString modulesActivity);
     //Одометр
     void signal_passed_distance(int passed_distance);
+    void signal_orig_passed_distance(int orig_passed_distance);
     //Светофоры
     void signal_trafficlight_light(int trafficlight_light);
     void signal_trafficlight_freq(int trafficlight_freq);
@@ -58,6 +65,9 @@ signals:
     void signal_vigilance(bool vigilance);
     void signal_movement_direction(int movement_direction);
     void signal_reg_tape_avl(bool reg_tape_avl);
+
+    void signal_autolock_type(int autolock_type);
+    void signal_autolock_type_target(int autolock_type);
 
     void signal_pressure_tc(QString pressure_tc);
     void signal_pressure_tm(QString pressure_tm);
@@ -68,16 +78,20 @@ signals:
 
     void signal_lat(double lat);
     void signal_lon(double lon);
+    void signal_lat_lon(double lat, double lon);
     void signal_time(QString time);
     void signal_date(QString date);
 
 public slots:
+    void slot_send_message(CanFrame frame);
+
     void slot_f_key_down();
     void slot_f_key_up();
     void slot_vk_key_down();
     void slot_vk_key_up();
     void slot_rmp_key_down();
     void slot_rmp_key_up();
+    void slot_autolock_type_target_changed(int value);
 
 private slots:
     void slot_serial_ready_read();
@@ -115,17 +129,21 @@ private:
     int c_trafficlight_light;
     int c_trafficlight_freq;
     int c_passed_distance;
+    int c_orig_passed_distance;
     int c_epv_state;
     int c_epv_key;
+    ModulesActivity c_modulesActivity;
 
     int c_driving_mode;
     int c_vigilance;
     int c_reg_tape_avl;
 
+    int c_autolock_type;
+    int c_autolock_type_target;
+
     double c_pressure_tc;
     double c_pressure_tm;
     int c_is_on_road;
-
 
     double p_speed;
     int p_speed_limit;
@@ -138,10 +156,14 @@ private:
     int p_passed_distance;
     int p_epv_state;
     int p_epv_key;
+    ModulesActivity p_modulesActivity;
 
     int p_driving_mode;
     int p_vigilance;
     int p_reg_tape_avl;
+
+    int p_autolock_type;
+    int p_autolock_type_target;
 
     double p_pressure_tc;
     double p_pressure_tm;
@@ -149,7 +171,6 @@ private:
 
     int c_ssps_mode; int p_ssps_mode;
     int c_in_traction; int p_in_traction;
-
 
     int decode_speed(struct can_frame* frame);
     int decode_speed_limit(struct can_frame* frame);
@@ -160,8 +181,10 @@ private:
     int decode_trafficlight_light(struct can_frame* frame);
     int decode_trafficlight_freq(struct can_frame* frame);
     int decode_passed_distance(struct can_frame* frame);
+    int decode_orig_passed_distance (struct can_frame* frame);
     int decode_epv_state(struct can_frame* frame);
     int decode_epv_key(struct can_frame* frame);
+    int decode_modules_activity(struct can_frame* frame);
     int decode_mm_lat_lon(struct can_frame* frame);
     int decode_ipd_datetime(struct can_frame* frame);
     int decode_driving_mode(struct can_frame* frame);
@@ -175,7 +198,11 @@ private:
 
     int decode_is_on_road(struct can_frame* frame);
 
+    int decode_autolock_type(struct can_frame* frame);
+    int set_autolock_type(int autolock_type);
+
     int process_can_messages(struct can_frame* frame);
+
 
 #ifdef WITH_SERIALPORT
     QSerialPort serial_port;
@@ -209,8 +236,8 @@ class SpeedAgregator: public QObject
 public:
     SpeedAgregator();
 
-    static const double minSpeedSkyAccount = 8;
-    static const double maxAllowDeltaSpeed = 4;
+    static constexpr double minSpeedSkyAccount = 8;
+    static constexpr double maxAllowDeltaSpeed = 4;
 
 public slots:
     void getSpeedFromSky (double speed);

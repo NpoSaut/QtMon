@@ -1,11 +1,11 @@
 #if defined WITH_CAN || defined WITH_SERIAL
 
-#include "iodrv.h"
 #include <QDate>
 #include <QtCore/qmath.h>
 
 #include <QFile>
-#include <QTextStream>
+
+#include "iodrv.h"
 
 // Distance between coordinates in kilometers
 const double PI = 3.141592653589793238462;
@@ -26,12 +26,13 @@ static double DistanceBetweenCoordinates(double lat1d, double lon1d, double lat2
 }
 
 iodrv::iodrv(SystemStateViewModel *systemState)
-    : distance_store_file("/media/milage.txt")
+    : distance_store_file("/media/milage.txt"),
+      c_modulesActivity(), p_modulesActivity()
 {
     //!!!!! TODO: ВРЕМЕННО
     this->systemState = systemState;
 
-    gps_source = gps;
+    gps_source = gps_data_source_gps;
     read_socket_0 = -1;
     write_socket_0 = -1;
     write_socket_1 = -1;
@@ -68,6 +69,9 @@ iodrv::iodrv(SystemStateViewModel *systemState)
     c_pressure_tm = -1;
     c_is_on_road = 1;
 
+    c_autolock_type = -1;
+    c_autolock_type_target = -1;
+
     p_speed = -1;
     p_speed_limit = -1;
     p_target_speed = -1;
@@ -84,6 +88,9 @@ iodrv::iodrv(SystemStateViewModel *systemState)
     p_pressure_tc = -1;
     p_pressure_tm = -1;
     p_is_on_road = -1;
+
+    p_autolock_type = -1;
+    p_autolock_type_target = -1;
 
     c_ssps_mode = -1; p_ssps_mode = -1;
 
@@ -103,7 +110,7 @@ int iodrv::start(char* can_iface_name_0, char *can_iface_name_1, gps_data_source
     gps_source = gps_datasource;
 
     // Инициализация сокетов
-    if (init_sktcan(can_iface_name_0, can_iface_name_1) == 0)
+    if (init_sktcan("can0", "can1") == 0)
     {
         //printf("Инициализация сокетов не удалась\n"); fflush(stdout);
         return 0;
@@ -113,7 +120,7 @@ int iodrv::start(char* can_iface_name_0, char *can_iface_name_1, gps_data_source
 
     // Инициализация и начало асинхронного чтения с последовательного порта.
     // Если не выбрано другое.
-    if (gps_source == gps)
+    if (gps_source == gps_data_source_gps)
     {
         if (init_serial_port() == 0)
         {
@@ -183,8 +190,11 @@ void iodrv::read_canmsgs_loop()
     struct can_frame read_frame;
     while(true)
     {
-        read_can_frame(read_socket_0, &read_frame);
-        process_can_messages(&read_frame);
+        if ( read_can_frame(read_socket_0, &read_frame) )
+        {
+            emit signal_new_message(CanFrame(read_frame));
+            process_can_messages(&read_frame);
+        }
     }
 }
 
@@ -199,22 +209,26 @@ int iodrv::process_can_messages(struct can_frame *frame)
     decode_trafficlight_light(frame);
     decode_trafficlight_freq(frame);
     decode_passed_distance(frame);
+    decode_orig_passed_distance (frame);
     decode_epv_state(frame);
     decode_epv_key(frame);
+    decode_modules_activity(frame);
 
     decode_driving_mode(frame);
     decode_vigilance(frame);
     decode_movement_direction(frame);
     decode_reg_tape_avl(frame);
 
+    decode_autolock_type(frame);
+
     decode_pressure_tc_tm(frame);
     decode_ssps_mode(frame);
     decode_traction(frame);
     decode_is_on_road(frame);
 
-//    if(gps_source == can)
+//    if(gps_source == gps_data_source_can)
 //    {
-//        decode_mm_lat_lon(frame);
+        decode_mm_lat_lon(frame);
 //        decode_ipd_datetime(frame);
 //    }
 }
@@ -249,6 +263,38 @@ int iodrv::decode_speed_limit(struct can_frame* frame)
             p_speed_limit = c_speed_limit;
             break;
     }
+}
+
+int iodrv::decode_autolock_type(struct can_frame* frame)
+{
+    switch (can_decoder::decode_autolock_type(frame, &c_autolock_type))
+    {
+    case 1:
+        if ((p_autolock_type == -1) || (p_autolock_type != -1 && p_autolock_type != c_autolock_type))
+        {
+            emit signal_autolock_type(c_autolock_type);
+            if (c_autolock_type_target == -1)
+            {
+                c_autolock_type_target = c_autolock_type;
+                emit signal_autolock_type_target(c_autolock_type);
+            }
+        }
+
+        if (c_autolock_type_target == p_autolock_type_target && c_autolock_type_target != c_autolock_type)
+        {
+            this->set_autolock_type(c_autolock_type_target);
+        }
+
+        p_autolock_type_target = c_autolock_type_target;
+        p_autolock_type = c_autolock_type;
+        break;
+    }
+}
+
+int iodrv::set_autolock_type(int autolock_type)
+{
+    can_frame frame = can_encoder::encode_autolock_set_message (autolock_type);
+    write_canmsg_async (write_socket_0, &frame);
 }
 
 int iodrv::decode_target_speed(struct can_frame* frame)
@@ -379,6 +425,16 @@ int iodrv::decode_passed_distance(struct can_frame* frame)
     }
 }
 
+int iodrv::decode_orig_passed_distance(can_frame *frame)
+{
+    switch (can_decoder::decode_orig_passed_distance (frame, &c_orig_passed_distance))
+    {
+    case 1:
+        emit signal_orig_passed_distance(c_orig_passed_distance);
+        break;
+    }
+}
+
 int iodrv::decode_epv_state(struct can_frame* frame)
 {
     switch (can_decoder::decode_epv_released(frame, &c_epv_state))
@@ -407,21 +463,35 @@ int iodrv::decode_epv_key(struct can_frame* frame)
     }
 }
 
+int iodrv::decode_modules_activity(can_frame *frame)
+{
+    switch (can_decoder::decode_modules_activity (frame, &c_modulesActivity))
+    {
+        case 1:
+        if ((p_modulesActivity.isCollected() == false) || (p_modulesActivity.isCollected() == true && p_modulesActivity != c_modulesActivity))
+            {
+                emit signal_modules_activity (c_modulesActivity.toString ());
+            }
+            p_modulesActivity = c_modulesActivity;
+            break;
+    }
+}
+
 int iodrv::decode_mm_lat_lon(struct can_frame* frame)
 {
     switch (can_decoder::decode_mm_lat_lon(frame, &c_lat, &c_lon))
     {
         case 1:
-            if ((p_lat == -1) || (p_lat != -1 && p_lat != c_lat))
+            if (((p_lat == -1) || (p_lat != -1 && p_lat != c_lat)) ||
+                ((p_lon == -1) || (p_lon != -1 && p_lon != c_lon)))
             {
                 emit signal_lat(c_lat);
-            }
-            if ((p_lon == -1) || (p_lon != -1 && p_lon != c_lon))
-            {
                 emit signal_lon(c_lon);
             }
+//            emit signal_lat_lon (c_lat, c_lon);
             p_lat = c_lat;
             p_lon = c_lon;
+
 //            printf("Coord: lat = %f, lon = %f\n", c_lat, c_lon); fflush(stdout);
             break;
     }
@@ -628,7 +698,7 @@ void iodrv::slot_serial_ready_read()
 
             emit signal_lat(gd.lat);
             emit signal_lon(gd.lon);
-
+            emit signal_lat_lon (gd.lat, gd.lon);
 
             static double speed_old = 0;
 
@@ -696,6 +766,12 @@ void iodrv::init_timers()
     timer_disp_state->start(500);
 }
 
+void iodrv::slot_send_message(CanFrame frame)
+{
+    can_frame linux_frame = frame;
+    write_canmsg_async ( write_socket_0, const_cast<can_frame *> (&linux_frame) );
+}
+
 void iodrv::slot_can_write_disp_state()
 {
     can_frame frame_a = can_encoder::encode_disp_state_a();
@@ -751,6 +827,10 @@ void iodrv::slot_rmp_key_up()
     write_canmsg_async(write_socket_1, &frame);
 }
 
+void iodrv::slot_autolock_type_target_changed (int value)
+{
+    c_autolock_type_target = value;
+}
 
 SpeedAgregator::SpeedAgregator()
     : currentSpeedFromEarth(-1), currentSpeedFromSky(-1), currentSpeedIsValid(false), onRails(true)
@@ -795,11 +875,7 @@ void SpeedAgregator::getNewSpeed(double speedFromSky, double speedFromEarth)
     if ( onRails )
     {
 //        qDebug() << "on rails: " << currentSpeedFromEarth;
-        setSpeedIsValid( !(
-                        currentSpeedFromSky > minSpeedSkyAccount &&
-                        abs(currentSpeedFromSky - currentSpeedFromEarth) > maxAllowDeltaSpeed
-                            )
-                );
+        setSpeedIsValid( true );
         emit speedChanged(currentSpeedFromEarth);
     }
     else
@@ -930,3 +1006,4 @@ void rmp_key_handler::ssps_mode_received(int ssps_mode)
 
 
 #endif
+

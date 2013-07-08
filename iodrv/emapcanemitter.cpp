@@ -12,7 +12,7 @@ EMapCanEmitter::EMapCanEmitter(QObject *parent) :
     QObject(parent),
     timer(parent), // Частота выдача в can объекта. Должна быть 100 мс, но из-за проблем со временем 50 -TiME-
     sendingObjects(), receivedObjects(),
-    step (0), targetNumber(0), targetDistance(0), active(false)
+    step (0), targetNumber(0), targetDistance(0), active(false), ipdRestart(false)
 {
     timer.setInterval (50);
     timer.start ();
@@ -21,6 +21,8 @@ EMapCanEmitter::EMapCanEmitter(QObject *parent) :
     // Получение данных о текущей цели из ЦО
     QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getTargetDistanceFromMcoState(CanFrame)));
     QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getTargetNumberFromMcoLimits(CanFrame)));
+    QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getMetrometerFromIpdState(CanFrame)));
+    QObject::connect (&canDev, SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(getIpdRestartFromSautInfo(CanFrame)));
 }
 
 EMapCanEmitter::CanMessageData EMapCanEmitter::encodeEMapTarget(const EMapTarget& t, int targetNumber)
@@ -89,8 +91,8 @@ void EMapCanEmitter::getTargetDistanceFromMcoState(CanFrame canFrame)
 {
     if ( canFrame.getDescriptor () == 0x0A08 )
     {
-        unsigned newTargetDistance = (unsigned(canFrame.getData ()[3] & 0x1F) << 8) + canFrame.getData ()[4];
-        qDebug() << "MCO_STATE: " << newTargetDistance;
+        signed char high = unsigned(canFrame.getData ()[3] & 0x1F);
+        Complex<int16_t> newTargetDistance ({canFrame.getData ()[4], high & (1 << 4) ? high | 0xF0 : high });
         if ( newTargetDistance != targetDistance )
         {
             targetDistance = newTargetDistance;
@@ -118,6 +120,30 @@ void EMapCanEmitter::getTargetNumberFromMcoLimits(CanFrame canFrame)
                 emit targetTypeChanged (0);
             }
         }
+    }
+}
+
+void EMapCanEmitter::getMetrometerFromIpdState(CanFrame canFrame)
+{
+    if ( canFrame.getDescriptor () == 0x1888 )
+    {
+        int32_t meters;
+        meters = Complex<int32_t> ({canFrame.getData () [4],
+                                    canFrame.getData () [3],
+                                    canFrame.getData () [5],
+                                    (canFrame.getData () [5] & (1 << 7)) ? 0xFF : 0});
+        emit metrometerChanged (meters);
+    }
+}
+
+void EMapCanEmitter::getIpdRestartFromSautInfo(CanFrame canFrame)
+{
+    if ( canFrame.getDescriptor () == 0x4668 )
+    {
+        bool restart = canFrame.getData ()[7] & (1 << 6);
+        if ( ipdRestart == false && restart == true )
+            emit metrometerReset ();
+        ipdRestart = restart;
     }
 }
 

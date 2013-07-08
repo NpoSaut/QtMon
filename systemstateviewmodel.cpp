@@ -20,10 +20,13 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isPressureOkValue = true;
     isEpvReadyValue = true;
     isEpvReleasedValue = false;
+    modulesActivityStringValue = "------------";
     milageValue = 0;
     lightValue = -2;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
+    autolockTypeTargetValue = -1;
+    autolockTypeFactValue = -1;
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
@@ -33,8 +36,18 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
+    ordinateValue = 0;
+    nextTargetKindValue = -1;
+    nextTargetNameValue = "";
+    nextTargetDistanceValue = 0;
     warningTextValue = "";
     infoTextValue = "";
+    trackNumberValue = 0;
+    machinistNumberValue = 0;
+    trainNumberValue = 0;
+    wagonCountValue = 1;
+    axlesCountValue = 4;
+    trainMassValue = 0;
     // fileds init end
 }
 
@@ -49,7 +62,7 @@ void SystemStateViewModel::setSpeed(const double value)
     if (speedValue != value)
     {
         speedValue = value;
-        emit SpeedChanged();
+        emit SpeedChanged(value);
     }
 }
 
@@ -63,7 +76,7 @@ void SystemStateViewModel::setSpeedIsValid(const bool value)
     if (speedIsValidValue != value)
     {
         speedIsValidValue = value;
-        emit SpeedIsValidChanged();
+        emit SpeedIsValidChanged(value);
     }
 }
 
@@ -77,7 +90,7 @@ void SystemStateViewModel::setSpeedFromSky(const double value)
     if (speedFromSkyValue != value)
     {
         speedFromSkyValue = value;
-        emit SpeedFromSkyChanged();
+        emit SpeedFromSkyChanged(value);
     }
 }
 
@@ -91,7 +104,7 @@ void SystemStateViewModel::setSpeedFromEarth(const double value)
     if (speedFromEarthValue != value)
     {
         speedFromEarthValue = value;
-        emit SpeedFromEarthChanged();
+        emit SpeedFromEarthChanged(value);
     }
 }
 
@@ -105,7 +118,7 @@ void SystemStateViewModel::setSpeedRestriction(const int value)
     if (speedRestrictionValue != value)
     {
         speedRestrictionValue = value;
-        emit SpeedRestrictionChanged();
+        emit SpeedRestrictionChanged(value);
     }
 }
 
@@ -119,7 +132,7 @@ void SystemStateViewModel::setTargetSpeed(const int value)
     if (targetSpeedValue != value)
     {
         targetSpeedValue = value;
-        emit TargetSpeedChanged();
+        emit TargetSpeedChanged(value);
     }
 }
 
@@ -133,7 +146,7 @@ void SystemStateViewModel::setAcceleration(const double value)
     if (accelerationValue != value)
     {
         accelerationValue = value;
-        emit AccelerationChanged();
+        emit AccelerationChanged(value);
     }
 }
 
@@ -147,7 +160,7 @@ void SystemStateViewModel::setPressureTC(const QString value)
     if (pressureTCValue != value)
     {
         pressureTCValue = value;
-        emit PressureTCChanged();
+        emit PressureTCChanged(value);
     }
 }
 
@@ -161,7 +174,7 @@ void SystemStateViewModel::setPressureTM(const QString value)
     if (pressureTMValue != value)
     {
         pressureTMValue = value;
-        emit PressureTMChanged();
+        emit PressureTMChanged(value);
     }
 }
 
@@ -174,7 +187,7 @@ void SystemStateViewModel::setLongitude(const double value)
     if (longitudeValue != value)
     {
         longitudeValue = value;
-        emit LongitudeChanged();
+        emit LongitudeChanged(value);
     }
 }
 
@@ -187,7 +200,7 @@ void SystemStateViewModel::setLatitude(const double value)
     if (latitudeValue != value)
     {
         latitudeValue = value;
-        emit LatitudeChanged();
+        emit LatitudeChanged(value);
     }
 }
 
@@ -201,7 +214,7 @@ void SystemStateViewModel::setSystemWarningLevel(const int value)
     if (systemWarningLevelValue != value)
     {
         systemWarningLevelValue = value;
-        emit SystemWarningLevelChanged();
+        emit SystemWarningLevelChanged(value);
     }
 }
 
@@ -215,7 +228,7 @@ void SystemStateViewModel::setFullSetWarningLevel(const int value)
     if (fullSetWarningLevelValue != value)
     {
         fullSetWarningLevelValue = value;
-        emit FullSetWarningLevelChanged();
+        emit FullSetWarningLevelChanged(value);
     }
 }
 
@@ -229,7 +242,7 @@ void SystemStateViewModel::setIsPressureOk(const bool value)
     if (isPressureOkValue != value)
     {
         isPressureOkValue = value;
-        emit IsPressureOkChanged();
+        emit IsPressureOkChanged(value);
     }
 }
 
@@ -243,7 +256,7 @@ void SystemStateViewModel::setIsEpvReady(const bool value)
     if (isEpvReadyValue != value)
     {
         isEpvReadyValue = value;
-        emit IsEpvReadyChanged();
+        emit IsEpvReadyChanged(value);
     }
 }
 
@@ -257,7 +270,21 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
     if (isEpvReleasedValue != value)
     {
         isEpvReleasedValue = value;
-        emit IsEpvReleasedChanged();
+        emit IsEpvReleasedChanged(value);
+    }
+}
+
+// Активность модулей
+const QString SystemStateViewModel::getModulesActivityString() const
+{
+    return modulesActivityStringValue;
+}
+void SystemStateViewModel::setModulesActivityString(const QString value)
+{
+    if (modulesActivityStringValue != value)
+    {
+        modulesActivityStringValue = value;
+        emit ModulesActivityStringChanged(value);
     }
 }
 
@@ -271,7 +298,7 @@ void SystemStateViewModel::setMilage(const int value)
     if (milageValue != value)
     {
         milageValue = value;
-        emit MilageChanged();
+        emit MilageChanged(value);
     }
 }
 
@@ -285,7 +312,7 @@ void SystemStateViewModel::setLight(const int value)
     if (lightValue != value)
     {
         lightValue = value;
-        emit LightChanged();
+        emit LightChanged(value);
     }
 }
 
@@ -299,7 +326,7 @@ void SystemStateViewModel::setAlsnFreqTarget(const int value)
     if (alsnFreqTargetValue != value)
     {
         alsnFreqTargetValue = value;
-        emit AlsnFreqTargetChanged();
+        emit AlsnFreqTargetChanged(value);
     }
 }
 
@@ -313,7 +340,35 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
     if (alsnFreqFactValue != value)
     {
         alsnFreqFactValue = value;
-        emit AlsnFreqFactChanged();
+        emit AlsnFreqFactChanged(value);
+    }
+}
+
+// Целевой тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeTarget() const
+{
+    return autolockTypeTargetValue;
+}
+void SystemStateViewModel::setAutolockTypeTarget(const int value)
+{
+    if (autolockTypeTargetValue != value)
+    {
+        autolockTypeTargetValue = value;
+        emit AutolockTypeTargetChanged(value);
+    }
+}
+
+// Фактический тип автоблокировки
+const int SystemStateViewModel::getAutolockTypeFact() const
+{
+    return autolockTypeFactValue;
+}
+void SystemStateViewModel::setAutolockTypeFact(const int value)
+{
+    if (autolockTypeFactValue != value)
+    {
+        autolockTypeFactValue = value;
+        emit AutolockTypeFactChanged(value);
     }
 }
 
@@ -327,7 +382,7 @@ void SystemStateViewModel::setTime(const QString value)
     if (timeValue != value)
     {
         timeValue = value;
-        emit TimeChanged();
+        emit TimeChanged(value);
     }
 }
 
@@ -341,7 +396,7 @@ void SystemStateViewModel::setDate(const QString value)
     if (dateValue != value)
     {
         dateValue = value;
-        emit DateChanged();
+        emit DateChanged(value);
     }
 }
 
@@ -355,7 +410,7 @@ void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
     if (isRegistrationTapeActiveValue != value)
     {
         isRegistrationTapeActiveValue = value;
-        emit IsRegistrationTapeActiveChanged();
+        emit IsRegistrationTapeActiveChanged(value);
     }
 }
 
@@ -369,7 +424,7 @@ void SystemStateViewModel::setDriveModeTarget(const int value)
     if (driveModeTargetValue != value)
     {
         driveModeTargetValue = value;
-        emit driveModeTargetChanged();
+        emit driveModeTargetChanged(value);
     }
 }
 
@@ -383,7 +438,7 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     if (driveModeFactValue != value)
     {
         driveModeFactValue = value;
-        emit driveModeFactChanged();
+        emit driveModeFactChanged(value);
     }
 }
 
@@ -396,7 +451,7 @@ void SystemStateViewModel::setIronWheels(const bool value)
     if (ironWheelsValue != value)
     {
         ironWheelsValue = value;
-        emit IronWheelsChanged();
+        emit IronWheelsChanged(value);
     }
 }
 
@@ -410,7 +465,7 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
     if (isVigilanceRequiredValue != value)
     {
         isVigilanceRequiredValue = value;
-        emit IsVigilanceRequiredChanged();
+        emit IsVigilanceRequiredChanged(value);
     }
 }
 
@@ -424,7 +479,7 @@ void SystemStateViewModel::setIsTractionOn(const bool value)
     if (isTractionOnValue != value)
     {
         isTractionOnValue = value;
-        emit IsTractionOnChanged();
+        emit IsTractionOnChanged(value);
     }
 }
 
@@ -438,7 +493,63 @@ void SystemStateViewModel::setDirection(const int value)
     if (directionValue != value)
     {
         directionValue = value;
-        emit DirectionChanged();
+        emit DirectionChanged(value);
+    }
+}
+
+// Текущая ордината
+const int SystemStateViewModel::getOrdinate() const
+{
+    return ordinateValue;
+}
+void SystemStateViewModel::setOrdinate(const int value)
+{
+    if (ordinateValue != value)
+    {
+        ordinateValue = value;
+        emit OrdinateChanged(value);
+    }
+}
+
+// Тип ближайшей цели
+const int SystemStateViewModel::getNextTargetKind() const
+{
+    return nextTargetKindValue;
+}
+void SystemStateViewModel::setNextTargetKind(const int value)
+{
+    if (nextTargetKindValue != value)
+    {
+        nextTargetKindValue = value;
+        emit NextTargetKindChanged(value);
+    }
+}
+
+// Название ближайшей цели
+const QString SystemStateViewModel::getNextTargetName() const
+{
+    return nextTargetNameValue;
+}
+void SystemStateViewModel::setNextTargetName(const QString value)
+{
+    if (nextTargetNameValue != value)
+    {
+        nextTargetNameValue = value;
+        emit NextTargetNameChanged(value);
+    }
+}
+
+// Расстояние до ближайшей цели
+const int SystemStateViewModel::getNextTargetDistance() const
+{
+    return nextTargetDistanceValue;
+}
+void SystemStateViewModel::setNextTargetDistance(const int value)
+{
+    if (nextTargetDistanceValue != value)
+    {
+        nextTargetDistanceValue = value;
+        emit NextTargetDistanceChanged(value);
     }
 }
 
@@ -452,7 +563,7 @@ void SystemStateViewModel::setWarningText(const QString value)
     if (warningTextValue != value)
     {
         warningTextValue = value;
-        emit WarningTextChanged();
+        emit WarningTextChanged(value);
     }
 }
 
@@ -466,7 +577,91 @@ void SystemStateViewModel::setInfoText(const QString value)
     if (infoTextValue != value)
     {
         infoTextValue = value;
-        emit InfoTextChanged();
+        emit InfoTextChanged(value);
+    }
+}
+
+// Номер пути
+const int SystemStateViewModel::getTrackNumber() const
+{
+    return trackNumberValue;
+}
+void SystemStateViewModel::setTrackNumber(const int value)
+{
+    if (trackNumberValue != value)
+    {
+        trackNumberValue = value;
+        emit TrackNumberChanged(value);
+    }
+}
+
+// Номер машиниста
+const int SystemStateViewModel::getMachinistNumber() const
+{
+    return machinistNumberValue;
+}
+void SystemStateViewModel::setMachinistNumber(const int value)
+{
+    if (machinistNumberValue != value)
+    {
+        machinistNumberValue = value;
+        emit MachinistNumberChanged(value);
+    }
+}
+
+// Номер поезда
+const int SystemStateViewModel::getTrainNumber() const
+{
+    return trainNumberValue;
+}
+void SystemStateViewModel::setTrainNumber(const int value)
+{
+    if (trainNumberValue != value)
+    {
+        trainNumberValue = value;
+        emit TrainNumberChanged(value);
+    }
+}
+
+// Длина поезда в условных вагонах
+const int SystemStateViewModel::getWagonCount() const
+{
+    return wagonCountValue;
+}
+void SystemStateViewModel::setWagonCount(const int value)
+{
+    if (wagonCountValue != value)
+    {
+        wagonCountValue = value;
+        emit WagonCountChanged(value);
+    }
+}
+
+// Длина поезда в осях
+const int SystemStateViewModel::getAxlesCount() const
+{
+    return axlesCountValue;
+}
+void SystemStateViewModel::setAxlesCount(const int value)
+{
+    if (axlesCountValue != value)
+    {
+        axlesCountValue = value;
+        emit AxlesCountChanged(value);
+    }
+}
+
+// Масса поезда
+const int SystemStateViewModel::getTrainMass() const
+{
+    return trainMassValue;
+}
+void SystemStateViewModel::setTrainMass(const int value)
+{
+    if (trainMassValue != value)
+    {
+        trainMassValue = value;
+        emit TrainMassChanged(value);
     }
 }
 

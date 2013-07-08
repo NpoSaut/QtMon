@@ -1,6 +1,10 @@
 #if defined WITH_CAN || defined WITH_SERIAL
 
+#include <QByteArray>
+
 #include "endecs.h"
+#include "lowlevel.h"
+
 
 
 can_frame can_encoder::encode_mm_alt_long(double lat, double lon, bool reliability)
@@ -127,6 +131,31 @@ can_frame can_encoder::encode_ipd_state( double speed, int distance, bool reliab
     frame.data[7] = 0;
 }
 
+can_frame can_encoder::encode_autolock_set_message(int autolock_type)
+{
+    can_frame frame = {0x468,
+                       7,
+                       {3, 0, 0, 0, 0, 0, 0, 0} };
+
+    switch (autolock_type) {
+    case 0: // АБ
+        frame.data[1] = 0x20;
+        break;
+    case 1: // ПАБ
+        frame.data[1] = 0x29;
+        frame.data[2] = 40;
+        break;
+    case 2:
+        frame.data[1] = 0x1F;
+        frame.data[2] = 40;
+        break;
+    default:
+        break;
+    }
+
+    return frame;
+}
+
 
 
 
@@ -168,6 +197,16 @@ int can_decoder::decode_speed_limit(struct can_frame* frame, int* speed_limit)
     return 1;
 }
 
+// MCO_MODE 0
+int can_decoder::decode_autolock_type(struct can_frame* frame, int* autolock_type)
+{
+    if ((*frame).can_id != 0x040) return -1;
+
+    (*autolock_type) = (int)(((*frame).data[0] & 0b1100) >> 2);
+
+    return 1;
+}
+
 // MCO_STATE_A
 int can_decoder::decode_target_speed(struct can_frame* frame, int* target_speed)
 {
@@ -205,6 +244,17 @@ int can_decoder::decode_epv_key(struct can_frame* frame, int* epv_key)
     if ((*frame).can_id != 0x050) return -1;
 
     (*epv_key) = (int) ( ( (*frame).data[0] >> 6 ) & 0b00000001 );
+
+    return 1;
+}
+
+// MCO_STATE_A
+int can_decoder::decode_modules_activity(can_frame *frame, ModulesActivity *modulesActivity)
+{
+    if ((*frame).can_id != 0x050) return -1;
+
+    (*modulesActivity) = ModulesActivity::loadFromMcoState (
+                QByteArray(reinterpret_cast<const char *> (frame->data), frame->can_dlc) );
 
     return 1;
 }
@@ -288,6 +338,23 @@ int can_decoder::decode_passed_distance(struct can_frame* frame, int* passed_dis
     return 1;
 }
 
+// MY_DEBUG_A
+int can_decoder::decode_orig_passed_distance(struct can_frame* frame, int* x)
+{
+    if ((*frame).can_id != 0x0C4) return -1; // 0x1888
+
+    struct IntByBytes
+    {
+        int byte1: 8;
+        int byte2: 8;
+        int byte3: 8;
+        int byte4: 8;
+    };
+
+    (*x) = Complex<int32_t> ({frame->data[4], frame->data[3], frame->data[5], (frame->data[5] & (1 << 7)) ? 0xFF : 0});
+
+    return 1;
+}
 
 // MM_ALT_LONG
 int can_decoder::decode_mm_lat_lon(struct can_frame* frame, double* lat, double* lon)
@@ -472,3 +539,4 @@ void nmea::decode_rmc(QString message, struct gps_data* gd)
 }
 
 #endif
+

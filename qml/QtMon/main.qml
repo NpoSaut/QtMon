@@ -131,12 +131,8 @@ Rectangle {
             else if (altMode && event.key == Qt.Key_F2) {
                 stateView.DisableRedButtonPressed();
             }
-            // Страница дорожного режима
+            // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
-                switchPage();
-            }
-            // Alt: пустой
-            else if (altMode && event.key == Qt.Key_F3) {
                 inputMode = true
 
                 var _offset = 0;
@@ -153,6 +149,10 @@ Rectangle {
 
                 inputPositions = input;
                 inputCursorIndex = 1;
+            }
+            // Alt: Страница дорожного режима
+            else if (altMode && event.key == Qt.Key_F3) {
+                switchPage();
             }
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
@@ -851,7 +851,7 @@ Rectangle {
                     font.family: "URW Gothic L";
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 36
+                    font.pixelSize: 32
 
                     text:
                     {
@@ -1467,7 +1467,7 @@ Rectangle {
                         id: page2buttonHeader
                         anchors.fill: parent
                         anchors.rightMargin: leftBorder.width
-                        visible: !altMode
+                        visible: altMode
                         clip: true
                         color: "#00000000"
 
@@ -1501,7 +1501,7 @@ Rectangle {
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Датчики")
+                            text: qsTr("   Панель\n приборов")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
@@ -1513,7 +1513,7 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        visible: altMode
+                        visible: !altMode
 
                         Text {
                             color: "#ffffff"

@@ -602,6 +602,7 @@ Rectangle {
 
                     // Дуга шкалы спидометра
                     Rectangle {
+                        id: speedometerCircle
                         color: "#00000000"
                         border.color: "#fff"
                         border.width: 3
@@ -617,6 +618,34 @@ Rectangle {
 
                         height: width
                         radius: width / 2
+
+                        // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
+                        Rectangle {
+                            id: speedometerWarner
+                            property int warningLimit: 5
+                            property bool warned: stateView.SpeedRestriction - stateView.Speed < warningLimit
+                            property bool poolsed: false
+                            property int maxThick: parent.width/2 - speedometerInnerCircle.width / 2 - parent.border.width / 2
+                            property int thick: Math.min(maxThick, Math.max(0, maxThick * (stateView.Speed - stateView.SpeedRestriction + warningLimit)/warningLimit))
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: speedometerInnerCircle.width + thick*2
+                            height: width
+                            radius: width/2
+                            color: "#ee1616"
+
+                            Behavior on thick { PropertyAnimation { duration: 250 } }
+
+                            opacity: poolsed ? 0 : 1
+
+                            // Пульсатрон
+                            Timer {
+                                interval: parent.poolsed ? 50 : 700 - parent.thick * 5
+                                repeat: true
+                                running: true
+                                onTriggered: parent.poolsed = !parent.poolsed
+                            }
+                        }
                     }
                 }
 
@@ -665,7 +694,8 @@ Rectangle {
                                 "Slices/Needle-Speed.png" :
                                 "Slices/Needle-Speed-Invalid.png"
 
-                    rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
+                    rotation: 180 - Math.min(speedometer.minAngle, Math.max(speedometer.maxAngle - 0.1,
+                                                    speedometer.minAngle - speedometer.anglePerKph * stateView.Speed)) * 180 / Math.PI
                     smooth: true
 
                     transformOrigin: Item.Right
@@ -673,7 +703,6 @@ Rectangle {
                     anchors.right: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                 }
-
 
                 // Стрелка целевой скорости
                 Rectangle {
@@ -725,6 +754,7 @@ Rectangle {
 
                 // Числа скорости и ограничения в кругляше в центре
                 Rectangle {
+                    id: speedometerInnerCircle
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
 
@@ -733,6 +763,7 @@ Rectangle {
                     radius: width / 2
 
                     color: "#4999c9"
+
 
                     // Индикатор отсутствия тяги вокруг кругляша скорости
                     Rectangle {
@@ -761,18 +792,27 @@ Rectangle {
                     }
 
                     // Ограничение скорости
-                    Text {
+                    Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65
+                        width: 60
+                        height: 40
+                        radius: 4
+                        color: speedometerWarner.warned ? "#a0ffffff" : "#00000000"
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
 
-                        text: stateView.SpeedRestriction.toFixed()
-                        color: "#c94949"
+                            text: stateView.SpeedRestriction.toFixed()
+                            color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
-                        font.pixelSize: 35
-                        font.family: "URW Gothic L"
-                        font.bold: true
+                            font.pixelSize: 35
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
                     }
+
 
                 }
             }

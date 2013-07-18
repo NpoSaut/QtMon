@@ -18,7 +18,8 @@ signals:
     
 public slots:
     void SayHello(int i);
-    
+    void SayLightIndex(int i);
+
 };
 
 #endif // LEVITHAN_H

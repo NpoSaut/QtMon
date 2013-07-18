@@ -30,7 +30,10 @@ SOURCES += main.cpp \
     iodrv/emapcanemitter.cpp\
     iodrv/canframe.cpp \
     iodrv/cookies.cpp \
-    iodrv/modulesactivity.cpp
+    iodrv/modulesactivity.cpp \
+    levithan.cpp \
+    sound/speakingthread.cpp \
+    sound/phrase.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -61,7 +64,10 @@ HEADERS += \
     iodrv/canframe.h \
     iodrv/cookies.h \
     lowlevel.h \
-    iodrv/modulesactivity.h
+    iodrv/modulesactivity.h \
+    levithan.h \
+    sound/speakingthread.h \
+    sound/phrase.h
 
 CONFIG += console
 

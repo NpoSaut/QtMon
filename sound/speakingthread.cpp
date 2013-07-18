@@ -29,8 +29,11 @@ void sound::SpeakingThread::run()
 
             mouth.play(phrase.fileName);
 
+#ifdef WIN32
             sleep(1);
-            //while (!mouth.isFinished()) {}
+#else
+            while (!mouth.isFinished()) {}
+#endif
         }
     }
 }

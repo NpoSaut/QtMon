@@ -2,6 +2,8 @@
 #define LEVITHAN_H
 
 #include <QObject>
+#include <QSound>
+
 #include "sound/speakingthread.h"
 
 class Levithan : public QObject

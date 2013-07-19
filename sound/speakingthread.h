@@ -15,9 +15,8 @@ namespace sound
         Q_OBJECT
 
     private:
-        QVector<Phrase> Speach;
+        QVector<Phrase>* Speach;
         QMutex speachMutex;
-        QSound mouth;
 
     protected:
         void run();

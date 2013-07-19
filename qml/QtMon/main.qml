@@ -625,11 +625,11 @@ Rectangle {
                             property int warningLimit: 5
                             property bool warned: stateView.SpeedRestriction - stateView.Speed < warningLimit
                             property bool poolsed: false
-                            property int maxThick: parent.width/2 - speedometerInnerCircle.width / 2 - parent.border.width / 2 + 2
+                            property int maxThick: parent.width/2 - speedometerInnerCircle.width / 2 - parent.border.width / 2 + 4
                             property int thick: Math.min(maxThick, Math.max(0, maxThick * (stateView.Speed - stateView.SpeedRestriction + warningLimit)/warningLimit))
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            width: speedometerInnerCircle.width - 2 + thick*2
+                            width: speedometerInnerCircle.width - 4 + thick*2
                             height: width
                             radius: width/2
                             color: "#ee1616"

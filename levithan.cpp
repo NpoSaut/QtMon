@@ -18,7 +18,10 @@ void Levithan::SayHello(int i)
 
 void Levithan::SayLightIndex(int i)
 {
-    speaker.EnqueuePhrase(Phrase("phrases/attention.wav", 0));
+    // Говорим "внимание", если сигнал ограничивающий (не "зелёный")
+    if (i < 3) speaker.EnqueuePhrase(Phrase("phrases/attention.wav", 0));
+
+    // Проговариваем сигнал
     switch (i)
     {
         case -1: speaker.EnqueuePhrase(Phrase("phrases/white.wav")); break;

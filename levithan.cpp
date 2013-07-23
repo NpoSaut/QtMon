@@ -34,8 +34,13 @@ void Levithan::SayLightIndex(int i)
 
 void Levithan::Beep()
 {
-    speaker.EnqueuePhrase(Phrase("phrases/ding.wav", 100));
+    speaker.EnqueuePhrase(Phrase("phrases/beep-700-40.wav", 0));
 }
 
 void Levithan::Beep(int i) { Beep(); }
 void Levithan::Beep(bool b) { Beep(); }
+
+void Levithan::BeepHigh()
+{
+    speaker.EnqueuePhrase(Phrase("phrases/beep-900-40.wav", 0));
+}

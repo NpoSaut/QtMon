@@ -25,6 +25,8 @@ public slots:
     void Beep();
     void Beep(int i);
     void Beep(bool b);
+
+    void BeepHigh();
 };
 
 #endif // LEVITHAN_H

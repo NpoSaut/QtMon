@@ -18,7 +18,6 @@ void SpeakingThread::EnqueuePhrase(Phrase phrase)
     {
         if (phrase.priority != 0 || Speach->size() == 0)
         {
-            qDebug() << "chah " << phrase.fileName;
             int i;
             for (i = 0; i < Speach->size(); i++)
             {
@@ -26,7 +25,6 @@ void SpeakingThread::EnqueuePhrase(Phrase phrase)
             }
             Speach->insert(i, phrase);
             //Speach->append(phrase);
-            qDebug() << "insert at " << i;
         }
     }
     speachMutex.unlock();
@@ -53,7 +51,7 @@ void sound::SpeakingThread::run()
             mouth.play();
 
 #ifdef WIN32
-            sleep(1);
+            msleep(40);
 #else
             while (!mouth.isFinished()) { /*qDebug (".");*/ }
 #endif

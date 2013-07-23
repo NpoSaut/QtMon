@@ -108,7 +108,7 @@ Rectangle {
         if (!inputMode)
         {
         	if (!altMode && event.key == Qt.Key_F1) {
-	            // Send CAN requset to change ALSN freq
+                stateView.ButtonPressed();
 
                 // Emulation
                 if (stateView.AlsnFreqTarget == 25 )
@@ -121,18 +121,22 @@ Rectangle {
                     stateView.AlsnFreqTarget = 25;
 	        }
     	    else if (altMode && event.key == Qt.Key_F1) {
+                stateView.ButtonPressed();
 	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
+                stateView.ButtonPressed();
                 stateView.ChangeDrivemodeButtonPressed();
             }
             // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F2) {
+                stateView.ConfirmButtonPressed();
                 stateView.DisableRedButtonPressed();
             }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
+                stateView.ButtonPressed();
                 inputMode = true
 
                 var _offset = 0;
@@ -163,6 +167,7 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
+                stateView.ButtonPressed();
                 inputBlinker.restart();
 
                 var input = inputPositions;
@@ -180,18 +185,21 @@ Rectangle {
             }
             if (event.key == Qt.Key_F2)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex++;
                 if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F3)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex--;
                 if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F4)
             {
+                stateView.ConfirmButtonPressed();
                 inputMode = false
 
                 var _offset = 0;
@@ -642,8 +650,12 @@ Rectangle {
                             Timer {
                                 interval: parent.poolsed ? 50 : 700 - parent.thick * 5
                                 repeat: true
-                                running: true
-                                onTriggered: parent.poolsed = !parent.poolsed
+                                running: parent.warned
+                                onTriggered:
+                                {
+                                    parent.poolsed = !parent.poolsed
+                                    if (parent.poolsed) stateView.SpeedWarningFlash()
+                                }
                             }
                         }
                     }

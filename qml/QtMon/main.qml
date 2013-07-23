@@ -641,7 +641,7 @@ Rectangle {
 
                             // Пульсатрон
                             Timer {
-                                interval: parent.poolsed ? 400 : 700 - parent.thick * 5
+                                interval: (parent.poolsed ? 650 : 800) - parent.thick * 5
                                 repeat: true
                                 running: speedometerWarner.warned
                                 onTriggered: parent.poolsed = !parent.poolsed

@@ -236,6 +236,11 @@ public:
     // public properties getters end
 
 signals:
+    // Для привязки звуков
+    void ButtonPressed();
+    void ConfirmButtonPressed();
+    void SpeedWarningFlash();
+
     // Сигнал о нажатии кнопки Смены режима движения
     void ChangeDrivemodeButtonPressed();
     void ChangeDrivemodeButtonReleased();

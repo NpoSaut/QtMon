@@ -11,6 +11,7 @@
 
 #include "systemstateviewmodel.h"
 #include "electroincmap.h"
+#include "levithan.h"
 
 #include "masqarade.h"
 #ifdef WIN32
@@ -27,6 +28,7 @@
 
 SystemStateViewModel *systemState ;
 Navigation::ElectroincMap* elMap;
+Levithan* levithan;
 
 #ifdef WITH_CAN
 iodrv* iodriver;
@@ -37,6 +39,8 @@ EMapCanEmitter* emapCanEmitter;
 
 void getParamsFromConsole ()
 {
+    qDebug() << "Starting reading console...";
+
     QString str;
     QTextStream in(stdin);
     QTextStream out(stdout);
@@ -49,6 +53,7 @@ void getParamsFromConsole ()
         if (cmd.at(0) == "s")
         {
             systemState->setSpeed( cmd.at(1).toInt() );
+            systemState->setSpeedIsValid(true);
             out << "Speed: " << systemState->getSpeed() << endl;
         }
         else if (cmd.at(0) == "r")
@@ -177,6 +182,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     elMap = new Navigation::ElectroincMap();
+    levithan = new Levithan();
 
 #ifdef WITH_CAN
     //QtConcurrent::run(getParamsFromCan);
@@ -286,23 +292,35 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies.mass.requestValue ();
 
 #else
-    QtConcurrent::run(getParamsFromConsole);
 #endif
+    QtConcurrent::run(getParamsFromConsole);
 
     qDebug() << "Loading map...";
     elMap->load ("./map.gps");
     qDebug() << "Map loaded.";
 
 //    elMap->setTrackNumber (1);
+
+#ifdef WITH_CAN
     QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
     QObject::connect (elMap, SIGNAL(ordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
     QObject::connect (elMap, SIGNAL(ordinateChanged(int)), emapCanEmitter, SLOT(setOrdinate(int)));
     QObject::connect (elMap, SIGNAL(isLocatedChanged(bool)), emapCanEmitter, SLOT(setActivity(bool)));
+    QObject::connect (elMap, SIGNAL(activityChanged(bool)), emapCanEmitter, SLOT(setActivity(bool)));
     QObject::connect (emapCanEmitter, SIGNAL(metrometerChanged(int)), elMap, SLOT(setMetrometer(int)));
-    QObject::connect (emapCanEmitter, SIGNAL(metrometerReset()), elMap, SLOT(resetMetrometer(int)));
+    QObject::connect (emapCanEmitter, SIGNAL(metrometerReset()), elMap, SLOT(resetMetrometer()));
     QObject::connect (emapCanEmitter, SIGNAL(targetDistanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
     QObject::connect (emapCanEmitter, SIGNAL(targetNameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
     QObject::connect (emapCanEmitter, SIGNAL(targetTypeChanged(int)), systemState, SLOT(setNextTargetKind(int)));
+#endif
+
+    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(SayLightIndex(int)));
+
+    QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(BeepHigh()));
+
+    QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(BeepHigh()));
+    QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(Beep()));
+
 
     return app->exec();
 }

@@ -22,6 +22,21 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient5202">
+      <stop
+         id="stop5204"
+         offset="0"
+         style="stop-color:#e8baa5;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.5"
+         id="stop5206" />
+      <stop
+         id="stop5208"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient6735">
       <stop
          style="stop-color:#000000;stop-opacity:1;"
@@ -4412,18 +4427,6 @@
        y1="25.5"
        x2="492"
        y2="-24.5" />
-    <filter
-       inkscape:collect="always"
-       id="filter6770"
-       x="-0.011237181"
-       width="1.0224744"
-       y="-0.10838528"
-       height="1.2167706">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.9571423"
-         id="feGaussianBlur6772" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient6735"
@@ -4453,6 +4456,16 @@
          stdDeviation="0.87679121"
          id="feGaussianBlur6842" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5202"
+       id="linearGradient4432"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.8779875,0,0,0.7646161,46.787138,218.07414)"
+       x1="260.31985"
+       y1="284.18881"
+       x2="435.72098"
+       y2="284.18881" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -4462,10 +4475,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="400"
-     inkscape:cy="286.36187"
+     inkscape:cx="228.5"
+     inkscape:cy="241.56383"
      inkscape:document-units="px"
-     inkscape:current-layer="layer15"
+     inkscape:current-layer="layer5"
      showgrid="false"
      borderlayer="false"
      inkscape:snap-grids="true"
@@ -4484,10 +4497,10 @@
      inkscape:snap-smooth-nodes="false"
      inkscape:snap-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:window-width="1600"
-     inkscape:window-height="853"
-     inkscape:window-x="1366"
-     inkscape:window-y="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-nodes="true"
      inkscape:snap-global="false"
@@ -5940,8 +5953,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="Ж/Д режим"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="fill:#7d7d7d;fill-opacity:1;stroke:none"
        id="rect4874"
@@ -6086,7 +6098,7 @@
          style="fill:none;stroke:#00ff00;stroke-width:1.00517929px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       <path
          transform="matrix(1.4212954,0,0,1.4212954,-2.3051461,1031.6624)"
-         d="m 7.0079331,11.254757 c 0,1.359861 -1.1023854,2.462247 -2.4622469,2.462247 -1.3598614,0 -2.4622468,-1.102386 -2.4622468,-2.462247 0,-1.3598615 1.1023854,-2.462247 2.4622468,-2.462247 1.3598615,0 2.4622469,1.1023855 2.4622469,2.462247 z"
+         d="m 7.0079331,11.254757 a 2.4622469,2.4622469 0 1 1 -4.9244937,0 2.4622469,2.4622469 0 1 1 4.9244937,0 z"
          sodipodi:ry="2.4622469"
          sodipodi:rx="2.4622469"
          sodipodi:cy="11.254757"
@@ -6102,7 +6114,7 @@
          sodipodi:cy="11.254757"
          sodipodi:rx="2.4622469"
          sodipodi:ry="2.4622469"
-         d="m 7.0079331,11.254757 c 0,1.359861 -1.1023854,2.462247 -2.4622469,2.462247 -1.3598614,0 -2.4622468,-1.102386 -2.4622468,-2.462247 0,-1.3598615 1.1023854,-2.462247 2.4622468,-2.462247 1.3598615,0 2.4622469,1.1023855 2.4622469,2.462247 z"
+         d="m 7.0079331,11.254757 a 2.4622469,2.4622469 0 1 1 -4.9244937,0 2.4622469,2.4622469 0 1 1 4.9244937,0 z"
          transform="matrix(1.4212954,0,0,1.4212954,6.5156024,1031.6624)" />
     </g>
     <path
@@ -6114,12 +6126,22 @@
        id="path2002"
        d="m 275.34471,395.36948 154,-13.01505 0,26.0301"
        style="fill:url(#linearGradient2004);fill-opacity:1;stroke:none" />
+    <path
+       style="fill:url(#linearGradient4432);fill-opacity:1.0;stroke:none"
+       d="m 275.34471,435.36948 154,-13.01505 0,26.0301"
+       id="path4430"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="C:\Users\Plyusnin\Qt\QtMon\qml\QtMon\Slices\Needle-inverted-Speed.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer16"
      inkscape:label="Ж/Д Режим скрин"
-     sodipodi:insensitive="true">
+     sodipodi:insensitive="true"
+     style="display:none">
     <image
        y="3.6766129"
        x="148.88908"
@@ -7146,12 +7168,12 @@
          sodipodi:linespacing="69.999999%"><tspan
            sodipodi:role="line"
            id="tspan4762"
-           x="660.41327"
+           x="660.28827"
            y="88"
            style="font-size:64px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:69.99999881%;text-anchor:end;fill:#000000;fill-opacity:0.42465754;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">60 </tspan><tspan
            sodipodi:role="line"
            x="642.53827"
-           y="96.81945"
+           y="99.882439"
            style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:0%;text-anchor:end;fill:#000000;fill-opacity:0.42465754;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            id="tspan4764">км/ч</tspan></text>
       <text
@@ -7163,12 +7185,12 @@
          xml:space="preserve"><tspan
            style="font-size:64px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:69.99999881%;text-anchor:end;fill:#c94949;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            y="87"
-           x="659.41327"
+           x="659.28827"
            id="tspan8059"
            sodipodi:role="line">60 </tspan><tspan
            id="tspan8063"
            style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:0%;text-anchor:end;fill:#c94949;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-           y="95.81945"
+           y="98.882439"
            x="641.53827"
            sodipodi:role="line">км/ч</tspan></text>
     </g>
@@ -7232,13 +7254,13 @@
          xml:space="preserve"><tspan
            style="font-size:40px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:40.0000006%;text-anchor:end;fill:#30759e;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            y="457"
-           x="146.42163"
+           x="146.34351"
            id="tspan4783"
            sodipodi:role="line">38 </tspan><tspan
            id="tspan4785"
            style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:40.0000006%;text-anchor:end;fill:#30759e;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-           y="465.77176"
-           x="139.15991"
+           y="466.38708"
+           x="139.13257"
            sodipodi:role="line"><tspan
              style="line-height:50%;fill:#30759e;fill-opacity:1"
              id="tspan5016">км/ч </tspan></tspan></text>
@@ -7251,12 +7273,12 @@
          sodipodi:linespacing="50%"><tspan
            sodipodi:role="line"
            id="tspan5020"
-           x="147.42163"
+           x="147.34351"
            y="458"
            style="font-size:40px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:40.0000006%;text-anchor:end;fill:#ffffff;fill-opacity:0.84577116;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">38 </tspan><tspan
            sodipodi:role="line"
-           x="140.15991"
-           y="466.77176"
+           x="140.13257"
+           y="467.38708"
            style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:end;line-height:40.0000006%;text-anchor:end;fill:#ffffff;fill-opacity:0.84577116;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
            id="tspan5022"><tspan
              id="tspan5024"
@@ -7318,7 +7340,8 @@
      inkscape:groupmode="layer"
      id="layer15"
      inkscape:label="Ввод параметров"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <rect
        y="-647"
        x="-22"
@@ -7838,7 +7861,7 @@
          id="tspan6856"
          x="235"
          y="47"
-         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;letter-spacing:5.82999991999999967px;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold;fill:#464646;fill-opacity:1">123</tspan></text>
+         style="font-size:24px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;letter-spacing:5.82999992px;fill:#464646;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">123</tspan></text>
   </g>
   <g
      inkscape:label="Кайма"
@@ -7858,7 +7881,7 @@
        transform="translate(-898.02561,0)">
       <path
          transform="translate(0,572.36218)"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          sodipodi:ry="9.5"
          sodipodi:rx="9.5"
          sodipodi:cy="68.5"
@@ -7874,11 +7897,11 @@
          sodipodi:cy="68.5"
          sodipodi:rx="9.5"
          sodipodi:ry="9.5"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          transform="translate(0,679.02887)" />
       <path
          transform="translate(0,785.69552)"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          sodipodi:ry="9.5"
          sodipodi:rx="9.5"
          sodipodi:cy="68.5"
@@ -7894,7 +7917,7 @@
          sodipodi:cy="68.5"
          sodipodi:rx="9.5"
          sodipodi:ry="9.5"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          transform="translate(0,892.36218)" />
     </g>
   </g>

@@ -633,6 +633,7 @@ Rectangle {
                             height: width
                             radius: width/2
                             color: "#ee1616"
+                            visible: false
 
                             Behavior on thick { PropertyAnimation { duration: 250 } }
 
@@ -640,9 +641,9 @@ Rectangle {
 
                             // Пульсатрон
                             Timer {
-                                interval: parent.poolsed ? 50 : 700 - parent.thick * 5
+                                interval: parent.poolsed ? 400 : 700 - parent.thick * 5
                                 repeat: true
-                                running: true
+                                running: speedometerWarner.warned
                                 onTriggered: parent.poolsed = !parent.poolsed
                             }
                         }
@@ -691,7 +692,7 @@ Rectangle {
                 // Стрелка спидометра
                 Image {
                     source: stateView.SpeedIsValid ?
-                                "Slices/Needle-Speed.png" :
+                                ("Slices/Needle-Speed" + (speedometerWarner.poolsed ? "-Inversed" : "") + ".png") :
                                 "Slices/Needle-Speed-Invalid.png"
 
                     rotation: 180 - Math.min(speedometer.minAngle, Math.max(speedometer.maxAngle - 0.1,
@@ -762,7 +763,7 @@ Rectangle {
                     height: width
                     radius: width / 2
 
-                    color: "#4999c9"
+                    color: speedometerWarner.poolsed ? "#fff" : "#4999c9"
 
 
                     // Индикатор отсутствия тяги вокруг кругляша скорости
@@ -784,7 +785,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
 
                         text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
-                        color: "#fff"
+                        color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
                         font.pixelSize: 35
                         font.family: "URW Gothic L"

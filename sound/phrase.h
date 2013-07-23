@@ -8,10 +8,10 @@ namespace sound
     {
     public:
         Phrase()
-            :fileName(""), priority(1)
+            :fileName(""), priority(10)
         {}
         Phrase(QString filename)
-            : fileName(filename), priority(1)
+            : fileName(filename), priority(10)
         {}
         Phrase(QString filename, int priority)
             : fileName(filename), priority(priority)

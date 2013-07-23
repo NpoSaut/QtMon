@@ -7,7 +7,7 @@ Levithan::Levithan(QObject *parent) :
     QObject(parent),
     speaker()
 {
-    speaker.start ();
+    speaker.start();
 }
 
 void Levithan::SayHello(int i)
@@ -32,3 +32,10 @@ void Levithan::SayLightIndex(int i)
     }
 }
 
+void Levithan::Beep()
+{
+    speaker.EnqueuePhrase(Phrase("phrases/ding.wav", 100));
+}
+
+void Levithan::Beep(int i) { Beep(); }
+void Levithan::Beep(bool b) { Beep(); }

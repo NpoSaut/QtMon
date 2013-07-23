@@ -16,7 +16,18 @@ void SpeakingThread::EnqueuePhrase(Phrase phrase)
     speachMutex.lock();
     if (Speach != nullptr)
     {
-        Speach->append(phrase);
+        if (phrase.priority != 0 || Speach->size() == 0)
+        {
+            qDebug() << "chah " << phrase.fileName;
+            int i;
+            for (i = 0; i < Speach->size(); i++)
+            {
+                if (Speach->at(i).priority > phrase.priority) break;
+            }
+            Speach->insert(i, phrase);
+            //Speach->append(phrase);
+            qDebug() << "insert at " << i;
+        }
     }
     speachMutex.unlock();
 }

@@ -22,6 +22,9 @@ public slots:
     void SayHello(int i);
     void SayLightIndex(int i);
 
+    void Beep();
+    void Beep(int i);
+    void Beep(bool b);
 };
 
 #endif // LEVITHAN_H

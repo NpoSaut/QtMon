@@ -134,6 +134,16 @@ void getParamsFromConsole ()
             systemState->setInfoText( cmd.at(1) );
             out << "Now Info Text is: " << systemState->getInfoText() << endl;
         }
+        else if (cmd.at(0) == "m")
+        {
+            systemState->setMilage( cmd.at(1).toInt() );
+            out << "Now Milage is: " << systemState->getMilage() << endl;
+        }
+        else if (cmd.at(0) == "m+")
+        {
+            systemState->setMilage( systemState->getMilage() + cmd.at(1).toInt() );
+            out << "Now Milage is: " << systemState->getMilage() << endl;
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -146,6 +156,8 @@ void getParamsFromConsole ()
             out << "dir {1/-1/0} Направление движения: вперёд/назад/стоим" << endl;
             out << "wt {text} Текст предупреждения" << endl;
             out << "it {text} Текст совета" << endl;
+            out << "m {int} Установить миляж" << endl;
+            out << "m+ {int} Увеличить миляж" << endl;
         }
     }
 }
@@ -308,6 +320,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (emapCanEmitter, SIGNAL(targetNameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
     QObject::connect (emapCanEmitter, SIGNAL(targetTypeChanged(int)), systemState, SLOT(setNextTargetKind(int)));
 #endif
+
+    CPRINTF(CL_RED_L, "╔══════════════════════════════════════╗\n");
+    CPRINTF(CL_RED_L, "║            !!! AHTUNG !!!            ║\n");
+    CPRINTF(CL_RED_L, "╟──────────────────────────────────────╢\n");
+    CPRINTF(CL_RED_L, "║"); CPRINTF(CL_RED, "  This version shows Milage instead   "); CPRINTF(CL_RED_L, "║\n");
+    CPRINTF(CL_RED_L, "║"); CPRINTF(CL_RED, " of Ordinate! Use just for metrology! "); CPRINTF(CL_RED_L, "║\n");
+    CPRINTF(CL_RED_L, "╚══════════════════════════════════════╝\n");
 
     return app->exec();
 }

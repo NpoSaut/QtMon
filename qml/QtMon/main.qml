@@ -340,11 +340,12 @@ Rectangle {
                            border.color: "#ffffff00"
                            height: 20
                            Text {
+                               property double ord: stateView.Milage
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
-                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
-                                     (stateView.Ordinate % 100).toString() + "м"
+                               text: ((ord / 1000) - ((ord / 1000) % 1)) + "км " +
+                                     (((ord % 1000 ) / 100) - (((ord % 1000 ) / 100) % 1)) + "пк " +
+                                     (ord % 100).toString() + "м"
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14

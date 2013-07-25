@@ -7,27 +7,18 @@
 #include <QMutex>
 
 #include "phrase.h"
+#include "queues.h"
 
 namespace sound
 {
-    class SpeakingThread : public QThread
+    class Speaker : public Queues::SimpleQueueBase<Phrase>
     {
-        Q_OBJECT
-
-    private:
-        QVector<Phrase>* Speach;
-        QMutex speachMutex;
+    public:
+        Speaker();
+        void EnqueuePhrase(Phrase phrase);
 
     protected:
-        void run();
-
-    public:
-        explicit SpeakingThread(QObject *parent = 0);
-
-    signals:
-
-    public slots:
-        void EnqueuePhrase(Phrase phrase);
+        void process(Phrase phrase);
 
     };
 }

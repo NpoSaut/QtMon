@@ -7,7 +7,6 @@ Levithan::Levithan(QObject *parent) :
     QObject(parent),
     speaker()
 {
-    speaker.start();
 }
 
 void Levithan::SayHello(int i)

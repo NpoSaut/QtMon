@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     iodrv/modulesactivity.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
-    sound/phrase.cpp
+    sound/phrase.cpp \
+    queues.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -69,7 +70,8 @@ HEADERS += \
     iodrv/modulesactivity.h \
     levithan.h \
     sound/speakingthread.h \
-    sound/phrase.h
+    sound/phrase.h \
+    queues.h
 
 CONFIG += console
 

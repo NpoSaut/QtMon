@@ -626,39 +626,6 @@ Rectangle {
 
                         height: width
                         radius: width / 2
-
-                        // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
-                        Rectangle {
-                            id: speedometerWarner
-                            property int warningLimit: 5
-                            property bool warned: stateView.SpeedRestriction - stateView.Speed < warningLimit
-                            property bool poolsed: false
-                            property int maxThick: parent.width/2 - speedometerInnerCircle.width / 2 - parent.border.width / 2 + 4
-                            property int thick: Math.min(maxThick, Math.max(0, maxThick * (stateView.Speed - stateView.SpeedRestriction + warningLimit)/warningLimit))
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: speedometerInnerCircle.width - 4 + thick*2
-                            height: width
-                            radius: width/2
-                            color: "#ee1616"
-                            visible: false
-
-                            Behavior on thick { PropertyAnimation { duration: 250 } }
-
-                            opacity: poolsed ? 0 : 1
-
-                            // Пульсатрон
-                            Timer {
-                                interval: (parent.poolsed ? 650 : 800) - parent.thick * 5
-                                repeat: true
-                                running: speedometerWarner.warned
-                                onTriggered:
-                                {
-                                    parent.poolsed = !parent.poolsed
-                                    if (parent.poolsed) stateView.SpeedWarningFlash()
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -698,6 +665,27 @@ Rectangle {
                             font.pixelSize: 16
                             font.family: "URW Gothic L"
                         }
+                    }
+                }
+
+
+                // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
+                Timer {
+                    id: speedometerWarner
+                    property int warningLimit: 3
+                    property bool warned: stateView.SpeedRestriction - stateView.Speed <= warningLimit
+                    property double warningLevel: Math.max(0, Math.min(warningLimit, stateView.Speed + warningLimit - stateView.SpeedRestriction)) / warningLimit
+                    property bool poolsed: warned && innerPoolsed
+                    property bool innerPoolsed: false
+                    property double nextInterval: 600 * (parent.poolsed ? 0.3 : 1.0) * (1.5 - warningLevel)
+                    interval: 100
+                    repeat: true
+                    running: speedometerWarner.warned
+                    onTriggered:
+                    {
+                        interval = nextInterval;
+                        innerPoolsed = !innerPoolsed
+                        if (poolsed) stateView.SpeedWarningFlash()
                     }
                 }
 

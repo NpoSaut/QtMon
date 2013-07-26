@@ -15,7 +15,7 @@ namespace sound
     {
     public:
         Speaker();
-        void EnqueuePhrase(Phrase phrase);
+        void enqueuePhrase(Phrase phrase);
 
     protected:
         void process(Phrase phrase);

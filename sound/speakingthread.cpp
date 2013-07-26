@@ -11,9 +11,9 @@ Speaker::Speaker()
     QSound::play ("phrases/attention.wav");
 }
 
-void Speaker::EnqueuePhrase(Phrase phrase)
+void Speaker::enqueuePhrase(Phrase phrase)
 {
-    enqueue(phrase);
+    this->enqueue(phrase);
 }
 
 

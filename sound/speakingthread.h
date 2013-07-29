@@ -11,7 +11,7 @@
 
 namespace sound
 {
-    class Speaker : public Queues::SimpleQueueBase<Phrase>
+    class Speaker : public Queues::PriorityQueueBase<Phrase>
     {
     public:
         Speaker();
@@ -19,6 +19,7 @@ namespace sound
 
     protected:
         void process(Phrase phrase);
+        int compare(Phrase a, Phrase b);
 
     };
 }

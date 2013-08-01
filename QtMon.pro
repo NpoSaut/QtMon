@@ -18,11 +18,12 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    iodrv/sktcan.cpp \
+    iodrv/cansendqueue.cpp \
     iodrv/can.cpp \
     queues.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
-    iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
     electroincmap.cpp \
     emap/kilometerpost.cpp \
@@ -36,8 +37,7 @@ SOURCES += main.cpp \
     iodrv/modulesactivity.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
-    sound/phrase.cpp \
-    iodrv/cansender.cpp
+    sound/phrase.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -49,10 +49,11 @@ OTHER_FILES += \
     properties.xml
 
 HEADERS += \
+    iodrv/sktcan.h \
+    iodrv/cansendqueue.h \
     iodrv/can.h \
     queues.h \
     systemstateviewmodel.h \
-    iodrv/sktcan.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \
@@ -72,8 +73,7 @@ HEADERS += \
     iodrv/modulesactivity.h \
     levithan.h \
     sound/speakingthread.h \
-    sound/phrase.h \
-    iodrv/cansender.h
+    sound/phrase.h
 
 CONFIG += console
 

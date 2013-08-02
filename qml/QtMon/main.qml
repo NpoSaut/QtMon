@@ -101,9 +101,6 @@ Rectangle {
     }
 
     Keys.onPressed: {
-        // Отладка зависания кнопок
-        console.debug("-------KNOPKA--------------------NAZHATA------FROM-QML--------------------");
-
         // Переключение частоты АЛСН
         if (!inputMode)
         {

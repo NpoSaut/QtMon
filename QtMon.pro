@@ -46,7 +46,8 @@ qtcAddDeployment()
 RESOURCES +=
 
 OTHER_FILES += \
-    properties.xml
+    properties.xml \
+    !TODO.txt
 
 HEADERS += \
     iodrv/sktcan.h \

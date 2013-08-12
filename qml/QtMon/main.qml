@@ -46,7 +46,6 @@ Rectangle {
         }
     }
 
-
     function getDriveModeLetter(driveModeIndex)
     {
         switch (driveModeIndex)
@@ -108,7 +107,7 @@ Rectangle {
         if (!inputMode)
         {
         	if (!altMode && event.key == Qt.Key_F1) {
-	            // Send CAN requset to change ALSN freq
+                stateView.ButtonPressed();
 
                 // Emulation
                 if (stateView.AlsnFreqTarget == 25 )
@@ -121,18 +120,22 @@ Rectangle {
                     stateView.AlsnFreqTarget = 25;
 	        }
     	    else if (altMode && event.key == Qt.Key_F1) {
+                stateView.ButtonPressed();
 	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
+                stateView.ButtonPressed();
                 stateView.ChangeDrivemodeButtonPressed();
             }
             // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F2) {
+                stateView.ConfirmButtonPressed();
                 stateView.DisableRedButtonPressed();
             }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
+                stateView.ButtonPressed();
                 inputMode = true
 
                 var _offset = 0;
@@ -163,6 +166,7 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
+                stateView.ButtonPressed();
                 inputBlinker.restart();
 
                 var input = inputPositions;
@@ -180,18 +184,21 @@ Rectangle {
             }
             if (event.key == Qt.Key_F2)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex++;
                 if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F3)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex--;
                 if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F4)
             {
+                stateView.ConfirmButtonPressed();
                 inputMode = false
 
                 var _offset = 0;
@@ -619,35 +626,6 @@ Rectangle {
 
                         height: width
                         radius: width / 2
-
-                        // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
-                        Rectangle {
-                            id: speedometerWarner
-                            property int warningLimit: 5
-                            property bool warned: stateView.SpeedRestriction - stateView.Speed < warningLimit
-                            property bool poolsed: false
-                            property int maxThick: parent.width/2 - speedometerInnerCircle.width / 2 - parent.border.width / 2 + 4
-                            property int thick: Math.min(maxThick, Math.max(0, maxThick * (stateView.Speed - stateView.SpeedRestriction + warningLimit)/warningLimit))
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: speedometerInnerCircle.width - 4 + thick*2
-                            height: width
-                            radius: width/2
-                            color: "#ee1616"
-                            visible: false
-
-                            Behavior on thick { PropertyAnimation { duration: 250 } }
-
-                            opacity: poolsed ? 0 : 1
-
-                            // Пульсатрон
-                            Timer {
-                                interval: (parent.poolsed ? 650 : 800) - parent.thick * 5
-                                repeat: true
-                                running: speedometerWarner.warned
-                                onTriggered: parent.poolsed = !parent.poolsed
-                            }
-                        }
                     }
                 }
 
@@ -687,6 +665,27 @@ Rectangle {
                             font.pixelSize: 16
                             font.family: "URW Gothic L"
                         }
+                    }
+                }
+
+
+                // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
+                Timer {
+                    id: speedometerWarner
+                    property int warningLimit: 3
+                    property double warningLevel: Math.max(0, Math.min(warningLimit, stateView.Speed + warningLimit - stateView.SpeedRestriction)) / warningLimit
+                    property bool warned: warningLevel > 0 && getDriveModeLetter(stateView.DriveModeFact) != "Т"
+                    property bool poolsed: warned && innerPoolsed
+                    property bool innerPoolsed: false
+                    property double nextInterval: 600 * (parent.poolsed ? 0.3 : 1.0) * (1.5 - warningLevel)
+                    interval: 100
+                    repeat: true
+                    running: speedometerWarner.warned
+                    onTriggered:
+                    {
+                        interval = nextInterval;
+                        innerPoolsed = !innerPoolsed
+                        if (poolsed) stateView.SpeedWarningFlash()
                     }
                 }
 

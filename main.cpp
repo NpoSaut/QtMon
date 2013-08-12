@@ -11,6 +11,7 @@
 
 #include "systemstateviewmodel.h"
 #include "electroincmap.h"
+#include "levithan.h"
 
 #include "masqarade.h"
 #ifdef WIN32
@@ -27,6 +28,7 @@
 
 SystemStateViewModel *systemState ;
 Navigation::ElectroincMap* elMap;
+Levithan* levithan;
 
 #ifdef WITH_CAN
 iodrv* iodriver;
@@ -37,6 +39,8 @@ EMapCanEmitter* emapCanEmitter;
 
 void getParamsFromConsole ()
 {
+    qDebug() << "Starting reading console...";
+
     QString str;
     QTextStream in(stdin);
     QTextStream out(stdout);
@@ -190,6 +194,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     elMap = new Navigation::ElectroincMap();
+    levithan = new Levithan();
 
 #ifdef WITH_CAN
     //QtConcurrent::run(getParamsFromCan);
@@ -299,8 +304,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies.mass.requestValue ();
 
 #else
-    QtConcurrent::run(getParamsFromConsole);
 #endif
+    QtConcurrent::run(getParamsFromConsole);
 
     qDebug() << "Loading map...";
     elMap->load ("./map.gps");
@@ -321,12 +326,22 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (emapCanEmitter, SIGNAL(targetTypeChanged(int)), systemState, SLOT(setNextTargetKind(int)));
 #endif
 
+
     CPRINTF(CL_RED_L, "╔══════════════════════════════════════╗\n");
     CPRINTF(CL_RED_L, "║            !!! AHTUNG !!!            ║\n");
     CPRINTF(CL_RED_L, "╟──────────────────────────────────────╢\n");
     CPRINTF(CL_RED_L, "║"); CPRINTF(CL_RED, "  This version shows Milage instead   "); CPRINTF(CL_RED_L, "║\n");
     CPRINTF(CL_RED_L, "║"); CPRINTF(CL_RED, " of Ordinate! Use just for metrology! "); CPRINTF(CL_RED_L, "║\n");
     CPRINTF(CL_RED_L, "╚══════════════════════════════════════╝\n");
+
+    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(SayLightIndex(int)));
+
+    QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(BeepHigh()));
+
+    QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(BeepHigh()));
+    QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(Beep()));
+
+
 
     return app->exec();
 }

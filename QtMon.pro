@@ -18,10 +18,12 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
+    iodrv/sktcan.cpp \
+    iodrv/cansendqueue.cpp \
     iodrv/can.cpp \
+    queues.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
-    iodrv/sktcan.cpp \
     iodrv/iodrv.cpp \
     electroincmap.cpp \
     emap/kilometerpost.cpp \
@@ -49,9 +51,11 @@ OTHER_FILES += \
     !TODO.txt
 
 HEADERS += \
-    iodrv/can.h \
-    systemstateviewmodel.h \
     iodrv/sktcan.h \
+    iodrv/cansendqueue.h \
+    iodrv/can.h \
+    queues.h \
+    systemstateviewmodel.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
     iodrv/iodrv.h \

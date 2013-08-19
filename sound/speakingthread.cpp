@@ -1,60 +1,38 @@
-#include "speakingthread.h"
 #include <QDebug>
 #include <QApplication>
+#include <QThread>
+
+#include "masqarade.h"
+#include "speakingthread.h"
 
 using namespace sound;
 
-SpeakingThread::SpeakingThread(QObject *parent) :
-    QThread(parent),
-    speachMutex()
+Speaker::Speaker()
+    : PriorityQueueBase()
 {
     QSound::play ("phrases/attention.wav");
 }
 
-void SpeakingThread::EnqueuePhrase(Phrase phrase)
+void Speaker::enqueuePhrase(Phrase phrase)
 {
-    speachMutex.lock();
-    if (Speach != nullptr)
-    {
-        if (phrase.priority != 0 || Speach->size() == 0)
-        {
-            int i;
-            for (i = 0; i < Speach->size(); i++)
-            {
-                if (Speach->at(i).priority > phrase.priority) break;
-            }
-            Speach->insert(i, phrase);
-            //Speach->append(phrase);
-        }
-    }
-    speachMutex.unlock();
+    this->enqueue(phrase);
 }
 
 
-void sound::SpeakingThread::run()
+void Speaker::process(Phrase phrase)
 {
-    Speach = new QVector<Phrase>();
-    while (true)
-    {
-        speachMutex.lock();
-        int ssize = Speach->size ();
-        speachMutex.unlock();
-
-        if (ssize > 0)
-        {
-            speachMutex.lock();
-            Phrase phrase = Speach->at(0);
-            Speach->remove(0);
-            speachMutex.unlock();
-
-            QSound mouth(phrase.fileName);
-            mouth.play();
+    QSound mouth(phrase.fileName);
+    qDebug() << "    playing" << phrase.fileName;
+    mouth.play();
 
 #ifdef WIN32
-            msleep(40);
+    //msleep(40);
 #else
-            while (!mouth.isFinished()) { /*qDebug (".");*/ }
+    while (!mouth.isFinished()) { /*qDebug (".");*/ }
 #endif
-        }
-    }
+}
+
+int Speaker::compare(Phrase a, Phrase b)
+{
+    return b.priority - a.priority;
 }

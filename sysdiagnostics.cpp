@@ -3,7 +3,7 @@
 SysDiagnostics::SysDiagnostics(QObject *parent) :
     QObject(parent)
 {
-    QObject::connect (&can,SIGNAL(receiveNewMessage(CanFrame)), this, SLOT(checkRequestInCanMessage(CanFrame)));
+    QObject::connect (&can,SIGNAL(messageReceived(CanFrame)), this, SLOT(checkRequestInCanMessage(CanFrame)));
 //    QObject::connect (this, SIGNAL(versionMessageSend(CanFrame)), &canDev, SLOT(transmitMessage(CanFrame)));
 }
 

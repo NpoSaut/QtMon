@@ -8,8 +8,10 @@ Can::Can(QObject *parent) :
     QObject(parent)
 {
     qRegisterMetaType<CanFrame>("CanFrame");
+    #ifndef WIN32
     QObject::connect (&CanInternals::readSocketLoop, SIGNAL(messageReceived(CanFrame)),
                       this, SLOT(receiveFromSocketCan(CanFrame)));
+    #endif
 }
 
 void Can::transmitMessage (CanFrame frame)

@@ -3,12 +3,57 @@
 #ifndef SKTCAN_H
 #define SKTCAN_H
 
-#include "iodrvmain.h"
+#include <QString>
+#include <QThread>
 
-extern int getSocket(char* iface_name);
-extern int write_can_frame(int s, can_frame frame);
-extern int read_can_frame(int s, struct can_frame* frame);
+#include "canframe.h"
 
+namespace CanInternals
+{
+    class Socket
+    {
+        public:
+            Socket (QString interfaceName);
+
+        protected:
+            int number;
+            bool ready;
+    };
+
+    class WriteSocket : public Socket
+    {
+        public:
+            WriteSocket (QString interfaceName);
+
+            bool send (CanFrame frame);
+    };
+    extern WriteSocket writeSocket;
+
+    class ReadSocket : public Socket
+    {
+        public:
+            ReadSocket (QString interfaceName);
+
+            CanFrame read ();
+    };
+
+    class ReadSocketThread : public QThread
+    {
+        Q_OBJECT
+    public:
+        ReadSocketThread (QString interfaceName);
+
+    signals:
+        void messageReceived (CanFrame frame);
+
+    private:
+        ReadSocket readSocket;
+
+        void run ();
+    };
+    extern ReadSocketThread readSocketLoop;
+
+}
 #endif // SKTCAN_H
 
 #endif

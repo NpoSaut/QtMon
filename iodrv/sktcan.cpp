@@ -23,7 +23,7 @@ using namespace CanInternals;
 
 // ------------------------------------- Socket --------------------------------------------------
 
-Socket::Socket(QString interfaceName)
+Socket::Socket(const QString &interfaceName)
     : number (0), ready (false)
 {
     // Создаем сокет
@@ -116,11 +116,11 @@ void debugStatus (bool success)
 
 WriteSocket CanInternals::writeSocket ("can0");
 
-WriteSocket::WriteSocket(QString interfaceName)
+WriteSocket::WriteSocket(const QString &interfaceName)
     : Socket(interfaceName)
 { }
 
-bool WriteSocket::send(CanFrame frame)
+bool WriteSocket::send(const CanFrame &frame)
 {
     if (!Socket::ready)
     {
@@ -142,7 +142,7 @@ bool WriteSocket::send(CanFrame frame)
 
 // ---------------------------------- ReadSocket -------------------------------------------------
 
-ReadSocket::ReadSocket(QString interfaceName)
+ReadSocket::ReadSocket(const QString &interfaceName)
     : Socket (interfaceName)
 { }
 

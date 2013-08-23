@@ -13,7 +13,7 @@ namespace CanInternals
     class Socket
     {
         public:
-            Socket (QString interfaceName);
+            Socket (const QString &interfaceName);
 
         protected:
             int number;
@@ -23,16 +23,16 @@ namespace CanInternals
     class WriteSocket : public Socket
     {
         public:
-            WriteSocket (QString interfaceName);
+            WriteSocket (const QString &interfaceName);
 
-            bool send (CanFrame frame);
+            bool send (const CanFrame &frame);
     };
     extern WriteSocket writeSocket;
 
     class ReadSocket : public Socket
     {
         public:
-            ReadSocket (QString interfaceName);
+            ReadSocket (const QString &interfaceName);
 
             CanFrame read ();
     };

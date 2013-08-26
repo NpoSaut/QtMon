@@ -65,18 +65,18 @@ HEADERS += \
     emap/almanac.h \
     emap/rail.h \
     emap/railobject.h \
-    packing.h \
     emap/emaptarget.h \
     iodrv/emapcanemitter.h\
-    masqarade.h \
     iodrv/canframe.h \
     iodrv/cookies.h \
-    lowlevel.h \
     iodrv/modulesactivity.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
-    sysdiagnostics.h
+    sysdiagnostics.h \
+    cDoodahLib/packing.h \
+    cDoodahLib/masqarade.h \
+    cDoodahLib/lowlevel.h
 
 CONFIG += console
 

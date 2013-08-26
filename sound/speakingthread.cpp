@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QThread>
 
-#include "masqarade.h"
+#include "cDoodahLib/masqarade.h"
 #include "speakingthread.h"
 
 using namespace sound;

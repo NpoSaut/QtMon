@@ -35,10 +35,10 @@ SOURCES += main.cpp \
     sound/phrase.cpp \
     sysdiagnostics.cpp \
     qtDoodahLib/queues.cpp \
-    qtCanLib/sktcan.cpp \
-    qtCanLib/cansendqueue.cpp \
     qtCanLib/canframe.cpp \
-    qtCanLib/can.cpp
+    qtCanLib/can.cpp \
+    qtCanLib/socketcan/sktcan.cpp \
+    qtCanLib/socketcan/cansendqueue.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -73,10 +73,10 @@ HEADERS += \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
     qtDoodahLib/queues.h \
-    qtCanLib/sktcan.h \
-    qtCanLib/cansendqueue.h \
     qtCanLib/canframe.h \
-    qtCanLib/can.h
+    qtCanLib/can.h \
+    qtCanLib/socketcan/sktcan.h \
+    qtCanLib/socketcan/cansendqueue.h
 
 CONFIG += console
 

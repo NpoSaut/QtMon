@@ -17,7 +17,12 @@ QML_IMPORT_PATH =
 # CONFIG += qdeclarative-boostable
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
+SOURCES += \
+    qtCanLib/canframe.cpp \
+    qtCanLib/socketcan/sktcan.cpp \
+    qtCanLib/socketcan.cpp \
+    qtDoodahLib/queues.cpp \
+    qtCanLib/socketcan/cansendqueue.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
     iodrv/iodrv.cpp \
@@ -34,11 +39,7 @@ SOURCES += main.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     sysdiagnostics.cpp \
-    qtDoodahLib/queues.cpp \
-    qtCanLib/canframe.cpp \
-    qtCanLib/socketcan/sktcan.cpp \
-    qtCanLib/socketcan/cansendqueue.cpp \
-    qtCanLib/socketcan.cpp
+    main.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -51,6 +52,14 @@ OTHER_FILES += \
     !TODO.txt
 
 HEADERS += \
+    cDoodahLib/packing.h \
+    cDoodahLib/masqarade.h \
+    cDoodahLib/lowlevel.h \
+    qtCanLib/canframe.h \
+    qtCanLib/can.h \
+    qtDoodahLib/queues.h \
+    qtCanLib/socketcan/sktcan.h \
+    qtCanLib/socketcan/cansendqueue.h \
     systemstateviewmodel.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
@@ -68,15 +77,7 @@ HEADERS += \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
-    sysdiagnostics.h \
-    cDoodahLib/packing.h \
-    cDoodahLib/masqarade.h \
-    cDoodahLib/lowlevel.h \
-    qtDoodahLib/queues.h \
-    qtCanLib/canframe.h \
-    qtCanLib/can.h \
-    qtCanLib/socketcan/sktcan.h \
-    qtCanLib/socketcan/cansendqueue.h
+    sysdiagnostics.h
 
 CONFIG += console
 

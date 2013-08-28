@@ -18,9 +18,6 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    iodrv/sktcan.cpp \
-    iodrv/cansendqueue.cpp \
-    iodrv/can.cpp \
     systemstateviewmodel.cpp \
     iodrv/endecs.cpp \
     iodrv/iodrv.cpp \
@@ -31,14 +28,17 @@ SOURCES += main.cpp \
     emap/railobject.cpp \
     emap/emaptarget.cpp \
     iodrv/emapcanemitter.cpp\
-    iodrv/canframe.cpp \
     iodrv/cookies.cpp \
     iodrv/modulesactivity.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     sysdiagnostics.cpp \
-    qtDoodahLib/queues.cpp
+    qtDoodahLib/queues.cpp \
+    qtCanLib/sktcan.cpp \
+    qtCanLib/cansendqueue.cpp \
+    qtCanLib/canframe.cpp \
+    qtCanLib/can.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -51,9 +51,6 @@ OTHER_FILES += \
     !TODO.txt
 
 HEADERS += \
-    iodrv/sktcan.h \
-    iodrv/cansendqueue.h \
-    iodrv/can.h \
     systemstateviewmodel.h \
     iodrv/endecs.h \
     iodrv/iodrvmain.h \
@@ -66,7 +63,6 @@ HEADERS += \
     emap/railobject.h \
     emap/emaptarget.h \
     iodrv/emapcanemitter.h\
-    iodrv/canframe.h \
     iodrv/cookies.h \
     iodrv/modulesactivity.h \
     levithan.h \
@@ -76,7 +72,11 @@ HEADERS += \
     cDoodahLib/packing.h \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
-    qtDoodahLib/queues.h
+    qtDoodahLib/queues.h \
+    qtCanLib/sktcan.h \
+    qtCanLib/cansendqueue.h \
+    qtCanLib/canframe.h \
+    qtCanLib/can.h
 
 CONFIG += console
 

@@ -36,9 +36,9 @@ SOURCES += main.cpp \
     sysdiagnostics.cpp \
     qtDoodahLib/queues.cpp \
     qtCanLib/canframe.cpp \
-    qtCanLib/can.cpp \
     qtCanLib/socketcan/sktcan.cpp \
-    qtCanLib/socketcan/cansendqueue.cpp
+    qtCanLib/socketcan/cansendqueue.cpp \
+    qtCanLib/socketcan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

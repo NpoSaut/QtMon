@@ -24,13 +24,6 @@ SOURCES += \
     qtDoodahLib/queues.cpp \
     qtCanLib/socketcan/cansendqueue.cpp \
     systemstateviewmodel.cpp \
-    electroincmap.cpp \
-    emap/kilometerpost.cpp \
-    emap/routesection.cpp \
-    emap/rail.cpp \
-    emap/railobject.cpp \
-    emap/emaptarget.cpp \
-    iodrv/emapcanemitter.cpp\
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
@@ -39,7 +32,8 @@ SOURCES += \
     qtBlokLib/modulesactivity.cpp \
     qtBlokLib/iodrv.cpp \
     qtBlokLib/endecs.cpp \
-    qtBlokLib/cookies.cpp
+    qtBlokLib/cookies.cpp \
+    qtBlokLib/elmapforwardtarget.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -61,14 +55,6 @@ HEADERS += \
     qtCanLib/socketcan/sktcan.h \
     qtCanLib/socketcan/cansendqueue.h \
     systemstateviewmodel.h \
-    electroincmap.h \
-    emap/kilometerpost.h \
-    emap/routesection.h \
-    emap/almanac.h \
-    emap/rail.h \
-    emap/railobject.h \
-    emap/emaptarget.h \
-    iodrv/emapcanemitter.h\
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
@@ -77,7 +63,8 @@ HEADERS += \
     qtBlokLib/iodrvmain.h \
     qtBlokLib/iodrv.h \
     qtBlokLib/endecs.h \
-    qtBlokLib/cookies.h
+    qtBlokLib/cookies.h \
+    qtBlokLib/elmapforwardtarget.h
 
 CONFIG += console
 

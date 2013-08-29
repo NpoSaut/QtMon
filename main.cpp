@@ -10,7 +10,6 @@
 #include <qmlapplicationviewer.h>
 
 #include "systemstateviewmodel.h"
-#include "electroincmap.h"
 #include "levithan.h"
 
 #include "cDoodahLib/masqarade.h"
@@ -22,19 +21,17 @@
 #ifdef WITH_CAN
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#include "iodrv/emapcanemitter.h"
+#include "qtBlokLib/elmapforwardtarget.h"
 #endif
 
 
 SystemStateViewModel *systemState ;
-Navigation::ElectroincMap* elMap;
 Levithan* levithan;
 
 #ifdef WITH_CAN
 iodrv* iodriver;
 SpeedAgregator* speedAgregator;
 rmp_key_handler* rmp_key_hdlr;
-EMapCanEmitter* emapCanEmitter;
 #endif
 
 void getParamsFromConsole ()
@@ -181,7 +178,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
-    elMap = new Navigation::ElectroincMap();
     levithan = new Levithan();
 
 #ifdef WITH_CAN
@@ -189,7 +185,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Здесь подключаюсь я.
     iodriver = new iodrv(systemState);
     speedAgregator = new SpeedAgregator();
-    emapCanEmitter = new EMapCanEmitter();
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
@@ -276,10 +271,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
 
-    // Электронная карта
-    QObject::connect (iodriver, SIGNAL(signal_lat_lon(double,double)), elMap, SLOT(checkMap(double,double)));
-    QObject::connect (elMap, SIGNAL(onUpcomingTargets(std::vector<EMapTarget>)), emapCanEmitter, SLOT(setObjectsList(std::vector<EMapTarget>)));
-
     iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
 
     cookies.trackNumberInMph.requestValue ();
@@ -289,28 +280,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies.lengthInWagons.requestValue ();
     cookies.mass.requestValue ();
 
+    // Электронная карта
+    QObject::connect (&elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
+    QObject::connect (&elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
+    QObject::connect (&elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
+
 #else
 #endif
 //    QtConcurrent::run(getParamsFromConsole);
-
-    qDebug() << "Loading map...";
-    elMap->load ("./map.gps");
-    qDebug() << "Map loaded.";
-
-//    elMap->setTrackNumber (1);
-
-#ifdef WITH_CAN
-    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), elMap, SLOT(setTrackNumber(int)));
-    QObject::connect (elMap, SIGNAL(ordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
-    QObject::connect (elMap, SIGNAL(ordinateChanged(int)), emapCanEmitter, SLOT(setOrdinate(int)));
-    QObject::connect (elMap, SIGNAL(isLocatedChanged(bool)), emapCanEmitter, SLOT(setActivity(bool)));
-    QObject::connect (elMap, SIGNAL(activityChanged(bool)), emapCanEmitter, SLOT(setActivity(bool)));
-    QObject::connect (emapCanEmitter, SIGNAL(metrometerChanged(int)), elMap, SLOT(setMetrometer(int)));
-    QObject::connect (emapCanEmitter, SIGNAL(metrometerReset()), elMap, SLOT(resetMetrometer()));
-    QObject::connect (emapCanEmitter, SIGNAL(targetDistanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
-    QObject::connect (emapCanEmitter, SIGNAL(targetNameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
-    QObject::connect (emapCanEmitter, SIGNAL(targetTypeChanged(int)), systemState, SLOT(setNextTargetKind(int)));
-#endif
 
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(SayLightIndex(int)));
 

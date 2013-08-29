@@ -183,7 +183,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef WITH_CAN
     //QtConcurrent::run(getParamsFromCan);
     //Здесь подключаюсь я.
-    iodriver = new iodrv(systemState);
+    iodriver = new iodrv();
     speedAgregator = new SpeedAgregator();
 
     // Создание и подключение «обработчиков»
@@ -228,6 +228,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Светофоры
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_light(int)), systemState, SLOT(setLight(int)));
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq(int)), systemState, SLOT(setAlsnFreqFact(int)));
+    QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq_target(int)), systemState, SLOT(setAlsnFreqTarget(int)));
+    QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), iodriver, SLOT(slot_trafficlight_freq_target(int)));
 
     QObject::connect(iodriver, SIGNAL(signal_vigilance(bool)), systemState, SLOT(setIsVigilanceRequired(bool)));
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));

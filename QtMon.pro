@@ -24,8 +24,6 @@ SOURCES += \
     qtDoodahLib/queues.cpp \
     qtCanLib/socketcan/cansendqueue.cpp \
     systemstateviewmodel.cpp \
-    iodrv/endecs.cpp \
-    iodrv/iodrv.cpp \
     electroincmap.cpp \
     emap/kilometerpost.cpp \
     emap/routesection.cpp \
@@ -33,13 +31,15 @@ SOURCES += \
     emap/railobject.cpp \
     emap/emaptarget.cpp \
     iodrv/emapcanemitter.cpp\
-    iodrv/cookies.cpp \
-    iodrv/modulesactivity.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
-    sysdiagnostics.cpp \
-    main.cpp
+    main.cpp \
+    qtBlokLib/sysdiagnostics.cpp \
+    qtBlokLib/modulesactivity.cpp \
+    qtBlokLib/iodrv.cpp \
+    qtBlokLib/endecs.cpp \
+    qtBlokLib/cookies.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -61,9 +61,6 @@ HEADERS += \
     qtCanLib/socketcan/sktcan.h \
     qtCanLib/socketcan/cansendqueue.h \
     systemstateviewmodel.h \
-    iodrv/endecs.h \
-    iodrv/iodrvmain.h \
-    iodrv/iodrv.h \
     electroincmap.h \
     emap/kilometerpost.h \
     emap/routesection.h \
@@ -72,12 +69,15 @@ HEADERS += \
     emap/railobject.h \
     emap/emaptarget.h \
     iodrv/emapcanemitter.h\
-    iodrv/cookies.h \
-    iodrv/modulesactivity.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
-    sysdiagnostics.h
+    qtBlokLib/sysdiagnostics.h \
+    qtBlokLib/modulesactivity.h \
+    qtBlokLib/iodrvmain.h \
+    qtBlokLib/iodrv.h \
+    qtBlokLib/endecs.h \
+    qtBlokLib/cookies.h
 
 CONFIG += console
 

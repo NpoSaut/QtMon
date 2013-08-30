@@ -22,6 +22,7 @@
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
 #include "qtBlokLib/elmapforwardtarget.h"
+#include "qtBlokLib/parser.h"
 #endif
 
 
@@ -286,6 +287,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
     QObject::connect (&elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
     QObject::connect (&elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
+    QObject::connect (&blokMessages.mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
 
 #else
 #endif

@@ -33,7 +33,8 @@ SOURCES += \
     qtBlokLib/iodrv.cpp \
     qtBlokLib/endecs.cpp \
     qtBlokLib/cookies.cpp \
-    qtBlokLib/elmapforwardtarget.cpp
+    qtBlokLib/elmapforwardtarget.cpp \
+    qtBlokLib/parser.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -64,7 +65,8 @@ HEADERS += \
     qtBlokLib/iodrv.h \
     qtBlokLib/endecs.h \
     qtBlokLib/cookies.h \
-    qtBlokLib/elmapforwardtarget.h
+    qtBlokLib/elmapforwardtarget.h \
+    qtBlokLib/parser.h
 
 CONFIG += console
 

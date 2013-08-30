@@ -46,7 +46,6 @@ Rectangle {
         }
     }
 
-
     function getDriveModeLetter(driveModeIndex)
     {
         switch (driveModeIndex)
@@ -101,14 +100,11 @@ Rectangle {
     }
 
     Keys.onPressed: {
-        // Отладка зависания кнопок
-        console.debug("-------KNOPKA--------------------NAZHATA------FROM-QML--------------------");
-
         // Переключение частоты АЛСН
         if (!inputMode)
         {
         	if (!altMode && event.key == Qt.Key_F1) {
-	            // Send CAN requset to change ALSN freq
+                stateView.ButtonPressed();
 
                 // Emulation
                 if (stateView.AlsnFreqTarget == 25 )
@@ -121,22 +117,22 @@ Rectangle {
                     stateView.AlsnFreqTarget = 25;
 	        }
     	    else if (altMode && event.key == Qt.Key_F1) {
+                stateView.ButtonPressed();
 	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
+                stateView.ButtonPressed();
                 stateView.ChangeDrivemodeButtonPressed();
             }
             // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F2) {
+                stateView.ConfirmButtonPressed();
                 stateView.DisableRedButtonPressed();
             }
-            // Страница дорожного режима
+            // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
-                switchPage();
-            }
-            // Alt: пустой
-            else if (altMode && event.key == Qt.Key_F3) {
+                stateView.ButtonPressed();
                 inputMode = true
 
                 var _offset = 0;
@@ -154,6 +150,10 @@ Rectangle {
                 inputPositions = input;
                 inputCursorIndex = 1;
             }
+            // Alt: Страница дорожного режима
+            else if (altMode && event.key == Qt.Key_F3) {
+                switchPage();
+            }
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
                 altMode = true;
@@ -163,6 +163,7 @@ Rectangle {
         {
             if (event.key == Qt.Key_F1)
             {
+                stateView.ButtonPressed();
                 inputBlinker.restart();
 
                 var input = inputPositions;
@@ -180,18 +181,21 @@ Rectangle {
             }
             if (event.key == Qt.Key_F2)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex++;
                 if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F3)
             {
+                stateView.ButtonPressed();
                 inputCursorIndex--;
                 if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
                 inputBlinker.restart();
             }
             if (event.key == Qt.Key_F4)
             {
+                stateView.ConfirmButtonPressed();
                 inputMode = false
 
                 var _offset = 0;
@@ -602,6 +606,7 @@ Rectangle {
 
                     // Дуга шкалы спидометра
                     Rectangle {
+                        id: speedometerCircle
                         color: "#00000000"
                         border.color: "#fff"
                         border.width: 3
@@ -659,13 +664,35 @@ Rectangle {
                     }
                 }
 
+
+                // Индикатор борзости (привышения допустимой скорости) вокруг кругляша скорости
+                Timer {
+                    id: speedometerWarner
+                    property int warningLimit: 3
+                    property double warningLevel: Math.max(0, Math.min(warningLimit, stateView.Speed + warningLimit - stateView.SpeedRestriction)) / warningLimit
+                    property bool warned: warningLevel > 0 && getDriveModeLetter(stateView.DriveModeFact) != "Т"
+                    property bool poolsed: warned && innerPoolsed
+                    property bool innerPoolsed: false
+                    property double nextInterval: 600 * (parent.poolsed ? 0.3 : 1.0) * (1.5 - warningLevel)
+                    interval: 100
+                    repeat: true
+                    running: speedometerWarner.warned
+                    onTriggered:
+                    {
+                        interval = nextInterval;
+                        innerPoolsed = !innerPoolsed
+                        if (poolsed) stateView.SpeedWarningFlash()
+                    }
+                }
+
                 // Стрелка спидометра
                 Image {
                     source: stateView.SpeedIsValid ?
-                                "Slices/Needle-Speed.png" :
+                                ("Slices/Needle-Speed" + (speedometerWarner.poolsed ? "-Inversed" : "") + ".png") :
                                 "Slices/Needle-Speed-Invalid.png"
 
-                    rotation: 180 - (speedometer.minAngle - speedometer.anglePerKph * stateView.Speed) * 180 / Math.PI
+                    rotation: 180 - Math.min(speedometer.minAngle, Math.max(speedometer.maxAngle - 0.1,
+                                                    speedometer.minAngle - speedometer.anglePerKph * stateView.Speed)) * 180 / Math.PI
                     smooth: true
 
                     transformOrigin: Item.Right
@@ -673,7 +700,6 @@ Rectangle {
                     anchors.right: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                 }
-
 
                 // Стрелка целевой скорости
                 Rectangle {
@@ -725,6 +751,7 @@ Rectangle {
 
                 // Числа скорости и ограничения в кругляше в центре
                 Rectangle {
+                    id: speedometerInnerCircle
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
 
@@ -732,7 +759,8 @@ Rectangle {
                     height: width
                     radius: width / 2
 
-                    color: "#4999c9"
+                    color: speedometerWarner.poolsed ? "#fff" : "#4999c9"
+
 
                     // Индикатор отсутствия тяги вокруг кругляша скорости
                     Rectangle {
@@ -753,7 +781,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
 
                         text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
-                        color: "#fff"
+                        color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
                         font.pixelSize: 35
                         font.family: "URW Gothic L"
@@ -761,18 +789,27 @@ Rectangle {
                     }
 
                     // Ограничение скорости
-                    Text {
+                    Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65
+                        width: 60
+                        height: 40
+                        radius: 4
+                        color: speedometerWarner.warned ? "#a0ffffff" : "#00000000"
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
 
-                        text: stateView.SpeedRestriction.toFixed()
-                        color: "#c94949"
+                            text: stateView.SpeedRestriction.toFixed()
+                            color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
-                        font.pixelSize: 35
-                        font.family: "URW Gothic L"
-                        font.bold: true
+                            font.pixelSize: 35
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
                     }
+
 
                 }
             }
@@ -851,7 +888,7 @@ Rectangle {
                     font.family: "URW Gothic L";
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 36
+                    font.pixelSize: 32
 
                     text:
                     {
@@ -1467,7 +1504,7 @@ Rectangle {
                         id: page2buttonHeader
                         anchors.fill: parent
                         anchors.rightMargin: leftBorder.width
-                        visible: !altMode
+                        visible: altMode
                         clip: true
                         color: "#00000000"
 
@@ -1501,7 +1538,7 @@ Rectangle {
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: 10
                             color: "#ffffff"
-                            text: qsTr("Датчики")
+                            text: qsTr("   Панель\n приборов")
                             font.pointSize: 16
                             font.family: "URW Gothic L"
                         }
@@ -1513,7 +1550,7 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        visible: altMode
+                        visible: !altMode
 
                         Text {
                             color: "#ffffff"
@@ -1845,7 +1882,7 @@ Rectangle {
         Image {
             source: "Slices/InputMode-Background.png"
             opacity: inputMode ? 1 : 0
-            Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+            Behavior on opacity { SmoothedAnimation { duration: 500 } }
         }
     }
 
@@ -1853,7 +1890,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: inputMode ? 0 : -width
-        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 300 } }
+        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 200 } }
         Repeater {
             model: ["Изм.", ">", "<", "OK"]
             Rectangle {
@@ -1883,12 +1920,13 @@ Rectangle {
     Rectangle {
         id: inputModeParentField
         anchors.top: parent.top
-        anchors.topMargin: 0
+        anchors.topMargin: inputMode ? 0 : -height
         anchors.horizontalCenter: parent.horizontalCenter
         color: "#00000000"
         width: 420
-        height: 75
-        visible: inputMode
+        height: 164
+
+        Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
 
         Image{
             anchors.top: parent.top

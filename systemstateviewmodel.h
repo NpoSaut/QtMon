@@ -3,7 +3,7 @@
 
 #include <QDeclarativeItem>
 
-#include "iodrv/modulesactivity.h"
+#include "qtBlokLib/modulesactivity.h"
 
 class SystemStateViewModel : public QDeclarativeItem
 {

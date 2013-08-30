@@ -7,7 +7,7 @@
 #include <QMutex>
 
 #include "phrase.h"
-#include "queues.h"
+#include "qtDoodahLib/queues.h"
 
 namespace sound
 {

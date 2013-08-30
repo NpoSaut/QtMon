@@ -17,25 +17,24 @@ QML_IMPORT_PATH =
 # CONFIG += qdeclarative-boostable
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp \
-    iodrv/can.cpp \
+SOURCES += \
+    qtCanLib/canframe.cpp \
+    qtCanLib/socketcan/sktcan.cpp \
+    qtCanLib/socketcan.cpp \
+    qtDoodahLib/queues.cpp \
+    qtCanLib/socketcan/cansendqueue.cpp \
     systemstateviewmodel.cpp \
-    iodrv/endecs.cpp \
-    iodrv/sktcan.cpp \
-    iodrv/iodrv.cpp \
-    electroincmap.cpp \
-    emap/kilometerpost.cpp \
-    emap/routesection.cpp \
-    emap/rail.cpp \
-    emap/railobject.cpp \
-    emap/emaptarget.cpp \
-    iodrv/emapcanemitter.cpp\
-    iodrv/canframe.cpp \
-    iodrv/cookies.cpp \
-    iodrv/modulesactivity.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
-    sound/phrase.cpp
+    sound/phrase.cpp \
+    main.cpp \
+    qtBlokLib/sysdiagnostics.cpp \
+    qtBlokLib/modulesactivity.cpp \
+    qtBlokLib/iodrv.cpp \
+    qtBlokLib/endecs.cpp \
+    qtBlokLib/cookies.cpp \
+    qtBlokLib/elmapforwardtarget.cpp \
+    qtBlokLib/parser.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -44,32 +43,30 @@ qtcAddDeployment()
 RESOURCES +=
 
 OTHER_FILES += \
-    properties.xml
+    properties.xml \
+    !TODO.txt
 
 HEADERS += \
-    iodrv/can.h \
+    cDoodahLib/packing.h \
+    cDoodahLib/masqarade.h \
+    cDoodahLib/lowlevel.h \
+    qtCanLib/canframe.h \
+    qtCanLib/can.h \
+    qtDoodahLib/queues.h \
+    qtCanLib/socketcan/sktcan.h \
+    qtCanLib/socketcan/cansendqueue.h \
     systemstateviewmodel.h \
-    iodrv/sktcan.h \
-    iodrv/endecs.h \
-    iodrv/iodrvmain.h \
-    iodrv/iodrv.h \
-    electroincmap.h \
-    emap/kilometerpost.h \
-    emap/routesection.h \
-    emap/almanac.h \
-    emap/rail.h \
-    emap/railobject.h \
-    packing.h \
-    emap/emaptarget.h \
-    iodrv/emapcanemitter.h\
-    masqarade.h \
-    iodrv/canframe.h \
-    iodrv/cookies.h \
-    lowlevel.h \
-    iodrv/modulesactivity.h \
     levithan.h \
     sound/speakingthread.h \
-    sound/phrase.h
+    sound/phrase.h \
+    qtBlokLib/sysdiagnostics.h \
+    qtBlokLib/modulesactivity.h \
+    qtBlokLib/iodrvmain.h \
+    qtBlokLib/iodrv.h \
+    qtBlokLib/endecs.h \
+    qtBlokLib/cookies.h \
+    qtBlokLib/elmapforwardtarget.h \
+    qtBlokLib/parser.h
 
 CONFIG += console
 
@@ -78,3 +75,7 @@ QMAKE_CXXFLAGS += -std=c++0x
 #DEFINES += QT_NO_CAST_FROM_ASCII
 
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
+
+# Для работы нужны:
+# DEFINES+=CPP11 DEFINES+=WITH_CAN DEFINES+=ON_DEVICE
+

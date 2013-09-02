@@ -11,7 +11,7 @@ class Levithan : public QObject
     Q_OBJECT
 
 private:
-    sound::SpeakingThread speaker;
+    sound::Speaker speaker;
 
 public:
     explicit Levithan(QObject *parent = 0);

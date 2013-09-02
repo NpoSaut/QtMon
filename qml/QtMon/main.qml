@@ -100,9 +100,6 @@ Rectangle {
     }
 
     Keys.onPressed: {
-        // Отладка зависания кнопок
-        console.debug("-------KNOPKA--------------------NAZHATA------FROM-QML--------------------");
-
         // Переключение частоты АЛСН
         if (!inputMode)
         {
@@ -1885,7 +1882,7 @@ Rectangle {
         Image {
             source: "Slices/InputMode-Background.png"
             opacity: inputMode ? 1 : 0
-            Behavior on opacity { SmoothedAnimation { duration: 2000 } }
+            Behavior on opacity { SmoothedAnimation { duration: 500 } }
         }
     }
 
@@ -1893,7 +1890,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: inputMode ? 0 : -width
-        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 300 } }
+        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 200 } }
         Repeater {
             model: ["Изм.", ">", "<", "OK"]
             Rectangle {
@@ -1923,12 +1920,13 @@ Rectangle {
     Rectangle {
         id: inputModeParentField
         anchors.top: parent.top
-        anchors.topMargin: 0
+        anchors.topMargin: inputMode ? 0 : -height
         anchors.horizontalCenter: parent.horizontalCenter
         color: "#00000000"
         width: 420
-        height: 75
-        visible: inputMode
+        height: 164
+
+        Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
 
         Image{
             anchors.top: parent.top

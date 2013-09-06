@@ -152,12 +152,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
 
     // Текст высокоприоритетного сообщения
-    QString warningTextValue;
-    Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
-
-    // Текст низкоприоритетного сообщения
-    QString infoTextValue;
-    Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
+    QString notificationTextValue;
+    Q_PROPERTY(QString NotificationText READ getNotificationText WRITE setNotificationText NOTIFY NotificationTextChanged)
 
     // Номер пути
     int trackNumberValue;
@@ -225,8 +221,7 @@ public:
     const int getNextTargetKind() const;
     const QString getNextTargetName() const;
     const int getNextTargetDistance() const;
-    const QString getWarningText() const;
-    const QString getInfoText() const;
+    const QString getNotificationText() const;
     const int getTrackNumber() const;
     const int getMachinistNumber() const;
     const int getTrainNumber() const;
@@ -286,8 +281,7 @@ signals:
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
     void NextTargetDistanceChanged(const int value);
-    void WarningTextChanged(const QString value);
-    void InfoTextChanged(const QString value);
+    void NotificationTextChanged(const QString value);
     void TrackNumberChanged(const int value);
     void MachinistNumberChanged(const int value);
     void TrainNumberChanged(const int value);
@@ -334,8 +328,7 @@ public slots:
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
     void setNextTargetDistance(const int);
-    void setWarningText(const QString);
-    void setInfoText(const QString);
+    void setNotificationText(const QString);
     void setTrackNumber(const int);
     void setMachinistNumber(const int);
     void setTrainNumber(const int);

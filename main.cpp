@@ -18,6 +18,7 @@
 #endif
 
 #include "qtCanLib/can.h"
+
 #ifdef WITH_CAN
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
@@ -25,15 +26,19 @@
 #include "qtBlokLib/parser.h"
 #endif
 
+#include "notificator.h"
+
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
+Notificator* notificator;
 
 #ifdef WITH_CAN
 iodrv* iodriver;
 SpeedAgregator* speedAgregator;
 rmp_key_handler* rmp_key_hdlr;
 #endif
+
 
 void getParamsFromConsole ()
 {
@@ -126,15 +131,10 @@ void getParamsFromConsole ()
             systemState->setDirection( cmd.at(1).toInt() );
             out << "Now Direction is: " << systemState->getDirection() << endl;
         }
-        else if (cmd.at(0) == "wt")
+        else if (cmd.at(0) == "nt")
         {
-            systemState->setWarningText( cmd.at(1) );
-            out << "Now Warning Text is: " << systemState->getWarningText() << endl;
-        }
-        else if (cmd.at(0) == "it")
-        {
-            systemState->setInfoText( cmd.at(1) );
-            out << "Now Info Text is: " << systemState->getInfoText() << endl;
+            systemState->setNotificationText( cmd.at(1) );
+            out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
         }
         else
         {
@@ -146,8 +146,7 @@ void getParamsFromConsole ()
             out << "iw {1/0} IronWheels" << endl;
             out << "tr {1/0} Тяга: вкл/выкл" << endl;
             out << "dir {1/-1/0} Направление движения: вперёд/назад/стоим" << endl;
-            out << "wt {text} Текст предупреждения" << endl;
-            out << "it {text} Текст совета" << endl;
+            out << "nt {text} Текст извещения" << endl;
         }
     }
 }
@@ -180,6 +179,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     levithan = new Levithan();
+    notificator = new Notificator();
 
 #ifdef WITH_CAN
     //QtConcurrent::run(getParamsFromCan);
@@ -224,6 +224,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
+
+    // Уведомления
+    QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));
+
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
     //Светофоры

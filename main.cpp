@@ -260,8 +260,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Автоблокировка
     QObject::connect(iodriver, SIGNAL(signal_autolock_type_target(int)), systemState, SLOT(setAutolockTypeTarget(int)));
 
-    QObject::connect (iodriver, SIGNAL(signal_notification_show(QString)), systemState, SLOT(setInfoText(QString)));
-
     // Ввод параметров
     QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies.trackNumberInMph, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies.machinistNumber, SLOT(setVaule(int)));

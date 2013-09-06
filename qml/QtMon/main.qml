@@ -890,14 +890,14 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: 32
 
-                    text:
-                    {
-                        if (stateView.WarningText != "") return stateView.WarningText
-                        if (!stateView.IsEpvReady) return "Система отключена"
-                        if (stateView.IsEpvReleased) return "Экстренное торможение"
-                        if (stateView.InfoText != "") return stateView.InfoText
-                        return "";
-                    }
+                    text: stateView.NotificationText
+//                    {
+//                        if (stateView.WarningText != "") return stateView.WarningText
+//                        if (!stateView.IsEpvReady) return "Система отключена"
+//                        if (stateView.IsEpvReleased) return "Экстренное торможение"
+//                        if (stateView.InfoText != "") return stateView.InfoText
+//                        return "";
+//                    }
 
                     property bool isActive: false;
                     opacity: 1.0 * isActive

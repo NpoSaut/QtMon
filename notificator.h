@@ -25,6 +25,7 @@ private slots:
     
 private:
     QTimer handbrakeHintTimeout;
+    bool handbrakeHint;
 };
 
 #endif // NOTIFICATOR_H

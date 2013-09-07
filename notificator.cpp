@@ -1,8 +1,8 @@
 #include "notificator.h"
 
-Notificator::Notificator(QObject *parent) :
-    QObject(parent),
-    handbrakeHintTimeout()
+Notificator::Notificator (QObject *parent) :
+    QObject (parent),
+    handbrakeHintTimeout (), handbrakeHint (false)
 {
     this->connect (&blokMessages, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
 
@@ -20,23 +20,28 @@ void Notificator::getStateChangedSignal()
     else if ( blokMessages.mcoLimits.isTractionShutdown () )
         emit notificationTextChanged ("Экстренное торможение");
 
+    else if ( handbrakeHint )
+        emit notificationTextChanged ("Подними ручник");
+
+    else
+        emit notificationTextChanged ("");
+
+    // Подними ручник
+    if ( blokMessages.mcoLimits.getDriveMode () != ROAD
+     &&  !blokMessages.ipdState.isInMotion ()             )
+    {
+        if ( !handbrakeHintTimeout.isActive () )
+            handbrakeHintTimeout.start ();
+    }
     else
     {
-        if ( blokMessages.mcoLimits.getDriveMode () != ROAD
-         &&  !blokMessages.ipdState.isInMotion ()             )
-        {
-            if ( !handbrakeHintTimeout.isActive () )
-                handbrakeHintTimeout.start ();
-        }
-        else
-        {
-            handbrakeHintTimeout.stop ();
-            emit notificationTextChanged ("");
-        }
+        handbrakeHintTimeout.stop ();
+        handbrakeHint = false;
     }
+
 }
 
 void Notificator::handbrakeHintShow()
 {
-    notificationTextChanged ("Подними ручник");
+    handbrakeHint = true;
 }

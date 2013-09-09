@@ -7,7 +7,7 @@ Notificator::Notificator (QObject *parent) :
     this->connect (&blokMessages, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
 
     handbrakeHintTimeout.setSingleShot (true);
-    handbrakeHintTimeout.setInterval (15);
+    handbrakeHintTimeout.setInterval (15000);
     this->connect (&handbrakeHintTimeout, SIGNAL(timeout()), SLOT(handbrakeHintShow()));
 }
 
@@ -28,7 +28,8 @@ void Notificator::getStateChangedSignal()
 
     // Подними ручник
     if ( blokMessages.mcoLimits.getDriveMode () != ROAD
-     &&  !blokMessages.ipdState.isInMotion ()             )
+     &&  !blokMessages.ipdState.isInMotion ()
+     &&  blokMessages.mcoState.isTraction ()  )
     {
         if ( !handbrakeHintTimeout.isActive () )
             handbrakeHintTimeout.start ();

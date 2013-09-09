@@ -29,12 +29,14 @@
 #include "qtCanLib/dummycan.h"
 #endif
 
+#include "notificator.h"
+
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
+Notificator* notificator;
 
 iodrv* iodriver;
-SpeedAgregator* speedAgregator;
 rmp_key_handler* rmp_key_hdlr;
 
 Can *can;
@@ -134,15 +136,10 @@ void getParamsFromConsole ()
             systemState->setDirection( cmd.at(1).toInt() );
             out << "Now Direction is: " << systemState->getDirection() << endl;
         }
-        else if (cmd.at(0) == "wt")
+        else if (cmd.at(0) == "nt")
         {
-            systemState->setWarningText( cmd.at(1) );
-            out << "Now Warning Text is: " << systemState->getWarningText() << endl;
-        }
-        else if (cmd.at(0) == "it")
-        {
-            systemState->setInfoText( cmd.at(1) );
-            out << "Now Info Text is: " << systemState->getInfoText() << endl;
+            systemState->setNotificationText( cmd.at(1) );
+            out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
         }
         else
         {
@@ -154,8 +151,7 @@ void getParamsFromConsole ()
             out << "iw {1/0} IronWheels" << endl;
             out << "tr {1/0} Тяга: вкл/выкл" << endl;
             out << "dir {1/-1/0} Направление движения: вперёд/назад/стоим" << endl;
-            out << "wt {text} Текст предупреждения" << endl;
-            out << "it {text} Текст совета" << endl;
+            out << "nt {text} Текст извещения" << endl;
         }
     }
 }
@@ -195,15 +191,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     can = new DummyCan();
 #endif
 
-
     monitorSysDiagnostics = new SysDiagnostics(can);
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
     cookies = new Cookies(can);
     elmapForwardTarget = new ElmapForwardTarget(can);
-
-
-    speedAgregator = new SpeedAgregator();
+    notificator = new Notificator(blokMessages);
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
@@ -230,11 +223,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_speed_sky(double)), systemState, SLOT(setSpeedFromSky(double)));
 
     //Скорость и ограничения
-    QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), speedAgregator, SLOT(getSpeedFromEarth(double)));
-    QObject::connect(iodriver, SIGNAL(signal_speed_sky(double)), speedAgregator, SLOT(getSpeedFromSky(double)));
-    QObject::connect(iodriver, SIGNAL(signal_is_on_road(bool)), speedAgregator, SLOT(getIsOnRoad(bool)));
-    QObject::connect(speedAgregator, SIGNAL(speedChanged(double)), systemState, SLOT(setSpeed(double)));
-    QObject::connect(speedAgregator, SIGNAL(speedIsValidChanged(bool)), systemState, SLOT(setSpeedIsValid(bool)));
+    QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeed(double)));
+    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
     QObject::connect(iodriver, SIGNAL(signal_speed_limit(int)), systemState, SLOT(setSpeedRestriction(int)));
     QObject::connect(iodriver, SIGNAL(signal_target_speed(int)), systemState, SLOT(setTargetSpeed(int)));
     QObject::connect(iodriver, SIGNAL(signal_acceleration(double)), systemState, SLOT(setAcceleration(double)));
@@ -242,6 +232,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
+
+    // Уведомления
+    QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));
+
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
     //Светофоры

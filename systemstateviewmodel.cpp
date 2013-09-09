@@ -40,8 +40,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
     nextTargetDistanceValue = 0;
-    warningTextValue = "";
-    infoTextValue = "";
+    notificationTextValue = "";
     trackNumberValue = 0;
     machinistNumberValue = 0;
     trainNumberValue = 0;
@@ -554,30 +553,16 @@ void SystemStateViewModel::setNextTargetDistance(const int value)
 }
 
 // Текст высокоприоритетного сообщения
-const QString SystemStateViewModel::getWarningText() const
+const QString SystemStateViewModel::getNotificationText() const
 {
-    return warningTextValue;
+    return notificationTextValue;
 }
-void SystemStateViewModel::setWarningText(const QString value)
+void SystemStateViewModel::setNotificationText(const QString value)
 {
-    if (warningTextValue != value)
+    if (notificationTextValue != value)
     {
-        warningTextValue = value;
-        emit WarningTextChanged(value);
-    }
-}
-
-// Текст низкоприоритетного сообщения
-const QString SystemStateViewModel::getInfoText() const
-{
-    return infoTextValue;
-}
-void SystemStateViewModel::setInfoText(const QString value)
-{
-    if (infoTextValue != value)
-    {
-        infoTextValue = value;
-        emit InfoTextChanged(value);
+        notificationTextValue = value;
+        emit NotificationTextChanged(value);
     }
 }
 

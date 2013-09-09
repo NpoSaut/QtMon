@@ -63,8 +63,7 @@
     <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
 
     <!-- Строки предупреждений -->
-    <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
-    <Property type="QString" name="InfoText" def="&quot;&quot;" description="Текст низкоприоритетного сообщения"/>
+    <Property type="QString" name="NotificationText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
 
     <!-- Ввод данных -->
     <Property type="int" name="TrackNumber" def="0" description="Номер пути" />

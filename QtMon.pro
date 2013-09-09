@@ -34,7 +34,13 @@ SOURCES += \
     qtBlokLib/endecs.cpp \
     qtBlokLib/cookies.cpp \
     qtBlokLib/elmapforwardtarget.cpp \
-    qtBlokLib/parser.cpp
+    qtBlokLib/parser.cpp \
+    notificator.cpp \
+    qtBlokLib/parsers/canblokmessage.cpp \
+    qtBlokLib/parsers/mm_coord.cpp \
+    qtBlokLib/parsers/mco_limits.cpp \
+    qtBlokLib/parsers/ipd_state.cpp \
+    qtBlokLib/parsers/mco_state.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -67,8 +73,14 @@ HEADERS += \
     qtBlokLib/cookies.h \
     qtBlokLib/elmapforwardtarget.h \
     qtBlokLib/parser.h \
+    qtBlokLib/parsers/canblokmessage.h \
+    qtBlokLib/parsers/mm_coord.h \
+    qtBlokLib/parsers/mco_limits.h \
+    qtBlokLib/parsers/ipd_state.h \
+    qtBlokLib/parsers/mco_state.h \
     qtCanLib/socketcan.h \
-    qtCanLib/dummycan.h
+    qtCanLib/dummycan.h \
+    notificator.h
 
 CONFIG += console
 

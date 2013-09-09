@@ -66,7 +66,9 @@ HEADERS += \
     qtBlokLib/endecs.h \
     qtBlokLib/cookies.h \
     qtBlokLib/elmapforwardtarget.h \
-    qtBlokLib/parser.h
+    qtBlokLib/parser.h \
+    qtCanLib/socketcan.h \
+    qtCanLib/dummycan.h
 
 CONFIG += console
 

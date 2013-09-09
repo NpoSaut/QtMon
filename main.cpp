@@ -18,22 +18,30 @@
 #endif
 
 #include "qtCanLib/can.h"
-#ifdef WITH_CAN
+#include "qtBlokLib/sysdiagnostics.h"
+#include "qtBlokLib/parser.h"
+#include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#include "qtBlokLib/elmapforwardtarget.h"
-#include "qtBlokLib/parser.h"
+#ifdef WITH_CAN
+#include "qtCanLib/socketcan.h"
+#else
+#include "qtCanLib/dummycan.h"
 #endif
 
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
 
-#ifdef WITH_CAN
 iodrv* iodriver;
 SpeedAgregator* speedAgregator;
 rmp_key_handler* rmp_key_hdlr;
-#endif
+
+Can *can;
+SysDiagnostics *monitorSysDiagnostics;
+Parser *blokMessages;
+Cookies *cookies;
+ElmapForwardTarget *elmapForwardTarget;
 
 void getParamsFromConsole ()
 {
@@ -182,9 +190,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     levithan = new Levithan();
 
 #ifdef WITH_CAN
-    //QtConcurrent::run(getParamsFromCan);
-    //Здесь подключаюсь я.
-    iodriver = new iodrv();
+    can = new SocketCan();
+#else
+    can = new DummyCan();
+#endif
+
+
+    monitorSysDiagnostics = new SysDiagnostics(can);
+    blokMessages = new Parser(can);
+    iodriver = new iodrv(can);
+    cookies = new Cookies(can);
+    elmapForwardTarget = new ElmapForwardTarget(can);
+
+
     speedAgregator = new SpeedAgregator();
 
     // Создание и подключение «обработчиков»
@@ -257,41 +275,46 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_autolock_type_target(int)), systemState, SLOT(setAutolockTypeTarget(int)));
 
     // Ввод параметров
-    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies.trackNumberInMph, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies.machinistNumber, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies.trainNumber, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies.lengthInWheels, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies.lengthInWagons, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies.mass, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies->trainNumber, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies->lengthInWheels, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies->lengthInWagons, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies->mass, SLOT(setVaule(int)));
     // Чтение параметров
-    QObject::connect (&cookies.trackNumberInMph, SIGNAL(onChange(int)), systemState, SLOT(setTrackNumber(int)));
-    QObject::connect (&cookies.machinistNumber, SIGNAL(onChange(int)), systemState, SLOT(setMachinistNumber(int)));
-    QObject::connect (&cookies.trainNumber, SIGNAL(onChange(int)), systemState, SLOT(setTrainNumber(int)));
-    QObject::connect (&cookies.lengthInWheels, SIGNAL(onChange(int)), systemState, SLOT(setAxlesCount(int)));
-    QObject::connect (&cookies.lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
-    QObject::connect (&cookies.mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
+    QObject::connect (&cookies->trackNumberInMph, SIGNAL(onChange(int)), systemState, SLOT(setTrackNumber(int)));
+    QObject::connect (&cookies->machinistNumber, SIGNAL(onChange(int)), systemState, SLOT(setMachinistNumber(int)));
+    QObject::connect (&cookies->trainNumber, SIGNAL(onChange(int)), systemState, SLOT(setTrainNumber(int)));
+    QObject::connect (&cookies->lengthInWheels, SIGNAL(onChange(int)), systemState, SLOT(setAxlesCount(int)));
+    QObject::connect (&cookies->lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
+    QObject::connect (&cookies->mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
+
 
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
 
-    iodriver->start(argv[1], argv[2], (QString(argv[3]).toInt() == 0) ? gps_data_source_gps : gps_data_source_can);
+#ifdef WITH_SERIAL
+    // Если компилируем с поддержкой COM-порта, то берём GPS-данные из NMEA
+    iodriver->start(gps_data_source_gps);
+#else
+    // Иначе, берём данные из CAN (если это вообще работает :-/ )
+    iodriver->start(gps_data_source_can);
+#endif
 
-    cookies.trackNumberInMph.requestValue ();
-    cookies.machinistNumber.requestValue ();
-    cookies.trainNumber.requestValue ();
-    cookies.lengthInWheels.requestValue ();
-    cookies.lengthInWagons.requestValue ();
-    cookies.mass.requestValue ();
+    cookies->trackNumberInMph.requestValue ();
+    cookies->machinistNumber.requestValue ();
+    cookies->trainNumber.requestValue ();
+    cookies->lengthInWheels.requestValue ();
+    cookies->lengthInWagons.requestValue ();
+    cookies->mass.requestValue ();
 
     // Электронная карта
-    QObject::connect (&elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
-    QObject::connect (&elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
-    QObject::connect (&elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
-    QObject::connect (&blokMessages.mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
+    QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
+    QObject::connect (elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
+    QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
+    QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
 
-#else
-#endif
-//    QtConcurrent::run(getParamsFromConsole);
+    QtConcurrent::run(getParamsFromConsole);
 
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(SayLightIndex(int)));
 

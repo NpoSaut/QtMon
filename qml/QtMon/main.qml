@@ -681,7 +681,11 @@ Rectangle {
                     {
                         interval = nextInterval;
                         innerPoolsed = !innerPoolsed
-                        if (poolsed) stateView.SpeedWarningFlash()
+                        if (poolsed)
+                        {
+                            stateView.SpeedWarningFlash();
+                            speedRestrictionNeedlePulsingAnimation.start();
+                        }
                     }
                 }
 
@@ -727,6 +731,7 @@ Rectangle {
 
                 // Стрелка ограничения скорости
                 Rectangle {
+                    id: speedRestrictionNeedle
                     transformOrigin: Item.Right
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -739,6 +744,16 @@ Rectangle {
                     anchors.horizontalCenterOffset: r * Math.cos(angle)
 
                     rotation: 180 - angle * 180 / Math.PI
+
+                    SequentialAnimation {
+                        id: speedRestrictionNeedlePulsingAnimation
+//                        property bool playing: false
+//                        running: playing || speedometerWarner.poolsed
+                        NumberAnimation { target: speedRestrictionNeedle; property: "scale"; to: 1.5; duration:  70; easing: Easing.OutCubic }
+                        NumberAnimation { target: speedRestrictionNeedle; property: "scale"; to: 1;   duration: 150; easing: Easing.InCubic }
+//                        onStarted: playing = true
+//                        onCompleted: playing = false
+                    }
 
                     Image {
                         source: "Slices/Needle-Restriction.png"

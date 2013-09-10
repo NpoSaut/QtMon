@@ -1509,12 +1509,14 @@ Rectangle {
                             // Текст просьбы об остановке
                             Text {
                                 id: drivemodeStopToSwitchLabel
-                                anchors.fill: parent
+                                anchors.top: parent.top
+                                anchors.left: parent.left
+                                anchors.bottom: parent.bottom
+                                anchors.right: parent.right
                                 anchors.margins: 5
                                 wrapMode: Text.WordWrap
                                 color: "#ccc"
                                 text: "Остановитесь для смены режима"
-                                style: Text.Outline
                                 styleColor: "#fff"
                             }
                             // Красная полосочка слева

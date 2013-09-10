@@ -30,7 +30,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
-    driveModeTargetValue = 0;
+    driveModeTargetValue = -1;
     driveModeFactValue = -1;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;

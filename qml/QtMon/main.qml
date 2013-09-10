@@ -1376,18 +1376,22 @@ Rectangle {
                         Repeater {
                             model: [ "П", "М", "Р", " ", "Т" ]
                             Row {
+                                property bool isTransport: modelData == "Т";
+                                property bool isSelected: getDriveModeLetter(stateView.DriveModeTarget) == modelData;
+                                property bool isConfirmed: getDriveModeLetter(stateView.DriveModeFact) == modelData;
                                 //height: 16
                                 spacing: 12
                                 Image {
                                     visible: modelData != " "
-                                    source: "Slices/drivemode-led-" +
-                                            (getDriveModeLetter(stateView.DriveModeTarget) == modelData ? "" : "un") + "selected" +
-                                            (getDriveModeLetter(stateView.DriveModeFact) == modelData ? "-confirmed" : "") +
+                                    source: "Slices/drivemode-led" +
+                                            (parent.isConfirmed ? "-confirmed" : "") +
+                                            ((parent.isTransport && stateView.IronWheels) ? "-disabled" : "") +
                                             ".png"
                                 }
                                 Text {
+                                    id: drivemodeSwitchItemLabel
                                     visible: modelData != " "
-                                    color: modelData != "Т" ? "#ccc" : "#ffffff00"
+                                    color: !parent.isTransport ? "#ccc" : "#ffffff00"
                                     text: modelData
                                 }
 
@@ -1397,6 +1401,11 @@ Rectangle {
                                     height: 3
                                     width: 10
                                     color: "#00000000"
+                                }
+
+                                onIsSelectedChanged: {
+                                    if (isSelected)
+                                        drivemodeSwitchSelector.y = drivemodeSwitch.y + y + height/2
                                 }
                             }
                         }
@@ -1470,6 +1479,56 @@ Rectangle {
                             text: "движения"
                             font.pixelSize: 14
                         }
+                    }
+
+                    // Стрелка выбора режима РМП
+                    Rectangle {
+                        id: drivemodeSwitchSelector
+                        anchors.right: drivemodeSwitch.right
+                        property bool isActive: stateView.DriveModeTarget != -1 && stateView.DriveModeFact != stateView.DriveModeTarget
+                        opacity: isActive ? 1 : 0
+                        anchors.rightMargin: isActive ? -3 : -8
+                        // Изображение стрелки
+                        Image {
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/drivemode-selector.png"
+                        }
+                        // Этикетка с просьбой остановиться
+                        Rectangle {
+                            property bool askToStop: parent.isActive && stateView.Speed > 0
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            width: 80
+                            height: drivemodeStopToSwitchLabel.paintedHeight + drivemodeStopToSwitchLabel.anchors.margins * 2
+                            color: "#f0333333"
+                            opacity: askToStop ? 1 : 0
+                            anchors.topMargin: askToStop ? 0 : 8
+                            Behavior on opacity { PropertyAnimation { duration: 170 } }
+                            Behavior on anchors.topMargin { PropertyAnimation { duration: 170 } }
+                            // Текст просьбы об остановке
+                            Text {
+                                id: drivemodeStopToSwitchLabel
+                                anchors.fill: parent
+                                anchors.margins: 5
+                                wrapMode: Text.WordWrap
+                                color: "#ccc"
+                                text: "Остановитесь для смены режима"
+                                style: Text.Outline
+                                styleColor: "#fff"
+                            }
+                            // Красная полосочка слева
+                            Rectangle {
+                                anchors.left: parent.left;
+                                anchors.top: parent.top; anchors.bottom: parent.bottom
+                                color: "#f41"
+                                width: 2
+                            }
+                        }
+
+                        Behavior on y { PropertyAnimation { duration: 100 } }
+                        Behavior on opacity { PropertyAnimation { duration: 170 } }
+                        Behavior on anchors.rightMargin { PropertyAnimation { duration: 170 } }
                     }
                 }
 

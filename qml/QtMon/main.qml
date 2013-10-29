@@ -273,8 +273,8 @@ Rectangle {
 
     property bool inputMode: false
     property int inputCursorIndex: 0
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 1]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
 
     Timer {
@@ -1993,14 +1993,14 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    Column {
         id: inputModeParentField
         anchors.top: parent.top
         anchors.topMargin: inputMode ? 0 : -height
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "#00000000"
+        //color: "#00000000"
         width: 420
-        height: 164
+        //height: 164
 
         Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
 
@@ -2013,8 +2013,8 @@ Rectangle {
         Column{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-            anchors.topMargin: 24
-            spacing: 26
+            anchors.topMargin: 28
+            spacing: 3
 
             Row{
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -2161,7 +2161,10 @@ Rectangle {
                 }
             }
 
-            Row{
+            // сепаратор
+            Rectangle { width: 1; height: 22; color: "#00000000" }
+
+            Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 60
 
@@ -2171,7 +2174,7 @@ Rectangle {
                     property int startPosition: 11
                     property int positionsCount: 3
                     width: 20*positionsCount
-                    height: 64
+                    height: 54
                     color: "#00000000"
 
                     Text{
@@ -2297,6 +2300,169 @@ Rectangle {
                                 width: 17
                                 Text {
                                     text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 6
+
+                Text{
+                    anchors.top: parent.top
+                    anchors.topMargin: 2
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    font.family: "URW Gothic L"
+                    font.pixelSize: 18
+                    font.bold: true
+                    color: "#ffe0e0e0"
+                    text: qsTr("Ордината")
+                }
+
+                // ввод ординаты (км)
+                Rectangle{
+                    id: inputModeOrdinateKm
+                    property int startPosition: 21
+                    property int positionsCount: 6
+                    width: 17*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("км")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ввод ординаты (пк)
+                Rectangle{
+                    id: inputModeDirectoinPc
+                    property int startPosition: 27
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("пк")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // сепаратор
+                Rectangle { width: 14; height: 1; color: "#00000000" }
+
+                // Направления движения
+                Rectangle{
+                    id: inputModeDirectoin
+                    property int startPosition: 28
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#0000ff00"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("Напр.")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 5
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex] == 0 ? "-" : "+"
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 21

@@ -1389,7 +1389,7 @@ Rectangle {
                         spacing: 4
 
                         Repeater {
-                            model: [ "П", "М", "Р", " ", "Т" ]
+                            model: [ "П", "М", "Р" ]
                             Row {
                                 property bool isTransport: modelData == "Т";
                                 property bool isSelected: getDriveModeLetter(stateView.DriveModeTarget) == modelData;
@@ -1429,59 +1429,22 @@ Rectangle {
                     }
 
                     // Индикаторы режима
-                    Column {
+                    Rectangle {
                         anchors.verticalCenter: drivemodeSwitch.verticalCenter
                         anchors.left: drivemodeSwitch.right
-                        anchors.leftMargin: 3
-                        spacing: 4
+                        anchors.leftMargin: 6
 
-                        Repeater {
-                            model: [ "iron", "rubber" ]
-                            Row {
-                                Image {
-                                    source: "Slices/drivemode-wheels-mode-" +
-                                            modelData +
-                                            (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
-                                            ".png"
-                                }
-                                Row {
-                                    spacing: 3
-                                    anchors.bottom: parent.bottom
-                                    Image {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        source: "Slices/drivemode-wheels-indicator" +
-                                                (stateView.IronWheels == (modelData == "iron") ? "-active" : "") +
-                                                ".png"
-                                        Image {
-                                            source: "Slices/drivemode-wheels-icon-" +
-                                                    modelData +
-                                                    ".png"
-                                            anchors.verticalCenter: parent.verticalCenter
-                                            anchors.horizontalCenter: parent.horizontalCenter
-                                        }
-                                    }
-                                    Text {
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        color: "#ccc"
-                                        text: {
-                                            switch(modelData)
-                                            {
-                                                case "iron": return "Опущены"
-                                                case "rubber": return "Подняты"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        width: 2
+                        height: 50
+                        color: "#ccc"
                     }
 
                     // Подпись кнопки РМП
                     Column {
                         anchors.top: parent.top
-                        anchors.topMargin: 15
+                        anchors.topMargin: 40
                         anchors.right: parent.right
-                        anchors.rightMargin: 22
+                        anchors.rightMargin: 16
                         spacing: -4
                         Text {
                             anchors.right: parent.right

@@ -1402,12 +1402,14 @@ Rectangle {
                                             (parent.isConfirmed ? "-confirmed" : "") +
                                             ((parent.isTransport && stateView.IronWheels) ? "-disabled" : "") +
                                             ".png"
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Text {
                                     id: drivemodeSwitchItemLabel
                                     visible: modelData != " "
                                     color: !parent.isTransport ? "#ccc" : "#ffffff00"
                                     text: modelData
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
 
                                 // Заглушка - сепаратор
@@ -1506,6 +1508,7 @@ Rectangle {
                         // Изображение стрелки
                         Image {
                             anchors.right: parent.right
+                            anchors.rightMargin: 6
                             anchors.verticalCenter: parent.verticalCenter
                             source: "Slices/drivemode-selector.png"
                         }

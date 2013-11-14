@@ -1698,8 +1698,7 @@ Rectangle {
             source: "Slices/Panel-Right.png"
         }
 
-
-
+        // Треугольник бдительности
         Image {
             id: vigilanceSign
             anchors.topMargin: 15
@@ -1711,6 +1710,35 @@ Rectangle {
             Image {
                 anchors.fill: parent
                 source: "Slices/Vigilance-Sign-Active-Overlay.png"
+                property bool isActive: false;
+                opacity: 1.0 * isActive
+                Behavior on opacity { PropertyAnimation { duration: 70 } }
+
+                Timer {
+                    interval: 400
+                    running: stateView.IsVigilanceRequired || (parent.isActive)
+                    repeat: true
+                    onTriggered: parent.isActive = !parent.isActive
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+            }
+        }
+
+        // Треугольник ТСКБМ
+        Image {
+            anchors.topMargin: vigilanceSign.y + vigilanceSign.height + 15
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            source: "Slices/Tsvc-Sign-Inactive.png"
+
+            Image {
+                anchors.fill: parent
+                source: "Slices/Tsvc-Sign-Active-Overlay.png"
                 property bool isActive: false;
                 opacity: 1.0 * isActive
                 Behavior on opacity { PropertyAnimation { duration: 70 } }

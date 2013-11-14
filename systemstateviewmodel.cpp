@@ -47,6 +47,10 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     wagonCountValue = 1;
     axlesCountValue = 4;
     trainMassValue = 0;
+    tsvcIsOnlineValue = false;
+    tsvcIsMachinistCheerfulValue = false;
+    tsvcIsVigilanceRequiredValue = false;
+    tsvcIsPreAlarmActiveValue = false;
     // fileds init end
 }
 
@@ -647,6 +651,62 @@ void SystemStateViewModel::setTrainMass(const int value)
     {
         trainMassValue = value;
         emit TrainMassChanged(value);
+    }
+}
+
+// ТСКБМ подключена
+const bool SystemStateViewModel::getTsvcIsOnline() const
+{
+    return tsvcIsOnlineValue;
+}
+void SystemStateViewModel::setTsvcIsOnline(const bool value)
+{
+    if (tsvcIsOnlineValue != value)
+    {
+        tsvcIsOnlineValue = value;
+        emit TsvcIsOnlineChanged(value);
+    }
+}
+
+// ТСКБМ: машинист бодр
+const bool SystemStateViewModel::getTsvcIsMachinistCheerful() const
+{
+    return tsvcIsMachinistCheerfulValue;
+}
+void SystemStateViewModel::setTsvcIsMachinistCheerful(const bool value)
+{
+    if (tsvcIsMachinistCheerfulValue != value)
+    {
+        tsvcIsMachinistCheerfulValue = value;
+        emit TsvcIsMachinistCheerfulChanged(value);
+    }
+}
+
+// ТСКБМ требует подтверждения бдительности
+const bool SystemStateViewModel::getTsvcIsVigilanceRequired() const
+{
+    return tsvcIsVigilanceRequiredValue;
+}
+void SystemStateViewModel::setTsvcIsVigilanceRequired(const bool value)
+{
+    if (tsvcIsVigilanceRequiredValue != value)
+    {
+        tsvcIsVigilanceRequiredValue = value;
+        emit TsvcIsVigilanceRequiredChanged(value);
+    }
+}
+
+// Предварительная сигнализация ТСКБМ активна
+const bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
+{
+    return tsvcIsPreAlarmActiveValue;
+}
+void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
+{
+    if (tsvcIsPreAlarmActiveValue != value)
+    {
+        tsvcIsPreAlarmActiveValue = value;
+        emit TsvcIsPreAlarmActiveChanged(value);
     }
 }
 

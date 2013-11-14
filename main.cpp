@@ -141,6 +141,30 @@ void getParamsFromConsole ()
             systemState->setNotificationText( cmd.at(1) );
             out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
         }
+        // ТСКБМ: на связи
+        else if (cmd.at(0) == "tso")
+        {
+            systemState->setTsvcIsOnline( cmd.at(1) == "1" );
+            out << "Now TSVC online is: " << systemState->getTsvcIsOnline() << endl;
+        }
+        // ТСКБМ: Машинист Бодр
+        else if (cmd.at(0) == "tsc")
+        {
+            systemState->setTsvcIsMachinistCheerful( cmd.at(1) == "1" );
+            out << "Now is Machinist Cheerful is: " << systemState->getTsvcIsMachinistCheerful() << endl;
+        }
+        // ТСКБМ: на связи
+        else if (cmd.at(0) == "tsv")
+        {
+            systemState->setTsvcIsVigilanceRequired( cmd.at(1) == "1" );
+            out << "Now TSVC Vigilance Required is: " << systemState->getTsvcIsVigilanceRequired() << endl;
+        }
+        // ТСКБМ: на связи
+        else if (cmd.at(0) == "tsa")
+        {
+            systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
+            out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -152,6 +176,10 @@ void getParamsFromConsole ()
             out << "tr {1/0} Тяга: вкл/выкл" << endl;
             out << "dir {1/-1/0} Направление движения: вперёд/назад/стоим" << endl;
             out << "nt {text} Текст извещения" << endl;
+            out << "tso {1/0} ТСКБМ: Связь с ТСКБМ" << endl;
+            out << "tsc {1/0} ТСКБМ: Машинист бодр" << endl;
+            out << "tsv {1/0} ТСКБМ: Требуется подтверждение бодрости" << endl;
+            out << "tsa {1/0} ТСКБМ: Предварительная сигнализация" << endl;
         }
     }
 }

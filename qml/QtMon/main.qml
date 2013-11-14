@@ -1740,15 +1740,21 @@ Rectangle {
                 anchors.fill: parent
                 source: "Slices/Tsvc-Sign-Active-Overlay.png"
                 property bool isActive: false;
-                opacity: 1.0 * isActive
+                opacity: 1.0 * (isActive ^ stateView.TsvcIsPreAlarmActive)
                 Behavior on opacity { PropertyAnimation { duration: 70 } }
 
                 Timer {
                     interval: 400
-                    running: stateView.IsVigilanceRequired || (parent.isActive)
+                    running: stateView.TsvcIsVigilanceRequired || (parent.isActive)
                     repeat: true
                     onTriggered: parent.isActive = !parent.isActive
                 }
+            }
+            Image {
+                anchors.fill: parent
+                source: "Slices/Tsvc-Sign-Red-Dot.png"
+                opacity: 1.0 * stateView.TsvcIsOnline
+                Behavior on opacity { PropertyAnimation { duration: 70 } }
             }
 
             MouseArea {

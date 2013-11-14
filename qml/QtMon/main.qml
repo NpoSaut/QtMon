@@ -1752,7 +1752,10 @@ Rectangle {
             }
             Image {
                 anchors.fill: parent
-                source: "Slices/Tsvc-Sign-Red-Dot.png"
+                source:
+                    "Slices/Tsvc-Sign-"
+                    +(stateView.TsvcIsMachinistCheerful? "Yellow" : "Red")
+                    +"-Dot.png"
                 opacity: 1.0 * stateView.TsvcIsOnline
                 Behavior on opacity { PropertyAnimation { duration: 70 } }
             }

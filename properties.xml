@@ -11,6 +11,8 @@
     <Property type="int" name="TargetSpeed" def="55" description="Целевая скорость" source="MCO_STATE" />
     <Property type="double" name="Acceleration" def="0" description="Ускорение" source="IPD_STATE" />
 
+    <Property type="int" name="DesignSpeed" def="40" description="Конструктивная скорость" />
+
     <!-- Давление -->
     <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
     <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->

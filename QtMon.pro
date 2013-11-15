@@ -78,6 +78,7 @@ HEADERS += \
     qtBlokLib/parsers/mco_limits.h \
     qtBlokLib/parsers/ipd_state.h \
     qtBlokLib/parsers/mco_state.h \
+    qtBlokLib/parsers/tskbm_state.h \
     qtCanLib/socketcan.h \
     qtCanLib/dummycan.h \
     notificator.h

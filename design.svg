@@ -62,27 +62,27 @@
     <linearGradient
        id="linearGradient5268">
       <stop
-         style="stop-color:#ff8273;stop-opacity:1;"
+         style="stop-color:#ffcc73;stop-opacity:1;"
          offset="0"
          id="stop5270" />
       <stop
          id="stop5280"
          offset="0.1605691"
-         style="stop-color:#fa5844;stop-opacity:1;" />
+         style="stop-color:#fab344;stop-opacity:1;" />
       <stop
          id="stop5278"
          offset="0.25"
-         style="stop-color:#f63e27;stop-opacity:1;" />
+         style="stop-color:#f69c28;stop-opacity:1;" />
       <stop
-         style="stop-color:#f23720;stop-opacity:1;"
+         style="stop-color:#f28d20;stop-opacity:1;"
          offset="0.375"
          id="stop5282" />
       <stop
          id="stop5276"
          offset="0.5"
-         style="stop-color:#ee3019;stop-opacity:1;" />
+         style="stop-color:#ef8823;stop-opacity:1;" />
       <stop
-         style="stop-color:#ca240f;stop-opacity:1;"
+         style="stop-color:#aa4b0c;stop-opacity:1;"
          offset="1"
          id="stop5272" />
     </linearGradient>
@@ -4690,8 +4690,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="683.71888"
+     inkscape:zoom="1"
+     inkscape:cx="720.54801"
      inkscape:cy="336.68894"
      inkscape:document-units="px"
      inkscape:current-layer="g4444"
@@ -6521,17 +6521,8 @@
        style="fill:#7a7a7a;fill-opacity:0.20547946;fill-rule:evenodd;stroke:none;stroke-width:0.40000001000000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        sodipodi:type="arc" />
     <path
-       d="m 736.4948,143 a 6.4947963,6.4947963 0 1 1 -12.9896,0 6.4947963,6.4947963 0 1 1 12.9896,0 z"
-       sodipodi:ry="6.4947963"
-       sodipodi:rx="6.4947963"
-       sodipodi:cy="143"
-       sodipodi:cx="730"
-       id="path4469"
-       style="fill:url(#radialGradient5254);fill-opacity:1;fill-rule:evenodd;stroke:#3a3a3a;stroke-width:0.40000000000000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:1"
-       sodipodi:type="arc" />
-    <path
        sodipodi:type="arc"
-       style="fill:url(#radialGradient5274);fill-opacity:1;fill-rule:evenodd;stroke:#3a3a3a;stroke-width:0.40000000000000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:1"
+       style="fill:url(#radialGradient5274);fill-opacity:1;fill-rule:evenodd;stroke:#343434;stroke-width:0.4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;opacity:1"
        id="path5245"
        sodipodi:cx="730"
        sodipodi:cy="143"

@@ -1679,10 +1679,20 @@ Rectangle {
 
                 Timer {
                     interval: 400
-                    running: stateView.IsVigilanceRequired || (parent.isActive)
+                    running: stateView.IsVigilanceRequired || stateView.TsvcIsVigilanceRequired || parent.isActive
                     repeat: true
                     onTriggered: parent.isActive = !parent.isActive
                 }
+            }
+
+            Text {
+                color: "#fff"
+                text: "ТСКБМ"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: - parent.height * 0.17
+                anchors.horizontalCenter: parent.horizontalCenter
+                opacity: stateView.TsvcIsVigilanceRequired ? 1 : 0
+                Behavior on opacity { PropertyAnimation { duration: 150 } }
             }
 
             MouseArea {
@@ -1703,12 +1713,12 @@ Rectangle {
                 anchors.fill: parent
                 source: "Slices/Tsvc-Sign-Active-Overlay.png"
                 property bool isActive: false;
-                opacity: 1.0 * (isActive ^ stateView.TsvcIsPreAlarmActive)
+                opacity: 1.0 * isActive
                 Behavior on opacity { PropertyAnimation { duration: 70 } }
 
                 Timer {
                     interval: 400
-                    running: stateView.TsvcIsVigilanceRequired || (parent.isActive)
+                    running: stateView.TsvcIsPreAlarmActive || parent.isActive
                     repeat: true
                     onTriggered: parent.isActive = !parent.isActive
                 }
@@ -1716,16 +1726,14 @@ Rectangle {
             Image {
                 anchors.fill: parent
                 source:
-                    "Slices/Tsvc-Sign-"
-                    +(stateView.TsvcIsMachinistCheerful? "Yellow" : "Red")
-                    +"-Dot.png"
+                    "Slices/Tsvc-Sign-Red-Dot.png"
                 opacity: 1.0 * stateView.TsvcIsOnline
-                Behavior on opacity { PropertyAnimation { duration: 70 } }
+                Behavior on opacity { PropertyAnimation { duration: 180 } }
             }
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: stateView.IsVigilanceRequired = !stateView.IsVigilanceRequired;
+                onClicked: stateView.TsvcIsPreAlarmActive = !stateView.TsvcIsPreAlarmActive;
             }
         }
 

@@ -317,6 +317,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&cookies->lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
     QObject::connect (&cookies->mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
 
+    QObject::connect (&cookies->designSpeed, SIGNAL(onChange(int)), systemState, SLOT(setDesignSpeed(int)));
+
 
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
@@ -335,6 +337,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->lengthInWheels.requestValue ();
     cookies->lengthInWagons.requestValue ();
     cookies->mass.requestValue ();
+    cookies->designSpeed.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

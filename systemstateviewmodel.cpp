@@ -11,6 +11,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
+    designSpeedValue = 40;
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
     longitudeValue = 60.4688;
@@ -150,6 +151,20 @@ void SystemStateViewModel::setAcceleration(const double value)
     {
         accelerationValue = value;
         emit AccelerationChanged(value);
+    }
+}
+
+// Конструктивная скорость
+const int SystemStateViewModel::getDesignSpeed() const
+{
+    return designSpeedValue;
+}
+void SystemStateViewModel::setDesignSpeed(const int value)
+{
+    if (designSpeedValue != value)
+    {
+        designSpeedValue = value;
+        emit DesignSpeedChanged(value);
     }
 }
 

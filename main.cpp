@@ -296,6 +296,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Автоблокировка
     QObject::connect(iodriver, SIGNAL(signal_autolock_type_target(int)), systemState, SLOT(setAutolockTypeTarget(int)));
 
+    // ТСКБМ
+    QObject::connect (&blokMessages->tskbmState, SIGNAL(onlineChanged(bool)), systemState, SLOT(setTsvcIsOnline(bool)));
+    QObject::connect (&blokMessages->tskbmState, SIGNAL(machinistCheerfulChanged(bool)), systemState, SLOT(setTsvcIsMachinistCheerful(bool)));
+    QObject::connect (&blokMessages->tskbmState, SIGNAL(vigilanceRequestChanged(bool)), systemState, SLOT(setTsvcIsVigilanceRequired(bool)));
+    QObject::connect (&blokMessages->tskbmState, SIGNAL(preAlarmChanged(bool)), systemState, SLOT(setTsvcIsPreAlarmActive(bool)));
+
     // Ввод параметров
     QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));

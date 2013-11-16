@@ -37,10 +37,11 @@ SOURCES += \
     qtBlokLib/parser.cpp \
     notificator.cpp \
     qtBlokLib/parsers/canblokmessage.cpp \
-    qtBlokLib/parsers/mm_coord.cpp \
-    qtBlokLib/parsers/mco_limits.cpp \
     qtBlokLib/parsers/ipd_state.cpp \
-    qtBlokLib/parsers/mco_state.cpp
+    qtBlokLib/parsers/mco_limits.cpp \
+    qtBlokLib/parsers/mco_state.cpp \
+    qtBlokLib/parsers/mm_coord.cpp \
+    qtBlokLib/parsers/tskbm_state.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

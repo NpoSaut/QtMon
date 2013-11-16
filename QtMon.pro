@@ -40,7 +40,10 @@ SOURCES += \
     qtBlokLib/parsers/mm_coord.cpp \
     qtBlokLib/parsers/mco_limits.cpp \
     qtBlokLib/parsers/ipd_state.cpp \
-    qtBlokLib/parsers/mco_state.cpp
+    qtBlokLib/parsers/mco_state.cpp \
+    qtBlokLib/parsers/sys_key.cpp \
+    qtBlokLib/parsers/display_state.cpp \
+    displaystatesander.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -80,7 +83,10 @@ HEADERS += \
     qtBlokLib/parsers/mco_state.h \
     qtCanLib/socketcan.h \
     qtCanLib/dummycan.h \
-    notificator.h
+    notificator.h \
+    qtBlokLib/parsers/sys_key.h \
+    qtBlokLib/parsers/display_state.h \
+    displaystatesender.h
 
 CONFIG += console
 

@@ -30,11 +30,13 @@
 #endif
 
 #include "notificator.h"
+#include "displaystatesender.h"
 
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
 Notificator* notificator;
+DisplayStateSander* displayStateSander;
 
 iodrv* iodriver;
 rmp_key_handler* rmp_key_hdlr;
@@ -197,6 +199,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies = new Cookies(can);
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
+    displayStateSander = new DisplayStateSander(blokMessages, can);
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-

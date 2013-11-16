@@ -303,6 +303,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->lengthInWheels.requestValue ();
     cookies->lengthInWagons.requestValue ();
     cookies->mass.requestValue ();
+    cookies->designSpeed.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

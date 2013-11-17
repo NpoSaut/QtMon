@@ -13,7 +13,7 @@ void Notificator::getStateChangedSignal()
     if ( !parser->mcoState.isEpvReady () )
         emit notificationTextChanged ("Система отключена");
 
-    else if ( parser->mcoLimits.isTractionShutdown () )
+    else if ( parser->mcoLimits.isTractionShutdownCommand () )
         emit notificationTextChanged ("Экстренное торможение");
 
     else

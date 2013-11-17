@@ -42,7 +42,6 @@ void DrivemodeHandler::processNewState()
 
 void DrivemodeHandler::setTarget(DriveMode tm)
 {
-    qDebug() << "Target mode: " << quint8(tm);
     if ( target != tm )
     {
         target = tm;

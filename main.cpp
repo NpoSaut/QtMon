@@ -31,7 +31,7 @@
 
 #include "notificator.h"
 #include "displaystatesender.h"
-
+#include "drivemodehandler.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -39,7 +39,7 @@ Notificator* notificator;
 DisplayStateSander* displayStateSander;
 
 iodrv* iodriver;
-rmp_key_handler* rmp_key_hdlr;
+DrivemodeHandler *drivemodeHandler;
 
 Can *can;
 SysDiagnostics *monitorSysDiagnostics;
@@ -203,20 +203,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
-    rmp_key_hdlr = new rmp_key_handler();
-
-    // Передача сообщения в новый CAN-класс
-
-
-    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), rmp_key_hdlr, SLOT(rmp_key_pressed()));
-    QObject::connect(iodriver, SIGNAL(signal_ssps_mode(int)), rmp_key_hdlr, SLOT(ssps_mode_received(int)));
-    QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), rmp_key_hdlr, SLOT(driving_mode_received(int)));
-
-    QObject::connect(rmp_key_hdlr, SIGNAL(target_driving_mode_changed(int)), systemState, SLOT(setDriveModeTarget(int)));
-    QObject::connect(rmp_key_hdlr, SIGNAL(actual_driving_mode_changed(int)), systemState, SLOT(setDriveModeFact(int)));
-    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
-//    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
-    // <- Отбработчик нажатия РМП ->
+    drivemodeHandler = new DrivemodeHandler(blokMessages, can);
+    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
+    QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
+    QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
 
     // Переносить ли эти события из iodrv в обработчики
     QObject::connect(iodriver, SIGNAL(signal_iron_wheels(bool)), systemState, SLOT(setIronWheels(bool)));

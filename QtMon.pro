@@ -37,13 +37,16 @@ SOURCES += \
     qtBlokLib/parser.cpp \
     notificator.cpp \
     qtBlokLib/parsers/canblokmessage.cpp \
+    qtBlokLib/parsers/display_state.cpp \
     qtBlokLib/parsers/mm_coord.cpp \
     qtBlokLib/parsers/mco_limits.cpp \
     qtBlokLib/parsers/ipd_state.cpp \
     qtBlokLib/parsers/mco_state.cpp \
     qtBlokLib/parsers/sys_key.cpp \
-    qtBlokLib/parsers/display_state.cpp \
-    displaystatesander.cpp
+    qtBlokLib/parsers/tskbm_state.cpp \
+    drivemodehandler.cpp \
+    qtBlokLib/parsers/vds_state.cpp \
+    displaystatesender.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -77,16 +80,20 @@ HEADERS += \
     qtBlokLib/elmapforwardtarget.h \
     qtBlokLib/parser.h \
     qtBlokLib/parsers/canblokmessage.h \
+    qtBlokLib/parsers/display_state.h \
     qtBlokLib/parsers/mm_coord.h \
     qtBlokLib/parsers/mco_limits.h \
     qtBlokLib/parsers/ipd_state.h \
     qtBlokLib/parsers/mco_state.h \
+    qtBlokLib/parsers/sys_key.h \
+    qtBlokLib/parsers/tskbm_state.h \
     qtCanLib/socketcan.h \
     qtCanLib/dummycan.h \
     notificator.h \
-    qtBlokLib/parsers/sys_key.h \
-    qtBlokLib/parsers/display_state.h \
-    displaystatesender.h
+    displaystatesender.h \
+    drivemodehandler.h \
+    qtBlokLib/parsers/vds_state.h \
+    qtBlokLib/parsers/drivemode.h
 
 CONFIG += console
 

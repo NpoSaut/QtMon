@@ -24,10 +24,10 @@ void DisplayStateSander::timerEvent(QTimerEvent *event)
     dsa.setOc (parser->sysKey.isKeyPressed (SysKey::OC));
     dsa.setK20 (parser->sysKey.isKeyPressed (SysKey::K20));
     dsa.setFreq (parser->sysKey.isKeyPressed (SysKey::FREQ));
-
     can->transmitMessage (dsa.encode ());
 
-    CanFrame dispStateB (0x53E2, // id: 0x29F
-                    std::vector<unsigned char> (2, 0) );
-    can->transmitMessage (dispStateB);
+    DisplayStateB dsb;
+    dsb.setRb (parser->sysKey.isKeyPressed (SysKey::RB));
+    dsb.setRbs (parser->sysKey.isKeyPressed (SysKey::RBS));
+    can->transmitMessage (dsb.encode ());
 }

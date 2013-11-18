@@ -10,7 +10,10 @@ Notificator::Notificator(Parser *onParser, QObject *parent) :
 
 void Notificator::getStateChangedSignal()
 {
-    if ( !parser->mcoState.isEpvReady () )
+    if ( !parser->mcoState.isConClosed () )
+        emit notificationTextChanged ("Срыв КОН");
+
+    else if ( !parser->mcoState.isEpvReady () )
         emit notificationTextChanged ("Система отключена");
 
     else if ( parser->mcoLimits.isTractionShutdownCommand () )

@@ -82,7 +82,7 @@ Rectangle {
 
     focus: true
 
-    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
+    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш
     property bool altMode: false
 
     function fillInputParameter(offset, length)
@@ -120,6 +120,7 @@ Rectangle {
     	    else if (altMode && event.key == Qt.Key_F1) {
                 stateView.ButtonPressed();
 	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
+                console.debug(stateView.AutolockTypeTarget)
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
@@ -1188,9 +1189,9 @@ Rectangle {
 
                         Text {
                             id: alsnTextBoxText
-                            anchors.left: parent.left
+                            anchors.horizontalCenter: parent.horizontalCenter
 
-                            text: qsTr("АЛСН")
+                            text: altMode ? qsTr("АБ") : qsTr("АЛСН")
                             color: "#ffdddddd"
                             font.pixelSize: 18
                             font.family: "URW Gothic L"
@@ -1207,10 +1208,10 @@ Rectangle {
                         }
                         Text {
                             id: alsnTextBoxFreq
-                            anchors.left: parent.left
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: alsnTextBoxLine.bottom
 
-                            text: qsTr("частота")
+                            text: altMode ? qsTr("режим") : qsTr("частота")
                             color: "#ffdddddd"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -1265,26 +1266,74 @@ Rectangle {
                             }
                         }
 
+                        Repeater {
+                            model: ["АБ", "ПАБ", "ЗАБ"]
+                            Rectangle {
+                                property real myRot: (12 - index) * alsnSwitch.angle
+
+                                x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                                y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                                rotation: myRot
+
+                                color: alsnSwitch.objColor
+                                width: 2
+                                height: 2
+                                smooth: true
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.right: parent.left
+                                    anchors.rightMargin: 4
+
+                                    text: modelData
+                                    font.pixelSize: 14
+                                    font.family: "URW Gothic L"
+                                    color: alsnSwitch.objColor
+                                    smooth: true
+                                }
+                            }
+                        }
+
                         states: [
                             State {
                                 name: "alsn0"
-                                when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget != 25 && stateView.AlsnFreqTarget != 50 && stateView.AlsnFreqTarget != 75)
                                 PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn25"
-                                when: (stateView.AlsnFreqTarget == 25)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 25)
                                 PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn50"
-                                when: (stateView.AlsnFreqTarget == 50)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 50)
                                 PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn75"
-                                when: (stateView.AlsnFreqTarget == 75)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 75)
                                 PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "0mode"
+                                when: (altMode == true) && (stateView.AutolockTypeTarget != 0) && (stateView.AutolockTypeTarget != 1) && (stateView.AutolockTypeTarget != 2)
+                                PropertyChanges { target: alsnSwitch; rotation: +11 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "abmode"
+                                when: (altMode == true) && (stateView.AutolockTypeTarget == 0)
+                                PropertyChanges { target: alsnSwitch; rotation: +12 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "pabmode"
+                                when: (altMode == true) && (stateView.AutolockTypeTarget == 1)
+                                PropertyChanges { target: alsnSwitch; rotation: +13 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "zabmode"
+                                when: (altMode == true) && (stateView.AutolockTypeTarget == 2)
+                                PropertyChanges { target: alsnSwitch; rotation: +14 * alsnSwitch.angle }
                             }
                         ]
 
@@ -1293,68 +1342,49 @@ Rectangle {
                         }
                     }
 
-
                     Row {
                         id: autolockSelector
-                        anchors.horizontalCenter: alsnTextBox.horizontalCenter
-                        anchors.horizontalCenterOffset: 3
-                        anchors.bottom: alsnTextBox.top
-                        anchors.bottomMargin: 16
-                        spacing: 4
+                        anchors.top: alsnTextBox.bottom
+                        anchors.topMargin: 4
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.horizontalCenterOffset: 30
+                        spacing: 30
                         property int itemWidth: 26
 
-                        Repeater {
-                            model: ["АБ", "ПАБ", "ЗАБ"]
-                            Rectangle {
-                                property bool isConfirmed: index == stateView.AutolockTypeFact
+                        Rectangle {
+                            property bool isConfirmed: stateView.AutolockTypeFact == 1
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: autolockSelector.itemWidth
+                            height: 14
+                            radius: 2
+                            color: isConfirmed ? "#ccc" : "#00000000"
+                            Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                width: autolockSelector.itemWidth
-                                height: 14
-                                radius: 2
-                                color: isConfirmed ? "#ccc" : "#00000000"
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: modelData
-                                    font.pixelSize: 10
-                                    color: parent.isConfirmed ? "#333" : "#ccc"
-                                }
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: qsTr("ПАБ")
+                                font.pixelSize: 10
+                                color: "#333"
+                                opacity: parent.isConfirmed ? 1 : 0
+                            }
+                        }
+
+                        Rectangle {
+                            property bool isConfirmed: stateView.AutolockTypeFact == 2
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: autolockSelector.itemWidth
+                            height: 14
+                            radius: 2
+                            color: isConfirmed ? "#ccc" : "#00000000"
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: qsTr("ЗАБ")
+                                font.pixelSize: 10
+                                color: "#333"
+                                opacity: parent.isConfirmed ? 1 : 0
                             }
                         }
                     }
-                    Rectangle {
-                        id: autolockSelectorCursor
-                        anchors.top: autolockSelector.bottom
-                        anchors.left: autolockSelector.left
-                        anchors.topMargin: 4
-                        anchors.leftMargin: autolockSelector.itemWidth * (0.5 + stateView.AutolockTypeTarget) + autolockSelector.spacing * stateView.AutolockTypeTarget
-
-                        property bool show: (altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget) && stateView.AutolockTypeTarget >= 0
-
-                        Image {
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            source: "Slices/autolock-cursor.png"
-                            scale: parent.show ? 0.25 : 2
-                            Behavior on scale { PropertyAnimation { duration: 100 } }
-                            smooth: true
-                        }
-                        //opacity: stateView.AutolockTypeFact != stateView.AutolockTypeTarget ? 1 : 0
-
-                        opacity: show ? 1 : 0
-                        Behavior on opacity { PropertyAnimation { duration: 100 } }
-                        Behavior on anchors.leftMargin { PropertyAnimation { duration: 170 } }
-                    }
-//                    Timer {
-//                        interval: 1000
-//                        running: true
-//                        repeat: true
-//                        onTriggered:
-//                        {
-//                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
-//                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
-//                        }
-//                    }
                 }
 
             }

@@ -14,6 +14,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     designSpeedValue = 40;
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
+    pressureURValue = "0.00";
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
     systemWarningLevelValue = 0;
@@ -189,6 +190,20 @@ void SystemStateViewModel::setPressureTM(const QString value)
     {
         pressureTMValue = value;
         emit PressureTMChanged(value);
+    }
+}
+
+// Давление УР
+const QString SystemStateViewModel::getPressureUR() const
+{
+    return pressureURValue;
+}
+void SystemStateViewModel::setPressureUR(const QString value)
+{
+    if (pressureURValue != value)
+    {
+        pressureURValue = value;
+        emit PressureURChanged(value);
     }
 }
 

@@ -50,6 +50,10 @@ class SystemStateViewModel : public QDeclarativeItem
     QString pressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
 
+    // Давление УР
+    QString pressureURValue;
+    Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
+
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
 
@@ -199,6 +203,7 @@ public:
     const int getDesignSpeed() const;
     const QString getPressureTC() const;
     const QString getPressureTM() const;
+    const QString getPressureUR() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const int getSystemWarningLevel() const;
@@ -260,6 +265,7 @@ signals:
     void DesignSpeedChanged(const int value);
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
+    void PressureURChanged(const QString value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void SystemWarningLevelChanged(const int value);
@@ -308,6 +314,7 @@ public slots:
     void setDesignSpeed(const int);
     void setPressureTC(const QString);
     void setPressureTM(const QString);
+    void setPressureUR(const QString);
     void setLongitude(const double);
     void setLatitude(const double);
     void setSystemWarningLevel(const int);

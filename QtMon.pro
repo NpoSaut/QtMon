@@ -46,7 +46,10 @@ SOURCES += \
     qtBlokLib/parsers/tskbm_state.cpp \
     drivemodehandler.cpp \
     qtBlokLib/parsers/vds_state.cpp \
-    displaystatesender.cpp
+    displaystatesender.cpp \
+    qtBlokLib/parsers/uktol_dd1.cpp \
+    qtBlokLib/parsers/mvd_dd.cpp \
+    pressureselector.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -93,7 +96,11 @@ HEADERS += \
     displaystatesender.h \
     drivemodehandler.h \
     qtBlokLib/parsers/vds_state.h \
-    qtBlokLib/parsers/drivemode.h
+    qtBlokLib/parsers/drivemode.h \
+    qtBlokLib/parsers/uktol_dd1.h \
+    qtBlokLib/parsers/pressure.h \
+    qtBlokLib/parsers/mvd_dd.h \
+    pressureselector.h
 
 CONFIG += console
 

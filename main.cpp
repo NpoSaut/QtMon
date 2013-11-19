@@ -245,7 +245,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect(iodriver, SIGNAL(signal_autolock_type(int)), systemState, SLOT(setAutolockTypeFact(int)));
     QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged(int)), iodriver, SLOT(slot_autolock_type_target_changed(int)));
-//    QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged()), iodriver, SLOT(slot_autolock_type_target_changed()));
+    QObject::connect (systemState, SIGNAL(AutolockSpeedChanged(int)), iodriver, SLOT(slot_autolock_speed_changed(int)));
 
     // Давление
     pressureSelector = new PressureSelector (PressureSelector::MPA, blokMessages);

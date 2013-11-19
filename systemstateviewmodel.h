@@ -187,6 +187,10 @@ class SystemStateViewModel : public QDeclarativeItem
     int trainMassValue;
     Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
 
+    // Скорость на белый при ЗАБ
+    int autolockSpeedValue;
+    Q_PROPERTY(int AutolockSpeed READ getAutolockSpeed WRITE setAutolockSpeed NOTIFY AutolockSpeedChanged)
+
     // private properties end
 
 public:
@@ -238,6 +242,7 @@ public:
     const int getWagonCount() const;
     const int getAxlesCount() const;
     const int getTrainMass() const;
+    const int getAutolockSpeed() const;
     // public properties getters end
 
 signals:
@@ -300,6 +305,7 @@ signals:
     void WagonCountChanged(const int value);
     void AxlesCountChanged(const int value);
     void TrainMassChanged(const int value);
+    void AutolockSpeedChanged(const int value);
     // properties signals end
 
 public slots:
@@ -349,6 +355,7 @@ public slots:
     void setWagonCount(const int);
     void setAxlesCount(const int);
     void setTrainMass(const int);
+    void setAutolockSpeed(const int);
     // public properties setters end
     
 };

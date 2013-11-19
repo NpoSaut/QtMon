@@ -76,5 +76,8 @@
     <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
     <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
 
+    <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
+    <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
+
   </Properties>
 </Task>

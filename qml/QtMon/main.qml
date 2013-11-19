@@ -99,6 +99,13 @@ Rectangle {
 
         return arra;
     }
+    function fillInputSpeedParameter(offset, length)
+    {
+        var res = 0;
+        for (var i = 0; i < length; i++)
+            res += Math.pow(10, length - i - 1) * inputSpeedPositions[offset + i];
+        return res;
+    }
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
@@ -119,8 +126,7 @@ Rectangle {
 	        }
     	    else if (altMode && event.key == Qt.Key_F1) {
                 stateView.ButtonPressed();
-	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
-                console.debug(stateView.AutolockTypeTarget)
+                autolockTypePreTarget = (autolockTypePreTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
@@ -136,6 +142,7 @@ Rectangle {
             else if (!altMode && event.key == Qt.Key_F3) {
                 stateView.ButtonPressed();
                 inputMode = true
+                inputMphMode = true
 
                 var _offset = 0;
 
@@ -168,54 +175,101 @@ Rectangle {
                 stateView.ButtonPressed();
                 inputBlinker.restart();
 
-                var input = inputPositions;
-                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
-                if ((inputCursorIndex == 1) && input[0] == 1)
+                if (inputMphMode)
                 {
-                    input[1] = input[1] % 6;
-                }
-                if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
-                {
-                    input[1] = 5;
+                    var input = inputPositions;
+                    input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
+                    if ((inputCursorIndex == 1) && input[0] == 1)
+                    {
+                        input[1] = input[1] % 6;
+                    }
+                    if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+                    {
+                        input[1] = 5;
+                    }
+
+                    inputPositions = input;
                 }
 
-                inputPositions = input;
+                if (inputSpeedMode)
+                {
+                    inputSpeedPositions[0] = 1
+                    console.debug(inputSpeedPositions)
+                    var input = inputSpeedPositions;
+                    input[inputSpeedCursorIndex] = (input[inputSpeedCursorIndex] + 1) % inputSpeedPositinosLength[inputSpeedCursorIndex];
+                    inputSpeedPositions = input;
+                }
             }
             if (event.key == Qt.Key_F2)
             {
                 stateView.ButtonPressed();
-                inputCursorIndex++;
-                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
-                inputBlinker.restart();
+
+                if (inputMphMode)
+                {
+                    inputCursorIndex++;
+                    if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+                    inputBlinker.restart();
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedCursorIndex++;
+                    if (inputSpeedCursorIndex >= inputSpeedPositions.length) inputSpeedCursorIndex = 0;
+                    inputBlinker.restart();
+                }
             }
             if (event.key == Qt.Key_F3)
             {
                 stateView.ButtonPressed();
-                inputCursorIndex--;
-                if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
-                inputBlinker.restart();
+
+                if (inputMphMode)
+                {
+                    inputCursorIndex--;
+                    if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
+                    inputBlinker.restart();
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedCursorIndex--;
+                    if (inputSpeedCursorIndex < 0) inputSpeedCursorIndex = inputSpeedPositions.length-1;
+                    inputBlinker.restart();
+                }
             }
             if (event.key == Qt.Key_F4)
             {
                 stateView.ConfirmButtonPressed();
                 inputMode = false
 
-                var _offset = 0;
-                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                if (inputMphMode)
                 {
-                    stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
-                }
-                else
-                {
-                    stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
-                }
-                stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
-                stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
-                stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    inputMphMode = false
+                    var _offset = 0;
+                    if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                    {
+                        stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                    }
+                    else
+                    {
+                        stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                    }
+                    stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
 
-                if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                    if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedMode = false
+
+                    stateView.AutolockSpeed =  fillInputSpeedParameter(0, 3);
+
+                    stateView.AutolockTypeTarget = autolockTypePreTarget
+                }
             }
         }
     }
@@ -224,6 +278,24 @@ Rectangle {
         // Выключение альтернативного режима клавиш
         if (event.key == Qt.Key_F4) {
             altMode = false;
+
+            if ( autolockTypePreTarget != stateView.AutolockTypeTarget)
+            {
+                if ( autolockTypePreTarget == 0 ) // АБ
+                {
+                    stateView.AutolockTypeTarget = autolockTypePreTarget
+                }
+                else
+                {
+                    inputMode = true;
+                    inputSpeedMode = true;
+
+                    var input = inputSpeedPositions
+                    input = fillInputArray(input, 0, 3, stateView.AutolockSpeed);
+                    inputSpeedPositions = input;
+                    inputSpeedCursorIndex = 0;
+                }
+            }
         }
         // Отпускание кнопки РМП
         else if (!altMode && event.key == Qt.Key_F2) {
@@ -274,10 +346,17 @@ Rectangle {
     }
 
     property bool inputMode: false
+    property bool inputMphMode: false
+    property bool inputSpeedMode:false
     property int inputCursorIndex: 0
     property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 1]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
+    property int inputSpeedCursorIndex: 0
+    property variant inputSpeedPositions: [0, 1, 2]
+    property variant inputSpeedPositinosLength: [4, 10, 10]
+
+    property int autolockTypePreTarget: stateView.AutolockTypeTarget
 
     Timer {
         id: inputBlinker
@@ -1317,22 +1396,22 @@ Rectangle {
                             },
                             State {
                                 name: "0mode"
-                                when: (altMode == true) && (stateView.AutolockTypeTarget != 0) && (stateView.AutolockTypeTarget != 1) && (stateView.AutolockTypeTarget != 2)
+                                when: (altMode == true) && (autolockTypePreTarget != 0) && (autolockTypePreTarget != 1) && (autolockTypePreTarget != 2)
                                 PropertyChanges { target: alsnSwitch; rotation: +11 * alsnSwitch.angle }
                             },
                             State {
                                 name: "abmode"
-                                when: (altMode == true) && (stateView.AutolockTypeTarget == 0)
+                                when: (altMode == true) && (autolockTypePreTarget == 0)
                                 PropertyChanges { target: alsnSwitch; rotation: +12 * alsnSwitch.angle }
                             },
                             State {
                                 name: "pabmode"
-                                when: (altMode == true) && (stateView.AutolockTypeTarget == 1)
+                                when: (altMode == true) && (autolockTypePreTarget == 1)
                                 PropertyChanges { target: alsnSwitch; rotation: +13 * alsnSwitch.angle }
                             },
                             State {
                                 name: "zabmode"
-                                when: (altMode == true) && (stateView.AutolockTypeTarget == 2)
+                                when: (altMode == true) && (autolockTypePreTarget == 2)
                                 PropertyChanges { target: alsnSwitch; rotation: +14 * alsnSwitch.angle }
                             }
                         ]
@@ -1342,47 +1421,53 @@ Rectangle {
                         }
                     }
 
-                    Row {
-                        id: autolockSelector
+                    Rectangle {
+                        property bool isSelected: stateView.AutolockTypeTarget == 1
+                        property bool isConfirmed: stateView.AutolockTypeFact == 1
                         anchors.top: alsnTextBox.bottom
                         anchors.topMargin: 4
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.horizontalCenterOffset: 30
-                        spacing: 30
-                        property int itemWidth: 26
-
-                        Rectangle {
-                            property bool isConfirmed: stateView.AutolockTypeFact == 1
+                        anchors.left: alsnTextBox.left
+                        anchors.leftMargin: 2
+                        width: 26
+                        height: 14
+                        radius: 2
+                        border.color: "#ccc"
+                        color: isConfirmed ? "#ccc" : "#00000000"
+                        opacity: isConfirmed || isSelected ? 1 : 0
+                        Text {
                             anchors.verticalCenter: parent.verticalCenter
-                            width: autolockSelector.itemWidth
-                            height: 14
-                            radius: 2
-                            color: isConfirmed ? "#ccc" : "#00000000"
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: qsTr("ПАБ")
-                                font.pixelSize: 10
-                                color: "#333"
-                                opacity: parent.isConfirmed ? 1 : 0
-                            }
-                        }
-
-                        Rectangle {
-                            property bool isConfirmed: stateView.AutolockTypeFact == 2
+                            anchors.verticalCenterOffset: 1
                             anchors.horizontalCenter: parent.horizontalCenter
-                            width: autolockSelector.itemWidth
-                            height: 14
-                            radius: 2
-                            color: isConfirmed ? "#ccc" : "#00000000"
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: qsTr("ЗАБ")
-                                font.pixelSize: 10
-                                color: "#333"
-                                opacity: parent.isConfirmed ? 1 : 0
-                            }
+                            anchors.horizontalCenterOffset: 1
+                            text: qsTr("ПАБ")
+                            font.pixelSize: 10
+                            color: parent.isConfirmed ? "#333" : "#ccc"
+                            opacity: parent.isConfirmed || parent.isSelected ? 1 : 0
+                        }
+                    }
+
+                    Rectangle {
+                        property bool isSelected: stateView.AutolockTypeTarget == 2
+                        property bool isConfirmed: stateView.AutolockTypeFact == 2
+                        anchors.top: alsnTextBox.bottom
+                        anchors.topMargin: 4
+                        anchors.right: alsnTextBox.right
+                        anchors.rightMargin: 2
+                        width: 26
+                        height: 14
+                        radius: 2
+                        border.color: "#ccc"
+                        color: isConfirmed ? "#ccc" : "#00000000"
+                        opacity: isConfirmed || isSelected ? 1 : 0
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 1
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: 1
+                            text: qsTr("ЗАБ")
+                            font.pixelSize: 10
+                            color: parent.isConfirmed ? "#333" : "#ccc"
+                            opacity: parent.isConfirmed || parent.isSelected ? 1 : 0
                         }
                     }
                 }
@@ -1985,6 +2070,7 @@ Rectangle {
         }
     }
 
+    // ----------------------- InputMode -------------------------
 
     Rectangle {
         anchors.fill: rootRect
@@ -2027,10 +2113,12 @@ Rectangle {
         }
     }
 
+
+
     Column {
-        id: inputModeParentField
+        id: inputMphModeParentField
         anchors.top: parent.top
-        anchors.topMargin: inputMode ? 0 : -height
+        anchors.topMargin: inputMphMode ? 0 : -height
         anchors.horizontalCenter: parent.horizontalCenter
         //color: "#00000000"
         width: 420
@@ -2511,7 +2599,75 @@ Rectangle {
             }
 
         }
+    }
 
+    // Панель ввода скорости на белый
+    Rectangle {
+        id: inputSpeedModeParentField
+        anchors.top: parent.top
+        anchors.topMargin: inputSpeedMode ? 0 : -height
+        anchors.horizontalCenter: parent.horizontalCenter
+        //color: "#00000000"
+        width: 420
+        height: 98
+
+        Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
+
+        Image{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "Slices/InputMode-Field.png"
+            fillMode: Image.Tile
+            height: parent.height
+        }
+
+        // Ввод номера машиниста
+        Rectangle{
+            id: inputSpeedModeAutolockSpeed
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            property int startPosition: 0
+            property int positionsCount: 3
+            width: 20*positionsCount
+            height: 54
+            color: "#00000000"
+
+            Text{
+                anchors.top: parent.top
+                anchors.topMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.family: "URW Gothic L"
+                font.pixelSize: 18
+                font.bold: true
+                color: "#ffe0e0e0"
+                text: qsTr("Скорость на БЕЛЫЙ")
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                height: 30
+                spacing: 0
+                Repeater {
+                    model: parent.parent.positionsCount
+                    Image {
+                        property int myCursorIndex: parent.parent.startPosition+index
+                        property bool blink: (myCursorIndex == inputSpeedCursorIndex) && inputBlinker.blink
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                        Text {
+                            text: inputSpeedPositions[parent.myCursorIndex]
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 24
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                            color: parent.blink ?  "#ccc" : "#ff474747"
+                        }
+                    }
+                }
+            }
+        }
 
     }
 

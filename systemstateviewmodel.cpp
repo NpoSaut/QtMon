@@ -49,6 +49,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     wagonCountValue = 1;
     axlesCountValue = 4;
     trainMassValue = 0;
+    autolockSpeedValue = 40;
     // fileds init end
 }
 
@@ -677,6 +678,20 @@ void SystemStateViewModel::setTrainMass(const int value)
     {
         trainMassValue = value;
         emit TrainMassChanged(value);
+    }
+}
+
+// Скорость на белый при ЗАБ
+const int SystemStateViewModel::getAutolockSpeed() const
+{
+    return autolockSpeedValue;
+}
+void SystemStateViewModel::setAutolockSpeed(const int value)
+{
+    if (autolockSpeedValue != value)
+    {
+        autolockSpeedValue = value;
+        emit AutolockSpeedChanged(value);
     }
 }
 

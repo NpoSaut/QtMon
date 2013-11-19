@@ -30,14 +30,18 @@
 #endif
 
 #include "notificator.h"
-
+#include "displaystatesender.h"
+#include "drivemodehandler.h"
+#include "pressureselector.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
 Notificator* notificator;
+DisplayStateSander* displayStateSander;
 
 iodrv* iodriver;
-rmp_key_handler* rmp_key_hdlr;
+DrivemodeHandler *drivemodeHandler;
+PressureSelector *pressureSelector;
 
 Can *can;
 SysDiagnostics *monitorSysDiagnostics;
@@ -197,26 +201,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies = new Cookies(can);
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
+    displayStateSander = new DisplayStateSander(blokMessages, can);
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
-    rmp_key_hdlr = new rmp_key_handler();
-
-    // Передача сообщения в новый CAN-класс
-
-
-    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), rmp_key_hdlr, SLOT(rmp_key_pressed()));
-    QObject::connect(iodriver, SIGNAL(signal_ssps_mode(int)), rmp_key_hdlr, SLOT(ssps_mode_received(int)));
-    QObject::connect(iodriver, SIGNAL(signal_driving_mode(int)), rmp_key_hdlr, SLOT(driving_mode_received(int)));
-
-    QObject::connect(rmp_key_hdlr, SIGNAL(target_driving_mode_changed(int)), systemState, SLOT(setDriveModeTarget(int)));
-    QObject::connect(rmp_key_hdlr, SIGNAL(actual_driving_mode_changed(int)), systemState, SLOT(setDriveModeFact(int)));
-    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
-//    QObject::connect(rmp_key_hdlr, SIGNAL(rmp_key_pressed_send()), iodriver, SLOT(slot_rmp_key_down()));
-    // <- Отбработчик нажатия РМП ->
+    drivemodeHandler = new DrivemodeHandler(blokMessages, can);
+    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
+    QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
+    QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
 
     // Переносить ли эти события из iodrv в обработчики
-    QObject::connect(iodriver, SIGNAL(signal_iron_wheels(bool)), systemState, SLOT(setIronWheels(bool)));
+    QObject::connect(&blokMessages->vdsState, SIGNAL(ironWheelsChagned(bool)), systemState, SLOT(setIronWheels(bool)));
 
     // Для отладки
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeedFromEarth(double)));
@@ -252,15 +247,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged(int)), iodriver, SLOT(slot_autolock_type_target_changed(int)));
 //    QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged()), iodriver, SLOT(slot_autolock_type_target_changed()));
 
-    QObject::connect(iodriver, SIGNAL(signal_pressure_tc(QString)), systemState, SLOT(setPressureTC(QString)));
-    QObject::connect(iodriver, SIGNAL(signal_pressure_tm(QString)), systemState, SLOT(setPressureTM(QString)));
+    // Давление
+    pressureSelector = new PressureSelector (PressureSelector::MPA, blokMessages);
+    QObject::connect (pressureSelector, SIGNAL(tcPressureChagned(QString)), systemState, SLOT(setPressureTC(QString)));
+    QObject::connect (pressureSelector, SIGNAL(tmPressureChanged(QString)), systemState, SLOT(setPressureTM(QString)));
+    QObject::connect (pressureSelector, SIGNAL(urPressureChanged(QString)), systemState, SLOT(setPressureUR(QString)));
 
     QObject::connect(iodriver, SIGNAL(signal_lat(double)), systemState, SLOT(setLatitude(double)));
     QObject::connect(iodriver, SIGNAL(signal_lon(double)), systemState, SLOT(setLongitude(double)));
     QObject::connect(iodriver, SIGNAL(signal_time(QString)), systemState, SLOT(setTime(QString)));
     QObject::connect(iodriver, SIGNAL(signal_date(QString)), systemState, SLOT(setDate(QString)));
 
-    QObject::connect(iodriver, SIGNAL(signal_traction(bool)), systemState, SLOT(setIsTractionOn(bool)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(tractionChanged(bool)), systemState, SLOT(setIsTractionOn(bool)));
 
     QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
     QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
@@ -283,6 +281,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&cookies->lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
     QObject::connect (&cookies->mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
 
+    QObject::connect (&cookies->designSpeed, SIGNAL(onChange(int)), systemState, SLOT(setDesignSpeed(int)));
+
 
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
@@ -301,6 +301,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->lengthInWheels.requestValue ();
     cookies->lengthInWagons.requestValue ();
     cookies->mass.requestValue ();
+    cookies->designSpeed.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

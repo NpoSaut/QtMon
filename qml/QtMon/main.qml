@@ -8,7 +8,8 @@ Rectangle {
 
     property int pageNum: 0
 
-    property double maxSpeed: 60
+    property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+    property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed/45)/Math.log(2))));
 
     function switchPage() {
         pageNum = 1 - pageNum
@@ -579,7 +580,7 @@ Rectangle {
                 height: width
 
                 // Количество засечек
-                property int tickCount: maxSpeed / 5
+                property int tickCount: maxSpeed / speedStep
 
                 property double minAngle: 1.25 * Math.PI
                 property double maxAngle: -0.25 * Math.PI

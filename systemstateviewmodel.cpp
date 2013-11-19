@@ -11,8 +11,10 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
+    designSpeedValue = 40;
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
+    pressureURValue = "0.00";
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
     systemWarningLevelValue = 0;
@@ -149,6 +151,20 @@ void SystemStateViewModel::setAcceleration(const double value)
     }
 }
 
+// Конструктивная скорость
+const int SystemStateViewModel::getDesignSpeed() const
+{
+    return designSpeedValue;
+}
+void SystemStateViewModel::setDesignSpeed(const int value)
+{
+    if (designSpeedValue != value)
+    {
+        designSpeedValue = value;
+        emit DesignSpeedChanged(value);
+    }
+}
+
 // Давление ТЦ
 const QString SystemStateViewModel::getPressureTC() const
 {
@@ -174,6 +190,20 @@ void SystemStateViewModel::setPressureTM(const QString value)
     {
         pressureTMValue = value;
         emit PressureTMChanged(value);
+    }
+}
+
+// Давление УР
+const QString SystemStateViewModel::getPressureUR() const
+{
+    return pressureURValue;
+}
+void SystemStateViewModel::setPressureUR(const QString value)
+{
+    if (pressureURValue != value)
+    {
+        pressureURValue = value;
+        emit PressureURChanged(value);
     }
 }
 

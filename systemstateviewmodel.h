@@ -38,6 +38,10 @@ class SystemStateViewModel : public QDeclarativeItem
     double accelerationValue;
     Q_PROPERTY(double Acceleration READ getAcceleration WRITE setAcceleration NOTIFY AccelerationChanged)
 
+    // Конструктивная скорость
+    int designSpeedValue;
+    Q_PROPERTY(int DesignSpeed READ getDesignSpeed WRITE setDesignSpeed NOTIFY DesignSpeedChanged)
+
     // Давление ТЦ
     QString pressureTCValue;
     Q_PROPERTY(QString PressureTC READ getPressureTC WRITE setPressureTC NOTIFY PressureTCChanged)
@@ -45,6 +49,10 @@ class SystemStateViewModel : public QDeclarativeItem
     // Давление ТМ
     QString pressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
+
+    // Давление УР
+    QString pressureURValue;
+    Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
 
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
@@ -192,8 +200,10 @@ public:
     const int getSpeedRestriction() const;
     const int getTargetSpeed() const;
     const double getAcceleration() const;
+    const int getDesignSpeed() const;
     const QString getPressureTC() const;
     const QString getPressureTM() const;
+    const QString getPressureUR() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const int getSystemWarningLevel() const;
@@ -252,8 +262,10 @@ signals:
     void SpeedRestrictionChanged(const int value);
     void TargetSpeedChanged(const int value);
     void AccelerationChanged(const double value);
+    void DesignSpeedChanged(const int value);
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
+    void PressureURChanged(const QString value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void SystemWarningLevelChanged(const int value);
@@ -299,8 +311,10 @@ public slots:
     void setSpeedRestriction(const int);
     void setTargetSpeed(const int);
     void setAcceleration(const double);
+    void setDesignSpeed(const int);
     void setPressureTC(const QString);
     void setPressureTM(const QString);
+    void setPressureUR(const QString);
     void setLongitude(const double);
     void setLatitude(const double);
     void setSystemWarningLevel(const int);

@@ -203,6 +203,22 @@ class SystemStateViewModel : public QDeclarativeItem
     int autolockSpeedValue;
     Q_PROPERTY(int AutolockSpeed READ getAutolockSpeed WRITE setAutolockSpeed NOTIFY AutolockSpeedChanged)
 
+    // ТСКБМ подключена
+    bool tsvcIsOnlineValue;
+    Q_PROPERTY(bool TsvcIsOnline READ getTsvcIsOnline WRITE setTsvcIsOnline NOTIFY TsvcIsOnlineChanged)
+
+    // ТСКБМ: машинист бодр
+    bool tsvcIsMachinistCheerfulValue;
+    Q_PROPERTY(bool TsvcIsMachinistCheerful READ getTsvcIsMachinistCheerful WRITE setTsvcIsMachinistCheerful NOTIFY TsvcIsMachinistCheerfulChanged)
+
+    // ТСКБМ требует подтверждения бдительности
+    bool tsvcIsVigilanceRequiredValue;
+    Q_PROPERTY(bool TsvcIsVigilanceRequired READ getTsvcIsVigilanceRequired WRITE setTsvcIsVigilanceRequired NOTIFY TsvcIsVigilanceRequiredChanged)
+
+    // Предварительная сигнализация ТСКБМ активна
+    bool tsvcIsPreAlarmActiveValue;
+    Q_PROPERTY(bool TsvcIsPreAlarmActive READ getTsvcIsPreAlarmActive WRITE setTsvcIsPreAlarmActive NOTIFY TsvcIsPreAlarmActiveChanged)
+
     // private properties end
 
 public:
@@ -258,6 +274,10 @@ public:
     const int getManualOrdinate() const;
     const int getManualOrdinateIncreaseDirection() const;
     const int getAutolockSpeed() const;
+    const bool getTsvcIsOnline() const;
+    const bool getTsvcIsMachinistCheerful() const;
+    const bool getTsvcIsVigilanceRequired() const;
+    const bool getTsvcIsPreAlarmActive() const;
     // public properties getters end
 
 signals:
@@ -324,6 +344,10 @@ signals:
     void ManualOrdinateChanged(const int value);
     void ManualOrdinateIncreaseDirectionChanged(const int value);
     void AutolockSpeedChanged(const int value);
+    void TsvcIsOnlineChanged(const bool value);
+    void TsvcIsMachinistCheerfulChanged(const bool value);
+    void TsvcIsVigilanceRequiredChanged(const bool value);
+    void TsvcIsPreAlarmActiveChanged(const bool value);
     // properties signals end
 
 public slots:
@@ -377,6 +401,10 @@ public slots:
     void setManualOrdinate(const int);
     void setManualOrdinateIncreaseDirection(const int);
     void setAutolockSpeed(const int);
+    void setTsvcIsOnline(const bool);
+    void setTsvcIsMachinistCheerful(const bool);
+    void setTsvcIsVigilanceRequired(const bool);
+    void setTsvcIsPreAlarmActive(const bool);
     // public properties setters end
     
 };

@@ -84,5 +84,11 @@
     <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
     <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
 
+    <!-- ТСКБМ -->
+    <Property type="bool" name="TsvcIsOnline" def="false" description="ТСКБМ подключена" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsMachinistCheerful" def="false" description="ТСКБМ: машинист бодр" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsVigilanceRequired" def="false" description="ТСКБМ требует подтверждения бдительности" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsPreAlarmActive" def="false" description="Предварительная сигнализация ТСКБМ активна" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+
   </Properties>
 </Task>

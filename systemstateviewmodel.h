@@ -50,6 +50,10 @@ class SystemStateViewModel : public QDeclarativeItem
     QString pressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
 
+    // Давление УР
+    QString pressureURValue;
+    Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
+
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
 
@@ -183,6 +187,10 @@ class SystemStateViewModel : public QDeclarativeItem
     int trainMassValue;
     Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
 
+    // Скорость на белый при ЗАБ
+    int autolockSpeedValue;
+    Q_PROPERTY(int AutolockSpeed READ getAutolockSpeed WRITE setAutolockSpeed NOTIFY AutolockSpeedChanged)
+
     // ТСКБМ подключена
     bool tsvcIsOnlineValue;
     Q_PROPERTY(bool TsvcIsOnline READ getTsvcIsOnline WRITE setTsvcIsOnline NOTIFY TsvcIsOnlineChanged)
@@ -215,6 +223,7 @@ public:
     const int getDesignSpeed() const;
     const QString getPressureTC() const;
     const QString getPressureTM() const;
+    const QString getPressureUR() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const int getSystemWarningLevel() const;
@@ -249,6 +258,7 @@ public:
     const int getWagonCount() const;
     const int getAxlesCount() const;
     const int getTrainMass() const;
+    const int getAutolockSpeed() const;
     const bool getTsvcIsOnline() const;
     const bool getTsvcIsMachinistCheerful() const;
     const bool getTsvcIsVigilanceRequired() const;
@@ -280,6 +290,7 @@ signals:
     void DesignSpeedChanged(const int value);
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
+    void PressureURChanged(const QString value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void SystemWarningLevelChanged(const int value);
@@ -314,6 +325,7 @@ signals:
     void WagonCountChanged(const int value);
     void AxlesCountChanged(const int value);
     void TrainMassChanged(const int value);
+    void AutolockSpeedChanged(const int value);
     void TsvcIsOnlineChanged(const bool value);
     void TsvcIsMachinistCheerfulChanged(const bool value);
     void TsvcIsVigilanceRequiredChanged(const bool value);
@@ -332,6 +344,7 @@ public slots:
     void setDesignSpeed(const int);
     void setPressureTC(const QString);
     void setPressureTM(const QString);
+    void setPressureUR(const QString);
     void setLongitude(const double);
     void setLatitude(const double);
     void setSystemWarningLevel(const int);
@@ -366,6 +379,7 @@ public slots:
     void setWagonCount(const int);
     void setAxlesCount(const int);
     void setTrainMass(const int);
+    void setAutolockSpeed(const int);
     void setTsvcIsOnline(const bool);
     void setTsvcIsMachinistCheerful(const bool);
     void setTsvcIsVigilanceRequired(const bool);

@@ -14,8 +14,9 @@
     <Property type="int" name="DesignSpeed" def="40" description="Конструктивная скорость" />
 
     <!-- Давление -->
-    <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
-    <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="UKTOL_DD1 | MVD_DD"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="UKTOL_DD1 | MVD_DD"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureUR" def="&quot;0.00&quot;" description="Давление УР" source="UKTOL_DD1"/> <!-- два знака после запятой. Макс 1.00 -->
 
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
@@ -75,6 +76,11 @@
     <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
     <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
 
+    
+    <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
+    <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
+
+    
     <!-- ТЭМ9H -->
     <Property type="bool" name="TsvcIsOnline" def="false" description="ТСКБМ подключена" source="TSKBM_STATE_A, TSKBM_STATE_B" />
     <Property type="bool" name="TsvcIsMachinistCheerful" def="false" description="ТСКБМ: машинист бодр" source="TSKBM_STATE_A, TSKBM_STATE_B" />

@@ -247,13 +247,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Скорость и ограничения
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeed(double)));
-    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
+//    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
+    systemState->setSpeedIsValid (true);
     QObject::connect(iodriver, SIGNAL(signal_speed_limit(int)), systemState, SLOT(setSpeedRestriction(int)));
     QObject::connect(iodriver, SIGNAL(signal_target_speed(int)), systemState, SLOT(setTargetSpeed(int)));
     QObject::connect(iodriver, SIGNAL(signal_acceleration(double)), systemState, SLOT(setAcceleration(double)));
     //Состояние системы
-    QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
-    QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
 
     // Уведомления
@@ -317,6 +318,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect (&cookies->designSpeed, SIGNAL(onChange(int)), systemState, SLOT(setDesignSpeed(int)));
 
+    // Ручной ввод начальной координаты
+    QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(ManualOrdinateIncreaseDirectionChanged(int)), &cookies->ordinateIncreaseDirection, SLOT(setVaule(int)));
+    QObject::connect (&cookies->startOrdinate, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinate(int)));
+    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
 
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
@@ -336,6 +342,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->lengthInWagons.requestValue ();
     cookies->mass.requestValue ();
     cookies->designSpeed.requestValue ();
+    cookies->startOrdinate.requestValue ();
+    cookies->ordinateIncreaseDirection.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
@@ -343,14 +351,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
 
+    // Звуки
+    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
+    QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
+    QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
+    QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(beep()));
+    QObject::connect (systemState, SIGNAL(TsvcIsVigilanceRequiredChanged(bool)), levithan, SLOT(beepNotification()));
+    QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(beepNotification()));
+    QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(beepNotification()));
+
     QtConcurrent::run(getParamsFromConsole);
 
-    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(SayLightIndex(int)));
-
-    QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(BeepHigh()));
-
-    QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(BeepHigh()));
-    QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(Beep()));
 
 
     return app->exec();

@@ -49,6 +49,9 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     wagonCountValue = 1;
     axlesCountValue = 4;
     trainMassValue = 0;
+    manualOrdinateEnableValue = false;
+    manualOrdinateValue = 1100;
+    manualOrdinateIncreaseDirectionValue = 1;
     autolockSpeedValue = 40;
     tsvcIsOnlineValue = false;
     tsvcIsMachinistCheerfulValue = false;
@@ -682,6 +685,48 @@ void SystemStateViewModel::setTrainMass(const int value)
     {
         trainMassValue = value;
         emit TrainMassChanged(value);
+    }
+}
+
+// Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути.
+const bool SystemStateViewModel::getManualOrdinateEnable() const
+{
+    return manualOrdinateEnableValue;
+}
+void SystemStateViewModel::setManualOrdinateEnable(const bool value)
+{
+    if (manualOrdinateEnableValue != value)
+    {
+        manualOrdinateEnableValue = value;
+        emit ManualOrdinateEnableChanged(value);
+    }
+}
+
+// Начальная ордината в ручном режиме
+const int SystemStateViewModel::getManualOrdinate() const
+{
+    return manualOrdinateValue;
+}
+void SystemStateViewModel::setManualOrdinate(const int value)
+{
+    if (manualOrdinateValue != value)
+    {
+        manualOrdinateValue = value;
+        emit ManualOrdinateChanged(value);
+    }
+}
+
+// Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад.
+const int SystemStateViewModel::getManualOrdinateIncreaseDirection() const
+{
+    return manualOrdinateIncreaseDirectionValue;
+}
+void SystemStateViewModel::setManualOrdinateIncreaseDirection(const int value)
+{
+    if (manualOrdinateIncreaseDirectionValue != value)
+    {
+        manualOrdinateIncreaseDirectionValue = value;
+        emit ManualOrdinateIncreaseDirectionChanged(value);
     }
 }
 

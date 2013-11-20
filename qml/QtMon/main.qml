@@ -155,6 +155,8 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
+                input = fillInputArray(input, _offset, 6, stateView.ManualOrdinate/100); _offset += 6;
+                input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
                 inputPositions = input;
                 inputCursorIndex = 1;
@@ -194,7 +196,6 @@ Rectangle {
                 if (inputSpeedMode)
                 {
                     inputSpeedPositions[0] = 1
-                    console.debug(inputSpeedPositions)
                     var input = inputSpeedPositions;
                     input[inputSpeedCursorIndex] = (input[inputSpeedCursorIndex] + 1) % inputSpeedPositinosLength[inputSpeedCursorIndex];
                     inputSpeedPositions = input;
@@ -258,6 +259,8 @@ Rectangle {
                     stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
+                    stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
 
                     if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
                 }
@@ -349,8 +352,8 @@ Rectangle {
     property bool inputMphMode: false
     property bool inputSpeedMode:false
     property int inputCursorIndex: 0
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 1]
-    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 6, 1]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
     property int inputSpeedCursorIndex: 0
     property variant inputSpeedPositions: [0, 1, 2]
@@ -2416,7 +2419,7 @@ Rectangle {
                 Rectangle{
                     id: inputModeOrdinateKm
                     property int startPosition: 21
-                    property int positionsCount: 6
+                    property int positionsCount: 5
                     width: 17*positionsCount
                     height: 64
                     color: "#00000000"
@@ -2463,7 +2466,7 @@ Rectangle {
                 // ввод ординаты (пк)
                 Rectangle{
                     id: inputModeDirectoinPc
-                    property int startPosition: 27
+                    property int startPosition: 26
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64
@@ -2514,7 +2517,7 @@ Rectangle {
                 // Направления движения
                 Rectangle{
                     id: inputModeDirectoin
-                    property int startPosition: 28
+                    property int startPosition: 27
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64

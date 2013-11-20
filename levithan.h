@@ -19,14 +19,15 @@ public:
 signals:
     
 public slots:
-    void SayHello(int i);
-    void SayLightIndex(int i);
+    void sayHello(int i);
+    void sayLightIndex(int i);
 
-    void Beep();
-    void Beep(int i);
-    void Beep(bool b);
+    void beep();
+    void beep(int i);
+    void beep(bool b);
 
-    void BeepHigh();
+    void beepHigh();
+    void beepNotification();
 };
 
 #endif // LEVITHAN_H

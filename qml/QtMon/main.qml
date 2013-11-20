@@ -406,157 +406,195 @@ Rectangle {
                     spacing: 40
                     width: 123
 
-                    // Координата
-                   Column {
-                       anchors.left: parent.left
-                       anchors.right: parent.right
-                       Text {
-                           anchors.horizontalCenter: parent.horizontalCenter
+                    Column {
+                        spacing: 10
+                        width: parent.width
 
-                           text: qsTr("ОРДИНАТА")
-                           color: "#ffffff00"
-                           font.pixelSize: 14
-                           font.family: "URW Gothic L"
-                       }
-                       Rectangle {
-                           color: "#20000000"
+                        // Координата
+                       Column {
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
-                           height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
-                               anchors.verticalCenter: parent.verticalCenter
-                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
-                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
-                                     (stateView.Ordinate % 100).toString() + "м"
-                               //text: stateView.Speed
-                               color: "#ffffffff"
+
+                               text: qsTr("ОРДИНАТА")
+                               color: "#ffffff00"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
                            }
+                           Rectangle {
+                               color: "#20000000"
+                               anchors.left: parent.left
+                               anchors.right: parent.right
+                               border.color: "#ffffff00"
+                               height: 20
+                               Text {
+                                   anchors.horizontalCenter: parent.horizontalCenter
+                                   anchors.verticalCenter: parent.verticalCenter
+                                   text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
+                                         (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
+                                         (stateView.Ordinate % 100).toString() + "м"
+                                   //text: stateView.Speed
+                                   color: "#ffffffff"
+                                   font.pixelSize: 14
+                                   font.family: "URW Gothic L"
+                               }
+                           }
                        }
-                   }
 
-                    // № ПУТИ
-                   Column {
-                       anchors.left: parent.left
-                       anchors.right: parent.right
-                       Text {
-                           anchors.horizontalCenter: parent.horizontalCenter
-
-                           text: qsTr("№ ПУТИ")
-                           color: "#ffffff00"
-                           font.pixelSize: 14
-                           font.family: "URW Gothic L"
-                       }
-                       Rectangle {
-                           color: "#20000000"
+                        // № ПУТИ
+                       Column {
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
-                           height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
-                               anchors.verticalCenter: parent.verticalCenter
-                               text:  (stateView.TrackNumber < 16) ?
-                                          stateView.TrackNumber      + " П" :
-                                          stateView.TrackNumber - 15 + " Н"
-                               color: "#ffffffff"
+
+                               text: qsTr("№ ПУТИ")
+                               color: "#ffffff00"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
                            }
+                           Rectangle {
+                               color: "#20000000"
+                               anchors.left: parent.left
+                               anchors.right: parent.right
+                               border.color: "#ffffff00"
+                               height: 20
+                               Text {
+                                   anchors.horizontalCenter: parent.horizontalCenter
+                                   anchors.verticalCenter: parent.verticalCenter
+                                   text:  (stateView.TrackNumber < 16) ?
+                                              stateView.TrackNumber      + " П" :
+                                              stateView.TrackNumber - 15 + " Н"
+                                   color: "#ffffffff"
+                                   font.pixelSize: 14
+                                   font.family: "URW Gothic L"
+                               }
+                           }
                        }
-                   }
+                    }
 
-                   // УСКОРЕНИЕ
-                  Column {
-                      anchors.left: parent.left
-                      anchors.right: parent.right
-                      Text {
-                          anchors.horizontalCenter: parent.horizontalCenter
-
-                          text: qsTr("УСКОРЕНИЕ")
-                          color: "#ffffff00"
-                          font.pixelSize: 14
-                          font.family: "URW Gothic L"
-                      }
-                      Rectangle {
-                          color: "#20000000"
+                    // УСКОРЕНИЕ
+                      Column {
                           anchors.left: parent.left
                           anchors.right: parent.right
-                          border.color: "#ffffff00"
-                          height: 20
                           Text {
                               anchors.horizontalCenter: parent.horizontalCenter
-                              anchors.verticalCenter: parent.verticalCenter
-                              //text: qsTr("0.15")
-                              text: stateView.Acceleration.toFixed(2)
-                              color: "#ffffffff"
+
+                              text: qsTr("УСКОРЕНИЕ")
+                              color: "#ffffff00"
                               font.pixelSize: 14
                               font.family: "URW Gothic L"
                           }
+                          Rectangle {
+                              color: "#20000000"
+                              anchors.left: parent.left
+                              anchors.right: parent.right
+                              border.color: "#ffffff00"
+                              height: 20
+                              Text {
+                                  anchors.horizontalCenter: parent.horizontalCenter
+                                  anchors.verticalCenter: parent.verticalCenter
+                                  //text: qsTr("0.15")
+                                  text: stateView.Acceleration.toFixed(2)
+                                  color: "#ffffffff"
+                                  font.pixelSize: 14
+                                  font.family: "URW Gothic L"
+                              }
+                          }
                       }
-                  }
 
-                  // ТЦ
-                 Column {
-                     anchors.left: parent.left
-                     anchors.right: parent.right
-                     Text {
-                         anchors.horizontalCenter: parent.horizontalCenter
+                   Column {
+                       spacing: 10
+                       width: parent.width
 
-                         text: qsTr("ТЦ")
-                         color: "#ffffff00"
-                         font.pixelSize: 14
-                         font.family: "URW Gothic L"
-                     }
-                     Rectangle {
-                         color: "#20000000"
+                      // ТЦ
+                     Column {
                          anchors.left: parent.left
                          anchors.right: parent.right
-                         border.color: "#ffffff00"
-                         height: 20
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
-                             anchors.verticalCenter: parent.verticalCenter
-                             text: qsTr(stateView.PressureTC)
-                             color: "#ffffffff"
+
+                             text: qsTr("ТЦ")
+                             color: "#ffffff00"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
                          }
+                         Rectangle {
+                             color: "#20000000"
+                             anchors.left: parent.left
+                             anchors.right: parent.right
+                             border.color: "#ffffff00"
+                             height: 20
+                             Text {
+                                 anchors.horizontalCenter: parent.horizontalCenter
+                                 anchors.verticalCenter: parent.verticalCenter
+                                 text: qsTr(stateView.PressureTC)
+                                 color: "#ffffffff"
+                                 font.pixelSize: 14
+                                 font.family: "URW Gothic L"
+                             }
+                         }
                      }
-                 }
 
-                 // ТМ
-                Column {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        text: qsTr("ТМ")
-                        color: "#ffffff00"
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
-                    }
-                    Rectangle {
-                        color: "#20000000"
+                     // ТМ
+                    Column {
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        border.color: "#ffffff00"
-                        height: 20
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr(stateView.PressureTM)
-                            color: "#ffffffff"
+
+                            text: qsTr("ТМ")
+                            color: "#ffffff00"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
                         }
+                        Rectangle {
+                            color: "#20000000"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            border.color: "#ffffff00"
+                            height: 20
+                            Text {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: qsTr(stateView.PressureTM)
+                                color: "#ffffffff"
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                            }
+                        }
                     }
-                }
 
+                    // УР
+                    Column {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            text: qsTr("УР")
+                            color: "#ffffff00"
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                        }
+                        Rectangle {
+                            color: "#20000000"
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            border.color: "#ffffff00"
+                            height: 20
+                            Text {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: qsTr(stateView.PressureUR)
+                                color: "#ffffffff"
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                            }
+                        }
+                    }
+                   }
                 }
 
                 // Время

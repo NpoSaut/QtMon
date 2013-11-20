@@ -283,6 +283,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect (&cookies->designSpeed, SIGNAL(onChange(int)), systemState, SLOT(setDesignSpeed(int)));
 
+    // Ручной ввод начальной координаты
+    QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(ManualOrdinateIncreaseDirectionChanged(int)), &cookies->ordinateIncreaseDirection, SLOT(setVaule(int)));
+    QObject::connect (&cookies->startOrdinate, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinate(int)));
+    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
 
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
 //    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
@@ -302,6 +307,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->lengthInWagons.requestValue ();
     cookies->mass.requestValue ();
     cookies->designSpeed.requestValue ();
+    cookies->startOrdinate.requestValue ();
+    cookies->ordinateIncreaseDirection.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

@@ -76,6 +76,11 @@
     <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
     <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
 
+    <!-- Ручной ввод ординаты -->
+    <Property type="bool" name="ManualOrdinateEnable" def="false" description="Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути." />
+    <Property type="int"  name="ManualOrdinate" def="1100" description="Начальная ордината в ручном режиме" />
+    <Property type="int" name="ManualOrdinateIncreaseDirection" def="1" description="Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад." />
+
     <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
     <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
 

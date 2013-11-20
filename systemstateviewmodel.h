@@ -187,6 +187,18 @@ class SystemStateViewModel : public QDeclarativeItem
     int trainMassValue;
     Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
 
+    // Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути.
+    bool manualOrdinateEnableValue;
+    Q_PROPERTY(bool ManualOrdinateEnable READ getManualOrdinateEnable WRITE setManualOrdinateEnable NOTIFY ManualOrdinateEnableChanged)
+
+    // Начальная ордината в ручном режиме
+    int manualOrdinateValue;
+    Q_PROPERTY(int ManualOrdinate READ getManualOrdinate WRITE setManualOrdinate NOTIFY ManualOrdinateChanged)
+
+    // Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад.
+    int manualOrdinateIncreaseDirectionValue;
+    Q_PROPERTY(int ManualOrdinateIncreaseDirection READ getManualOrdinateIncreaseDirection WRITE setManualOrdinateIncreaseDirection NOTIFY ManualOrdinateIncreaseDirectionChanged)
+
     // Скорость на белый при ЗАБ
     int autolockSpeedValue;
     Q_PROPERTY(int AutolockSpeed READ getAutolockSpeed WRITE setAutolockSpeed NOTIFY AutolockSpeedChanged)
@@ -242,6 +254,9 @@ public:
     const int getWagonCount() const;
     const int getAxlesCount() const;
     const int getTrainMass() const;
+    const bool getManualOrdinateEnable() const;
+    const int getManualOrdinate() const;
+    const int getManualOrdinateIncreaseDirection() const;
     const int getAutolockSpeed() const;
     // public properties getters end
 
@@ -305,6 +320,9 @@ signals:
     void WagonCountChanged(const int value);
     void AxlesCountChanged(const int value);
     void TrainMassChanged(const int value);
+    void ManualOrdinateEnableChanged(const bool value);
+    void ManualOrdinateChanged(const int value);
+    void ManualOrdinateIncreaseDirectionChanged(const int value);
     void AutolockSpeedChanged(const int value);
     // properties signals end
 
@@ -355,6 +373,9 @@ public slots:
     void setWagonCount(const int);
     void setAxlesCount(const int);
     void setTrainMass(const int);
+    void setManualOrdinateEnable(const bool);
+    void setManualOrdinate(const int);
+    void setManualOrdinateIncreaseDirection(const int);
     void setAutolockSpeed(const int);
     // public properties setters end
     

@@ -247,13 +247,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Скорость и ограничения
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeed(double)));
-    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
+//    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
+    systemState->setSpeedIsValid (true);
     QObject::connect(iodriver, SIGNAL(signal_speed_limit(int)), systemState, SLOT(setSpeedRestriction(int)));
     QObject::connect(iodriver, SIGNAL(signal_target_speed(int)), systemState, SLOT(setTargetSpeed(int)));
     QObject::connect(iodriver, SIGNAL(signal_acceleration(double)), systemState, SLOT(setAcceleration(double)));
     //Состояние системы
-    QObject::connect(iodriver, SIGNAL(signal_epv_key(bool)), systemState, SLOT(setIsEpvReady(bool)));
-    QObject::connect(iodriver, SIGNAL(signal_epv_released(bool)), systemState, SLOT(setIsEpvReleased(bool)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
 
     // Уведомления

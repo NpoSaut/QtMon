@@ -349,7 +349,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(beep()));
-//    QObject::connect (systemState, SIGNAL())
+    QObject::connect (systemState, SIGNAL(TsvcIsVigilanceRequiredChanged(bool)), levithan, SLOT(beepNotification()));
+    QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(beepNotification()));
+    QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(beepNotification()));
 
     QtConcurrent::run(getParamsFromConsole);
 

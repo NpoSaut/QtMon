@@ -1791,8 +1791,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Alt")
-                        font.pointSize: 20
+                        font.pixelSize: 20
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
             }

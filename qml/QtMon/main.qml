@@ -1681,8 +1681,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Отмена\nКрасного")
-                        font.pointSize: 16
+                        font.pixelSize: 16
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
                 MouseArea {
@@ -1727,8 +1728,9 @@ Rectangle {
                             anchors.topMargin: 10
                             color: "#ffffff"
                             text: qsTr("Карта")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                         Text {
                             anchors.right: parent.right
@@ -1737,8 +1739,9 @@ Rectangle {
                             anchors.bottomMargin: 10
                             color: "#ffffff"
                             text: qsTr("   Панель\n приборов")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
 
                     }
@@ -1753,8 +1756,9 @@ Rectangle {
                         Text {
                             color: "#ffffff"
                             text: qsTr("Ввод\nпараметров")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                     }
                     MouseArea {

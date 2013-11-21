@@ -1574,7 +1574,7 @@ Rectangle {
                     Rectangle {
                         id: driveModeIndicator
                         anchors.horizontalCenter: drivemodeField.horizontalCenter
-                        anchors.horizontalCenterOffset: -4
+                        anchors.horizontalCenterOffset: -8
                         anchors.verticalCenter: drivemodeField.verticalCenter
                         anchors.verticalCenterOffset: 0
                         width: 20
@@ -1583,7 +1583,7 @@ Rectangle {
 
                         Text {
                             property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "П";
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.topMargin: 0
                             color: isActive ? "#ff00ff00" :"#ffdddddd"
@@ -1594,7 +1594,7 @@ Rectangle {
                         }
                         Text {
                             property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "М";
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.topMargin: 18
                             color: isActive ? "#ff00ff00" :"#ffdddddd"
@@ -1605,18 +1605,18 @@ Rectangle {
                         }
                         Text {
                             property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Д";
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.topMargin: 64
                             color: isActive ? "#ff00ff00" :"#ffdddddd"
-                            text: qsTr("Д")
+                            text: qsTr("РДТ")
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
                             font.bold: true
                         }
                         Text {
                             property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Г";
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.topMargin: 88
                             color: isActive ? "#ff00ff00" :"#ffdddddd"

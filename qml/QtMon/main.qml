@@ -1509,7 +1509,7 @@ Rectangle {
                         radius: 2
                         border.color: "#ccc"
                         color: isConfirmed ? "#ccc" : "#00000000"
-                        opacity: isConfirmed || isSelected ? 1 : 0
+                        opacity: isConfirmed ? 1 : 0
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: 1
@@ -1534,7 +1534,7 @@ Rectangle {
                         radius: 2
                         border.color: "#ccc"
                         color: isConfirmed ? "#ccc" : "#00000000"
-                        opacity: isConfirmed || isSelected ? 1 : 0
+                        opacity: isConfirmed ? 1 : 0
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.verticalCenterOffset: 1

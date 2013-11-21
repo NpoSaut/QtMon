@@ -155,7 +155,7 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
-                input = fillInputArray(input, _offset, 6, stateView.ManualOrdinate/100); _offset += 6;
+                input = fillInputArray(input, _offset, 6, stateView.Ordinate/100); _offset += 6;
                 input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
                 inputPositions = input;

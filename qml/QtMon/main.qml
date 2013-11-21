@@ -416,7 +416,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
 
-                           text: qsTr("ОРДИНАТА")
+                           text: qsTr("КООРДИНАТА")
                            color: "#ffffff00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
@@ -2455,7 +2455,7 @@ Rectangle {
                     font.pixelSize: 18
                     font.bold: true
                     color: "#ffe0e0e0"
-                    text: qsTr("Ордината")
+                    text: qsTr("Координата")
                 }
 
                 // ввод ординаты (км)

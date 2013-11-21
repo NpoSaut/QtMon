@@ -167,11 +167,6 @@ Rectangle {
                         driveModePreTarget = 0
                 }
             }
-//            // Alt: Отмена Красного
-//            else if (altMode && event.key == Qt.Key_F2) {
-//                stateView.ConfirmButtonPressed();
-//                stateView.DisableRedButtonPressed();
-//            }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
                 stateView.ButtonPressed();
@@ -195,9 +190,10 @@ Rectangle {
                 inputPositions = input;
                 inputCursorIndex = 1;
             }
-            // Alt: Страница дорожного режима
+            // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F3) {
-                switchPage();
+                stateView.ConfirmButtonPressed();
+                stateView.DisableRedButtonPressed();
             }
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
@@ -1762,26 +1758,6 @@ Rectangle {
 //                        Behavior on anchors.rightMargin { PropertyAnimation { duration: 170 } }
 //                    }
                 }
-
-                // Отмена Красного
-//                Column {
-//                    id: page1buttonAltHeader
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 10
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    visible: altMode
-
-//                    Text {
-//                        color: "#ffffff"
-//                        text: qsTr("Отмена\nКрасного")
-//                        font.pointSize: 16
-//                        font.family: "URW Gothic L"
-//                    }
-//                }
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onPressed: switchPage(1)
-//                }
             }
             Rectangle {
                 id: rightButton3Container
@@ -1790,54 +1766,70 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.left: parent.left
 
-                    // Переключатель страниц
-                    Rectangle {
-                        id: page2buttonHeader
-                        anchors.fill: parent
-                        anchors.rightMargin: leftBorder.width
-                        visible: altMode
-                        clip: true
-                        color: "#00000000"
-
-                        Image {
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.right
-                            source: "Slices/Panel-Left-PageSwitcher-FlipFlop.png"
-                            smooth: true
-
-                            rotation: { switch (pageNum)
-                                          {
-                                            case 0: return 0
-                                            case 1: return -90
-                                          }}
-                            Behavior on rotation { SmoothedAnimation { duration: 1000 } }
-                        }
-
-                        Text {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 15
-                            anchors.top: parent.top
-                            anchors.topMargin: 10
-                            color: "#ffffff"
-                            text: qsTr("Карта")
-                            font.pointSize: 16
-                            font.family: "URW Gothic L"
-                        }
-                        Text {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 15
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 10
-                            color: "#ffffff"
-                            text: qsTr("   Панель\n приборов")
-                            font.pointSize: 16
-                            font.family: "URW Gothic L"
-                        }
-
-                    }
-
+                    // Отмена Красного
                     Column {
                         id: page2buttonAltHeader
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: altMode
+
+                        Text {
+                            color: "#ffffff"
+                            text: qsTr("Отмена\nКрасного")
+                            font.pointSize: 16
+                            font.family: "URW Gothic L"
+                        }
+                    }
+
+//                    // Переключатель страниц
+//                    Rectangle {
+//                        id: page2buttonHeader
+//                        anchors.fill: parent
+//                        anchors.rightMargin: leftBorder.width
+//                        visible: altMode
+//                        clip: true
+//                        color: "#00000000"
+
+//                        Image {
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            anchors.horizontalCenter: parent.right
+//                            source: "Slices/Panel-Left-PageSwitcher-FlipFlop.png"
+//                            smooth: true
+
+//                            rotation: { switch (pageNum)
+//                                          {
+//                                            case 0: return 0
+//                                            case 1: return -90
+//                                          }}
+//                            Behavior on rotation { SmoothedAnimation { duration: 1000 } }
+//                        }
+
+//                        Text {
+//                            anchors.right: parent.right
+//                            anchors.rightMargin: 15
+//                            anchors.top: parent.top
+//                            anchors.topMargin: 10
+//                            color: "#ffffff"
+//                            text: qsTr("Карта")
+//                            font.pointSize: 16
+//                            font.family: "URW Gothic L"
+//                        }
+//                        Text {
+//                            anchors.right: parent.right
+//                            anchors.rightMargin: 15
+//                            anchors.bottom: parent.bottom
+//                            anchors.bottomMargin: 10
+//                            color: "#ffffff"
+//                            text: qsTr("   Панель\n приборов")
+//                            font.pointSize: 16
+//                            font.family: "URW Gothic L"
+//                        }
+
+//                    }
+
+                    Column {
+                        id: page2buttonHeader
                         anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter

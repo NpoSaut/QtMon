@@ -22,6 +22,28 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient5324">
+      <stop
+         id="stop5326"
+         offset="0"
+         style="stop-color:#888888;stop-opacity:1;" />
+      <stop
+         id="stop5328"
+         offset="1"
+         style="stop-color:#888888;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5310">
+      <stop
+         style="stop-color:#949494;stop-opacity:1;"
+         offset="0"
+         id="stop5312" />
+      <stop
+         id="stop5318"
+         offset="1"
+         style="stop-color:#949494;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient5240">
       <stop
          id="stop5242"
@@ -4752,6 +4774,25 @@
        id="linearGradient4453"
        xlink:href="#linearGradient5033-7"
        inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5310"
+       id="linearGradient5316"
+       x1="51.25"
+       y1="96.125"
+       x2="49.327682"
+       y2="162.44965"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5324"
+       id="linearGradient5330"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-799.72751,0)"
+       x1="729.77197"
+       y1="122"
+       x2="729.77197"
+       y2="175.00943" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -4761,10 +4802,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="128.04801"
-     inkscape:cy="296.68894"
+     inkscape:cx="329.58217"
+     inkscape:cy="242.0491"
      inkscape:document-units="px"
-     inkscape:current-layer="layer12"
+     inkscape:current-layer="g5336"
      showgrid="false"
      borderlayer="false"
      inkscape:snap-grids="true"
@@ -6885,6 +6926,14 @@
        id="path3936"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <rect
+       transform="scale(-1,1)"
+       y="120"
+       x="-147.95557"
+       height="120"
+       width="149"
+       id="rect5320"
+       style="fill:url(#linearGradient5330);fill-opacity:1;display:inline" />
     <path
        style="fill:#4999c9;fill-opacity:1;stroke:none;display:inline"
        d="m 148.72754,0 0,480 -6.625,0 0,-480 z"
@@ -6920,13 +6969,13 @@
       <path
          id="path5255"
          style="fill:none;stroke:url(#linearGradient5272);stroke-width:0.9999997;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1"
-         d="m 61.849909,182.10097 3.499894,0 c 4.499189,0 8.121281,3.62209 8.121281,8.12128 l 0,10.62748 c 0,4.49919 -3.622092,8.12128 -8.121281,8.12128 l -3.499894,0 0.01981,0.0483 c -3.244169,0.22373 -5.761491,2.92064 -5.742121,5.90285 l 0.01937,5.37293 c 0.01622,4.49916 3.622091,8.12128 8.121281,8.12128 l 19.819873,0 c 4.49919,0 8.121281,-3.62209 8.121281,-8.12128 l 0,-86.8204 c 0,-4.49919 -3.622091,-8.12129 -8.121281,-8.12129 l -19.819873,0 c -4.49919,0 -8.11923,3.6221 -8.121281,8.12129 l -0.01937,42.48711 c -0.01937,3.20378 2.497952,5.90069 5.742121,6.12442"
+         d="m 61.849909,165.10097 3.499894,0 c 4.499189,0 8.121281,3.62209 8.121281,8.12128 l 0,10.62748 c 0,4.49919 -3.622092,8.12128 -8.121281,8.12128 l -3.499894,0 0.01981,0.0483 c -3.244169,0.22373 -5.761491,2.92064 -5.742121,5.90285 l 0.01937,22.37293 c 0.0039,4.49919 3.622091,8.12128 8.121281,8.12128 l 19.819873,0 c 4.49919,0 8.121281,-3.62209 8.121281,-8.12128 l 0,-86.8204 c 0,-4.49919 -3.622091,-8.12129 -8.121281,-8.12129 l -19.819873,0 c -4.49919,0 -8.117862,3.6221 -8.121281,8.12129 l -0.01937,25.48711 c -0.01937,3.20378 2.497952,5.90069 5.742121,6.12442"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="csssscccsssssssscc" />
       <path
          sodipodi:nodetypes="csssscccsssssssscc"
          inkscape:connector-curvature="0"
-         d="m 69.565191,217.69705 -3.499894,0 c -4.499189,0 -8.121281,-3.62209 -8.121281,-8.12128 l 0,-10.62748 c 0,-4.49919 3.622092,-8.12128 8.121281,-8.12128 l 3.499894,0 -0.01981,-0.0483 c 3.244169,-0.22373 5.761491,-2.92064 5.742121,-5.90285 l -0.01937,-5.37293 c -0.01622,-4.49916 -3.622091,-8.12128 -8.121281,-8.12128 l -19.819873,0 c -4.49919,0 -8.121281,3.62209 -8.121281,8.12128 l 0,86.5704 c 0,4.49919 3.622091,8.12129 8.121281,8.12129 l 19.819873,0 c 4.49919,0 8.119218,-3.6221 8.121281,-8.12129 l 0.01937,-42.23711 c 0.01937,-3.20378 -2.497952,-5.90069 -5.742121,-6.12442"
+         d="m 69.565191,234.69705 -3.499894,0 c -4.499189,0 -8.121281,-3.62209 -8.121281,-8.12128 l 0,-10.62748 c 0,-4.49919 3.622092,-8.12128 8.121281,-8.12128 l 3.499894,0 -0.01981,-0.0483 c 3.244169,-0.22373 5.761491,-2.92064 5.742121,-5.90285 l -0.01937,-22.37293 c -0.0039,-4.49919 -3.622091,-8.12128 -8.121281,-8.12128 l -19.819873,0 c -4.49919,0 -8.121281,3.62209 -8.121281,8.12128 l 0,86.5704 c 0,4.49919 3.622091,8.12129 8.121281,8.12129 l 19.819873,0 c 4.49919,0 8.117828,-3.6221 8.121281,-8.12129 l 0.01937,-25.23711 c 0.01937,-3.20378 -2.497952,-5.90069 -5.742121,-6.12442"
          style="fill:url(#linearGradient4453);fill-opacity:1;stroke:#2a2a2a;stroke-width:0.9999997;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1"
          transform="matrix(-1,0,0,-1,130.6651,399.29802)"
          id="path5225" />
@@ -6947,62 +6996,66 @@
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#dddddd;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
        x="55.469315"
-       y="159.04001"
+       y="160.29001"
        id="text5333"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5335"
          x="55.469315"
-         y="159.04001"
+         y="160.29001"
          style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#dddddd;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">М</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5341"
-       y="223.04001"
+       y="224.79001"
        x="57.977325"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#dddddd;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
        xml:space="preserve"><tspan
          style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#dddddd;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-         y="223.04001"
+         y="224.79001"
          x="57.977325"
          id="tspan5343"
-         sodipodi:role="line">Т</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text5353"
-       y="201.47165"
-       x="21.098869"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-       xml:space="preserve"><tspan
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#808080;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
+         sodipodi:role="line">Г</tspan></text>
+    <g
+       id="g5336"
+       transform="translate(0.5,-15.5)">
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
+         x="22.098869"
          y="201.47165"
-         x="21.098869"
-         id="tspan5355"
-         sodipodi:role="line">Режим</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#1a1a1a;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-       x="20.745323"
-       y="201.1181"
-       id="text5345"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5347"
-         x="20.745323"
+         id="text5353"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan5355"
+           x="22.098869"
+           y="201.47165"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#808080;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">Режим</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text5345"
          y="201.1181"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold">Режим</tspan></text>
+         x="20.745323"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#1a1a1a;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#1a1a1a;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
+           y="201.1181"
+           x="20.745323"
+           id="tspan5347"
+           sodipodi:role="line">Режим</tspan></text>
+    </g>
     <text
        sodipodi:linespacing="125%"
        id="text5349"
-       y="176.04001"
-       x="55.469315"
+       y="208.29001"
+       x="55.719315"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#dddddd;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
        xml:space="preserve"><tspan
          style="font-size:14px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;fill:#dddddd;fill-opacity:1;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
-         y="176.04001"
-         x="55.469315"
+         y="208.29001"
+         x="55.719315"
          id="tspan5351"
-         sodipodi:role="line">Р</tspan></text>
+         sodipodi:role="line">Д</tspan></text>
     <path
        sodipodi:type="arc"
        style="fill:url(#linearGradient5373);fill-opacity:1;stroke:none;display:inline"

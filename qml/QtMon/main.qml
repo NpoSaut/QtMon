@@ -57,6 +57,21 @@ Rectangle {
             case 2: return "Р";
             case 3: return "Д";
             case 4: return "Т";
+            case 5: return "Г";
+        }
+    }
+
+    function getDriveModeIndex(driveModeLetter)
+    {
+        switch (driveModeIndex)
+        {
+            case "": return -1;
+            case "П": return 0;
+            case "М": return 1;
+            case "Р": return 2;
+            case "Д": return 3;
+            case "Т": return 4;
+            case "Г": return 5;
         }
     }
 
@@ -129,15 +144,34 @@ Rectangle {
                 autolockTypePreTarget = (autolockTypePreTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
-            else if (!altMode && event.key == Qt.Key_F2) {
+            else if (event.key == Qt.Key_F2) {
                 stateView.ButtonPressed();
-                stateView.ChangeDrivemodeButtonPressed();
+                if ( altMode )
+                {
+                    if (driveModePreTarget == 0)
+                        driveModePreTarget = 1
+                    else if (driveModePreTarget == 1)
+                        driveModePreTarget = 3
+                    else if (driveModePreTarget == 3)
+                        driveModePreTarget = 5
+                    else
+                        driveModePreTarget = 0
+                }
+                else
+                {
+                    if (driveModePreTarget == 0)
+                        driveModePreTarget = 1
+                    else if (driveModePreTarget == 1)
+                        driveModePreTarget = 0
+                    else if (driveModePreTarget == -1)
+                        driveModePreTarget = 0
+                }
             }
-            // Alt: Отмена Красного
-            else if (altMode && event.key == Qt.Key_F2) {
-                stateView.ConfirmButtonPressed();
-                stateView.DisableRedButtonPressed();
-            }
+//            // Alt: Отмена Красного
+//            else if (altMode && event.key == Qt.Key_F2) {
+//                stateView.ConfirmButtonPressed();
+//                stateView.DisableRedButtonPressed();
+//            }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
                 stateView.ButtonPressed();
@@ -360,6 +394,7 @@ Rectangle {
     property variant inputSpeedPositinosLength: [4, 10, 10]
 
     property int autolockTypePreTarget: stateView.AutolockTypeTarget
+    property int driveModePreTarget: stateView.DriveModeTarget
 
     Timer {
         id: inputBlinker
@@ -1527,169 +1562,226 @@ Rectangle {
                 Rectangle {
                     id: page1buttonHeader
                     anchors.fill: parent
-                    visible: !altMode
                     color: "#00000000"
 
-                    // Фон области индикаторов режима
+                    // Поле переключателя
                     Image {
-                        anchors.left: parent.left
+                        id: drivemodeField
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.horizontalCenterOffset: -8
                         anchors.verticalCenter: parent.verticalCenter
-                        source: "Slices/drivemode-bck.png"
+                        anchors.verticalCenterOffset: 0
+                        source: "Slices/Drivemode-Field.png"
                     }
 
-                    // Индикаторы режима движения
-                    Column {
-                        id: drivemodeSwitch
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.leftMargin: 4
-                        spacing: 4
-
-                        Repeater {
-                            model: [ "П", "М", "Р" ]
-                            Row {
-                                property bool isTransport: modelData == "Т";
-                                property bool isSelected: getDriveModeLetter(stateView.DriveModeTarget) == modelData;
-                                property bool isConfirmed: getDriveModeLetter(stateView.DriveModeFact) == modelData;
-                                //height: 16
-                                spacing: 12
-                                Image {
-                                    visible: modelData != " "
-                                    source: "Slices/drivemode-led" +
-                                            (parent.isConfirmed ? "-confirmed" : "") +
-                                            ((parent.isTransport && stateView.IronWheels) ? "-disabled" : "") +
-                                            ".png"
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Text {
-                                    id: drivemodeSwitchItemLabel
-                                    visible: modelData != " "
-                                    color: !parent.isTransport ? "#ccc" : "#ffffff00"
-                                    text: modelData
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                // Заглушка - сепаратор
-                                Rectangle {
-                                    visible: modelData == " "
-                                    height: 3
-                                    width: 10
-                                    color: "#00000000"
-                                }
-
-                                onIsSelectedChanged: {
-                                    if (isSelected)
-                                        drivemodeSwitchSelector.y = drivemodeSwitch.y + y + height/2
-                                }
-                            }
-                        }
-                    }
-
-                    // Индикаторы режима
+                    // Индикаторы активного режима движения
                     Rectangle {
-                        anchors.verticalCenter: drivemodeSwitch.verticalCenter
-                        anchors.left: drivemodeSwitch.right
-                        anchors.leftMargin: 6
+                        id: driveModeIndicator
+                        anchors.horizontalCenter: drivemodeField.horizontalCenter
+                        anchors.horizontalCenterOffset: -4
+                        anchors.verticalCenter: drivemodeField.verticalCenter
+                        anchors.verticalCenterOffset: 0
+                        width: 20
+                        height: drivemodeField.height
+                        color: "#00000000"
 
-                        width: 2
-                        height: 50
-                        color: "#ccc"
-                    }
-
-                    // Подпись кнопки РМП
-                    Column {
-                        anchors.top: parent.top
-                        anchors.topMargin: 40
-                        anchors.right: parent.right
-                        anchors.rightMargin: 16
-                        spacing: -4
                         Text {
-                            anchors.right: parent.right
-                            color: "#ccc"
-                            text: "Режим"
-                            font.pixelSize: 20
+                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "П";
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.topMargin: 0
+                            color: isActive ? "#ff00ff00" :"#ffdddddd"
+                            text: qsTr("П")
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
                             font.bold: true
                         }
                         Text {
-                            anchors.right: parent.right
-                            color: "#ccc"
-                            text: "движения"
-                            font.pixelSize: 14
-                        }
-                    }
-
-                    // Стрелка выбора режима РМП
-                    Rectangle {
-                        id: drivemodeSwitchSelector
-                        anchors.right: drivemodeSwitch.right
-                        property bool isActive: stateView.DriveModeTarget != -1 && stateView.DriveModeFact != stateView.DriveModeTarget
-                        opacity: isActive ? 1 : 0
-                        anchors.rightMargin: isActive ? -3 : -8
-                        // Изображение стрелки
-                        Image {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 6
-                            anchors.verticalCenter: parent.verticalCenter
-                            source: "Slices/drivemode-selector.png"
-                        }
-                        // Этикетка с просьбой остановиться
-                        Rectangle {
-                            property bool askToStop: parent.isActive && stateView.Speed > 0
+                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "М";
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: parent.top
-                            anchors.left: parent.left
-                            width: 80
-                            height: drivemodeStopToSwitchLabel.paintedHeight + drivemodeStopToSwitchLabel.anchors.margins * 2
-                            color: "#f0333333"
-                            opacity: askToStop ? 1 : 0
-                            anchors.topMargin: askToStop ? 0 : 8
-                            Behavior on opacity { PropertyAnimation { duration: 170 } }
-                            Behavior on anchors.topMargin { PropertyAnimation { duration: 170 } }
-                            // Текст просьбы об остановке
-                            Text {
-                                id: drivemodeStopToSwitchLabel
-                                anchors.top: parent.top
-                                anchors.left: parent.left
-                                anchors.bottom: parent.bottom
-                                anchors.right: parent.right
-                                anchors.margins: 5
-                                wrapMode: Text.WordWrap
-                                color: "#ccc"
-                                text: "Остановитесь для смены режима"
-                                styleColor: "#fff"
-                            }
-                            // Красная полосочка слева
-                            Rectangle {
-                                anchors.left: parent.left;
-                                anchors.top: parent.top; anchors.bottom: parent.bottom
-                                color: "#f41"
-                                width: 2
-                            }
+                            anchors.topMargin: 18
+                            color: isActive ? "#ff00ff00" :"#ffdddddd"
+                            text: qsTr("М")
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
+                        Text {
+                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Д";
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.topMargin: 64
+                            color: isActive ? "#ff00ff00" :"#ffdddddd"
+                            text: qsTr("Д")
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
+                        Text {
+                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Г";
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.topMargin: 88
+                            color: isActive ? "#ff00ff00" :"#ffdddddd"
+                            text: qsTr("Г")
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                        }
+                    }
+
+                    // Ручка выбора режима
+                    Rectangle {
+                        id: drivemodeHandle
+                        property int xpos: altMode ? 24 : 8
+                        property int ypos: 2
+                        anchors.horizontalCenter: drivemodeField.horizontalCenter
+                        anchors.horizontalCenterOffset: xpos
+                        anchors.top: drivemodeField.top
+                        anchors.topMargin: ypos
+
+                        Image {
+                            anchors.centerIn: parent.Center
+                            source: "Slices/Drivemode-Handle.png"
                         }
 
-                        Behavior on y { PropertyAnimation { duration: 100 } }
-                        Behavior on opacity { PropertyAnimation { duration: 170 } }
-                        Behavior on anchors.rightMargin { PropertyAnimation { duration: 170 } }
+                        states: [
+                            State {
+                                name: "Pmode"
+                                when: (driveModePreTarget === 0)
+                                PropertyChanges { target: drivemodeHandle; ypos: 2 }
+                            },
+                            State {
+                                name: "Mmode"
+                                when: (driveModePreTarget === 1)
+                                PropertyChanges { target: drivemodeHandle; ypos: 21 }
+                            },
+                            State {
+                                name: "Dmode"
+                                when: (driveModePreTarget === 3)
+                                PropertyChanges { target: drivemodeHandle; ypos: 66 }
+                            },
+                            State {
+                                name: "Gmode"
+                                when: (driveModePreTarget === 5)
+                                PropertyChanges { target: drivemodeHandle; ypos: 91 }
+                            }
+                        ]
+
+                        Behavior on anchors.horizontalCenterOffset { PropertyAnimation { duration: 100 } }
+                        Behavior on anchors.topMargin { PropertyAnimation { duration: 100 } }
+
                     }
+
+
+
+//                    // Индикаторы режима
+//                    Rectangle {
+//                        anchors.verticalCenter: drivemodeSwitch.verticalCenter
+//                        anchors.left: drivemodeSwitch.right
+//                        anchors.leftMargin: 6
+
+//                        width: 2
+//                        height: 50
+//                        color: "#ccc"
+//                    }
+
+//                    // Подпись кнопки РМП
+//                    Column {
+//                        anchors.top: parent.top
+//                        anchors.topMargin: 40
+//                        anchors.right: parent.right
+//                        anchors.rightMargin: 16
+//                        spacing: -4
+//                        Text {
+//                            anchors.right: parent.right
+//                            color: "#ccc"
+//                            text: "Режим"
+//                            font.pixelSize: 20
+//                            font.bold: true
+//                        }
+//                        Text {
+//                            anchors.right: parent.right
+//                            color: "#ccc"
+//                            text: "движения"
+//                            font.pixelSize: 14
+//                        }
+//                    }
+
+//                    // Стрелка выбора режима РМП
+//                    Rectangle {
+//                        id: drivemodeSwitchSelector
+//                        anchors.right: drivemodeSwitch.right
+//                        property bool isActive: stateView.DriveModeTarget != -1 && stateView.DriveModeFact != stateView.DriveModeTarget
+//                        opacity: isActive ? 1 : 0
+//                        anchors.rightMargin: isActive ? -3 : -8
+//                        // Изображение стрелки
+//                        Image {
+//                            anchors.right: parent.right
+//                            anchors.rightMargin: 6
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            source: "Slices/drivemode-selector.png"
+//                        }
+//                        // Этикетка с просьбой остановиться
+//                        Rectangle {
+//                            property bool askToStop: parent.isActive && stateView.Speed > 0
+//                            anchors.top: parent.top
+//                            anchors.left: parent.left
+//                            width: 80
+//                            height: drivemodeStopToSwitchLabel.paintedHeight + drivemodeStopToSwitchLabel.anchors.margins * 2
+//                            color: "#f0333333"
+//                            opacity: askToStop ? 1 : 0
+//                            anchors.topMargin: askToStop ? 0 : 8
+//                            Behavior on opacity { PropertyAnimation { duration: 170 } }
+//                            Behavior on anchors.topMargin { PropertyAnimation { duration: 170 } }
+//                            // Текст просьбы об остановке
+//                            Text {
+//                                id: drivemodeStopToSwitchLabel
+//                                anchors.top: parent.top
+//                                anchors.left: parent.left
+//                                anchors.bottom: parent.bottom
+//                                anchors.right: parent.right
+//                                anchors.margins: 5
+//                                wrapMode: Text.WordWrap
+//                                color: "#ccc"
+//                                text: "Остановитесь для смены режима"
+//                                styleColor: "#fff"
+//                            }
+//                            // Красная полосочка слева
+//                            Rectangle {
+//                                anchors.left: parent.left;
+//                                anchors.top: parent.top; anchors.bottom: parent.bottom
+//                                color: "#f41"
+//                                width: 2
+//                            }
+//                        }
+
+//                        Behavior on y { PropertyAnimation { duration: 100 } }
+//                        Behavior on opacity { PropertyAnimation { duration: 170 } }
+//                        Behavior on anchors.rightMargin { PropertyAnimation { duration: 170 } }
+//                    }
                 }
 
-                Column {
-                    id: page1buttonAltHeader
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                    visible: altMode
+                // Отмена Красного
+//                Column {
+//                    id: page1buttonAltHeader
+//                    anchors.left: parent.left
+//                    anchors.leftMargin: 10
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    visible: altMode
 
-                    Text {
-                        color: "#ffffff"
-                        text: qsTr("Отмена\nКрасного")
-                        font.pointSize: 16
-                        font.family: "URW Gothic L"
-                    }
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: switchPage(1)
-                }
+//                    Text {
+//                        color: "#ffffff"
+//                        text: qsTr("Отмена\nКрасного")
+//                        font.pointSize: 16
+//                        font.family: "URW Gothic L"
+//                    }
+//                }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    onPressed: switchPage(1)
+//                }
             }
             Rectangle {
                 id: rightButton3Container

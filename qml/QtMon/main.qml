@@ -197,6 +197,7 @@ Rectangle {
             else if (altMode && event.key == Qt.Key_F3) {
                 stateView.ConfirmButtonPressed();
                 stateView.DisableRedButtonPressed();
+                disableRedButtonPressed = true
             }
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
@@ -370,6 +371,7 @@ Rectangle {
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
+            disableRedButtonPressed = false
         }
 
     }
@@ -428,6 +430,8 @@ Rectangle {
 
     property int autolockTypePreTarget: stateView.AutolockTypeTarget
     property int driveModePreTarget: stateView.DriveModeTarget
+
+    property bool disableRedButtonPressed: false
 
     Timer {
         id: inputBlinker
@@ -1828,7 +1832,7 @@ Rectangle {
                         visible: altMode
 
                         Text {
-                            color: "#ffffff"
+                            color: disableRedButtonPressed ? "#ccc" :  "#ffffff"
                             text: qsTr("Отмена\nКрасного")
                             font.pixelSize: 16
                             font.family: "URW Gothic L"
@@ -1918,19 +1922,17 @@ Rectangle {
                     visible: altMode
                 }
 
-                Column {
-                    id: page4buttonAltHeader
-                    anchors.right: parent.right
-                    anchors.rightMargin: 20
-                    anchors.verticalCenter: parent.verticalCenter
 
-                    Text {
-                        color: "#ffffff"
-                        text: qsTr("Alt")
-                        font.pixelSize: 20
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: 15
+                    font.pixelSize: 20
+                    text: qsTr("Alt")
+                    font.family: "URW Gothic L"
+                    font.bold: true
+                    color: "#ffffff"
                 }
             }
 

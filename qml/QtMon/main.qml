@@ -353,9 +353,8 @@ Rectangle {
             {
                 if ( driveModePreTarget === 3 ) // Двойная тяга. РДТ.
                 {
-                    dialogMode = !(stateView.DriveModeFact === stateView.DriveModeTarget)
-                    waitRdtConfirmationMode = !(stateView.DriveModeFact === stateView.DriveModeTarget)
-
+                    dialogMode = true
+                    waitRdtConfirmationMode = true
                 }
 
                 stateView.DriveModeTarget = driveModePreTarget
@@ -375,7 +374,6 @@ Rectangle {
 
     }
 
-
     SystemStateView {
         id: stateView
         objectName: "stateView"
@@ -383,6 +381,12 @@ Rectangle {
         onDriveModeFactChanged: {
             if (stateView.DriveModeFact == stateView.DriveModeTarget)
                 pageNum = getDriveModeLetter(stateView.DriveModeFact) == "Т" ? 1 : 0
+
+            if ( waitRdtConfirmationMode && stateView.DriveModeFact == stateView.DriveModeTarget )
+            {
+                waitRdtConfirmationMode = false
+                dialogMode = false
+            }
         }
     }
 
@@ -2203,6 +2207,7 @@ Rectangle {
         anchors.bottom: rootRect.bottom
         anchors.left: parent.left
         anchors.leftMargin: waitRdtConfirmationMode ? 0 : -width
+        Behavior on anchors.leftMargin { SmoothedAnimation { duration: 200 } }
         height: rightButton4Container.height
         width: 77
         color: "#00000000"
@@ -2223,6 +2228,7 @@ Rectangle {
         }
     }
 
+    // Панель ввода МПХ
     Column {
         id: inputMphModeParentField
         anchors.top: parent.top
@@ -2777,6 +2783,38 @@ Rectangle {
             }
         }
 
+    }
+
+    // Панель ожидания нажатия РБ
+    Rectangle {
+        id: waiRbParentField
+        anchors.top: parent.top
+        anchors.topMargin: waitRdtConfirmationMode ? 0 : -height
+        anchors.horizontalCenter: parent.horizontalCenter
+        //color: "#00000000"
+        width: 420
+        height: 98
+
+        Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
+
+        Image {
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "Slices/InputMode-Field.png"
+            fillMode: Image.Tile
+            height: parent.height
+        }
+
+        // Ввод номера машиниста
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "URW Gothic L"
+            font.pixelSize: 18
+            font.bold: true
+            color: "#ffe0e0e0"
+            text: qsTr("Нажмите РБ для подтверждения")
+        }
     }
 
 }

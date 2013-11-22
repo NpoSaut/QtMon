@@ -34,6 +34,9 @@ public slots:
     // Нажатие на кнопку выбора режима
     void drivemodeChangeButtonPressed ();
 
+    // Или напрямую целевой режим
+    void proccessNewTargetDrivemode (int dm);
+
 private slots:
     void processIronWheelsChange (bool ironWheels);
     void processActualDrivemodeChage (DriveMode dm);

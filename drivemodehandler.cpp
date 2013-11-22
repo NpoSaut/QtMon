@@ -9,6 +9,11 @@ DrivemodeHandler::DrivemodeHandler(Parser *parser, Can *can, QObject *parent) :
     QObject::connect (&parser->mcoLimits, SIGNAL(driveModeChanged(DriveMode)), this, SLOT(processActualDrivemodeChage(DriveMode)));
 }
 
+void DrivemodeHandler::proccessNewTargetDrivemode(int dm)
+{
+    setTarget (DriveMode (dm));
+}
+
 void DrivemodeHandler::processIronWheelsChange(bool ironWheels)
 {
     if (ironWheels)
@@ -65,6 +70,7 @@ void DrivemodeHandler::drivemodeChangeButtonPressed()
             break;
         case WORKING:
         case DOUBLE_TRACTION:
+        case HILL:
             setTarget (TRAIN);
             break;
         case ROAD:
@@ -72,3 +78,4 @@ void DrivemodeHandler::drivemodeChangeButtonPressed()
             break;
     }
 }
+

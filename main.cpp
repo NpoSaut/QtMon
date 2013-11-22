@@ -234,7 +234,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
     drivemodeHandler = new DrivemodeHandler(blokMessages, can);
-    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
+//    QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
+    QObject::connect (systemState, SIGNAL(driveModeTargetChanged(int)), drivemodeHandler, SLOT(proccessNewTargetDrivemode(int)));
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
 

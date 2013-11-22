@@ -1618,49 +1618,65 @@ Rectangle {
                         height: drivemodeField.height
                         color: "#00000000"
 
-                        Text {
-                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "П";
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.topMargin: 0
-                            color: isActive ? "#ff00ff00" :"#ffdddddd"
-                            text: qsTr("П")
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            font.bold: true
+                        Repeater {
+                            model: [1, 0]
+                            Text {
+                                property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "П";
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.topMargin: modelData == 0 ? 0 : 1
+                                anchors.rightMargin: modelData == 0 ? 1 : 0
+                                color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
+                                text: qsTr("П")
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                font.bold: true
+                            }
                         }
-                        Text {
-                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "М";
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.topMargin: 18
-                            color: isActive ? "#ff00ff00" :"#ffdddddd"
-                            text: qsTr("М")
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            font.bold: true
+                        Repeater {
+                            model: [1, 0]
+                            Text {
+                                property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "М";
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.topMargin: modelData == 0 ? 18 : 19
+                                anchors.rightMargin: modelData == 0 ? 0 : -1
+                                color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
+                                text: qsTr("М")
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                font.bold: true
+                            }
                         }
-                        Text {
-                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Д";
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.topMargin: 64
-                            color: isActive ? "#ff00ff00" :"#ffdddddd"
-                            text: qsTr("РДТ")
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            font.bold: true
+                        Repeater {
+                            model: [1, 0]
+                            Text {
+                                property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Д";
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.topMargin: modelData == 0 ? 64 : 65
+                                anchors.rightMargin: modelData == 0 ? 0 : -1
+                                color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
+                                text: qsTr("РДТ")
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                font.bold: true
+                            }
                         }
-                        Text {
-                            property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Г";
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            anchors.topMargin: 88
-                            color: isActive ? "#ff00ff00" :"#ffdddddd"
-                            text: qsTr("Г")
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            font.bold: true
+                        Repeater {
+                            model: [1, 0]
+                            Text {
+                                property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Г";
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.topMargin: modelData == 0 ? 88 : 89
+                                anchors.rightMargin: modelData == 0 ? 0 : -1
+                                color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
+                                text: qsTr("Г")
+                                font.pixelSize: 14
+                                font.family: "URW Gothic L"
+                                font.bold: true
+                            }
                         }
                     }
 

@@ -33,6 +33,7 @@
 #include "displaystatesender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
+#include "trafficlightadaptor.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -42,6 +43,7 @@ DisplayStateSander* displayStateSander;
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
+TrafficlightAdaptor *trafficlightAdaptor;
 
 Can *can;
 SysDiagnostics *monitorSysDiagnostics;
@@ -95,7 +97,7 @@ void getParamsFromConsole ()
         }
         else if (cmd.at(0) == "c")
         {
-            systemState->setLight( cmd.at(1).toInt() );
+            systemState->setLight( Trafficlight(cmd.at(1).toInt()) );
             out << "Liht: " << systemState->getLight() << endl;
         }
         else if (cmd.at(0) == "a")
@@ -263,7 +265,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
     //Светофоры
-    QObject::connect(iodriver, SIGNAL(signal_trafficlight_light(int)), systemState, SLOT(setLight(int)));
+    trafficlightAdaptor = new TrafficlightAdaptor();
+    QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
+    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), systemState, SLOT(setLight(int)));
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq(int)), systemState, SLOT(setAlsnFreqFact(int)));
     QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq_target(int)), systemState, SLOT(setAlsnFreqTarget(int)));
     QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), iodriver, SLOT(slot_trafficlight_freq_target(int)));

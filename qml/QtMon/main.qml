@@ -124,7 +124,7 @@ Rectangle {
 
     Keys.onPressed: {
         // Переключение частоты АЛСН
-        if (!inputMode)
+        if (!dialogMode)
         {
         	if (!altMode && event.key == Qt.Key_F1) {
                 stateView.ButtonPressed();
@@ -165,11 +165,14 @@ Rectangle {
                         driveModePreTarget = 0
                     else if (driveModePreTarget == -1)
                         driveModePreTarget = 0
+
+                    stateView.DriveModeTarget = driveModePreTarget
                 }
             }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
                 stateView.ButtonPressed();
+                dialogMode = true
                 inputMode = true
                 inputMphMode = true
 
@@ -200,108 +203,123 @@ Rectangle {
                 altMode = true;
             }
         }
-        else
+        else // dialogMode
         {
-            if (event.key == Qt.Key_F1)
+            if (inputMode)
             {
-                stateView.ButtonPressed();
-                inputBlinker.restart();
-
-                if (inputMphMode)
+                if (event.key == Qt.Key_F1)
                 {
-                    var input = inputPositions;
-                    input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
-                    if ((inputCursorIndex == 1) && input[0] == 1)
+                    stateView.ButtonPressed();
+                    inputBlinker.restart();
+
+                    if (inputMphMode)
                     {
-                        input[1] = input[1] % 6;
+                        var input = inputPositions;
+                        input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
+                        if ((inputCursorIndex == 1) && input[0] == 1)
+                        {
+                            input[1] = input[1] % 6;
+                        }
+                        if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+                        {
+                            input[1] = 5;
+                        }
+
+                        inputPositions = input;
                     }
-                    if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+
+                    if (inputSpeedMode)
                     {
-                        input[1] = 5;
+                        inputSpeedPositions[0] = 1
+                        var input = inputSpeedPositions;
+                        input[inputSpeedCursorIndex] = (input[inputSpeedCursorIndex] + 1) % inputSpeedPositinosLength[inputSpeedCursorIndex];
+                        inputSpeedPositions = input;
+                    }
+                }
+                if (event.key == Qt.Key_F2)
+                {
+                    stateView.ButtonPressed();
+
+                    if (inputMphMode)
+                    {
+                        inputCursorIndex++;
+                        if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+                        inputBlinker.restart();
                     }
 
-                    inputPositions = input;
+                    if (inputSpeedMode)
+                    {
+                        inputSpeedCursorIndex++;
+                        if (inputSpeedCursorIndex >= inputSpeedPositions.length) inputSpeedCursorIndex = 0;
+                        inputBlinker.restart();
+                    }
                 }
-
-                if (inputSpeedMode)
+                if (event.key == Qt.Key_F3)
                 {
-                    inputSpeedPositions[0] = 1
-                    var input = inputSpeedPositions;
-                    input[inputSpeedCursorIndex] = (input[inputSpeedCursorIndex] + 1) % inputSpeedPositinosLength[inputSpeedCursorIndex];
-                    inputSpeedPositions = input;
+                    stateView.ButtonPressed();
+
+                    if (inputMphMode)
+                    {
+                        inputCursorIndex--;
+                        if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
+                        inputBlinker.restart();
+                    }
+
+                    if (inputSpeedMode)
+                    {
+                        inputSpeedCursorIndex--;
+                        if (inputSpeedCursorIndex < 0) inputSpeedCursorIndex = inputSpeedPositions.length-1;
+                        inputBlinker.restart();
+                    }
+                }
+                if (event.key == Qt.Key_F4)
+                {
+                    inputMode = false
+
+                    if (inputMphMode)
+                    {
+                        inputMphMode = false
+                        var _offset = 0;
+                        if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                        {
+                            stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                        }
+                        else
+                        {
+                            stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                        }
+                        stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
+                        stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
+                        stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                        stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                        stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                        stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
+                        stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
+
+                        if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                    }
+
+                    if (inputSpeedMode)
+                    {
+                        inputSpeedMode = false
+
+                        stateView.AutolockSpeed =  fillInputSpeedParameter(0, 3);
+
+                        stateView.AutolockTypeTarget = autolockTypePreTarget
+                    }
                 }
             }
-            if (event.key == Qt.Key_F2)
-            {
-                stateView.ButtonPressed();
 
-                if (inputMphMode)
-                {
-                    inputCursorIndex++;
-                    if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
-                    inputBlinker.restart();
-                }
-
-                if (inputSpeedMode)
-                {
-                    inputSpeedCursorIndex++;
-                    if (inputSpeedCursorIndex >= inputSpeedPositions.length) inputSpeedCursorIndex = 0;
-                    inputBlinker.restart();
-                }
-            }
-            if (event.key == Qt.Key_F3)
-            {
-                stateView.ButtonPressed();
-
-                if (inputMphMode)
-                {
-                    inputCursorIndex--;
-                    if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
-                    inputBlinker.restart();
-                }
-
-                if (inputSpeedMode)
-                {
-                    inputSpeedCursorIndex--;
-                    if (inputSpeedCursorIndex < 0) inputSpeedCursorIndex = inputSpeedPositions.length-1;
-                    inputBlinker.restart();
-                }
-            }
             if (event.key == Qt.Key_F4)
             {
                 stateView.ConfirmButtonPressed();
-                inputMode = false
+                dialogMode = false
 
-                if (inputMphMode)
+                if (waitRdtConfirmationMode)
                 {
-                    inputMphMode = false
-                    var _offset = 0;
-                    if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
-                    {
-                        stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
-                    }
-                    else
-                    {
-                        stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
-                    }
-                    stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
-                    stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
-
-                    if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
-                }
-
-                if (inputSpeedMode)
-                {
-                    inputSpeedMode = false
-
-                    stateView.AutolockSpeed =  fillInputSpeedParameter(0, 3);
-
-                    stateView.AutolockTypeTarget = autolockTypePreTarget
+                    waitRdtConfirmationMode = false;
+                    driveModePreTarget = 0
+                    stateView.DriveModeTarget = 0
                 }
             }
         }
@@ -312,7 +330,7 @@ Rectangle {
         if (event.key == Qt.Key_F4) {
             altMode = false;
 
-            if ( autolockTypePreTarget != stateView.AutolockTypeTarget)
+            if ( stateView.AutolockTypeTarget != autolockTypePreTarget )
             {
                 if ( autolockTypePreTarget == 0 ) // АБ
                 {
@@ -320,6 +338,7 @@ Rectangle {
                 }
                 else
                 {
+                    dialogMode = true
                     inputMode = true;
                     inputSpeedMode = true;
 
@@ -328,6 +347,18 @@ Rectangle {
                     inputSpeedPositions = input;
                     inputSpeedCursorIndex = 0;
                 }
+            }
+
+            if ( stateView.DriveModeTarget != driveModePreTarget )
+            {
+                if ( driveModePreTarget === 3 ) // Двойная тяга. РДТ.
+                {
+                    dialogMode = !(stateView.DriveModeFact === stateView.DriveModeTarget)
+                    waitRdtConfirmationMode = !(stateView.DriveModeFact === stateView.DriveModeTarget)
+
+                }
+
+                stateView.DriveModeTarget = driveModePreTarget
             }
         }
         // Отпускание кнопки РМП
@@ -378,9 +409,11 @@ Rectangle {
         NumberAnimation { target: graduateBar; properties: "opacity"; easing.type: Easing.OutQuad; duration: 300 }
     }
 
-    property bool inputMode: false
-    property bool inputMphMode: false
-    property bool inputSpeedMode:false
+    property bool dialogMode: false // Затемняется экран.
+    property bool inputMode: false // появляются кнопки для ввода
+    property bool inputMphMode: false // появляется панель с кучей параметров
+    property bool inputSpeedMode:false // появляется панель со скоростью
+    property bool waitRdtConfirmationMode: false // появляется панель с надписью "Для подтверждения нажмите РБ"
     property int inputCursorIndex: 0
     property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 6, 1]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
@@ -1777,8 +1810,9 @@ Rectangle {
                         Text {
                             color: "#ffffff"
                             text: qsTr("Отмена\nКрасного")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                     }
 
@@ -1838,8 +1872,9 @@ Rectangle {
                         Text {
                             color: "#ffffff"
                             text: qsTr("Ввод\nпараметров")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                     }
                     MouseArea {
@@ -1872,8 +1907,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Alt")
-                        font.pointSize: 20
+                        font.pixelSize: 20
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
             }
@@ -2126,7 +2162,7 @@ Rectangle {
         color: "#00000000"
         Image {
             source: "Slices/InputMode-Background.png"
-            opacity: inputMode ? 1 : 0
+            opacity: dialogMode ? 1 : 0
             Behavior on opacity { SmoothedAnimation { duration: 500 } }
         }
     }
@@ -2162,7 +2198,30 @@ Rectangle {
         }
     }
 
-
+    // Кнопка Отм. для режима ожидания подтверждения РДТ
+    Rectangle {
+        anchors.bottom: rootRect.bottom
+        anchors.left: parent.left
+        anchors.leftMargin: waitRdtConfirmationMode ? 0 : -width
+        height: rightButton4Container.height
+        width: 77
+        color: "#00000000"
+        Image{
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            source: "Slices/InputMode-Button.png"
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 16
+                text: qsTr("Отм.")
+                font.pixelSize: 24
+                font.family: "URW Gothic L"
+                font.bold: true
+                color: "#ffe0e0e0"
+            }
+        }
+    }
 
     Column {
         id: inputMphModeParentField

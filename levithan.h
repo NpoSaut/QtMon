@@ -28,6 +28,10 @@ public slots:
 
     void beepHigh();
     void beepNotification();
+
+    void proccessNewVigilanceRequired (bool required);
+    void proccessNewPreAlarmActive (bool active);
+    void proccessNewEpvReady (bool ready);
 };
 
 #endif // LEVITHAN_H

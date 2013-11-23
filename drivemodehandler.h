@@ -47,6 +47,7 @@ private:
     Can *can;
     DriveMode target;
     quint8 convergenceCounter; // счётчик сообщений ЦО с режимом, не совпадающим с целевым
+    bool init;
 };
 
 #endif // DRIVEMODEHANDLER_H

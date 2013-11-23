@@ -413,37 +413,37 @@ Rectangle {
                         spacing: 10
                         width: parent.width
 
-                        // Координата
-                       Column {
+                    // Координата
+                   Column {
+                       anchors.left: parent.left
+                       anchors.right: parent.right
+                       Text {
+                           anchors.horizontalCenter: parent.horizontalCenter
+
+                           text: qsTr("КООРДИНАТА")
+                           color: "#ffffff00"
+                           font.pixelSize: 14
+                           font.family: "URW Gothic L"
+                       }
+                       Rectangle {
+                           color: "#20000000"
                            anchors.left: parent.left
                            anchors.right: parent.right
+                           border.color: "#ffffff00"
+                           height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
-
-                               text: qsTr("ОРДИНАТА")
-                               color: "#ffffff00"
+                               anchors.verticalCenter: parent.verticalCenter
+                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
+                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
+                                     (stateView.Ordinate % 100).toString() + "м"
+                               //text: stateView.Speed
+                               color: "#ffffffff"
                                font.pixelSize: 14
                                font.family: "URW Gothic L"
                            }
-                           Rectangle {
-                               color: "#20000000"
-                               anchors.left: parent.left
-                               anchors.right: parent.right
-                               border.color: "#ffffff00"
-                               height: 20
-                               Text {
-                                   anchors.horizontalCenter: parent.horizontalCenter
-                                   anchors.verticalCenter: parent.verticalCenter
-                                   text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
-                                         (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
-                                         (stateView.Ordinate % 100).toString() + "м"
-                                   //text: stateView.Speed
-                                   color: "#ffffffff"
-                                   font.pixelSize: 14
-                                   font.family: "URW Gothic L"
-                               }
-                           }
                        }
+                   }
 
                         // № ПУТИ
                        Column {
@@ -1682,8 +1682,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Отмена\nКрасного")
-                        font.pointSize: 16
+                        font.pixelSize: 16
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
                 MouseArea {
@@ -1728,8 +1729,9 @@ Rectangle {
                             anchors.topMargin: 10
                             color: "#ffffff"
                             text: qsTr("Карта")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                         Text {
                             anchors.right: parent.right
@@ -1738,8 +1740,9 @@ Rectangle {
                             anchors.bottomMargin: 10
                             color: "#ffffff"
                             text: qsTr("   Панель\n приборов")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
 
                     }
@@ -1754,8 +1757,9 @@ Rectangle {
                         Text {
                             color: "#ffffff"
                             text: qsTr("Ввод\nпараметров")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                     }
                     MouseArea {
@@ -1788,8 +1792,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Alt")
-                        font.pointSize: 20
+                        font.pixelSize: 20
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
             }
@@ -2412,7 +2417,7 @@ Rectangle {
                     font.pixelSize: 18
                     font.bold: true
                     color: "#ffe0e0e0"
-                    text: qsTr("Ордината")
+                    text: qsTr("Координата")
                 }
 
                 // ввод ординаты (км)

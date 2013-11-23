@@ -48,3 +48,20 @@ void Levithan::beepNotification()
 {
     speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav"));
 }
+
+void Levithan::proccessNewVigilanceRequired(bool required)
+{
+    if (required)
+        beepNotification ();
+}
+
+void Levithan::proccessNewPreAlarmActive(bool active)
+{
+    if (active)
+        beepNotification ();
+}
+
+void Levithan::proccessNewEpvReady(bool ready)
+{
+    beepHigh ();
+}

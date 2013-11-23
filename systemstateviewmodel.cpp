@@ -381,7 +381,7 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
     }
 }
 
-// Целевой тип автоблокировки
+// Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
 const int SystemStateViewModel::getAutolockTypeTarget() const
 {
     return autolockTypeTargetValue;
@@ -395,7 +395,7 @@ void SystemStateViewModel::setAutolockTypeTarget(const int value)
     }
 }
 
-// Фактический тип автоблокировки
+// Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
 const int SystemStateViewModel::getAutolockTypeFact() const
 {
     return autolockTypeFactValue;

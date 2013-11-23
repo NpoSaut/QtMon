@@ -100,11 +100,11 @@ class SystemStateViewModel : public QDeclarativeItem
     int alsnFreqFactValue;
     Q_PROPERTY(int AlsnFreqFact READ getAlsnFreqFact WRITE setAlsnFreqFact NOTIFY AlsnFreqFactChanged)
 
-    // Целевой тип автоблокировки
+    // Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
     int autolockTypeTargetValue;
     Q_PROPERTY(int AutolockTypeTarget READ getAutolockTypeTarget WRITE setAutolockTypeTarget NOTIFY AutolockTypeTargetChanged)
 
-    // Фактический тип автоблокировки
+    // Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
     int autolockTypeFactValue;
     Q_PROPERTY(int AutolockTypeFact READ getAutolockTypeFact WRITE setAutolockTypeFact NOTIFY AutolockTypeFactChanged)
 

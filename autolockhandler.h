@@ -36,9 +36,14 @@ public slots:
     void setWhiteSpeed (int speed);
 
 protected slots:
+    // Вызывается с каждым приходом сообщения MP_STATE
     void proccessMpMessage ();
+    // Вызывается, когда изменяется состояние автоблокировки
+    void proccessAutolockStateChange ();
     
 protected:
+    AutolockMode getMpAutolockState () const;
+
     Can *can;
     Parser *parser;
 

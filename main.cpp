@@ -34,6 +34,7 @@
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
+#include "alsnfreqhandler.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -44,6 +45,7 @@ iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 TrafficlightAdaptor *trafficlightAdaptor;
+AlsnFreqHandler *alsnFreqHandler;
 
 Can *can;
 SysDiagnostics *monitorSysDiagnostics;
@@ -264,13 +266,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));
-    //Светофоры
+
+    //Светофоры:
+    // огонь
     trafficlightAdaptor = new TrafficlightAdaptor();
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
     QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), systemState, SLOT(setLight(int)));
-    QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq(int)), systemState, SLOT(setAlsnFreqFact(int)));
-    QObject::connect(iodriver, SIGNAL(signal_trafficlight_freq_target(int)), systemState, SLOT(setAlsnFreqTarget(int)));
-    QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), iodriver, SLOT(slot_trafficlight_freq_target(int)));
+    // частота
+    alsnFreqHandler = new AlsnFreqHandler (can, blokMessages);
+    QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));
+    QObject::connect (alsnFreqHandler, SIGNAL(targetAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqTarget(int)));
+    QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), alsnFreqHandler, SLOT(proccessNewTargetAlsnFreq(int)));
 
     QObject::connect(iodriver, SIGNAL(signal_vigilance(bool)), systemState, SLOT(setIsVigilanceRequired(bool)));
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));

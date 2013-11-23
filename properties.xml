@@ -82,7 +82,7 @@
     <Property type="int" name="ManualOrdinateIncreaseDirection" def="1" description="Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад." />
 
     <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
-    <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
+    <Property type="int" name="AutolockSpeed" def="-1" description="Скорость на белый при ЗАБ" />
 
     <!-- ТСКБМ -->
     <Property type="bool" name="TsvcIsOnline" def="false" description="ТСКБМ подключена" source="TSKBM_STATE_A, TSKBM_STATE_B" />

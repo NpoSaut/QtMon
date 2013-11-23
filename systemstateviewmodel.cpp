@@ -52,7 +52,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     manualOrdinateEnableValue = false;
     manualOrdinateValue = 1100;
     manualOrdinateIncreaseDirectionValue = 1;
-    autolockSpeedValue = -1;
+    autolockSpeedValue = 40;
     tsvcIsOnlineValue = false;
     tsvcIsMachinistCheerfulValue = false;
     tsvcIsVigilanceRequiredValue = false;

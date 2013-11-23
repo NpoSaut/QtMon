@@ -5,7 +5,7 @@ AutolockHandler::AutolockHandler(Can *can, Parser *parser, QObject *parent) :
     can (can),
     parser (parser),
     target (AB),
-    speed (0),
+    speed (40),
     init (true)
 {
     QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessMpMessage()));

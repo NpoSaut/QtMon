@@ -4,7 +4,7 @@
 DrivemodeHandler::DrivemodeHandler(Parser *parser, Can *can, QObject *parent) :
     QObject(parent), parser (parser), can (can),
     target (parser->mcoLimits.getDriveMode ()),
-    init (false)
+    init (true)
 {
     QObject::connect (&parser->mcoLimits, SIGNAL(messageReceived()), this, SLOT(processNewState()));
     QObject::connect (&parser->mcoLimits, SIGNAL(driveModeChanged(DriveMode)), this, SLOT(processActualDrivemodeChage(DriveMode)));

@@ -49,7 +49,10 @@ SOURCES += \
     displaystatesender.cpp \
     qtBlokLib/parsers/uktol_dd1.cpp \
     qtBlokLib/parsers/mvd_dd.cpp \
-    pressureselector.cpp
+    pressureselector.cpp \
+    qtBlokLib/parsers/mp_state.cpp \
+    trafficlightadaptor.cpp \
+    alsnfreqhandler.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -100,7 +103,11 @@ HEADERS += \
     qtBlokLib/parsers/uktol_dd1.h \
     qtBlokLib/parsers/pressure.h \
     qtBlokLib/parsers/mvd_dd.h \
-    pressureselector.h
+    pressureselector.h \
+    qtBlokLib/parsers/mp_state.h \
+    qtBlokLib/parsers/trafficlight.h \
+    trafficlightadaptor.h \
+    alsnfreqhandler.h
 
 CONFIG += console
 

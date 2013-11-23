@@ -3,7 +3,8 @@
 
 DrivemodeHandler::DrivemodeHandler(Parser *parser, Can *can, QObject *parent) :
     QObject(parent), parser (parser), can (can),
-    target (parser->mcoLimits.getDriveMode ())
+    target (parser->mcoLimits.getDriveMode ()),
+    init (false)
 {
     QObject::connect (&parser->mcoLimits, SIGNAL(messageReceived()), this, SLOT(processNewState()));
     QObject::connect (&parser->mcoLimits, SIGNAL(driveModeChanged(DriveMode)), this, SLOT(processActualDrivemodeChage(DriveMode)));
@@ -29,6 +30,11 @@ void DrivemodeHandler::processIronWheelsChange(bool ironWheels)
 
 void DrivemodeHandler::processActualDrivemodeChage(DriveMode dm)
 {
+    if ( init )
+    {
+        init = false;
+        emit targetDrivemodeChanged (quint8(dm));
+    }
     emit actualDrivemodeChanged (quint8(dm));
 }
 
@@ -41,6 +47,10 @@ void DrivemodeHandler::processNewState()
             convergenceCounter = 0;
             can->transmitMessage (SysKey(SysKey::RMP, SysKey::PRESS).encode ());
         }
+    }
+    else
+    {
+        convergenceCounter = 0;
     }
 }
 

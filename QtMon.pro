@@ -52,7 +52,8 @@ SOURCES += \
     pressureselector.cpp \
     qtBlokLib/parsers/mp_state.cpp \
     trafficlightadaptor.cpp \
-    alsnfreqhandler.cpp
+    alsnfreqhandler.cpp \
+    autolockhandler.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -107,7 +108,8 @@ HEADERS += \
     qtBlokLib/parsers/mp_state.h \
     qtBlokLib/parsers/trafficlight.h \
     trafficlightadaptor.h \
-    alsnfreqhandler.h
+    alsnfreqhandler.h \
+    autolockhandler.h
 
 CONFIG += console
 

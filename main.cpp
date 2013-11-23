@@ -35,6 +35,7 @@
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
 #include "alsnfreqhandler.h"
+#include "autolockhandler.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -46,6 +47,7 @@ DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 TrafficlightAdaptor *trafficlightAdaptor;
 AlsnFreqHandler *alsnFreqHandler;
+AutolockHandler *autolockHandler;
 
 Can *can;
 SysDiagnostics *monitorSysDiagnostics;
@@ -282,9 +284,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));
     QObject::connect(iodriver, SIGNAL(signal_reg_tape_avl(bool)), systemState, SLOT(setIsRegistrationTapeActive(bool)));
 
-    QObject::connect(iodriver, SIGNAL(signal_autolock_type(int)), systemState, SLOT(setAutolockTypeFact(int)));
-    QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged(int)), iodriver, SLOT(slot_autolock_type_target_changed(int)));
-    QObject::connect (systemState, SIGNAL(AutolockSpeedChanged(int)), iodriver, SLOT(slot_autolock_speed_changed(int)));
+    // Автоблокировка АБ
+    autolockHandler = new AutolockHandler (can, blokMessages);
+    QObject::connect(autolockHandler, SIGNAL(actualAutolockModeChanged(int)), systemState, SLOT(setAutolockTypeFact(int)));
+    QObject::connect (autolockHandler, SIGNAL(targetAutlockModeChanged(int)), systemState, SLOT(setAutolockTypeTarget(int)));
+    QObject::connect(systemState, SIGNAL(AutolockTypeTargetChanged(int)), autolockHandler, SLOT(setTargetMode(int)));
+    QObject::connect (systemState, SIGNAL(AutolockSpeedChanged(int)), autolockHandler, SLOT(setWhiteSpeed(int)));
 
     // Давление
     pressureSelector = new PressureSelector (PressureSelector::MPA, blokMessages);

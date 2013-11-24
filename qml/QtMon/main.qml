@@ -1990,6 +1990,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: - parent.height * 0.17
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -1
                 opacity: stateView.TsvcIsVigilanceRequired ? 1 : 0
                 Behavior on opacity { PropertyAnimation { duration: 150 } }
             }

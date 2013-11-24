@@ -15,7 +15,7 @@ Speaker::Speaker()
 
 void Speaker::enqueuePhrase(Phrase phrase)
 {
-//    this->enqueue(phrase);
+    this->enqueue(phrase);
 }
 
 

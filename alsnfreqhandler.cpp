@@ -26,6 +26,9 @@ void AlsnFreqHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
 
 void AlsnFreqHandler::proccessNewMpMessage()
 {
+    if ( init )
+    {
+        init = false;
         emit targetAlsnFreqChanged (getIntFromFreq (parser->mpState.getFrequense ()));
     }
     else if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )

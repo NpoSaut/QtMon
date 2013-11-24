@@ -11,8 +11,7 @@ Levithan::Levithan(QObject *parent) :
 
 void Levithan::sayHello(int i)
 {
-    speaker.enqueuePhrase(Phrase("phrases/Внимание 1.wav"));
-    speaker.enqueuePhrase(Phrase("play3.wav"));
+
 }
 
 void Levithan::sayLightIndex(int i)
@@ -46,7 +45,7 @@ void Levithan::beepHigh()
 
 void Levithan::beepNotification()
 {
-    speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav"));
+    speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 50));
 }
 
 void Levithan::proccessNewVigilanceRequired(bool required)

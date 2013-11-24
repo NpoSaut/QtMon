@@ -1,5 +1,7 @@
 #include "alsnfreqhandler.h"
 
+#include <QDebug>
+
 AlsnFreqHandler::AlsnFreqHandler(Can *can, Parser *parser, QObject *parent) :
     QObject(parent),
     can (can),
@@ -12,24 +14,21 @@ AlsnFreqHandler::AlsnFreqHandler(Can *can, Parser *parser, QObject *parent) :
     QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessNewMpMessage()));
 }
 
-void AlsnFreqHandler::proccessNewTargetAlsnFreq(int freq)
+void AlsnFreqHandler::setTargetAlsnFreq(int freq)
 {
     target = freq;
 }
 
 void AlsnFreqHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
 {
-    if ( init )
-    {
-        init = false;
-        emit targetAlsnFreqChanged (getIntFromFreq (freq));
-    }
     emit actualAlsnFreqChanged (getIntFromFreq (freq));
 }
 
 void AlsnFreqHandler::proccessNewMpMessage()
 {
-    if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )
+        emit targetAlsnFreqChanged (getIntFromFreq (parser->mpState.getFrequense ()));
+    }
+    else if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )
     {
         if ( ++convergenceCounter >= 2 )
         {

@@ -30,17 +30,17 @@ void DrivemodeHandler::processIronWheelsChange(bool ironWheels)
 
 void DrivemodeHandler::processActualDrivemodeChage(DriveMode dm)
 {
-    if ( init )
-    {
-        init = false;
-        emit targetDrivemodeChanged (quint8(dm));
-    }
     emit actualDrivemodeChanged (quint8(dm));
 }
 
 void DrivemodeHandler::processNewState()
 {
-    if ( parser->mcoLimits.getDriveMode () != target )
+    if ( init )
+    {
+        init = false;
+        emit targetDrivemodeChanged (quint8 (parser->mcoLimits.getDriveMode ()));
+    }
+    else if ( parser->mcoLimits.getDriveMode () != target )
     {
         if (++convergenceCounter >= 2)
         {

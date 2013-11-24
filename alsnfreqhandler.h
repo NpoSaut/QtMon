@@ -22,7 +22,7 @@ signals:
     
 public slots:
     // Принимает новую целевую частоту в качестве задания
-    void proccessNewTargetAlsnFreq (int freq);
+    void setTargetAlsnFreq (int freq);
 
 protected slots:
     // Принимает новую частоту от МП-АЛС

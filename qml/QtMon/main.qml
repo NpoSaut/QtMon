@@ -208,7 +208,7 @@ Rectangle {
                 if (inputMphMode)
                 {
                     inputCursorIndex++;
-                    if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
+                    if (inputCursorIndex >= maxInputCursorIndex) inputCursorIndex = 0;
                     inputBlinker.restart();
                 }
 
@@ -226,7 +226,7 @@ Rectangle {
                 if (inputMphMode)
                 {
                     inputCursorIndex--;
-                    if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
+                    if (inputCursorIndex < 0) inputCursorIndex = maxInputCursorIndex-1;
                     inputBlinker.restart();
                 }
 
@@ -259,8 +259,11 @@ Rectangle {
                     stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
-                    stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
+                    if (stateView.TrackNumber == 0)
+                    {
+                        stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
+                        stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
+                    }
 
                     if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
                 }
@@ -352,6 +355,8 @@ Rectangle {
     property bool inputMphMode: false
     property bool inputSpeedMode:false
     property int inputCursorIndex: 0
+    property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
+    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
     property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 6, 1]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
@@ -2454,7 +2459,7 @@ Rectangle {
                     font.family: "URW Gothic L"
                     font.pixelSize: 18
                     font.bold: true
-                    color: "#ffe0e0e0"
+                    color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
                     text: qsTr("Координата")
                 }
 
@@ -2474,7 +2479,7 @@ Rectangle {
                         font.family: "URW Gothic L"
                         font.pixelSize: 12
                         font.bold: true
-                        color: "#ffe0e0e0"
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
                         text: qsTr("км")
                     }
 
@@ -2492,6 +2497,7 @@ Rectangle {
                                 source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
                                 Text {
                                     text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -2522,7 +2528,7 @@ Rectangle {
                         font.family: "URW Gothic L"
                         font.pixelSize: 12
                         font.bold: true
-                        color: "#ffe0e0e0"
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
                         text: qsTr("пк")
                     }
 
@@ -2540,6 +2546,7 @@ Rectangle {
                                 source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
                                 Text {
                                     text: inputPositions[parent.myCursorIndex]
                                     anchors.horizontalCenter: parent.horizontalCenter
@@ -2573,7 +2580,7 @@ Rectangle {
                         font.family: "URW Gothic L"
                         font.pixelSize: 12
                         font.bold: true
-                        color: "#ffe0e0e0"
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
                         text: qsTr("Напр.")
                     }
 
@@ -2591,6 +2598,7 @@ Rectangle {
                                 source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
                                 width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
                                 Text {
                                     text: inputPositions[parent.myCursorIndex] == 0 ? "-" : "+"
                                     anchors.horizontalCenter: parent.horizontalCenter

@@ -153,7 +153,7 @@ Rectangle {
                     else if (driveModePreTarget == 1)
                         driveModePreTarget = 3
                     else if (driveModePreTarget == 3)
-                        driveModePreTarget = 5
+                        driveModePreTarget = 0
                     else
                         driveModePreTarget = 0
                 }
@@ -1658,25 +1658,10 @@ Rectangle {
                                 property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Д";
                                 anchors.right: parent.right
                                 anchors.top: parent.top
-                                anchors.topMargin: modelData == 0 ? 64 : 65
+                                anchors.topMargin: modelData == 0 ? 63 : 64
                                 anchors.rightMargin: modelData == 0 ? 0 : -1
                                 color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
                                 text: qsTr("РДТ")
-                                font.pixelSize: 14
-                                font.family: "URW Gothic L"
-                                font.bold: true
-                            }
-                        }
-                        Repeater {
-                            model: [1, 0]
-                            Text {
-                                property bool isActive: getDriveModeLetter(stateView.DriveModeFact) === "Г";
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                anchors.topMargin: modelData == 0 ? 88 : 89
-                                anchors.rightMargin: modelData == 0 ? 0 : -1
-                                color: modelData == 0 ? (isActive ? "#ff00ff00" :"#ffdddddd") : "#ff000000"
-                                text: qsTr("Г")
                                 font.pixelSize: 14
                                 font.family: "URW Gothic L"
                                 font.bold: true
@@ -1714,11 +1699,6 @@ Rectangle {
                                 name: "Dmode"
                                 when: (driveModePreTarget === 3)
                                 PropertyChanges { target: drivemodeHandle; ypos: 66 }
-                            },
-                            State {
-                                name: "Gmode"
-                                when: (driveModePreTarget === 5)
-                                PropertyChanges { target: drivemodeHandle; ypos: 91 }
                             }
                         ]
 

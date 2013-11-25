@@ -370,8 +370,9 @@ Rectangle {
             stateView.DisableRedButtonReleased();
         }
         // Alt: пустой
-        else if (altMode && event.key == Qt.Key_F3) {
-            disableRedButtonPressed = false
+        else if (event.key == Qt.Key_F3) {
+            if (disableRedButtonPressed)
+                disableRedButtonPressed = false
         }
 
     }
@@ -719,7 +720,8 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
-                           text: getDriveModeLetter(stateView.DriveModeFact)
+                           text: getDriveModeLetter(stateView.DriveModeFact) !== "Д" ? getDriveModeLetter(stateView.DriveModeFact)
+                                                                                     : inputBlinker.blink ? qsTr("П") : qsTr("")
 
                            color: "#ffffffff"
                            font.pixelSize: 14
@@ -2016,146 +2018,6 @@ Rectangle {
                 onClicked: stateView.TsvcIsPreAlarmActive = !stateView.TsvcIsPreAlarmActive;
             }
         }
-
-
-        Rectangle {
-            id: graduateBar
-
-            width: 10
-
-            color: "#00000000"
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: speedBox.height
-            anchors.left: parent.left
-
-            Repeater {
-                id: repeater
-                model: Math.floor(maxSpeed/5) - 1
-
-                Rectangle {
-                    property int sp: (index + 1) * 5
-                    property bool nice: sp % 10 == 0
-
-                    anchors.left: parent.left
-                    anchors.leftMargin: 5
-                    y: graduateBar.height - (graduateBar.height / maxSpeed) * sp - height/2
-                    visible: y > vigilanceSign.y + vigilanceSign.height
-
-                    width: 20
-                    height: 14;
-                    color: "#00000000"
-
-                    Repeater {
-                        model: [ "#71000000", "#a8ffffff" ]
-                        Row
-                        {
-                            anchors.verticalCenterOffset: index-1
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.left: parent.left
-                            anchors.leftMargin: index
-                            spacing: 3
-
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter;
-                                height: nice? 2:1;
-                                color: modelData;
-                                width: 6; // + 0.4*Math.floor(repeater.count / 6) * index;
-                            }
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter;
-                                text: parent.parent.sp;
-                                font.family: "URW Gothic L";
-                                font.pointSize: 8;
-                                color: modelData
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        Rectangle {
-            x: 0
-            y: 0
-            width: 7
-            height: rootRect.height - speedBox.height
-            color: "#fff"
-            anchors.top: parent.top
-            opacity: graduateBar.opacity
-        }
-
-        Rectangle {
-            id: speedValueBar
-            x: 0
-            width: 7
-            height: (stateView.Speed/maxSpeed)*(rootRect.height - speedBox.height)
-            visible: stateView.Speed >= 0
-            color: "#4999c9"
-            anchors.bottom: speedBox.top
-            opacity: graduateBar.opacity
-
-            Behavior on height { SmoothedAnimation { duration: 500 } }
-        }
-
-        Rectangle {
-            id: restrictionBar
-            x: 0
-            y: 0
-            width: 7
-            height: (rootRect.height - speedBox.height) - (stateView.SpeedRestriction/maxSpeed)*(rootRect.height - speedBox.height)
-            color: "#c94949"
-            anchors.top: parent.top
-            opacity: graduateBar.opacity
-
-            Behavior on height { SmoothedAnimation { duration: 500 } }
-        }
-
-        Rectangle {
-            width: 63
-            height: 64
-            color: "#00000000"
-            id: speedBox
-            anchors.right: parent.left
-            anchors.bottom: parent.bottom
-
-            Image {
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                source: "Slices/Speedbox-Label.png"
-            }
-
-            Repeater {
-                model: [ "#ff30759e", "#d8ffffff" ]
-                Column {
-                    y: index
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10-index
-
-                    Text {
-                        text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "--"
-                        anchors.right: parent.right
-                        height: 38
-                        color: modelData
-                        font.pointSize: 26
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                    Text {
-                        text: qsTr("км/ч")
-                        anchors.right: parent.right
-                        color: modelData
-                        font.pointSize: 11.2
-                        font.family: "URW Gothic L"
-                        font.bold: true
-                    }
-                }
-            }
-        }
-
-
-
     }
 
     // ----------------------- InputMode -------------------------

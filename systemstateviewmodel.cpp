@@ -17,6 +17,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     pressureURValue = "0.00";
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
+    gpsValidValue = false;
     systemWarningLevelValue = 0;
     fullSetWarningLevelValue = 0;
     isPressureOkValue = true;
@@ -238,6 +239,19 @@ void SystemStateViewModel::setLatitude(const double value)
     {
         latitudeValue = value;
         emit LatitudeChanged(value);
+    }
+}
+
+const bool SystemStateViewModel::getGpsValid() const
+{
+    return gpsValidValue;
+}
+void SystemStateViewModel::setGpsValid(const bool value)
+{
+    if (gpsValidValue != value)
+    {
+        gpsValidValue = value;
+        emit gpsValidChanged(value);
     }
 }
 

@@ -60,6 +60,9 @@ class SystemStateViewModel : public QDeclarativeItem
     double latitudeValue;
     Q_PROPERTY(double Latitude READ getLatitude WRITE setLatitude NOTIFY LatitudeChanged)
 
+    bool gpsValidValue;
+    Q_PROPERTY(bool gpsValid READ getGpsValid WRITE setGpsValid NOTIFY gpsValidChanged)
+
     // Общий уровень предупреждений
     int systemWarningLevelValue;
     Q_PROPERTY(int SystemWarningLevel READ getSystemWarningLevel WRITE setSystemWarningLevel NOTIFY SystemWarningLevelChanged)
@@ -238,6 +241,7 @@ public:
     const QString getPressureUR() const;
     const double getLongitude() const;
     const double getLatitude() const;
+    const bool getGpsValid() const;
     const int getSystemWarningLevel() const;
     const int getFullSetWarningLevel() const;
     const bool getIsPressureOk() const;
@@ -308,6 +312,7 @@ signals:
     void PressureURChanged(const QString value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
+    void gpsValidChanged(const bool value);
     void SystemWarningLevelChanged(const int value);
     void FullSetWarningLevelChanged(const int value);
     void IsPressureOkChanged(const bool value);
@@ -365,6 +370,7 @@ public slots:
     void setPressureUR(const QString);
     void setLongitude(const double);
     void setLatitude(const double);
+    void setGpsValid(const bool);
     void setSystemWarningLevel(const int);
     void setFullSetWarningLevel(const int);
     void setIsPressureOk(const bool);

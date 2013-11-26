@@ -298,8 +298,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (pressureSelector, SIGNAL(tmPressureChanged(QString)), systemState, SLOT(setPressureTM(QString)));
     QObject::connect (pressureSelector, SIGNAL(urPressureChanged(QString)), systemState, SLOT(setPressureUR(QString)));
 
-    QObject::connect(iodriver, SIGNAL(signal_lat(double)), systemState, SLOT(setLatitude(double)));
-    QObject::connect(iodriver, SIGNAL(signal_lon(double)), systemState, SLOT(setLongitude(double)));
+    // GPS
+    QObject::connect(&blokMessages->mmAltLong, SIGNAL(latitudeChanged(double)), systemState, SLOT(setLatitude(double)));
+    QObject::connect(&blokMessages->mmAltLong, SIGNAL(longitudeChanged(double)), systemState, SLOT(setLongitude(double)));
+    QObject::connect(&blokMessages->mmAltLong, SIGNAL(validChanged(bool)), systemState, SLOT(setGpsValid(bool)));
     QObject::connect(iodriver, SIGNAL(signal_time(QString)), systemState, SLOT(setTime(QString)));
     QObject::connect(iodriver, SIGNAL(signal_date(QString)), systemState, SLOT(setDate(QString)));
 

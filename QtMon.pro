@@ -53,7 +53,8 @@ SOURCES += \
     qtBlokLib/parsers/mp_state.cpp \
     trafficlightadaptor.cpp \
     alsnfreqhandler.cpp \
-    autolockhandler.cpp
+    autolockhandler.cpp \
+    qtBlokLib/parsers/mm_alt_long.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -109,7 +110,8 @@ HEADERS += \
     qtBlokLib/parsers/trafficlight.h \
     trafficlightadaptor.h \
     alsnfreqhandler.h \
-    autolockhandler.h
+    autolockhandler.h \
+    qtBlokLib/parsers/mm_alt_long.h
 
 CONFIG += console
 

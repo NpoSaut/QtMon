@@ -384,7 +384,7 @@ Rectangle {
         id: debugModeEnterTimer
         property int pushCounter: 0
         property int maxPushCounter: 2
-        interval: 300
+        interval: 400
         running: false
         repeat: false
         onTriggered: pushCounter = 0

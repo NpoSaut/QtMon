@@ -168,6 +168,10 @@ Rectangle {
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
                 altMode = true;
+
+                debugModeEnterTimer.restart()
+                if ( debugModeEnterTimer.pushCounter++ >= debugModeEnterTimer.maxPushCounter )
+                    debugModeEnableTimer.restart()
             }
         }
         else
@@ -357,7 +361,7 @@ Rectangle {
     property int inputCursorIndex: 0
     property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
     property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 6, 1]
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
     property int inputSpeedCursorIndex: 0
@@ -374,6 +378,23 @@ Rectangle {
         repeat: true
         onTriggered: blink = !blink
         onRunningChanged: blink = true
+    }
+
+    Timer {
+        id: debugModeEnterTimer
+        property int pushCounter: 0
+        property int maxPushCounter: 2
+        interval: 300
+        running: false
+        repeat: false
+        onTriggered: pushCounter = 0
+    }
+
+    Timer {
+        id: debugModeEnableTimer
+        interval: 100000
+        running: false
+        repeat: false
     }
 
     Rectangle {
@@ -642,6 +663,7 @@ Rectangle {
                        border.color: "#ffffff00"
                        width: 21
                        height: 20
+                       visible: debugModeEnableTimer.running
                        Image {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
@@ -1053,6 +1075,7 @@ Rectangle {
                 anchors.leftMargin: -180
                 border.color: "#ffffff00"
                 height: 25
+                visible: debugModeEnableTimer.running
 
                 Text {
                     anchors.left: parent.left

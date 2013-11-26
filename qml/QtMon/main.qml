@@ -136,7 +136,7 @@ Rectangle {
             // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F2) {
                 stateView.ConfirmButtonPressed();
-                stateView.DisableRedButtonPressed();
+                disableRedButton.pressed = true
             }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
@@ -313,7 +313,7 @@ Rectangle {
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
-            stateView.DisableRedButtonReleased();
+            disableRedButton.pressed = false
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
@@ -1700,18 +1700,26 @@ Rectangle {
                 }
 
                 Column {
-                    id: page1buttonAltHeader
+                    id: disableRedButton
+                    property bool pressed: false
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
                     visible: altMode
+                    onPressedChanged: {
+                        if (pressed)
+                            stateView.DisableRedButtonPressed()
+                        else
+                            stateView.DisableRedButtonReleased()
+                    }
 
                     Text {
-                        color: "#ffffff"
+                        color: parent.pressed ? "#ccc" : "#ffffff"
                         text: qsTr("Отмена\nКрасного")
                         font.pixelSize: 16
                         font.family: "URW Gothic L"
                         font.bold: true
+
                     }
                 }
                 MouseArea {

@@ -340,9 +340,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect (&cookies->startOrdinate, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinate(int)));
     QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
 
-//    QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
-//    QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
-
 #ifdef WITH_SERIAL
     // Если компилируем с поддержкой COM-порта, то берём GPS-данные из NMEA
     iodriver->start(gps_data_source_gps);

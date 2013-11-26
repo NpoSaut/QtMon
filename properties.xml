@@ -21,6 +21,7 @@
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
     <Property type="double" name="Latitude" def="56.88397" />
+    <Property type="bool"   name="gpsValid" def="false" />
 
     <!-- Состояние системы -->
     <Property type="int" name="SystemWarningLevel" def="0" description="Общий уровень предупреждений" />

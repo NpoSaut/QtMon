@@ -668,7 +668,7 @@ Rectangle {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
                            source: "Slices/icon-gps-valid.png"
-                           opacity: stateView.SpeedFromSky >= 0 ? 1 : 0
+                           opacity: stateView.gpsValid ? 1 : 0
                        }
                    }
                }

@@ -9,13 +9,12 @@ Levithan::Levithan(QObject *parent) :
 {
 }
 
-void Levithan::SayHello(int i)
+void Levithan::sayHello(int i)
 {
-    speaker.enqueuePhrase(Phrase("phrases/Внимание 1.wav"));
-    speaker.enqueuePhrase(Phrase("play3.wav"));
+
 }
 
-void Levithan::SayLightIndex(int i)
+void Levithan::sayLightIndex(int i)
 {
     // Говорим "внимание", если сигнал ограничивающий (не "зелёный")
     if (i < 3) speaker.enqueuePhrase(Phrase("phrases/attention.wav", 0));
@@ -31,15 +30,37 @@ void Levithan::SayLightIndex(int i)
     }
 }
 
-void Levithan::Beep()
+void Levithan::beep()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-700-40.wav", 0));
 }
 
-void Levithan::Beep(int i) { Beep(); }
-void Levithan::Beep(bool b) { Beep(); }
+void Levithan::beep(int i) { beep(); }
+void Levithan::beep(bool b) { beep(); }
 
-void Levithan::BeepHigh()
+void Levithan::beepHigh()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0));
+}
+
+void Levithan::beepNotification()
+{
+    speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 50));
+}
+
+void Levithan::proccessNewVigilanceRequired(bool required)
+{
+    if (required)
+        beepNotification ();
+}
+
+void Levithan::proccessNewPreAlarmActive(bool active)
+{
+    if (active)
+        beepNotification ();
+}
+
+void Levithan::proccessNewEpvReady(bool ready)
+{
+    beepHigh ();
 }

@@ -1,10 +1,10 @@
 #include "notificator.h"
 
-Notificator::Notificator (QObject *parent) :
-    QObject (parent),
-    handbrakeHintTimeout (), handbrakeHint (false)
+Notificator::Notificator(Parser *onParser, QObject *parent) :
+    QObject(parent),
+    parser(onParser)
 {
-    this->connect (&blokMessages, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
+    this->connect (onParser, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
 
     handbrakeHintTimeout.setSingleShot (true);
     handbrakeHintTimeout.setInterval (15000);
@@ -14,10 +14,10 @@ Notificator::Notificator (QObject *parent) :
 
 void Notificator::getStateChangedSignal()
 {
-    if ( !blokMessages.mcoState.isEpvReady () )
+    if ( !parser->mcoState.isEpvReady () )
         emit notificationTextChanged ("Система отключена");
 
-    else if ( blokMessages.mcoLimits.isTractionShutdown () )
+    else if ( parser->mcoLimits.isTractionShutdownCommand () )
         emit notificationTextChanged ("Экстренное торможение");
 
     else if ( handbrakeHint )

@@ -8,7 +8,8 @@ Rectangle {
 
     property int pageNum: 0
 
-    property double maxSpeed: 60
+    property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+    property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed/45)/Math.log(2))));
 
     function switchPage() {
         pageNum = 1 - pageNum
@@ -81,7 +82,7 @@ Rectangle {
 
     focus: true
 
-    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш F2-F3
+    // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш
     property bool altMode: false
 
     function fillInputParameter(offset, length)
@@ -97,6 +98,13 @@ Rectangle {
             arra[offset + i] = Math.floor(val / Math.pow(10, length - i - 1)) % 10;
 
         return arra;
+    }
+    function fillInputSpeedParameter(offset, length)
+    {
+        var res = 0;
+        for (var i = 0; i < length; i++)
+            res += Math.pow(10, length - i - 1) * inputSpeedPositions[offset + i];
+        return res;
     }
 
     Keys.onPressed: {
@@ -118,7 +126,7 @@ Rectangle {
 	        }
     	    else if (altMode && event.key == Qt.Key_F1) {
                 stateView.ButtonPressed();
-	            stateView.AutolockTypeTarget = (stateView.AutolockTypeTarget + 1) % 3
+                autolockTypePreTarget = (autolockTypePreTarget + 1) % 3
             }
             // Кнопка смены режима движения (РМП)
             else if (!altMode && event.key == Qt.Key_F2) {
@@ -128,12 +136,13 @@ Rectangle {
             // Alt: Отмена Красного
             else if (altMode && event.key == Qt.Key_F2) {
                 stateView.ConfirmButtonPressed();
-                stateView.DisableRedButtonPressed();
+                disableRedButton.pressed = true
             }
             // Ввод параметров
             else if (!altMode && event.key == Qt.Key_F3) {
                 stateView.ButtonPressed();
                 inputMode = true
+                inputMphMode = true
 
                 var _offset = 0;
 
@@ -146,6 +155,8 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
+                input = fillInputArray(input, _offset, 6, stateView.Ordinate/100); _offset += 6;
+                input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
                 inputPositions = input;
                 inputCursorIndex = 1;
@@ -157,6 +168,10 @@ Rectangle {
             // Включение альтернативного режим клавиш
             else if (event.key == Qt.Key_F4) {
                 altMode = true;
+
+                debugModeEnterTimer.restart()
+                if ( debugModeEnterTimer.pushCounter++ >= debugModeEnterTimer.maxPushCounter )
+                    debugModeEnableTimer.restart()
             }
         }
         else
@@ -166,54 +181,105 @@ Rectangle {
                 stateView.ButtonPressed();
                 inputBlinker.restart();
 
-                var input = inputPositions;
-                input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
-                if ((inputCursorIndex == 1) && input[0] == 1)
+                if (inputMphMode)
                 {
-                    input[1] = input[1] % 6;
-                }
-                if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
-                {
-                    input[1] = 5;
+                    var input = inputPositions;
+                    input[inputCursorIndex] = (input[inputCursorIndex] + 1) % inputPositionsLength[inputCursorIndex];
+                    if ((inputCursorIndex == 1) && input[0] == 1)
+                    {
+                        input[1] = input[1] % 6;
+                    }
+                    if ((inputCursorIndex == 0) && input[0] == 1 && input[1] > 5)
+                    {
+                        input[1] = 5;
+                    }
+
+                    inputPositions = input;
                 }
 
-                inputPositions = input;
+                if (inputSpeedMode)
+                {
+                    inputSpeedPositions[0] = 1
+                    var input = inputSpeedPositions;
+                    input[inputSpeedCursorIndex] = (input[inputSpeedCursorIndex] + 1) % inputSpeedPositinosLength[inputSpeedCursorIndex];
+                    inputSpeedPositions = input;
+                }
             }
             if (event.key == Qt.Key_F2)
             {
                 stateView.ButtonPressed();
-                inputCursorIndex++;
-                if (inputCursorIndex >= inputPositions.length) inputCursorIndex = 0;
-                inputBlinker.restart();
+
+                if (inputMphMode)
+                {
+                    inputCursorIndex++;
+                    if (inputCursorIndex >= maxInputCursorIndex) inputCursorIndex = 0;
+                    inputBlinker.restart();
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedCursorIndex++;
+                    if (inputSpeedCursorIndex >= inputSpeedPositions.length) inputSpeedCursorIndex = 0;
+                    inputBlinker.restart();
+                }
             }
             if (event.key == Qt.Key_F3)
             {
                 stateView.ButtonPressed();
-                inputCursorIndex--;
-                if (inputCursorIndex < 0) inputCursorIndex = inputPositions.length-1;
-                inputBlinker.restart();
+
+                if (inputMphMode)
+                {
+                    inputCursorIndex--;
+                    if (inputCursorIndex < 0) inputCursorIndex = maxInputCursorIndex-1;
+                    inputBlinker.restart();
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedCursorIndex--;
+                    if (inputSpeedCursorIndex < 0) inputSpeedCursorIndex = inputSpeedPositions.length-1;
+                    inputBlinker.restart();
+                }
             }
             if (event.key == Qt.Key_F4)
             {
                 stateView.ConfirmButtonPressed();
                 inputMode = false
 
-                var _offset = 0;
-                if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                if (inputMphMode)
                 {
-                    stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
-                }
-                else
-                {
-                    stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
-                }
-                stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
-                stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
-                stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    inputMphMode = false
+                    var _offset = 0;
+                    if (inputPositions[2] % 2 == 0 || (inputPositions[0] == 0 && inputPositions[1] == 0))
+                    {
+                        stateView.TrackNumber = fillInputParameter(_offset, 2);       _offset += 3;
+                    }
+                    else
+                    {
+                        stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
+                    }
+                    stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    if (stateView.TrackNumber == 0)
+                    {
+                        stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
+                        stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
+                    }
 
-                if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                    if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                }
+
+                if (inputSpeedMode)
+                {
+                    inputSpeedMode = false
+
+                    stateView.AutolockSpeed =  fillInputSpeedParameter(0, 3);
+
+                    stateView.AutolockTypeTarget = autolockTypePreTarget
+                }
             }
         }
     }
@@ -222,6 +288,24 @@ Rectangle {
         // Выключение альтернативного режима клавиш
         if (event.key == Qt.Key_F4) {
             altMode = false;
+
+            if ( autolockTypePreTarget != stateView.AutolockTypeTarget)
+            {
+                if ( autolockTypePreTarget == 0 ) // АБ
+                {
+                    stateView.AutolockTypeTarget = autolockTypePreTarget
+                }
+                else
+                {
+                    inputMode = true;
+                    inputSpeedMode = true;
+
+                    var input = inputSpeedPositions
+                    input = fillInputArray(input, 0, 3, stateView.AutolockSpeed);
+                    inputSpeedPositions = input;
+                    inputSpeedCursorIndex = 0;
+                }
+            }
         }
         // Отпускание кнопки РМП
         else if (!altMode && event.key == Qt.Key_F2) {
@@ -229,7 +313,7 @@ Rectangle {
         }
         // Alt: Отмена Красного
         else if (altMode && event.key == Qt.Key_F2) {
-            stateView.DisableRedButtonReleased();
+            disableRedButton.pressed = false
         }
         // Alt: пустой
         else if (altMode && event.key == Qt.Key_F3) {
@@ -272,10 +356,19 @@ Rectangle {
     }
 
     property bool inputMode: false
+    property bool inputMphMode: false
+    property bool inputSpeedMode:false
     property int inputCursorIndex: 0
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+    property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
+    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
+    property int inputSpeedCursorIndex: 0
+    property variant inputSpeedPositions: [0, 1, 2]
+    property variant inputSpeedPositinosLength: [4, 10, 10]
+
+    property int autolockTypePreTarget: stateView.AutolockTypeTarget
 
     Timer {
         id: inputBlinker
@@ -285,6 +378,23 @@ Rectangle {
         repeat: true
         onTriggered: blink = !blink
         onRunningChanged: blink = true
+    }
+
+    Timer {
+        id: debugModeEnterTimer
+        property int pushCounter: 0
+        property int maxPushCounter: 2
+        interval: 400
+        running: false
+        repeat: false
+        onTriggered: pushCounter = 0
+    }
+
+    Timer {
+        id: debugModeEnableTimer
+        interval: 100000
+        running: false
+        repeat: false
     }
 
     Rectangle {
@@ -332,7 +442,7 @@ Rectangle {
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
 
-                           text: qsTr("ОРДИНАТА")
+                           text: qsTr("КООРДИНАТА")
                            color: "#ffffff00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
@@ -439,7 +549,7 @@ Rectangle {
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
                              anchors.verticalCenter: parent.verticalCenter
-                             text: qsTr("--")
+                             text: qsTr(stateView.PressureTC)
                              color: "#ffffffff"
                              font.pixelSize: 14
                              font.family: "URW Gothic L"
@@ -468,7 +578,7 @@ Rectangle {
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            text: qsTr("--")
+                            text: qsTr(stateView.PressureTM)
                             color: "#ffffffff"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -553,11 +663,12 @@ Rectangle {
                        border.color: "#ffffff00"
                        width: 21
                        height: 20
+                       visible: debugModeEnableTimer.running
                        Image {
                            anchors.horizontalCenter: parent.horizontalCenter
                            anchors.verticalCenter: parent.verticalCenter
                            source: "Slices/icon-gps-valid.png"
-                           opacity: stateView.SpeedFromSky >= 0 ? 1 : 0
+                           opacity: stateView.gpsValid ? 1 : 0
                        }
                    }
                }
@@ -579,7 +690,7 @@ Rectangle {
                 height: width
 
                 // Количество засечек
-                property int tickCount: maxSpeed / 5
+                property int tickCount: maxSpeed / speedStep
 
                 property double minAngle: 1.25 * Math.PI
                 property double maxAngle: -0.25 * Math.PI
@@ -681,7 +792,11 @@ Rectangle {
                     {
                         interval = nextInterval;
                         innerPoolsed = !innerPoolsed
-                        if (poolsed) stateView.SpeedWarningFlash()
+                        if (poolsed)
+                        {
+                            stateView.SpeedWarningFlash();
+                            speedRestrictionNeedlePulsingAnimation.start();
+                        }
                     }
                 }
 
@@ -727,6 +842,7 @@ Rectangle {
 
                 // Стрелка ограничения скорости
                 Rectangle {
+                    id: speedRestrictionNeedle
                     transformOrigin: Item.Right
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -739,6 +855,16 @@ Rectangle {
                     anchors.horizontalCenterOffset: r * Math.cos(angle)
 
                     rotation: 180 - angle * 180 / Math.PI
+
+                    SequentialAnimation {
+                        id: speedRestrictionNeedlePulsingAnimation
+//                        property bool playing: false
+//                        running: playing || speedometerWarner.poolsed
+                        NumberAnimation { target: speedRestrictionNeedle; property: "scale"; to: 1.5; duration:  70; easing: Easing.OutCubic }
+                        NumberAnimation { target: speedRestrictionNeedle; property: "scale"; to: 1;   duration: 150; easing: Easing.InCubic }
+//                        onStarted: playing = true
+//                        onCompleted: playing = false
+                    }
 
                     Image {
                         source: "Slices/Needle-Restriction.png"
@@ -949,6 +1075,7 @@ Rectangle {
                 anchors.leftMargin: -180
                 border.color: "#ffffff00"
                 height: 25
+                visible: debugModeEnableTimer.running
 
                 Text {
                     anchors.left: parent.left
@@ -1172,9 +1299,9 @@ Rectangle {
 
                         Text {
                             id: alsnTextBoxText
-                            anchors.left: parent.left
+                            anchors.horizontalCenter: parent.horizontalCenter
 
-                            text: qsTr("АЛСН")
+                            text: altMode ? qsTr("АБ") : qsTr("АЛСН")
                             color: "#ffdddddd"
                             font.pixelSize: 18
                             font.family: "URW Gothic L"
@@ -1191,10 +1318,10 @@ Rectangle {
                         }
                         Text {
                             id: alsnTextBoxFreq
-                            anchors.left: parent.left
+                            anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: alsnTextBoxLine.bottom
 
-                            text: qsTr("частота")
+                            text: altMode ? qsTr("режим") : qsTr("частота")
                             color: "#ffdddddd"
                             font.pixelSize: 14
                             font.family: "URW Gothic L"
@@ -1249,26 +1376,74 @@ Rectangle {
                             }
                         }
 
+                        Repeater {
+                            model: ["АБ", "ПАБ", "ЗАБ"]
+                            Rectangle {
+                                property real myRot: (12 - index) * alsnSwitch.angle
+
+                                x: alsnSwitch.width/2 + alsnSwitch.radius * Math.cos(myRot / 180 * Math.PI)
+                                y: alsnSwitch.height/2 + alsnSwitch.radius * Math.sin(myRot / 180 * Math.PI)
+                                rotation: myRot
+
+                                color: alsnSwitch.objColor
+                                width: 2
+                                height: 2
+                                smooth: true
+
+                                Text {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.right: parent.left
+                                    anchors.rightMargin: 4
+
+                                    text: modelData
+                                    font.pixelSize: 14
+                                    font.family: "URW Gothic L"
+                                    color: alsnSwitch.objColor
+                                    smooth: true
+                                }
+                            }
+                        }
+
                         states: [
                             State {
                                 name: "alsn0"
-                                when: (stateView.AlsnFreqTarget != 25 && tateView.AlsnFreqTarget != 50 && tateView.AlsnFreqTarget != 75)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget != 25 && stateView.AlsnFreqTarget != 50 && stateView.AlsnFreqTarget != 75)
                                 PropertyChanges { target: alsnSwitch; rotation: -2 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn25"
-                                when: (stateView.AlsnFreqTarget == 25)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 25)
                                 PropertyChanges { target: alsnSwitch; rotation: -1 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn50"
-                                when: (stateView.AlsnFreqTarget == 50)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 50)
                                 PropertyChanges { target: alsnSwitch; rotation: 0 * alsnSwitch.angle }
                             },
                             State {
                                 name: "alsn75"
-                                when: (stateView.AlsnFreqTarget == 75)
+                                when: (altMode == false) && (stateView.AlsnFreqTarget == 75)
                                 PropertyChanges { target: alsnSwitch; rotation: +1 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "0mode"
+                                when: (altMode == true) && (autolockTypePreTarget != 0) && (autolockTypePreTarget != 1) && (autolockTypePreTarget != 2)
+                                PropertyChanges { target: alsnSwitch; rotation: +11 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "abmode"
+                                when: (altMode == true) && (autolockTypePreTarget == 0)
+                                PropertyChanges { target: alsnSwitch; rotation: +12 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "pabmode"
+                                when: (altMode == true) && (autolockTypePreTarget == 1)
+                                PropertyChanges { target: alsnSwitch; rotation: +13 * alsnSwitch.angle }
+                            },
+                            State {
+                                name: "zabmode"
+                                when: (altMode == true) && (autolockTypePreTarget == 2)
+                                PropertyChanges { target: alsnSwitch; rotation: +14 * alsnSwitch.angle }
                             }
                         ]
 
@@ -1277,68 +1452,55 @@ Rectangle {
                         }
                     }
 
-
-                    Row {
-                        id: autolockSelector
-                        anchors.horizontalCenter: alsnTextBox.horizontalCenter
-                        anchors.horizontalCenterOffset: 3
-                        anchors.bottom: alsnTextBox.top
-                        anchors.bottomMargin: 16
-                        spacing: 4
-                        property int itemWidth: 26
-
-                        Repeater {
-                            model: ["АБ", "ПАБ", "ЗАБ"]
-                            Rectangle {
-                                property bool isConfirmed: index == stateView.AutolockTypeFact
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: autolockSelector.itemWidth
-                                height: 14
-                                radius: 2
-                                color: isConfirmed ? "#ccc" : "#00000000"
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    text: modelData
-                                    font.pixelSize: 10
-                                    color: parent.isConfirmed ? "#333" : "#ccc"
-                                }
-                            }
-                        }
-                    }
                     Rectangle {
-                        id: autolockSelectorCursor
-                        anchors.top: autolockSelector.bottom
-                        anchors.left: autolockSelector.left
+                        property bool isSelected: stateView.AutolockTypeTarget == 1
+                        property bool isConfirmed: stateView.AutolockTypeFact == 1
+                        anchors.top: alsnTextBox.bottom
                         anchors.topMargin: 4
-                        anchors.leftMargin: autolockSelector.itemWidth * (0.5 + stateView.AutolockTypeTarget) + autolockSelector.spacing * stateView.AutolockTypeTarget
-
-                        property bool show: (altMode || stateView.AutolockTypeFact != stateView.AutolockTypeTarget) && stateView.AutolockTypeTarget >= 0
-
-                        Image {
+                        anchors.left: alsnTextBox.left
+                        anchors.leftMargin: 2
+                        width: 26
+                        height: 14
+                        radius: 2
+                        border.color: "#ccc"
+                        color: isConfirmed ? "#ccc" : "#00000000"
+                        opacity: isConfirmed || isSelected ? 1 : 0
+                        Text {
                             anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 1
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "Slices/autolock-cursor.png"
-                            scale: parent.show ? 0.25 : 2
-                            Behavior on scale { PropertyAnimation { duration: 100 } }
-                            smooth: true
+                            anchors.horizontalCenterOffset: 1
+                            text: qsTr("ПАБ")
+                            font.pixelSize: 10
+                            color: parent.isConfirmed ? "#333" : "#ccc"
+                            opacity: parent.isConfirmed || parent.isSelected ? 1 : 0
                         }
-                        //opacity: stateView.AutolockTypeFact != stateView.AutolockTypeTarget ? 1 : 0
-
-                        opacity: show ? 1 : 0
-                        Behavior on opacity { PropertyAnimation { duration: 100 } }
-                        Behavior on anchors.leftMargin { PropertyAnimation { duration: 170 } }
                     }
-//                    Timer {
-//                        interval: 1000
-//                        running: true
-//                        repeat: true
-//                        onTriggered:
-//                        {
-//                            if (stateView.AutolockTypeFact != stateView.AutolockTypeTarget)
-//                                stateView.AutolockTypeFact = (stateView.AutolockTypeFact + 1) % 3
-//                        }
-//                    }
+
+                    Rectangle {
+                        property bool isSelected: stateView.AutolockTypeTarget == 2
+                        property bool isConfirmed: stateView.AutolockTypeFact == 2
+                        anchors.top: alsnTextBox.bottom
+                        anchors.topMargin: 4
+                        anchors.right: alsnTextBox.right
+                        anchors.rightMargin: 2
+                        width: 26
+                        height: 14
+                        radius: 2
+                        border.color: "#ccc"
+                        color: isConfirmed ? "#ccc" : "#00000000"
+                        opacity: isConfirmed || isSelected ? 1 : 0
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenterOffset: 1
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.horizontalCenterOffset: 1
+                            text: qsTr("ЗАБ")
+                            font.pixelSize: 10
+                            color: parent.isConfirmed ? "#333" : "#ccc"
+                            opacity: parent.isConfirmed || parent.isSelected ? 1 : 0
+                        }
+                    }
                 }
 
             }
@@ -1376,19 +1538,25 @@ Rectangle {
                         Repeater {
                             model: [ "П", "М", "Р", " ", "Т" ]
                             Row {
+                                property bool isTransport: modelData == "Т";
+                                property bool isSelected: getDriveModeLetter(stateView.DriveModeTarget) == modelData;
+                                property bool isConfirmed: getDriveModeLetter(stateView.DriveModeFact) == modelData;
                                 //height: 16
                                 spacing: 12
                                 Image {
                                     visible: modelData != " "
-                                    source: "Slices/drivemode-led-" +
-                                            (getDriveModeLetter(stateView.DriveModeTarget) == modelData ? "" : "un") + "selected" +
-                                            (getDriveModeLetter(stateView.DriveModeFact) == modelData ? "-confirmed" : "") +
+                                    source: "Slices/drivemode-led" +
+                                            (parent.isConfirmed ? "-confirmed" : "") +
+                                            ((parent.isTransport && stateView.IronWheels) ? "-disabled" : "") +
                                             ".png"
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Text {
+                                    id: drivemodeSwitchItemLabel
                                     visible: modelData != " "
-                                    color: modelData != "Т" ? "#ccc" : "#ffffff00"
+                                    color: !parent.isTransport ? "#ccc" : "#ffffff00"
                                     text: modelData
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
 
                                 // Заглушка - сепаратор
@@ -1397,6 +1565,11 @@ Rectangle {
                                     height: 3
                                     width: 10
                                     color: "#00000000"
+                                }
+
+                                onIsSelectedChanged: {
+                                    if (isSelected)
+                                        drivemodeSwitchSelector.y = drivemodeSwitch.y + y + height/2
                                 }
                             }
                         }
@@ -1471,20 +1644,82 @@ Rectangle {
                             font.pixelSize: 14
                         }
                     }
+
+                    // Стрелка выбора режима РМП
+                    Rectangle {
+                        id: drivemodeSwitchSelector
+                        anchors.right: drivemodeSwitch.right
+                        property bool isActive: stateView.DriveModeTarget != -1 && stateView.DriveModeFact != stateView.DriveModeTarget
+                        opacity: isActive ? 1 : 0
+                        anchors.rightMargin: isActive ? -3 : -8
+                        // Изображение стрелки
+                        Image {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 6
+                            anchors.verticalCenter: parent.verticalCenter
+                            source: "Slices/drivemode-selector.png"
+                        }
+                        // Этикетка с просьбой остановиться
+                        Rectangle {
+                            property bool askToStop: parent.isActive && stateView.Speed > 0
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            width: 80
+                            height: drivemodeStopToSwitchLabel.paintedHeight + drivemodeStopToSwitchLabel.anchors.margins * 2
+                            color: "#f0333333"
+                            opacity: askToStop ? 1 : 0
+                            anchors.topMargin: askToStop ? 0 : 8
+                            Behavior on opacity { PropertyAnimation { duration: 170 } }
+                            Behavior on anchors.topMargin { PropertyAnimation { duration: 170 } }
+                            // Текст просьбы об остановке
+                            Text {
+                                id: drivemodeStopToSwitchLabel
+                                anchors.top: parent.top
+                                anchors.left: parent.left
+                                anchors.bottom: parent.bottom
+                                anchors.right: parent.right
+                                anchors.margins: 5
+                                wrapMode: Text.WordWrap
+                                color: "#ccc"
+                                text: "Остановитесь для смены режима"
+                                styleColor: "#fff"
+                            }
+                            // Красная полосочка слева
+                            Rectangle {
+                                anchors.left: parent.left;
+                                anchors.top: parent.top; anchors.bottom: parent.bottom
+                                color: "#f41"
+                                width: 2
+                            }
+                        }
+
+                        Behavior on y { PropertyAnimation { duration: 100 } }
+                        Behavior on opacity { PropertyAnimation { duration: 170 } }
+                        Behavior on anchors.rightMargin { PropertyAnimation { duration: 170 } }
+                    }
                 }
 
                 Column {
-                    id: page1buttonAltHeader
+                    id: disableRedButton
+                    property bool pressed: false
                     anchors.left: parent.left
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
                     visible: altMode
+                    onPressedChanged: {
+                        if (pressed)
+                            stateView.DisableRedButtonPressed()
+                        else
+                            stateView.DisableRedButtonReleased()
+                    }
 
                     Text {
-                        color: "#ffffff"
+                        color: parent.pressed ? "#ccc" : "#ffffff"
                         text: qsTr("Отмена\nКрасного")
-                        font.pointSize: 16
+                        font.pixelSize: 16
                         font.family: "URW Gothic L"
+                        font.bold: true
+
                     }
                 }
                 MouseArea {
@@ -1529,8 +1764,9 @@ Rectangle {
                             anchors.topMargin: 10
                             color: "#ffffff"
                             text: qsTr("Карта")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                         Text {
                             anchors.right: parent.right
@@ -1539,8 +1775,9 @@ Rectangle {
                             anchors.bottomMargin: 10
                             color: "#ffffff"
                             text: qsTr("   Панель\n приборов")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
 
                     }
@@ -1555,8 +1792,9 @@ Rectangle {
                         Text {
                             color: "#ffffff"
                             text: qsTr("Ввод\nпараметров")
-                            font.pointSize: 16
+                            font.pixelSize: 16
                             font.family: "URW Gothic L"
+                            font.bold: true
                         }
                     }
                     MouseArea {
@@ -1589,8 +1827,9 @@ Rectangle {
                     Text {
                         color: "#ffffff"
                         text: qsTr("Alt")
-                        font.pointSize: 20
+                        font.pixelSize: 20
                         font.family: "URW Gothic L"
+                        font.bold: true
                     }
                 }
             }
@@ -1875,6 +2114,7 @@ Rectangle {
         }
     }
 
+    // ----------------------- InputMode -------------------------
 
     Rectangle {
         anchors.fill: rootRect
@@ -1917,14 +2157,16 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: inputModeParentField
+
+
+    Column {
+        id: inputMphModeParentField
         anchors.top: parent.top
-        anchors.topMargin: inputMode ? 0 : -height
+        anchors.topMargin: inputMphMode ? 0 : -height
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "#00000000"
+        //color: "#00000000"
         width: 420
-        height: 164
+        //height: 164
 
         Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
 
@@ -1937,8 +2179,8 @@ Rectangle {
         Column{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-            anchors.topMargin: 24
-            spacing: 26
+            anchors.topMargin: 28
+            spacing: 3
 
             Row{
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -2085,7 +2327,10 @@ Rectangle {
                 }
             }
 
-            Row{
+            // сепаратор
+            Rectangle { width: 1; height: 22; color: "#00000000" }
+
+            Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 60
 
@@ -2095,7 +2340,7 @@ Rectangle {
                     property int startPosition: 11
                     property int positionsCount: 3
                     width: 20*positionsCount
-                    height: 64
+                    height: 54
                     color: "#00000000"
 
                     Text{
@@ -2234,8 +2479,242 @@ Rectangle {
                 }
             }
 
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 6
+
+                Text{
+                    anchors.top: parent.top
+                    anchors.topMargin: 2
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    font.family: "URW Gothic L"
+                    font.pixelSize: 18
+                    font.bold: true
+                    color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
+                    text: qsTr("Координата")
+                }
+
+                // ввод ординаты (км)
+                Rectangle{
+                    id: inputModeOrdinateKm
+                    property int startPosition: 21
+                    property int positionsCount: 5
+                    width: 17*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
+                        text: qsTr("км")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ввод ординаты (пк)
+                Rectangle{
+                    id: inputModeDirectoinPc
+                    property int startPosition: 26
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
+                        text: qsTr("пк")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // сепаратор
+                Rectangle { width: 14; height: 1; color: "#00000000" }
+
+                // Направления движения
+                Rectangle{
+                    id: inputModeDirectoin
+                    property int startPosition: 27
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#0000ff00"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 28
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 12
+                        font.bold: true
+                        color: manualOrdinateEnable ? "#ffe0e0e0" : "#44e0e0e0"
+                        text: qsTr("Напр.")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 5
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                opacity: manualOrdinateEnable ? 1 : 0.6
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex] == 0 ? "-" : "+"
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    // Панель ввода скорости на белый
+    Rectangle {
+        id: inputSpeedModeParentField
+        anchors.top: parent.top
+        anchors.topMargin: inputSpeedMode ? 0 : -height
+        anchors.horizontalCenter: parent.horizontalCenter
+        //color: "#00000000"
+        width: 420
+        height: 98
+
+        Behavior on anchors.topMargin { SmoothedAnimation { duration: 100 } }
+
+        Image{
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "Slices/InputMode-Field.png"
+            fillMode: Image.Tile
+            height: parent.height
         }
 
+        // Ввод номера машиниста
+        Rectangle{
+            id: inputSpeedModeAutolockSpeed
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            property int startPosition: 0
+            property int positionsCount: 3
+            width: 20*positionsCount
+            height: 54
+            color: "#00000000"
+
+            Text{
+                anchors.top: parent.top
+                anchors.topMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.family: "URW Gothic L"
+                font.pixelSize: 18
+                font.bold: true
+                color: "#ffe0e0e0"
+                text: qsTr("Скорость на БЕЛЫЙ")
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                height: 30
+                spacing: 0
+                Repeater {
+                    model: parent.parent.positionsCount
+                    Image {
+                        property int myCursorIndex: parent.parent.startPosition+index
+                        property bool blink: (myCursorIndex == inputSpeedCursorIndex) && inputBlinker.blink
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                        Text {
+                            text: inputSpeedPositions[parent.myCursorIndex]
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 24
+                            font.family: "URW Gothic L"
+                            font.bold: true
+                            color: parent.blink ?  "#ccc" : "#ff474747"
+                        }
+                    }
+                }
+            }
+        }
 
     }
 

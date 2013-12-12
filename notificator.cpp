@@ -27,9 +27,9 @@ void Notificator::getStateChangedSignal()
         emit notificationTextChanged ("");
 
     // Подними ручник
-    if ( blokMessages.mcoLimits.getDriveMode () != ROAD
-     &&  !blokMessages.ipdState.isInMotion ()
-     &&  blokMessages.mcoState.isTraction ()  )
+    if ( parser->mcoLimits.getDriveMode () != ROAD
+     && !parser->ipdState.isInMotion ()
+     &&  parser->mcoState.isTraction ()  )
     {
         if ( !handbrakeHintTimeout.isActive () )
             handbrakeHintTimeout.start ();

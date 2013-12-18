@@ -14,18 +14,6 @@ Notificator::Notificator(Parser *onParser, QObject *parent) :
 
 void Notificator::getStateChangedSignal()
 {
-    if ( !parser->mcoState.isEpvReady () )
-        emit notificationTextChanged ("Система отключена");
-
-    else if ( parser->mcoLimits.isTractionShutdownCommand () )
-        emit notificationTextChanged ("Экстренное торможение");
-
-    else if ( handbrakeHint )
-        emit notificationTextChanged ("Подними ручник");
-
-    else
-        emit notificationTextChanged ("");
-
     // Подними ручник
     if ( parser->mcoLimits.getDriveMode () != ROAD
      && !parser->ipdState.isInMotion ()
@@ -40,9 +28,21 @@ void Notificator::getStateChangedSignal()
         handbrakeHint = false;
     }
 
+    if ( !parser->mcoState.isEpvReady () )
+        emit notificationTextChanged ("Система отключена");
+
+    else if ( parser->mcoLimits.isTractionShutdownCommand () )
+        emit notificationTextChanged ("Экстренное торможение");
+
+    else if ( handbrakeHint )
+        emit notificationTextChanged ("Подними ручник");
+
+    else
+        emit notificationTextChanged ("");
 }
 
 void Notificator::handbrakeHintShow()
 {
     handbrakeHint = true;
+    getStateChangedSignal ();
 }

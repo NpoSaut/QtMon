@@ -15,7 +15,6 @@ PressureSelector::PressureSelector(Unit unit, Parser *parser, QObject *parent) :
 
     QObject::connect (&parser->mvdDd, SIGNAL(tcPressureChanged(Pressure)), this, SLOT(updateTcPressure()));
     QObject::connect (&parser->mvdDd, SIGNAL(tmPressureChanged(Pressure)), this, SLOT(updateTmPressure()));
-    QObject::connect (&parser->mvdDd, SIGNAL(urPressureChanged(Pressure)), this, SLOT(updateUrPressure()));
     QObject::connect (&parser->mvdDd, SIGNAL(freshChanged(bool)), this, SLOT(updateTcPressure()));
     QObject::connect (&parser->mvdDd, SIGNAL(freshChanged(bool)), this, SLOT(updateTmPressure()));
     QObject::connect (&parser->mvdDd, SIGNAL(freshChanged(bool)), this, SLOT(updateUrPressure()));

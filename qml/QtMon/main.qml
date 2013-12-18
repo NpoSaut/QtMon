@@ -1844,7 +1844,7 @@ Rectangle {
 
         x: 652
         y: 0
-        width: 149
+        width: 153
         height: 480
         color: "#00000000"
         anchors.bottom: parent.bottom

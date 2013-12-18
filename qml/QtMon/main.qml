@@ -1879,7 +1879,12 @@ Rectangle {
                     interval: 400
                     running: stateView.IsVigilanceRequired || (parent.isActive)
                     repeat: true
-                    onTriggered: parent.isActive = !parent.isActive
+                    onTriggered:
+                    {
+                        parent.isActive = !parent.isActive
+                        if (parent.isActive)
+                            stateView.WarningLedFlash ();
+                    }
                 }
             }
 

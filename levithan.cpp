@@ -3,10 +3,12 @@
 
 using namespace sound;
 
-Levithan::Levithan(QObject *parent) :
+Levithan::Levithan(SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
+    state (state),
     speaker()
 {
+    QObject::connect (state, SIGNAL(IsVigilanceRequiredChanged(bool)), this, SLOT(onStateVigilanceRequiredChanged(bool)));
 }
 
 void Levithan::sayHello(int i)
@@ -43,6 +45,16 @@ void Levithan::beepHigh()
     speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0));
 }
 
+void Levithan::beepVigilance()
+{
+    speaker.enqueuePhrase(Phrase("phrases/beep-700-160.wav", -1));
+}
+
+void Levithan::beepConfirmation()
+{
+    speaker.enqueuePhrase(Phrase("phrases/beep-low-hi.wav", -1));
+}
+
 void Levithan::beepNotification()
 {
     speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 50));
@@ -64,3 +76,4 @@ void Levithan::proccessNewEpvReady(bool ready)
 {
     beepHigh ();
 }
+

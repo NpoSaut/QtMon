@@ -18,11 +18,4 @@ void Notificator::getStateChangedSignal()
 
     else
         emit notificationTextChanged ("");
-
-//    else if (     blokMessages.mcoLimits.getDriveMode () != ROAD
-//         && !blokMessages.ipdState.isInMotion ()             )
-//    {
-//        // empty for Patriot
-//    }
-
 }

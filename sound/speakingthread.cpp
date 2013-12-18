@@ -14,6 +14,8 @@ Speaker::Speaker()
 
 void Speaker::enqueuePhrase(Phrase phrase)
 {
+    if (phrase.priority == -1 && !this->isEmpty ()) return;
+
     this->enqueue(phrase);
 }
 

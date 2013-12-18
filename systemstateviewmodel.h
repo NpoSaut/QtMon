@@ -289,6 +289,7 @@ signals:
     void ButtonPressed();
     void ConfirmButtonPressed();
     void SpeedWarningFlash();
+    void WarningLedFlash();
 
     // Сигнал о нажатии кнопки Смены режима движения
     void ChangeDrivemodeButtonPressed();

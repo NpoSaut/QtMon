@@ -221,7 +221,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
-    levithan = new Levithan();
+    levithan = new Levithan(systemState);
 
 #ifdef WITH_CAN
     can = new SocketCan();
@@ -364,10 +364,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(TsvcIsVigilanceRequiredChanged(bool)), levithan, SLOT(proccessNewVigilanceRequired(bool)));
     QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
+    QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     QtConcurrent::run(getParamsFromConsole);
-
-
 
     return app->exec();
 }

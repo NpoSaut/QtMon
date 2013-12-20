@@ -11,10 +11,13 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
+    designSpeedValue = 40;
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
+    pressureURValue = "0.00";
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
+    gpsValidValue = false;
     systemWarningLevelValue = 0;
     fullSetWarningLevelValue = 0;
     isPressureOkValue = true;
@@ -30,24 +33,31 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     timeValue = "-:-";
     dateValue = "- / - / -";
     isRegistrationTapeActiveValue = false;
-    driveModeTargetValue = 0;
+    driveModeTargetValue = -1;
     driveModeFactValue = -1;
     ironWheelsValue = true;
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
-    ordinateValue = 0;
+    ordinateValue = 1100;
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
     nextTargetDistanceValue = 0;
-    warningTextValue = "";
-    infoTextValue = "";
+    notificationTextValue = "";
     trackNumberValue = 0;
     machinistNumberValue = 0;
     trainNumberValue = 0;
     wagonCountValue = 1;
     axlesCountValue = 4;
     trainMassValue = 0;
+    manualOrdinateEnableValue = false;
+    manualOrdinateValue = 1100;
+    manualOrdinateIncreaseDirectionValue = 1;
+    autolockSpeedValue = 40;
+    tsvcIsOnlineValue = false;
+    tsvcIsMachinistCheerfulValue = false;
+    tsvcIsVigilanceRequiredValue = false;
+    tsvcIsPreAlarmActiveValue = false;
     // fileds init end
 }
 
@@ -150,6 +160,20 @@ void SystemStateViewModel::setAcceleration(const double value)
     }
 }
 
+// Конструктивная скорость
+const int SystemStateViewModel::getDesignSpeed() const
+{
+    return designSpeedValue;
+}
+void SystemStateViewModel::setDesignSpeed(const int value)
+{
+    if (designSpeedValue != value)
+    {
+        designSpeedValue = value;
+        emit DesignSpeedChanged(value);
+    }
+}
+
 // Давление ТЦ
 const QString SystemStateViewModel::getPressureTC() const
 {
@@ -178,6 +202,20 @@ void SystemStateViewModel::setPressureTM(const QString value)
     }
 }
 
+// Давление УР
+const QString SystemStateViewModel::getPressureUR() const
+{
+    return pressureURValue;
+}
+void SystemStateViewModel::setPressureUR(const QString value)
+{
+    if (pressureURValue != value)
+    {
+        pressureURValue = value;
+        emit PressureURChanged(value);
+    }
+}
+
 const double SystemStateViewModel::getLongitude() const
 {
     return longitudeValue;
@@ -201,6 +239,19 @@ void SystemStateViewModel::setLatitude(const double value)
     {
         latitudeValue = value;
         emit LatitudeChanged(value);
+    }
+}
+
+const bool SystemStateViewModel::getGpsValid() const
+{
+    return gpsValidValue;
+}
+void SystemStateViewModel::setGpsValid(const bool value)
+{
+    if (gpsValidValue != value)
+    {
+        gpsValidValue = value;
+        emit gpsValidChanged(value);
     }
 }
 
@@ -344,7 +395,7 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
     }
 }
 
-// Целевой тип автоблокировки
+// Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
 const int SystemStateViewModel::getAutolockTypeTarget() const
 {
     return autolockTypeTargetValue;
@@ -358,7 +409,7 @@ void SystemStateViewModel::setAutolockTypeTarget(const int value)
     }
 }
 
-// Фактический тип автоблокировки
+// Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
 const int SystemStateViewModel::getAutolockTypeFact() const
 {
     return autolockTypeFactValue;
@@ -554,30 +605,16 @@ void SystemStateViewModel::setNextTargetDistance(const int value)
 }
 
 // Текст высокоприоритетного сообщения
-const QString SystemStateViewModel::getWarningText() const
+const QString SystemStateViewModel::getNotificationText() const
 {
-    return warningTextValue;
+    return notificationTextValue;
 }
-void SystemStateViewModel::setWarningText(const QString value)
+void SystemStateViewModel::setNotificationText(const QString value)
 {
-    if (warningTextValue != value)
+    if (notificationTextValue != value)
     {
-        warningTextValue = value;
-        emit WarningTextChanged(value);
-    }
-}
-
-// Текст низкоприоритетного сообщения
-const QString SystemStateViewModel::getInfoText() const
-{
-    return infoTextValue;
-}
-void SystemStateViewModel::setInfoText(const QString value)
-{
-    if (infoTextValue != value)
-    {
-        infoTextValue = value;
-        emit InfoTextChanged(value);
+        notificationTextValue = value;
+        emit NotificationTextChanged(value);
     }
 }
 
@@ -662,6 +699,118 @@ void SystemStateViewModel::setTrainMass(const int value)
     {
         trainMassValue = value;
         emit TrainMassChanged(value);
+    }
+}
+
+// Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути.
+const bool SystemStateViewModel::getManualOrdinateEnable() const
+{
+    return manualOrdinateEnableValue;
+}
+void SystemStateViewModel::setManualOrdinateEnable(const bool value)
+{
+    if (manualOrdinateEnableValue != value)
+    {
+        manualOrdinateEnableValue = value;
+        emit ManualOrdinateEnableChanged(value);
+    }
+}
+
+// Начальная ордината в ручном режиме
+const int SystemStateViewModel::getManualOrdinate() const
+{
+    return manualOrdinateValue;
+}
+void SystemStateViewModel::setManualOrdinate(const int value)
+{
+    if (manualOrdinateValue != value)
+    {
+        manualOrdinateValue = value;
+        emit ManualOrdinateChanged(value);
+    }
+}
+
+// Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад.
+const int SystemStateViewModel::getManualOrdinateIncreaseDirection() const
+{
+    return manualOrdinateIncreaseDirectionValue;
+}
+void SystemStateViewModel::setManualOrdinateIncreaseDirection(const int value)
+{
+    if (manualOrdinateIncreaseDirectionValue != value)
+    {
+        manualOrdinateIncreaseDirectionValue = value;
+        emit ManualOrdinateIncreaseDirectionChanged(value);
+    }
+}
+
+// Скорость на белый при ЗАБ
+const int SystemStateViewModel::getAutolockSpeed() const
+{
+    return autolockSpeedValue;
+}
+void SystemStateViewModel::setAutolockSpeed(const int value)
+{
+    if (autolockSpeedValue != value)
+    {
+        autolockSpeedValue = value;
+        emit AutolockSpeedChanged(value);
+    }
+}
+
+// ТСКБМ подключена
+const bool SystemStateViewModel::getTsvcIsOnline() const
+{
+    return tsvcIsOnlineValue;
+}
+void SystemStateViewModel::setTsvcIsOnline(const bool value)
+{
+    if (tsvcIsOnlineValue != value)
+    {
+        tsvcIsOnlineValue = value;
+        emit TsvcIsOnlineChanged(value);
+    }
+}
+
+// ТСКБМ: машинист бодр
+const bool SystemStateViewModel::getTsvcIsMachinistCheerful() const
+{
+    return tsvcIsMachinistCheerfulValue;
+}
+void SystemStateViewModel::setTsvcIsMachinistCheerful(const bool value)
+{
+    if (tsvcIsMachinistCheerfulValue != value)
+    {
+        tsvcIsMachinistCheerfulValue = value;
+        emit TsvcIsMachinistCheerfulChanged(value);
+    }
+}
+
+// ТСКБМ требует подтверждения бдительности
+const bool SystemStateViewModel::getTsvcIsVigilanceRequired() const
+{
+    return tsvcIsVigilanceRequiredValue;
+}
+void SystemStateViewModel::setTsvcIsVigilanceRequired(const bool value)
+{
+    if (tsvcIsVigilanceRequiredValue != value)
+    {
+        tsvcIsVigilanceRequiredValue = value;
+        emit TsvcIsVigilanceRequiredChanged(value);
+    }
+}
+
+// Предварительная сигнализация ТСКБМ активна
+const bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
+{
+    return tsvcIsPreAlarmActiveValue;
+}
+void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
+{
+    if (tsvcIsPreAlarmActiveValue != value)
+    {
+        tsvcIsPreAlarmActiveValue = value;
+        emit TsvcIsPreAlarmActiveChanged(value);
     }
 }
 

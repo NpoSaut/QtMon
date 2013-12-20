@@ -38,6 +38,10 @@ class SystemStateViewModel : public QDeclarativeItem
     double accelerationValue;
     Q_PROPERTY(double Acceleration READ getAcceleration WRITE setAcceleration NOTIFY AccelerationChanged)
 
+    // Конструктивная скорость
+    int designSpeedValue;
+    Q_PROPERTY(int DesignSpeed READ getDesignSpeed WRITE setDesignSpeed NOTIFY DesignSpeedChanged)
+
     // Давление ТЦ
     QString pressureTCValue;
     Q_PROPERTY(QString PressureTC READ getPressureTC WRITE setPressureTC NOTIFY PressureTCChanged)
@@ -46,11 +50,18 @@ class SystemStateViewModel : public QDeclarativeItem
     QString pressureTMValue;
     Q_PROPERTY(QString PressureTM READ getPressureTM WRITE setPressureTM NOTIFY PressureTMChanged)
 
+    // Давление УР
+    QString pressureURValue;
+    Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
+
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
 
     double latitudeValue;
     Q_PROPERTY(double Latitude READ getLatitude WRITE setLatitude NOTIFY LatitudeChanged)
+
+    bool gpsValidValue;
+    Q_PROPERTY(bool gpsValid READ getGpsValid WRITE setGpsValid NOTIFY gpsValidChanged)
 
     // Общий уровень предупреждений
     int systemWarningLevelValue;
@@ -92,11 +103,11 @@ class SystemStateViewModel : public QDeclarativeItem
     int alsnFreqFactValue;
     Q_PROPERTY(int AlsnFreqFact READ getAlsnFreqFact WRITE setAlsnFreqFact NOTIFY AlsnFreqFactChanged)
 
-    // Целевой тип автоблокировки
+    // Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
     int autolockTypeTargetValue;
     Q_PROPERTY(int AutolockTypeTarget READ getAutolockTypeTarget WRITE setAutolockTypeTarget NOTIFY AutolockTypeTargetChanged)
 
-    // Фактический тип автоблокировки
+    // Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
     int autolockTypeFactValue;
     Q_PROPERTY(int AutolockTypeFact READ getAutolockTypeFact WRITE setAutolockTypeFact NOTIFY AutolockTypeFactChanged)
 
@@ -152,12 +163,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
 
     // Текст высокоприоритетного сообщения
-    QString warningTextValue;
-    Q_PROPERTY(QString WarningText READ getWarningText WRITE setWarningText NOTIFY WarningTextChanged)
-
-    // Текст низкоприоритетного сообщения
-    QString infoTextValue;
-    Q_PROPERTY(QString InfoText READ getInfoText WRITE setInfoText NOTIFY InfoTextChanged)
+    QString notificationTextValue;
+    Q_PROPERTY(QString NotificationText READ getNotificationText WRITE setNotificationText NOTIFY NotificationTextChanged)
 
     // Номер пути
     int trackNumberValue;
@@ -183,6 +190,38 @@ class SystemStateViewModel : public QDeclarativeItem
     int trainMassValue;
     Q_PROPERTY(int TrainMass READ getTrainMass WRITE setTrainMass NOTIFY TrainMassChanged)
 
+    // Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути.
+    bool manualOrdinateEnableValue;
+    Q_PROPERTY(bool ManualOrdinateEnable READ getManualOrdinateEnable WRITE setManualOrdinateEnable NOTIFY ManualOrdinateEnableChanged)
+
+    // Начальная ордината в ручном режиме
+    int manualOrdinateValue;
+    Q_PROPERTY(int ManualOrdinate READ getManualOrdinate WRITE setManualOrdinate NOTIFY ManualOrdinateChanged)
+
+    // Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад.
+    int manualOrdinateIncreaseDirectionValue;
+    Q_PROPERTY(int ManualOrdinateIncreaseDirection READ getManualOrdinateIncreaseDirection WRITE setManualOrdinateIncreaseDirection NOTIFY ManualOrdinateIncreaseDirectionChanged)
+
+    // Скорость на белый при ЗАБ
+    int autolockSpeedValue;
+    Q_PROPERTY(int AutolockSpeed READ getAutolockSpeed WRITE setAutolockSpeed NOTIFY AutolockSpeedChanged)
+
+    // ТСКБМ подключена
+    bool tsvcIsOnlineValue;
+    Q_PROPERTY(bool TsvcIsOnline READ getTsvcIsOnline WRITE setTsvcIsOnline NOTIFY TsvcIsOnlineChanged)
+
+    // ТСКБМ: машинист бодр
+    bool tsvcIsMachinistCheerfulValue;
+    Q_PROPERTY(bool TsvcIsMachinistCheerful READ getTsvcIsMachinistCheerful WRITE setTsvcIsMachinistCheerful NOTIFY TsvcIsMachinistCheerfulChanged)
+
+    // ТСКБМ требует подтверждения бдительности
+    bool tsvcIsVigilanceRequiredValue;
+    Q_PROPERTY(bool TsvcIsVigilanceRequired READ getTsvcIsVigilanceRequired WRITE setTsvcIsVigilanceRequired NOTIFY TsvcIsVigilanceRequiredChanged)
+
+    // Предварительная сигнализация ТСКБМ активна
+    bool tsvcIsPreAlarmActiveValue;
+    Q_PROPERTY(bool TsvcIsPreAlarmActive READ getTsvcIsPreAlarmActive WRITE setTsvcIsPreAlarmActive NOTIFY TsvcIsPreAlarmActiveChanged)
+
     // private properties end
 
 public:
@@ -196,10 +235,13 @@ public:
     const int getSpeedRestriction() const;
     const int getTargetSpeed() const;
     const double getAcceleration() const;
+    const int getDesignSpeed() const;
     const QString getPressureTC() const;
     const QString getPressureTM() const;
+    const QString getPressureUR() const;
     const double getLongitude() const;
     const double getLatitude() const;
+    const bool getGpsValid() const;
     const int getSystemWarningLevel() const;
     const int getFullSetWarningLevel() const;
     const bool getIsPressureOk() const;
@@ -225,14 +267,21 @@ public:
     const int getNextTargetKind() const;
     const QString getNextTargetName() const;
     const int getNextTargetDistance() const;
-    const QString getWarningText() const;
-    const QString getInfoText() const;
+    const QString getNotificationText() const;
     const int getTrackNumber() const;
     const int getMachinistNumber() const;
     const int getTrainNumber() const;
     const int getWagonCount() const;
     const int getAxlesCount() const;
     const int getTrainMass() const;
+    const bool getManualOrdinateEnable() const;
+    const int getManualOrdinate() const;
+    const int getManualOrdinateIncreaseDirection() const;
+    const int getAutolockSpeed() const;
+    const bool getTsvcIsOnline() const;
+    const bool getTsvcIsMachinistCheerful() const;
+    const bool getTsvcIsVigilanceRequired() const;
+    const bool getTsvcIsPreAlarmActive() const;
     // public properties getters end
 
 signals:
@@ -240,6 +289,7 @@ signals:
     void ButtonPressed();
     void ConfirmButtonPressed();
     void SpeedWarningFlash();
+    void WarningLedFlash();
 
     // Сигнал о нажатии кнопки Смены режима движения
     void ChangeDrivemodeButtonPressed();
@@ -257,10 +307,13 @@ signals:
     void SpeedRestrictionChanged(const int value);
     void TargetSpeedChanged(const int value);
     void AccelerationChanged(const double value);
+    void DesignSpeedChanged(const int value);
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
+    void PressureURChanged(const QString value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
+    void gpsValidChanged(const bool value);
     void SystemWarningLevelChanged(const int value);
     void FullSetWarningLevelChanged(const int value);
     void IsPressureOkChanged(const bool value);
@@ -286,14 +339,21 @@ signals:
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
     void NextTargetDistanceChanged(const int value);
-    void WarningTextChanged(const QString value);
-    void InfoTextChanged(const QString value);
+    void NotificationTextChanged(const QString value);
     void TrackNumberChanged(const int value);
     void MachinistNumberChanged(const int value);
     void TrainNumberChanged(const int value);
     void WagonCountChanged(const int value);
     void AxlesCountChanged(const int value);
     void TrainMassChanged(const int value);
+    void ManualOrdinateEnableChanged(const bool value);
+    void ManualOrdinateChanged(const int value);
+    void ManualOrdinateIncreaseDirectionChanged(const int value);
+    void AutolockSpeedChanged(const int value);
+    void TsvcIsOnlineChanged(const bool value);
+    void TsvcIsMachinistCheerfulChanged(const bool value);
+    void TsvcIsVigilanceRequiredChanged(const bool value);
+    void TsvcIsPreAlarmActiveChanged(const bool value);
     // properties signals end
 
 public slots:
@@ -305,10 +365,13 @@ public slots:
     void setSpeedRestriction(const int);
     void setTargetSpeed(const int);
     void setAcceleration(const double);
+    void setDesignSpeed(const int);
     void setPressureTC(const QString);
     void setPressureTM(const QString);
+    void setPressureUR(const QString);
     void setLongitude(const double);
     void setLatitude(const double);
+    void setGpsValid(const bool);
     void setSystemWarningLevel(const int);
     void setFullSetWarningLevel(const int);
     void setIsPressureOk(const bool);
@@ -334,14 +397,21 @@ public slots:
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
     void setNextTargetDistance(const int);
-    void setWarningText(const QString);
-    void setInfoText(const QString);
+    void setNotificationText(const QString);
     void setTrackNumber(const int);
     void setMachinistNumber(const int);
     void setTrainNumber(const int);
     void setWagonCount(const int);
     void setAxlesCount(const int);
     void setTrainMass(const int);
+    void setManualOrdinateEnable(const bool);
+    void setManualOrdinate(const int);
+    void setManualOrdinateIncreaseDirection(const int);
+    void setAutolockSpeed(const int);
+    void setTsvcIsOnline(const bool);
+    void setTsvcIsMachinistCheerful(const bool);
+    void setTsvcIsVigilanceRequired(const bool);
+    void setTsvcIsPreAlarmActive(const bool);
     // public properties setters end
     
 };

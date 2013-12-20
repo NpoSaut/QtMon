@@ -11,13 +11,17 @@
     <Property type="int" name="TargetSpeed" def="55" description="Целевая скорость" source="MCO_STATE" />
     <Property type="double" name="Acceleration" def="0" description="Ускорение" source="IPD_STATE" />
 
+    <Property type="int" name="DesignSpeed" def="40" description="Конструктивная скорость" />
+
     <!-- Давление -->
-    <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="?(Havanskhih/Gyr)"/> <!-- два знака после запятой. Макс 1.00 -->
-    <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="?"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTC" def="&quot;0.00&quot;" description="Давление ТЦ" source="UKTOL_DD1 | MVD_DD"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="UKTOL_DD1 | MVD_DD"/> <!-- два знака после запятой. Макс 1.00 -->
+    <Property type="QString" name="PressureUR" def="&quot;0.00&quot;" description="Давление УР" source="UKTOL_DD1"/> <!-- два знака после запятой. Макс 1.00 -->
 
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
     <Property type="double" name="Latitude" def="56.88397" />
+    <Property type="bool"   name="gpsValid" def="false" />
 
     <!-- Состояние системы -->
     <Property type="int" name="SystemWarningLevel" def="0" description="Общий уровень предупреждений" />
@@ -34,8 +38,8 @@
     <Property type="int" name="Light" def="-2" description="Код сигнала светофора (0 - К, 1 - КЖ, ...)" />
     <Property type="int" name="AlsnFreqTarget" def="-1" description="Целевая Частота АЛСН"/>
     <Property type="int" name="AlsnFreqFact" def="-1" description="Фактическая Частота АЛСН" source="BVU_STATE_A"/>
-    <Property type="int" name="AutolockTypeTarget" def="-1" description="Целевой тип автоблокировки"/>
-    <Property type="int" name="AutolockTypeFact" def="-1" description="Фактический тип автоблокировки" source="MCO_MODE"/>
+    <Property type="int" name="AutolockTypeTarget" def="-1" description="Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ."/>
+    <Property type="int" name="AutolockTypeFact" def="-1" description="Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ." source="MCO_MODE"/>
 
     <!-- Дата и время -->
     <Property type="QString" name="Time" def="&quot;-:-&quot;" description="Время" />
@@ -45,7 +49,7 @@
     <Property type="bool" name="IsRegistrationTapeActive" def="false" description="Наличие кассеты регистрации" source="AMR_STATE_1" />
 
     <!-- Режим движения -->
-    <Property type="int" name="DriveModeTarget" def="0" description="Целевой Режим движения" signalsafe="true" />
+    <Property type="int" name="DriveModeTarget" def="-1" description="Целевой Режим движения" signalsafe="true" />
     <Property type="int" name="DriveModeFact" def="-1" description="Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)" source="MCO_LIMITS" signalsafe="true" />
     <Property type="bool" name="IronWheels" def="true" />
 
@@ -57,14 +61,13 @@
     <Property type="int" name="Direction" def="0" description="Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)" source="IPD_STATE" />
 
     <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
-    <Property type="int" name="Ordinate" def="0" description="Текущая ордината" />
+    <Property type="int" name="Ordinate" def="1100" description="Текущая ордината" />
     <Property type="int" name="NextTargetKind" def="-1" description="Тип ближайшей цели" />
     <Property type="QString" name="NextTargetName" def="&quot;&quot;" description="Название ближайшей цели" />
     <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
 
     <!-- Строки предупреждений -->
-    <Property type="QString" name="WarningText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
-    <Property type="QString" name="InfoText" def="&quot;&quot;" description="Текст низкоприоритетного сообщения"/>
+    <Property type="QString" name="NotificationText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>
 
     <!-- Ввод данных -->
     <Property type="int" name="TrackNumber" def="0" description="Номер пути" />
@@ -73,6 +76,20 @@
     <Property type="int" name="WagonCount" def="1" description="Длина поезда в условных вагонах" />
     <Property type="int" name="AxlesCount" def="4" description="Длина поезда в осях" />
     <Property type="int" name="TrainMass" def="0" description="Масса поезда" />
+
+    <!-- Ручной ввод ординаты -->
+    <Property type="bool" name="ManualOrdinateEnable" def="false" description="Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути." />
+    <Property type="int"  name="ManualOrdinate" def="1100" description="Начальная ордината в ручном режиме" />
+    <Property type="int" name="ManualOrdinateIncreaseDirection" def="1" description="Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад." />
+
+    <!-- Ввод скорости на белый при ПАБ/ЗАБ -->
+    <Property type="int" name="AutolockSpeed" def="40" description="Скорость на белый при ЗАБ" />
+
+    <!-- ТСКБМ -->
+    <Property type="bool" name="TsvcIsOnline" def="false" description="ТСКБМ подключена" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsMachinistCheerful" def="false" description="ТСКБМ: машинист бодр" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsVigilanceRequired" def="false" description="ТСКБМ требует подтверждения бдительности" source="TSKBM_STATE_A, TSKBM_STATE_B" />
+    <Property type="bool" name="TsvcIsPreAlarmActive" def="false" description="Предварительная сигнализация ТСКБМ активна" source="TSKBM_STATE_A, TSKBM_STATE_B" />
 
   </Properties>
 </Task>

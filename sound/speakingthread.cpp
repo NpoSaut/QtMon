@@ -1,6 +1,5 @@
 #include <QDebug>
 #include <QApplication>
-#include <QThread>
 
 #include "cDoodahLib/masqarade.h"
 #include "speakingthread.h"
@@ -10,11 +9,13 @@ using namespace sound;
 Speaker::Speaker()
     : PriorityQueueBase()
 {
-    QSound::play ("phrases/attention.wav");
+    QSound::play ("phrases/silence.wav");
 }
 
 void Speaker::enqueuePhrase(Phrase phrase)
 {
+    if (phrase.priority == -1 && !this->isEmpty ()) return;
+
     this->enqueue(phrase);
 }
 
@@ -22,7 +23,7 @@ void Speaker::enqueuePhrase(Phrase phrase)
 void Speaker::process(Phrase phrase)
 {
     QSound mouth(phrase.fileName);
-    qDebug() << "    playing" << phrase.fileName;
+//    qDebug() << "    playing" << phrase.fileName;
     mouth.play();
 
 #ifdef WIN32

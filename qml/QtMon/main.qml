@@ -312,7 +312,7 @@ Rectangle {
             stateView.ChangeDrivemodeButtonReleased();
         }
         // Alt: Отмена Красного
-        else if (altMode && event.key == Qt.Key_F2) {
+        else if (event.key == Qt.Key_F2) {
             disableRedButton.pressed = false
         }
         // Alt: пустой

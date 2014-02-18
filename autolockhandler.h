@@ -5,6 +5,7 @@
 
 #include "qtCanLib/can.h"
 #include "qtBlokLib/parser.h"
+#include "qtBlokLib/parsers/autolockmode.h"
 
 // Задатчик режми автоблокировки (АБ, ПАБ, ЗАБ)
 //  Из интерфейса принимает целеой режим и скорость на белы для ПАБ/ЗАБ
@@ -15,13 +16,6 @@ class AutolockHandler : public QObject
     Q_OBJECT
 public:
     explicit AutolockHandler(Can *can, Parser *parser, QObject *parent = 0);
-
-    enum AutolockMode
-    {
-        AB = 0,
-        PAB = 1,
-        ZAB = 2
-    };
     
 signals:
     // Испускается при изменении акутального (фактического) режима
@@ -36,14 +30,12 @@ public slots:
     void setWhiteSpeed (int speed);
 
 protected slots:
-    // Вызывается с каждым приходом сообщения MP_STATE
-    void proccessMpMessage ();
+    // Вызывается с каждым приходом сообщения MCO_MODE
+    void proccessMcoMode ();
     // Вызывается, когда изменяется состояние автоблокировки
-    void proccessAutolockStateChange ();
+    void proccessAutolockStateChange (AutolockMode mode);
     
 protected:
-    AutolockMode getMpAutolockState () const;
-
     Can *can;
     Parser *parser;
 

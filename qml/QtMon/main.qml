@@ -265,6 +265,7 @@ Rectangle {
                     stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
                     if (stateView.TrackNumber == 0)
                     {
+                        stateView.ManualOrdinate = stateView.Ordinate // HACK
                         stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
                         stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
                     }

@@ -309,15 +309,15 @@ Rectangle {
             }
         }
         // Отпускание кнопки РМП
-        else if (!altMode && event.key == Qt.Key_F2) {
+        if (!altMode && event.key == Qt.Key_F2) {
             stateView.ChangeDrivemodeButtonReleased();
         }
         // Alt: Отмена Красного
-        else if (event.key == Qt.Key_F2) {
+        if (event.key == Qt.Key_F2) {
             disableRedButton.pressed = false
         }
         // Alt: пустой
-        else if (altMode && event.key == Qt.Key_F3) {
+        if (altMode && event.key == Qt.Key_F3) {
         }
 
     }

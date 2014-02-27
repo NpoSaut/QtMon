@@ -150,12 +150,12 @@ Rectangle {
 
                 input = fillInputArray(input, _offset, 2, stateView.TrackNumber < 16 ? stateView.TrackNumber :  stateView.TrackNumber - 15);   _offset += 2;
                 input = fillInputArray(input, _offset, 1, Math.floor(stateView.TrackNumber / 16)); _offset += 1;
-                input = fillInputArray(input, _offset, 4, stateView.MachinistNumber);    _offset += 4;
-                input = fillInputArray(input, _offset, 4, stateView.TrainNumber);        _offset += 4;
-                input = fillInputArray(input, _offset, 3, stateView.WagonCount);         _offset += 3;
-                input = fillInputArray(input, _offset, 3, stateView.AxlesCount);         _offset += 3;
-                input = fillInputArray(input, _offset, 4, stateView.TrainMass);          _offset += 4;
-                input = fillInputArray(input, _offset, 6, stateView.Ordinate/100); _offset += 6;
+                input = fillInputArray(input, _offset, 4, stateView.MachinistNumber);       _offset += 4;
+                input = fillInputArray(input, _offset, 4, stateView.TrainNumber);           _offset += 4;
+                input = fillInputArray(input, _offset, 3, stateView.WagonCount);            _offset += 3;
+                input = fillInputArray(input, _offset, 3, stateView.AxlesCount);            _offset += 3;
+                input = fillInputArray(input, _offset, 4, stateView.TrainMass);             _offset += 4;
+                input = fillInputArray(input, _offset, 6, (stateView.Ordinate + 1000)/100); _offset += 6;
                 input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
                 inputPositions = input;
@@ -266,7 +266,8 @@ Rectangle {
                     if (stateView.TrackNumber == 0)
                     {
                         stateView.ManualOrdinate = stateView.Ordinate // HACK
-                        stateView.ManualOrdinate  =  fillInputParameter(_offset, 6)*100;  _offset += 6;
+                        stateView.ManualOrdinate  =  (fillInputParameter(_offset, 6) - 10)*100;  _offset += 6;
+                        console.debug("ORDINATE: " + stateView.ManualOrdinate);
                         stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
                     }
 
@@ -457,9 +458,10 @@ Rectangle {
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
                                anchors.verticalCenter: parent.verticalCenter
-                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1)) + "км " +
-                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1)) + "пк " +
-                                     (stateView.Ordinate % 100).toString() + "м"
+                               text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1) + 1) + "км " +
+                                     (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1) + 1) + "пк " +
+                                     ((stateView.Ordinate % 100 - stateView.Ordinate % 10) / 10).toFixed(0) +
+                                     (stateView.Ordinate % 10).toString() + "м"
                                //text: stateView.Speed
                                color: "#ffffffff"
                                font.pixelSize: 14
@@ -2582,10 +2584,10 @@ Rectangle {
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
                                 height: 26
-                                width: 17
+                                width: 29
                                 opacity: manualOrdinateEnable ? 1 : 0.6
                                 Text {
-                                    text: inputPositions[parent.myCursorIndex]
+                                    text: inputPositions[parent.myCursorIndex] + 1
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.pixelSize: 21

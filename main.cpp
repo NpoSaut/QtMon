@@ -350,6 +350,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->designSpeed.requestValue ();
     cookies->startOrdinate.requestValue ();
     cookies->ordinateIncreaseDirection.requestValue ();
+    // Для регистрации
+    cookies->speedLimitGreen.requestValue ();
+    cookies->speedLimitRedYellow.requestValue ();
+    cookies->speedLimitWhite.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

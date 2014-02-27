@@ -263,13 +263,11 @@ Rectangle {
                     stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
-                    if (stateView.TrackNumber == 0)
-                    {
+
                         stateView.ManualOrdinate = stateView.Ordinate // HACK
                         stateView.ManualOrdinate  =  (fillInputParameter(_offset, 6) - 10)*100;  _offset += 6;
                         console.debug("ORDINATE: " + stateView.ManualOrdinate);
                         stateView.ManualOrdinateIncreaseDirection = fillInputParameter(_offset, 1); _offset +=1;
-                    }
 
                     if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
                 }
@@ -361,7 +359,7 @@ Rectangle {
     property bool inputMphMode: false
     property bool inputSpeedMode:false
     property int inputCursorIndex: 0
-    property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
+    property bool manualOrdinateEnable: true
     property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
     property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0]
     property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]

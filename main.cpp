@@ -311,6 +311,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Ввод параметров
     QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumbetNotSaved, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies->trainNumber, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies->lengthInWheels, SLOT(setVaule(int)));

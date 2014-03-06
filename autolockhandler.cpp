@@ -8,9 +8,8 @@ AutolockHandler::AutolockHandler(Can *can, Parser *parser, QObject *parent) :
     speed (40),
     init (true)
 {
-    QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessMpMessage()));
-    QObject::connect (&parser->mpState, SIGNAL(autoblockClosedChanged(bool)), this, SLOT(proccessAutolockStateChange()));
-    QObject::connect (&parser->mpState, SIGNAL(autoblockSemiClosedChanged(bool)), this, SLOT(proccessAutolockStateChange()));
+    QObject::connect (&parser->mcoMode, SIGNAL(messageReceived()), this, SLOT(proccessMcoMode()));
+    QObject::connect (&parser->mcoMode, SIGNAL(autolockModeChanged(AutolockMode)), this, SLOT(proccessAutolockStateChange(AutolockMode)));
 }
 
 void AutolockHandler::setTargetMode(int mode)
@@ -23,9 +22,9 @@ void AutolockHandler::setWhiteSpeed(int s)
     speed = s;
 }
 
-void AutolockHandler::proccessMpMessage()
+void AutolockHandler::proccessMcoMode()
 {
-    AutolockMode actual = getMpAutolockState ();
+    AutolockMode actual = parser->mcoMode.getAutolockMode ();
     if ( init )
     {
         init = false;
@@ -58,18 +57,9 @@ void AutolockHandler::proccessMpMessage()
     }
 }
 
-void AutolockHandler::proccessAutolockStateChange()
+void AutolockHandler::proccessAutolockStateChange(AutolockMode mode)
 {
-    emit actualAutolockModeChanged (int (getMpAutolockState ()));
+    emit actualAutolockModeChanged (int (mode));
 }
-
-AutolockHandler::AutolockMode AutolockHandler::getMpAutolockState() const
-{
-    return AutolockMode (
-                      (quint8 (parser->mpState.isAutoblockClosed ()) << 1)
-                    | (quint8 (parser->mpState.isAutoblockSemiClosed ()) << 0)
-                            );
-}
-
 
 

@@ -39,7 +39,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isVigilanceRequiredValue = true;
     isTractionOnValue = false;
     directionValue = 0;
-    ordinateValue = 1100;
+    ordinateValue = 0;
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
     nextTargetDistanceValue = 0;

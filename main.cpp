@@ -311,6 +311,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Ввод параметров
     QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
+    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumbetNotSaved, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies->trainNumber, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies->lengthInWheels, SLOT(setVaule(int)));
@@ -349,6 +350,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies->designSpeed.requestValue ();
     cookies->startOrdinate.requestValue ();
     cookies->ordinateIncreaseDirection.requestValue ();
+    // Для регистрации
+    cookies->speedLimitGreen.requestValue ();
+    cookies->speedLimitRedYellow.requestValue ();
+    cookies->speedLimitWhite.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));

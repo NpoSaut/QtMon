@@ -2045,6 +2045,19 @@ Rectangle {
             anchors.bottomMargin: 55
             Behavior on anchors.rightMargin { SmoothedAnimation { duration: 1000 } }
 
+            Text {
+                id: enLabel
+                text: stateView.Light - 2
+                visible: stateView.Light > 3
+                anchors.horizontalCenter: lightsPanel.horizontalCenter
+                anchors.top: lightsPanel.top
+                anchors.topMargin: 10
+                font.pixelSize: 24
+                font.family: "URW Gothic L"
+                font.bold: true
+                color: "#ffe0e0e0"
+            }
+
             ListView {
                 id: lightsPanel
                 width: 54

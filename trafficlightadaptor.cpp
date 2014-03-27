@@ -26,10 +26,16 @@ void TrafficlightAdaptor::proccessNewTrafficlight(Trafficlight light)
         break;
     case GREEN:
     case GREEN_1_EN:
-    case GREEN_2_EN:
-    case GREEN_3_EN:
-    case GREEN_4_EN:
         code = 3;
+        break;
+    case GREEN_2_EN:
+        code = 4;
+        break;
+    case GREEN_3_EN:
+        code = 5;
+        break;
+    case GREEN_4_EN:
+        code = 6;
         break;
     case WHITE:
     default:

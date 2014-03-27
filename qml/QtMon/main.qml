@@ -2078,7 +2078,7 @@ Rectangle {
                             opacity: 0
                         }
 
-                        state: stateView.Light == permissiveIndex ? "On" : "Off"
+                        state: (stateView.Light >= minPermissiveIndex && stateView.Light <= maxPermissiveIndex) ? "On" : "Off"
 
                         states: [
                             State {
@@ -2099,25 +2099,44 @@ Rectangle {
                 model: ListModel {
                     ListElement {
                         name: "Green"
-                        permissiveIndex: 3
+                        minPermissiveIndex: 3
+                        maxPermissiveIndex: 300
                     }
                     ListElement {
                         name: "Yellow"
-                        permissiveIndex: 2
+                        minPermissiveIndex: 2
+                        maxPermissiveIndex: 2
                     }
                     ListElement {
                         name: "YellowRed"
                         permissiveIndex: 1
+                        minPermissiveIndex: 1
+                        maxPermissiveIndex: 1
                     }
                     ListElement {
                         name: "Red"
-                        permissiveIndex: 0
+                        minPermissiveIndex: 0
+                        maxPermissiveIndex: 0
                     }
                     ListElement {
                         name: "White"
-                        permissiveIndex: -1
+                        minPermissiveIndex: -1
+                        maxPermissiveIndex: -1
                     }
                 }
+            }
+
+            Text {
+                id: enLabel
+                text: stateView.Light - 2
+                visible: stateView.Light > 3
+                anchors.horizontalCenter: lightsPanel.horizontalCenter
+                anchors.top: lightsPanel.top
+                anchors.topMargin: 10
+                font.pixelSize: 24
+                font.family: "URW Gothic L"
+                font.bold: true
+                color: "#e0003000"
             }
         }
     }

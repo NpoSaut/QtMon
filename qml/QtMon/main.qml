@@ -2078,7 +2078,9 @@ Rectangle {
                             opacity: 0
                         }
 
-                        state: (stateView.Light >= minPermissiveIndex && stateView.Light <= maxPermissiveIndex) ? "On" : "Off"
+                        state: ((stateView.Light == alsnIndex || (stateView.Light >= alsenStartIndex && stateView.Light <= alsenStopIndex))
+                               && (stateView.Light != 8 || inputBlinker.blink))
+                               ? "On" : "Off"
 
                         states: [
                             State {
@@ -2099,37 +2101,41 @@ Rectangle {
                 model: ListModel {
                     ListElement {
                         name: "Green"
-                        minPermissiveIndex: 3
-                        maxPermissiveIndex: 300
+                        alsnIndex: 4
+                        alsenStartIndex: 12
+                        alsenStopIndex:  999
                     }
                     ListElement {
                         name: "Yellow"
-                        minPermissiveIndex: 2
-                        maxPermissiveIndex: 2
+                        alsnIndex: 3
+                        alsenStartIndex: 11
+                        alsenStopIndex:  999
                     }
                     ListElement {
                         name: "YellowRed"
-                        permissiveIndex: 1
-                        minPermissiveIndex: 1
-                        maxPermissiveIndex: 1
+                        alsnIndex: 2
+                        alsenStartIndex: 10
+                        alsenStopIndex:  10
                     }
                     ListElement {
                         name: "Red"
-                        minPermissiveIndex: 0
-                        maxPermissiveIndex: 0
+                        alsnIndex: 1
+                        alsenStartIndex: 9
+                        alsenStopIndex:  9
                     }
                     ListElement {
                         name: "White"
-                        minPermissiveIndex: -1
-                        maxPermissiveIndex: -1
+                        alsnIndex: 0
+                        alsenStartIndex: 8
+                        alsenStopIndex:  8
                     }
                 }
             }
 
             Text {
                 id: enLabel
-                text: stateView.Light - 2
-                visible: stateView.Light > 3
+                text: stateView.Light - 11
+                visible: stateView.Light >= 13
                 anchors.horizontalCenter: lightsPanel.horizontalCenter
                 anchors.top: lightsPanel.top
                 anchors.topMargin: 10

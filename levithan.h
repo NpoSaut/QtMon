@@ -42,6 +42,7 @@ private slots:
 
 private:
     const SystemStateViewModel *state;
+    int prevLightIndex;
 };
 
 #endif // LEVITHAN_H

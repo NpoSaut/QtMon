@@ -1,0 +1,5 @@
+ #!/bin/sh
+
+killall QtMon
+
+exit 0

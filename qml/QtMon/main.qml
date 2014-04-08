@@ -1147,7 +1147,7 @@ Rectangle {
                             x: (leftCoordinate - stateView.Longitude)*mapContainer.horizontalDensity + page1container.width/2
                             y: (topCoordinate - stateView.Latitude)*mapContainer.verticalDensity + page1container.height/2
 
-                            source: "../../MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
+                            source: "/media/dat/QtMon/MapTiles/" + horizontalIndex + "-" + verticalIndex + ".png"
                             //asynchronous: true
 
                             Rectangle

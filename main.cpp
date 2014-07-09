@@ -23,7 +23,7 @@
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#ifdef WITH_CAN
+#ifdef LIB_SOCKET_CAN
 #include "qtCanLib/socketcan.h"
 #else
 #include "qtCanLib/dummycan.h"
@@ -223,7 +223,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     levithan = new Levithan(systemState);
 
-#ifdef WITH_CAN
+#ifdef LIB_SOCKET_CAN
     can = new SocketCan();
 #else
     can = new DummyCan();

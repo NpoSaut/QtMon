@@ -89,19 +89,41 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 15
             width: 250
-            color: "#00000000"
+            color: "#20ff00ff"
 
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 spacing: 4
 
-                ParameterBox {
+                Column {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    borderColor: accentColor
-                    textColor: regularColor
-                    text: "128км 7пк 23м"
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: accentColor
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                        text: "КООРДИНАТА"
+                    }
+                    ParameterBox {
+                        height: 20
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        borderColor: accentColor
+                        textColor: rootRect.regularColor
+                        text: "128км 7пк 23м"
+                    }
+                }
+
+                HorizontalLabeledParameterBox {
+                    labelText: "Путь:"
+                    text: "47"
+                    labelWidth: parent.width * 2.0 / 3.0
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                 }
             }
         }

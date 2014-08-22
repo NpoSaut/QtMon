@@ -6,6 +6,9 @@ Rectangle {
     height: 600
     id: rootRect
 
+    property color accentColor: "#eacc2e"
+    property color textColor: "#fff"
+
     property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20)
     property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed / 45) / Math.log(2))))
 
@@ -76,6 +79,63 @@ Rectangle {
         id: contentArea
         color: "#000"
         anchors.fill: parent
+
+        // Левый столбец с подписями
+        Rectangle {
+            anchors.top: parent.top
+            anchors.topMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 15
+            width: 250
+
+            Column {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 4
+
+                // Координата
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Text {
+                        font.pixelSize: 14
+                        font.family: "URW Gothic L"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: accentColor
+                        text: "КООРДИНАТА"
+                    }
+                    Rectangle {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        color: "#00000000"
+                        border.color: accentColor
+                        border.width: 1
+                        height: 20
+                        Text {
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            color: textColor
+                            text: "128км 7пк 23м"
+                        }
+                    }
+                }
+
+                // Номер пути
+                Row {
+                    Text {
+                        Text {
+                            font.pixelSize: 14
+                            font.family: "URW Gothic L"
+                            color: textColor
+                            text: "128км 7пк 23м"
+                        }
+                    }
+                }
+            }
+        }
 
         // Спидометр с треуольниками движения
         Rectangle {

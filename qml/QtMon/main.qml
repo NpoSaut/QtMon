@@ -7,7 +7,7 @@ Rectangle {
     id: rootRect
 
     property color accentColor: "#eacc2e"
-    property color textColor: "#fff"
+    property color regularColor: "#fff"
 
     property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20)
     property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed / 45) / Math.log(2))))
@@ -89,50 +89,19 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 15
             width: 250
+            color: "#00000000"
 
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 spacing: 4
 
-                // Координата
-                Column {
+                ParameterBox {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    Text {
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: accentColor
-                        text: "КООРДИНАТА"
-                    }
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        color: "#00000000"
-                        border.color: accentColor
-                        border.width: 1
-                        height: 20
-                        Text {
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            color: textColor
-                            text: "128км 7пк 23м"
-                        }
-                    }
-                }
-
-                // Номер пути
-                Row {
-                    Text {
-                        Text {
-                            font.pixelSize: 14
-                            font.family: "URW Gothic L"
-                            color: textColor
-                            text: "128км 7пк 23м"
-                        }
-                    }
+                    borderColor: accentColor
+                    textColor: regularColor
+                    text: "128км 7пк 23м"
                 }
             }
         }

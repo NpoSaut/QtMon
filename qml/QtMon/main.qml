@@ -87,13 +87,12 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 15
             width: 250
-            //color: "#20ff00ff"
             color: "#00000000"
 
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                spacing: 4
+                spacing: 18
 
                 Column {
                     anchors.left: parent.left
@@ -144,18 +143,30 @@ Rectangle {
         }
 
         // Спидометр с треуольниками движения
-        Speedometer {
-            width: 300
-            height: 300
+        Rectangle {
+            anchors.left: leftCollumn.right
+            anchors.leftMargin: 20
             anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 20
+            anchors.top: parent.top
+            anchors.topMargin: 20
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            color: "#00000000"
 
-            speed: stateView.Speed;
-            speedRestriction: stateView.SpeedRestriction;
-            maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+            Speedometer {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                width: 375
+                height: 375
 
-            speedWarningLimit: 3
-            onSpeedWarningPoolsed: stateView.SpeedWarningFlash()
+                speed: stateView.Speed;
+                speedRestriction: stateView.SpeedRestriction;
+                maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+
+                speedWarningLimit: 3
+                onSpeedWarningPoolsed: stateView.SpeedWarningFlash()
+            }
         }
     }
 }

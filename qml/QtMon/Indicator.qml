@@ -7,7 +7,7 @@ Rectangle {
     property color textColor: "#fff"
     property bool isActive: false
 
-    height: 20
+    height: 25
 
     border.width: 1
     border.color: accentColor
@@ -15,8 +15,8 @@ Rectangle {
 
     Text {
         id: label
-        font.pixelSize: 14
-        font.family: "URW Gothic L"
+        font.pixelSize: 18
+        font.family: "Calibri"
         color: root.isActive == true ?
                  "#000" :
                  textColor

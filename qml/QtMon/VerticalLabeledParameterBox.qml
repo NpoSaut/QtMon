@@ -1,35 +1,30 @@
 import QtQuick 1.1
 
-Rectangle {
+Column {
     id: root
-    property alias labelWidth: labelContainer.width
     property alias labelText: label.text
     property alias text: parameter.text
 
     property color accentColor: "#ff0"
     property color regularColor: "#fff"
 
-    height: 25
-    color: "#00000000"
-
     Rectangle {
         id: labelContainer
-        height: parent.height
+        height: 25
         anchors.left: parent.left
+        anchors.right: parent.right
         color: "#00000000"
         Text {
             id: label
-            anchors.right: parent.right
-            anchors.rightMargin: 3
-            anchors.verticalCenter: parent.verticalCenter
-            color: regularColor
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: accentColor
             font.pixelSize: 18
             font.family: "Calibri"
         }
     }
     ParameterBox {
         id: parameter
-        anchors.left: labelContainer.right
+        anchors.left: parent.left
         anchors.right: parent.right
         borderColor: accentColor
         textColor: regularColor

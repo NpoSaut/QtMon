@@ -8,12 +8,12 @@ Rectangle {
     color: "#00000000"
     border.width: 1
     border.color: borderColor
-    height: 20
+    height: 25
     width: 100
     Text {
         id: label
-        font.pixelSize: 14
-        font.family: "URW Gothic L"
+        font.pixelSize: 18
+        font.family: "Calibri"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }

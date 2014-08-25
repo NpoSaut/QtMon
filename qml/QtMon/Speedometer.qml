@@ -72,7 +72,7 @@ Rectangle {
         Repeater {
             model: speedometer.tickCount + 1
             Rectangle {
-
+                property double tickDisstance: 28
                 property double kph: index * (maxSpeed / speedometer.tickCount)
                 property double angle: speedometer.minAngle - kph * speedometer.anglePerKph
 
@@ -97,12 +97,12 @@ Rectangle {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 20 * Math.sin(parent.angle)
-                    anchors.horizontalCenterOffset: -20 * Math.cos(parent.angle)
+                    anchors.verticalCenterOffset: tickDisstance * Math.sin(parent.angle)
+                    anchors.horizontalCenterOffset: -tickDisstance * Math.cos(parent.angle)
                     text: parent.kph
                     color: "#ffffffff"
 
-                    font.pixelSize: 16
+                    font.pixelSize: 16 * 1.25
                     font.family: "URW Gothic L"
                 }
             }
@@ -228,7 +228,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
 
-            width: 80
+            width: 80 * 1.25
             height: width
             radius: width / 2
 
@@ -255,7 +255,7 @@ Rectangle {
                 text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
                 color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
-                font.pixelSize: 35
+                font.pixelSize: 35 * 1.25
                 font.family: "URW Gothic L"
                 font.bold: true
             }
@@ -264,7 +264,7 @@ Rectangle {
             Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 65
+                anchors.verticalCenterOffset: 65 * 1.25
                 width: 60
                 height: 40
                 radius: 4
@@ -276,7 +276,7 @@ Rectangle {
                     text: stateView.SpeedRestriction.toFixed()
                     color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
-                    font.pixelSize: 35
+                    font.pixelSize: 35 * 1.25
                     font.family: "URW Gothic L"
                     font.bold: true
                 }

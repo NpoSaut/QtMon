@@ -6,7 +6,7 @@ Rectangle {
     height: 600
     id: rootRect
 
-    property color accentColor: "#eacc2e"
+    property color accentColor: "#ffc000"
     property color regularColor: "#fff"
 
     function getDriveModeLetter(driveModeIndex) {
@@ -94,18 +94,18 @@ Rectangle {
                 anchors.right: parent.right
                 spacing: 18
 
+                // Координата
                 Column {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
-                        font.pixelSize: 14
-                        font.family: "URW Gothic L"
+                        font.pixelSize: 18
+                        font.family: "Calibri"
                         text: "КООРДИНАТА"
                     }
                     ParameterBox {
-                        height: 20
                         anchors.left: parent.left
                         anchors.right: parent.right
                         borderColor: accentColor
@@ -114,8 +114,9 @@ Rectangle {
                     }
                 }
 
+                // Номер пути
                 HorizontalLabeledParameterBox {
-                    labelText: "Путь:"
+                    labelText: "ПУТЬ:"
                     text: "7"
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
@@ -124,20 +125,139 @@ Rectangle {
                     anchors.right: parent.right
                 }
 
-                Row {
-                    id: frequncyIndicator
+
+                // Частота
+                Column {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    Repeater {
-                        model: [ 25, 50, 75 ]
-                        Indicator {
-                            text: modelData
-                            isActive: modelData == 50
-                            width: frequncyIndicator.width / 3.0
-                            accentColor: rootRect.accentColor
-                            textColor: "#30ffffff"
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: accentColor
+                        font.pixelSize: 18
+                        font.family: "Calibri"
+                        text: "ЧАСТОТА"
+                    }
+                    // Индикатор частоты
+                    Row {
+                        id: frequncyIndicator
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Repeater {
+                            model: [ 25, 50, 75 ]
+                            Indicator {
+                                text: modelData + " Гц"
+                                isActive: modelData == 50
+                                width: frequncyIndicator.width / 3.0
+                                accentColor: rootRect.accentColor
+                                textColor: "#80ffffff"
+                            }
                         }
                     }
+                }
+
+                // Часы
+                Rectangle {
+                    color: "#00000000"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: 80
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "22:35:18"
+                        color: "#95b3d7"
+                        font.pixelSize: 40
+                        font.family: "Calibri"
+                    }
+                }
+
+                // Давления
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: accentColor
+                        font.pixelSize: 18
+                        font.family: "Calibri"
+                        text: "ДАВЛЕНИЕ (МПа)"
+                    }
+                    Row {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        VerticalLabeledParameterBox {
+                            labelText: "ТЦ"
+                            text: "0,15"
+                            width: parent.width / 3.0
+                            accentColor: rootRect.accentColor
+                            regularColor: rootRect.regularColor
+                        }
+                        VerticalLabeledParameterBox {
+                            labelText: "ТМ"
+                            text: "0,51"
+                            width: parent.width / 3.0
+                            accentColor: rootRect.accentColor
+                            regularColor: rootRect.regularColor
+                        }
+                        VerticalLabeledParameterBox {
+                            labelText: "УР"
+                            text: "0,50"
+                            width: parent.width / 3.0
+                            accentColor: rootRect.accentColor
+                            regularColor: rootRect.regularColor
+                        }
+                    }
+                }
+
+                // Ускорение
+                HorizontalLabeledParameterBox {
+                    labelText: "УСКОРЕНИЕ:"
+                    text: "-0,15"
+                    labelWidth: parent.width * 2.0 / 3.0
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+
+                // Коэффициент торможения
+                HorizontalLabeledParameterBox {
+                    labelText: "КОЭФ. ТОРМ.:"
+                    text: "0,32"
+                    labelWidth: parent.width * 2.0 / 3.0
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.right: parent.right
+            anchors.rightMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 15
+
+            color: "#00000000"
+            height: bottomPanel.height
+
+            // Нижняя панель
+            Column {
+                id: bottomPanel
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                // Строка статуса
+                ParameterBox {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    borderColor: accentColor
+                    textColor: rootRect.regularColor
+                    text: "К777"
                 }
             }
         }
@@ -162,7 +282,7 @@ Rectangle {
 
                 speed: stateView.Speed;
                 speedRestriction: stateView.SpeedRestriction;
-                maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+                maxSpeed: 300 //20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
 
                 speedWarningLimit: 3
                 onSpeedWarningPoolsed: stateView.SpeedWarningFlash()

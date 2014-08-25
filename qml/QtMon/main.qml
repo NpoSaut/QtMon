@@ -130,12 +130,14 @@ Rectangle {
 
                 Row {
                     id: frequncyIndicator
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                     Repeater {
                         model: [ 25, 50, 75 ]
                         Indicator {
                             text: modelData
                             isActive: modelData == 50
-                            width: frequncyIndicator.width / 3
+                            width: frequncyIndicator.width / 3.0
                             accentColor: rootRect.accentColor
                             textColor: "#30ffffff"
                         }

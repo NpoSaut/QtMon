@@ -125,5 +125,5 @@ QMAKE_CXXFLAGS += -std=c++0x
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
 
 # Для работы нужны:
-# DEFINES+=CPP11 DEFINES+=WITH_CAN DEFINES+=ON_DEVICE
+DEFINES+=CPP11 #DEFINES+=WITH_CAN DEFINES+=ON_DEVICE
 

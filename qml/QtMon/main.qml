@@ -82,6 +82,7 @@ Rectangle {
 
         // Левый столбец с подписями
         Rectangle {
+            id: leftCollumn
             anchors.top: parent.top
             anchors.topMargin: 15
             anchors.left: parent.left
@@ -89,7 +90,8 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 15
             width: 250
-            color: "#20ff00ff"
+            //color: "#20ff00ff"
+            color: "#00000000"
 
             Column {
                 anchors.left: parent.left
@@ -118,12 +120,26 @@ Rectangle {
 
                 HorizontalLabeledParameterBox {
                     labelText: "Путь:"
-                    text: "47"
+                    text: "7"
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     anchors.left: parent.left
                     anchors.right: parent.right
+                }
+
+                Row {
+                    id: frequncyIndicator
+                    Repeater {
+                        model: [ 25, 50, 75 ]
+                        Indicator {
+                            text: modelData
+                            isActive: modelData == 50
+                            width: frequncyIndicator.width / 3
+                            accentColor: rootRect.accentColor
+                            textColor: "#30ffffff"
+                        }
+                    }
                 }
             }
         }

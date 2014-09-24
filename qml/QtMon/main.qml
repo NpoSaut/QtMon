@@ -2,15 +2,15 @@ import QtQuick 1.1
 import views 1.0
 
 Rectangle {
-    width: 800
-    height: 600
+    width: 640
+    height: 480
     id: rootRect
 
     property color accentColor: "#ffc000"
     property color regularColor: "#fff"
 
-    property int globalBoxHeight: rootRect.height / 20
-    property int globalFontHeight: globalBoxHeight - 8
+    property int globalBoxHeight: 21
+    property int globalFontHeight: globalBoxHeight - 6
 
     function getDriveModeLetter(driveModeIndex) {
         switch (driveModeIndex) {
@@ -298,8 +298,9 @@ Rectangle {
             Speedometer {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                width: 375
-                height: 375
+                fontHeight: globalFontHeight
+                width: rootRect.width * (6/13)
+                height: width
 
                 speed: stateView.Speed;
                 speedRestriction: stateView.SpeedRestriction;

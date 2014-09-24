@@ -5,6 +5,8 @@ Rectangle {
     property double speedRestriction: 80
     property double maxSpeed: 180
 
+    property int fontHeight: 21
+
     property alias speedWarningLimit: speedometerWarner.warningLimit
     signal speedWarningPoolsed
 
@@ -72,7 +74,7 @@ Rectangle {
         Repeater {
             model: speedometer.tickCount + 1
             Rectangle {
-                property double tickDisstance: 28
+                property double tickDisstance: fontHeight * (3/2)
                 property double kph: index * (maxSpeed / speedometer.tickCount)
                 property double angle: speedometer.minAngle - kph * speedometer.anglePerKph
 
@@ -102,7 +104,7 @@ Rectangle {
                     text: parent.kph
                     color: "#ffffffff"
 
-                    font.pixelSize: 16 * 1.25
+                    font.pixelSize: fontHeight
                     font.family: "URW Gothic L"
                 }
             }
@@ -142,6 +144,8 @@ Rectangle {
                               speedometer.minAngle - speedometer.anglePerKph
                               * speed)) * 180 / Math.PI
             smooth: true
+
+            scale: (speedometer.width / 2) / width
 
             transformOrigin: Item.Right
 
@@ -228,7 +232,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
 
-            width: 80 * 1.25
+            width: parent.width * (3/11)
             height: width
             radius: width / 2
 
@@ -249,13 +253,14 @@ Rectangle {
 
             // Текущая скорость
             Text {
+                id: speedLabel
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
 
                 text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
                 color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
-                font.pixelSize: 35 * 1.25
+                font.pixelSize: parent.height * (3/7)
                 font.family: "URW Gothic L"
                 font.bold: true
             }
@@ -263,20 +268,21 @@ Rectangle {
             // Ограничение скорости
             Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 65 * 1.25
-                width: 60
-                height: 40
+                anchors.top: parent.bottom
+                anchors.topMargin: height / 8
+                height: speedRestrictionLabel.height
+                width: speedRestrictionLabel.width + 12
                 radius: 4
                 color: speedometerWarner.warned ? "#a0ffffff" : "#00000000"
                 Text {
+                    id: speedRestrictionLabel
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
 
                     text: stateView.SpeedRestriction.toFixed()
                     color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
-                    font.pixelSize: 35 * 1.25
+                    font.pixelSize: speedLabel.height * (4/6)
                     font.family: "URW Gothic L"
                     font.bold: true
                 }

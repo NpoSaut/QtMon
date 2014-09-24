@@ -9,6 +9,9 @@ Rectangle {
     property color accentColor: "#ffc000"
     property color regularColor: "#fff"
 
+    property int globalBoxHeight: rootRect.height / 20
+    property int globalFontHeight: globalBoxHeight - 8
+
     function getDriveModeLetter(driveModeIndex) {
         switch (driveModeIndex) {
         case -1:
@@ -101,7 +104,7 @@ Rectangle {
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
-                        font.pixelSize: 18
+                        font.pixelSize: globalFontHeight
                         font.family: "Calibri"
                         text: "КООРДИНАТА"
                     }
@@ -110,6 +113,8 @@ Rectangle {
                         anchors.right: parent.right
                         borderColor: accentColor
                         textColor: rootRect.regularColor
+                        boxHeight: globalBoxHeight
+                        fontHeight: globalFontHeight
                         text: "128км 7пк 23м"
                     }
                 }
@@ -118,6 +123,8 @@ Rectangle {
                 HorizontalLabeledParameterBox {
                     labelText: "ПУТЬ:"
                     text: "7"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
@@ -133,7 +140,7 @@ Rectangle {
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
-                        font.pixelSize: 18
+                        font.pixelSize: globalFontHeight
                         font.family: "Calibri"
                         text: "ЧАСТОТА"
                     }
@@ -147,6 +154,8 @@ Rectangle {
                             Indicator {
                                 text: modelData + " Гц"
                                 isActive: modelData == 50
+                                boxHeight: globalBoxHeight
+                                fontHeight: globalFontHeight
                                 width: frequncyIndicator.width / 3.0
                                 accentColor: rootRect.accentColor
                                 textColor: "#80ffffff"
@@ -179,7 +188,7 @@ Rectangle {
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
-                        font.pixelSize: 18
+                        font.pixelSize: globalFontHeight
                         font.family: "Calibri"
                         text: "ДАВЛЕНИЕ (МПа)"
                     }
@@ -190,6 +199,8 @@ Rectangle {
                             labelText: "ТЦ"
                             text: "0,15"
                             width: parent.width / 3.0
+                            boxHeight: globalBoxHeight
+                            fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
                         }
@@ -197,6 +208,8 @@ Rectangle {
                             labelText: "ТМ"
                             text: "0,51"
                             width: parent.width / 3.0
+                            boxHeight: globalBoxHeight
+                            fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
                         }
@@ -204,6 +217,8 @@ Rectangle {
                             labelText: "УР"
                             text: "0,50"
                             width: parent.width / 3.0
+                            boxHeight: globalBoxHeight
+                            fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
                         }
@@ -214,6 +229,8 @@ Rectangle {
                 HorizontalLabeledParameterBox {
                     labelText: "УСКОРЕНИЕ:"
                     text: "-0,15"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
@@ -225,6 +242,8 @@ Rectangle {
                 HorizontalLabeledParameterBox {
                     labelText: "КОЭФ. ТОРМ.:"
                     text: "0,32"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
@@ -258,6 +277,8 @@ Rectangle {
                     borderColor: accentColor
                     textColor: rootRect.regularColor
                     text: "К777"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
                 }
             }
         }

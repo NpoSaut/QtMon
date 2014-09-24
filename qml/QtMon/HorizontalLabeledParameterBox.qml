@@ -5,11 +5,13 @@ Rectangle {
     property alias labelWidth: labelContainer.width
     property alias labelText: label.text
     property alias text: parameter.text
+    property alias boxHeight: parameter.boxHeight
+    property alias fontHeight: parameter.fontHeight
 
     property color accentColor: "#ff0"
     property color regularColor: "#fff"
 
-    height: 25
+    height: parameter.boxHeight
     color: "#00000000"
 
     Rectangle {
@@ -23,7 +25,7 @@ Rectangle {
             anchors.rightMargin: 3
             anchors.verticalCenter: parent.verticalCenter
             color: regularColor
-            font.pixelSize: 18
+            font.pixelSize: fontHeight
             font.family: "Calibri"
         }
     }

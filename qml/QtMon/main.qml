@@ -89,34 +89,24 @@ Rectangle {
             anchors.leftMargin: 15
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 15
-            width: 250
+            width: contentArea.width * (2/7)
             color: "#00000000"
 
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                spacing: 18
+                spacing: globalBoxHeight * (3/5)
 
                 // Координата
-                Column {
+                VerticalLabeledParameterBox {
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: accentColor
-                        font.pixelSize: globalFontHeight
-                        font.family: "Calibri"
-                        text: "КООРДИНАТА"
-                    }
-                    ParameterBox {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        borderColor: accentColor
-                        textColor: rootRect.regularColor
-                        boxHeight: globalBoxHeight
-                        fontHeight: globalFontHeight
-                        text: "128км 7пк 23м"
-                    }
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    labelText: "КООРДИНАТА"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
+                    text: "128км 7пк 23м"
                 }
 
                 // Номер пути
@@ -175,7 +165,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "22:35:18"
                         color: "#95b3d7"
-                        font.pixelSize: 40
+                        font.pixelSize: globalFontHeight * 2
                         font.family: "Calibri"
                     }
                 }

@@ -8,6 +8,7 @@ Rectangle {
     property bool isActive: false
     property alias boxHeight: box.boxHeight
     property alias fontHeight: box.fontHeight
+    property color backgroundColor: "#00000000"
 
     height: boxHeight
 
@@ -17,7 +18,7 @@ Rectangle {
         id: box
         height: parent.height
         width: parent.width
-        backgroundColor: isActive == true ? root.accentColor : "#00000000"
+        backgroundColor: isActive == true ? root.accentColor : root.backgroundColor
         borderColor: accentColor
         textColor: root.isActive == true ? "#000" : parent.textColor
     }

@@ -10,6 +10,7 @@ Rectangle {
 
     property color accentColor: "#ff0"
     property color regularColor: "#fff"
+    property alias backgroundColor: parameter.backgroundColor
 
     height: parameter.boxHeight
     color: "#00000000"

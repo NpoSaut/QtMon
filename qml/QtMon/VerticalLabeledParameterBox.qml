@@ -9,6 +9,7 @@ Column {
 
     property color accentColor: "#ff0"
     property color regularColor: "#fff"
+    property alias backgroundColor: parameter.backgroundColor
 
     Rectangle {
         id: labelContainer

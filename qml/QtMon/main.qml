@@ -8,6 +8,7 @@ Rectangle {
 
     property color accentColor: "#ffc000"
     property color regularColor: "#fff"
+    property color boxColor: "#70000000"
 
     property int globalBoxHeight: 21
     property int globalFontHeight: globalBoxHeight - 6
@@ -105,6 +106,7 @@ Rectangle {
                     anchors.right: parent.right
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
                     labelText: "КООРДИНАТА"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
@@ -120,6 +122,7 @@ Rectangle {
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
                     anchors.left: parent.left
                     anchors.right: parent.right
                 }
@@ -150,6 +153,7 @@ Rectangle {
                                 fontHeight: globalFontHeight
                                 width: frequncyIndicator.width / 3.0
                                 accentColor: rootRect.accentColor
+                                backgroundColor: boxColor
                                 textColor: "#80ffffff"
                             }
                         }
@@ -195,6 +199,7 @@ Rectangle {
                             fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
+                            backgroundColor: boxColor
                         }
                         VerticalLabeledParameterBox {
                             labelText: "ТМ"
@@ -204,6 +209,7 @@ Rectangle {
                             fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
+                            backgroundColor: boxColor
                         }
                         VerticalLabeledParameterBox {
                             labelText: "УР"
@@ -213,6 +219,7 @@ Rectangle {
                             fontHeight: globalFontHeight
                             accentColor: rootRect.accentColor
                             regularColor: rootRect.regularColor
+                            backgroundColor: boxColor
                         }
                     }
                 }
@@ -226,6 +233,7 @@ Rectangle {
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
                     anchors.left: parent.left
                     anchors.right: parent.right
                 }
@@ -239,6 +247,7 @@ Rectangle {
                     labelWidth: parent.width * 2.0 / 3.0
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
                     anchors.left: parent.left
                     anchors.right: parent.right
                 }
@@ -266,6 +275,7 @@ Rectangle {
                 anchors.rightMargin: globalSpacing
                 accentColor: rootRect.accentColor
                 regularColor: rootRect.regularColor
+                backgroundColor: boxColor
                 labelText: "СТАНЦИЯ"
                 boxHeight: globalBoxHeight
                 fontHeight: globalFontHeight
@@ -282,14 +292,13 @@ Rectangle {
                     anchors.bottom: parent.bottom
                     IconBox {
                         borderColor: accentColor
+                        backgroundColor: boxColor
                         boxHeight: globalBoxHeight
                         width: height
-                        Text {
-                            text: qsTr("text")
-                        }
                     }
                     IconBox {
                         borderColor: accentColor
+                        backgroundColor: boxColor
                         //backgroundColor: accentColor
                         boxHeight: globalBoxHeight
                         width: height
@@ -319,6 +328,7 @@ Rectangle {
                                 fontHeight: globalFontHeight
                                 width: globalBoxHeight
                                 accentColor: rootRect.accentColor
+                                backgroundColor: boxColor
                                 textColor: "#80ffffff"
                             }
                         }
@@ -350,6 +360,7 @@ Rectangle {
                     anchors.right: parent.right
                     borderColor: accentColor
                     textColor: rootRect.regularColor
+                    backgroundColor: boxColor
                     text: "К777"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight

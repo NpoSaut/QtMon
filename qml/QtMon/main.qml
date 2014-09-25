@@ -77,9 +77,15 @@ Rectangle {
         onRunningChanged: blink = true
     }
 
+    Image {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "Slices/Background.jpg"
+    }
+
     Rectangle {
         id: contentArea
-        color: "#000"
+        color: "#40000000"
         anchors.fill: parent
 
         // Левый столбец с подписями

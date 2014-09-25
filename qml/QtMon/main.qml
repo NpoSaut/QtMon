@@ -11,6 +11,7 @@ Rectangle {
 
     property int globalBoxHeight: 21
     property int globalFontHeight: globalBoxHeight - 6
+    property int globalSpacing: 10
 
     function getDriveModeLetter(driveModeIndex) {
         switch (driveModeIndex) {
@@ -82,23 +83,24 @@ Rectangle {
 
         // Левый столбец с подписями
         Rectangle {
-            id: leftCollumn
+            id: leftColumn
             anchors.top: parent.top
-            anchors.topMargin: 15
+            anchors.topMargin: globalSpacing
             anchors.left: parent.left
-            anchors.leftMargin: 15
+            anchors.leftMargin: globalSpacing
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 15
+            anchors.bottomMargin: globalSpacing
             width: contentArea.width * (2/7)
             color: "#00000000"
 
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                spacing: globalBoxHeight * (3/5)
+                spacing: globalSpacing
 
                 // Координата
                 VerticalLabeledParameterBox {
+                    id: ordinateBox
                     anchors.left: parent.left
                     anchors.right: parent.right
                     accentColor: rootRect.accentColor
@@ -243,6 +245,83 @@ Rectangle {
             }
         }
 
+        // Верхняя строка
+        Rectangle {
+            id: topRow
+            anchors.left: leftColumn.right
+            anchors.leftMargin: globalSpacing
+            anchors.right: contentArea.right
+            anchors.rightMargin: globalSpacing
+            anchors.top: contentArea.top
+            anchors.topMargin: globalSpacing
+            height: ordinateBox.height
+            color: "#00000000"
+
+
+
+            // Координата
+            VerticalLabeledParameterBox {
+                anchors.left: parent.left
+                anchors.right: topIconsRow.left
+                anchors.rightMargin: globalSpacing
+                accentColor: rootRect.accentColor
+                regularColor: rootRect.regularColor
+                labelText: "СТАНЦИЯ"
+                boxHeight: globalBoxHeight
+                fontHeight: globalFontHeight
+                text: "Решёты"
+            }
+
+            // Строка иконок в верхнем ряду
+            Row {
+                id: topIconsRow
+                anchors.right: parent.right
+                spacing: globalSpacing
+
+                Row {
+                    anchors.bottom: parent.bottom
+                    ParameterBox {
+                        borderColor: accentColor
+                        boxHeight: globalBoxHeight
+                        width: height
+                    }
+                    ParameterBox {
+                        borderColor: accentColor
+                        boxHeight: globalBoxHeight
+                        width: height
+                    }
+                }
+
+                // Режим движения (переключатель РМП)
+                Column {
+                    id: rmpSwitch
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: accentColor
+                        font.pixelSize: globalFontHeight
+                        font.family: "Calibri"
+                        text: "РЕЖИМ"
+                    }
+
+                    Row {
+                        Repeater {
+                            model: [ "П", "М", "Р" ]
+                            Indicator {
+                                text: modelData
+                                isActive: modelData == 50
+                                boxHeight: globalBoxHeight
+                                fontHeight: globalFontHeight
+                                width: globalBoxHeight
+                                accentColor: rootRect.accentColor
+                                textColor: "#80ffffff"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: 15
@@ -275,7 +354,7 @@ Rectangle {
 
         // Спидометр с треуольниками движения
         Rectangle {
-            anchors.left: leftCollumn.right
+            anchors.left: leftColumn.right
             anchors.leftMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20

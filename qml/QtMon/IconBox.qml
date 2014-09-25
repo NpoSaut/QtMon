@@ -1,8 +1,7 @@
 import QtQuick 1.1
 
 Rectangle {
-    property alias text: label.text
-    property alias textColor: label.color
+    property alias iconSource: icon.source
     property alias backgroundColor: box.backgroundColor
     property alias borderColor: box.borderColor
     property alias boxHeight: box.height
@@ -16,10 +15,9 @@ Rectangle {
         anchors.fill: parent
     }
 
-    Text {
-        id: label
-        font.pixelSize: fontHeight
-        font.family: "Calibri"
+    Image {
+        id: icon
+        source: "file"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }

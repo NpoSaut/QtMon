@@ -280,15 +280,20 @@ Rectangle {
 
                 Row {
                     anchors.bottom: parent.bottom
-                    ParameterBox {
+                    IconBox {
                         borderColor: accentColor
                         boxHeight: globalBoxHeight
                         width: height
+                        Text {
+                            text: qsTr("text")
+                        }
                     }
-                    ParameterBox {
+                    IconBox {
                         borderColor: accentColor
+                        //backgroundColor: accentColor
                         boxHeight: globalBoxHeight
                         width: height
+                        iconSource: "Slices/Registration-Type.png"
                     }
                 }
 

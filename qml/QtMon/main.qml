@@ -10,9 +10,9 @@ Rectangle {
     property color regularColor: "#fff"
     property color boxColor: "#70000000"
 
-    property int globalBoxHeight: 21
+    property int globalBoxHeight: rootRect.height / 23
     property int globalFontHeight: globalBoxHeight - 6
-    property int globalSpacing: 10
+    property int globalSpacing: globalBoxHeight / 2
 
     function getDriveModeLetter(driveModeIndex) {
         switch (driveModeIndex) {
@@ -165,7 +165,7 @@ Rectangle {
                     color: "#00000000"
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    height: 80
+                    height: globalBoxHeight * 4
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter

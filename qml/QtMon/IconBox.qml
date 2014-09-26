@@ -4,11 +4,11 @@ Rectangle {
     property alias iconSource: icon.source
     property alias backgroundColor: box.backgroundColor
     property alias borderColor: box.borderColor
-    property alias boxHeight: box.height
+    property alias boxHeight: box.boxHeight
     property int fontHeight: boxHeight - 8
 
     color: "#00000000"
-    height: box.height
+    height: box.boxHeight
 
     Box {
         id: box

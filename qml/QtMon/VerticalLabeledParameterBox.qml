@@ -22,7 +22,7 @@ Column {
             anchors.horizontalCenter: parent.horizontalCenter
             color: accentColor
             font.pixelSize: fontHeight
-            font.family: "Calibri"
+            font.family: "Helvetica"
         }
     }
     ParameterBox {

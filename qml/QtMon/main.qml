@@ -110,13 +110,16 @@ Rectangle {
                     labelText: "КООРДИНАТА"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    text: "128км 7пк 23м"
+                    text: ((stateView.Ordinate / 1000) - ((stateView.Ordinate / 1000) % 1) + 1) + "км " +
+                          (((stateView.Ordinate % 1000 ) / 100) - (((stateView.Ordinate % 1000 ) / 100) % 1) + 1) + "пк " +
+                          ((stateView.Ordinate % 100 - stateView.Ordinate % 10) / 10).toFixed(0) +
+                          (stateView.Ordinate % 10).toString() + "м"
                 }
 
                 // Номер пути
                 HorizontalLabeledParameterBox {
                     labelText: "ПУТЬ:"
-                    text: "7"
+                    text: stateView.TrackNumber
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
@@ -148,7 +151,7 @@ Rectangle {
                             model: [ 25, 50, 75 ]
                             Indicator {
                                 text: modelData + " Гц"
-                                isActive: modelData == 50
+                                isActive: modelData == stateView.AlsnFreqFact
                                 boxHeight: globalBoxHeight
                                 fontHeight: globalFontHeight
                                 width: frequncyIndicator.width / 3.0
@@ -169,7 +172,7 @@ Rectangle {
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "22:35:18"
+                        text: stateView.Time
                         color: "#95b3d7"
                         font.pixelSize: globalFontHeight * 2
                         font.family: "Helvetica"
@@ -193,7 +196,7 @@ Rectangle {
                         anchors.right: parent.right
                         VerticalLabeledParameterBox {
                             labelText: "ТЦ"
-                            text: "0,15"
+                            text: stateView.PressureTC
                             width: parent.width / 3.0
                             boxHeight: globalBoxHeight
                             fontHeight: globalFontHeight
@@ -203,7 +206,7 @@ Rectangle {
                         }
                         VerticalLabeledParameterBox {
                             labelText: "ТМ"
-                            text: "0,51"
+                            text: stateView.PressureTM
                             width: parent.width / 3.0
                             boxHeight: globalBoxHeight
                             fontHeight: globalFontHeight
@@ -213,7 +216,7 @@ Rectangle {
                         }
                         VerticalLabeledParameterBox {
                             labelText: "УР"
-                            text: "0,50"
+                            text: stateView.PressureUR
                             width: parent.width / 3.0
                             boxHeight: globalBoxHeight
                             fontHeight: globalFontHeight
@@ -227,7 +230,7 @@ Rectangle {
                 // Ускорение
                 HorizontalLabeledParameterBox {
                     labelText: "УСКОРЕНИЕ:"
-                    text: "-0,15"
+                    text: stateView.Acceleration
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
@@ -241,7 +244,7 @@ Rectangle {
                 // Коэффициент торможения
                 HorizontalLabeledParameterBox {
                     labelText: "КОЭФ. ТОРМ.:"
-                    text: "0,32"
+                    text: stateView.BrakingCoefficient
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: parent.width * 2.0 / 3.0
@@ -279,7 +282,7 @@ Rectangle {
                 labelText: "СТАНЦИЯ"
                 boxHeight: globalBoxHeight
                 fontHeight: globalFontHeight
-                text: "Решёты"
+                text: stateView.NextStatinName
             }
 
             // Строка иконок в верхнем ряду
@@ -302,7 +305,9 @@ Rectangle {
                         //backgroundColor: accentColor
                         boxHeight: globalBoxHeight
                         width: height
-                        iconSource: "Slices/Registration-Type.png"
+                        iconSource: stateView.IsRegistrationTapeActive
+                                    ? "Slices/Registration-Type.png"
+                                    : ""
                     }
                 }
 
@@ -323,7 +328,7 @@ Rectangle {
                             model: [ "П", "М", "Р" ]
                             Indicator {
                                 text: modelData
-                                isActive: modelData == 50
+                                isActive: modelData == getDriveModeLetter(stateView.DriveModeFact)
                                 boxHeight: globalBoxHeight
                                 fontHeight: globalFontHeight
                                 width: globalBoxHeight

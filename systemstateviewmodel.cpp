@@ -15,6 +15,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
     pressureURValue = "0.00";
+    brakingCoefficientValue = 0;
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
     gpsValidValue = false;
@@ -40,6 +41,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isTractionOnValue = false;
     directionValue = 0;
     ordinateValue = 0;
+    nextStatinNameValue = "---";
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
     nextTargetDistanceValue = 0;
@@ -213,6 +215,20 @@ void SystemStateViewModel::setPressureUR(const QString value)
     {
         pressureURValue = value;
         emit PressureURChanged(value);
+    }
+}
+
+// Коэффициент торможения
+const double SystemStateViewModel::getBrakingCoefficient() const
+{
+    return brakingCoefficientValue;
+}
+void SystemStateViewModel::setBrakingCoefficient(const double value)
+{
+    if (brakingCoefficientValue != value)
+    {
+        brakingCoefficientValue = value;
+        emit BrakingCoefficientChanged(value);
     }
 }
 
@@ -559,6 +575,20 @@ void SystemStateViewModel::setOrdinate(const int value)
     {
         ordinateValue = value;
         emit OrdinateChanged(value);
+    }
+}
+
+// Название ближайшей станции
+const QString SystemStateViewModel::getNextStatinName() const
+{
+    return nextStatinNameValue;
+}
+void SystemStateViewModel::setNextStatinName(const QString value)
+{
+    if (nextStatinNameValue != value)
+    {
+        nextStatinNameValue = value;
+        emit NextStatinNameChanged(value);
     }
 }
 

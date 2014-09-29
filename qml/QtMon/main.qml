@@ -355,6 +355,33 @@ Rectangle {
                 id: bottomPanel
                 anchors.left: parent.left
                 anchors.right: parent.right
+                spacing: globalSpacing
+
+                HorizontalLabeledParameterBox {
+                    labelText: "ДО ЦЕЛИ САУТ:"
+                    text: "315м"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
+                    labelWidth: leftColumn.labelsColumnWidth
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
+                    anchors.left: parent.left
+                    width: leftColumn.width
+                }
+
+                HorizontalLabeledParameterBox {
+                    labelText: "ЦЕЛЬ КЛУБ:"
+                    text: "Светофор Н3 через 500м"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
+                    labelWidth: leftColumn.labelsColumnWidth
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
 
                 // Строка статуса
                 ParameterBox {

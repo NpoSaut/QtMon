@@ -94,6 +94,8 @@ Rectangle {
             width: contentArea.width * (2/7)
             color: "#00000000"
 
+            property int labelsColumnWidth: width * (2/3)
+
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -122,7 +124,7 @@ Rectangle {
                     text: stateView.TrackNumber
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor
@@ -233,7 +235,7 @@ Rectangle {
                     text: stateView.Acceleration
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor
@@ -247,7 +249,7 @@ Rectangle {
                     text: stateView.BrakingCoefficient
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor
@@ -358,6 +360,33 @@ Rectangle {
                 id: bottomPanel
                 anchors.left: parent.left
                 anchors.right: parent.right
+                spacing: globalSpacing
+
+                HorizontalLabeledParameterBox {
+                    labelText: "ДО ЦЕЛИ САУТ:"
+                    text: "315м"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
+                    labelWidth: leftColumn.labelsColumnWidth
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
+                    anchors.left: parent.left
+                    width: leftColumn.width
+                }
+
+                HorizontalLabeledParameterBox {
+                    labelText: "ЦЕЛЬ КЛУБ:"
+                    text: "Светофор Н3 через 500м"
+                    boxHeight: globalBoxHeight
+                    fontHeight: globalFontHeight
+                    labelWidth: leftColumn.labelsColumnWidth
+                    accentColor: rootRect.accentColor
+                    regularColor: rootRect.regularColor
+                    backgroundColor: boxColor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
 
                 // Строка статуса
                 ParameterBox {

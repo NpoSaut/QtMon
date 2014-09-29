@@ -45,6 +45,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     nextTargetKindValue = -1;
     nextTargetNameValue = "";
     nextTargetDistanceValue = 0;
+    sautTargetDistanceValue = 0;
     notificationTextValue = "";
     trackNumberValue = 0;
     machinistNumberValue = 0;
@@ -631,6 +632,20 @@ void SystemStateViewModel::setNextTargetDistance(const int value)
     {
         nextTargetDistanceValue = value;
         emit NextTargetDistanceChanged(value);
+    }
+}
+
+// Расстояние до цели САУТ
+const int SystemStateViewModel::getSautTargetDistance() const
+{
+    return sautTargetDistanceValue;
+}
+void SystemStateViewModel::setSautTargetDistance(const int value)
+{
+    if (sautTargetDistanceValue != value)
+    {
+        sautTargetDistanceValue = value;
+        emit SautTargetDistanceChanged(value);
     }
 }
 

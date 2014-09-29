@@ -170,6 +170,10 @@ class SystemStateViewModel : public QDeclarativeItem
     int nextTargetDistanceValue;
     Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
 
+    // Расстояние до цели САУТ
+    int sautTargetDistanceValue;
+    Q_PROPERTY(int SautTargetDistance READ getSautTargetDistance WRITE setSautTargetDistance NOTIFY SautTargetDistanceChanged)
+
     // Текст высокоприоритетного сообщения
     QString notificationTextValue;
     Q_PROPERTY(QString NotificationText READ getNotificationText WRITE setNotificationText NOTIFY NotificationTextChanged)
@@ -277,6 +281,7 @@ public:
     const int getNextTargetKind() const;
     const QString getNextTargetName() const;
     const int getNextTargetDistance() const;
+    const int getSautTargetDistance() const;
     const QString getNotificationText() const;
     const int getTrackNumber() const;
     const int getMachinistNumber() const;
@@ -351,6 +356,7 @@ signals:
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
     void NextTargetDistanceChanged(const int value);
+    void SautTargetDistanceChanged(const int value);
     void NotificationTextChanged(const QString value);
     void TrackNumberChanged(const int value);
     void MachinistNumberChanged(const int value);
@@ -411,6 +417,7 @@ public slots:
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
     void setNextTargetDistance(const int);
+    void setSautTargetDistance(const int);
     void setNotificationText(const QString);
     void setTrackNumber(const int);
     void setMachinistNumber(const int);

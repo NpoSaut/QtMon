@@ -69,6 +69,7 @@
     <Property type="int" name="NextTargetKind" def="-1" description="Тип ближайшей цели" />
     <Property type="QString" name="NextTargetName" def="&quot;&quot;" description="Название ближайшей цели" />
     <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
+    <Property type="int" name="SautTargetDistance" def="0" description="Расстояние до цели САУТ" />
 
     <!-- Строки предупреждений -->
     <Property type="QString" name="NotificationText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>

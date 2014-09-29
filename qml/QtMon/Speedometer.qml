@@ -236,7 +236,13 @@ Rectangle {
             height: width
             radius: width / 2
 
-            color: speedometerWarner.poolsed ? "#fff" : "#4999c9"
+            color: "#00000000"
+
+            Image {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "Slices/hot-head.png"
+            }
 
             // Индикатор отсутствия тяги вокруг кругляша скорости
             Rectangle {
@@ -258,7 +264,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
 
                 text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
-                color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
+                color: !speedometerWarner.poolsed ? "#ff4600" : "#ff00c4"
 
                 font.pixelSize: parent.height * (3/7)
                 font.family: "URW Gothic L"

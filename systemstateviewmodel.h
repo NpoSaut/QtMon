@@ -54,6 +54,10 @@ class SystemStateViewModel : public QDeclarativeItem
     QString pressureURValue;
     Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
 
+    // Коэффициент торможения
+    double brakingCoefficientValue;
+    Q_PROPERTY(double BrakingCoefficient READ getBrakingCoefficient WRITE setBrakingCoefficient NOTIFY BrakingCoefficientChanged)
+
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
 
@@ -150,6 +154,10 @@ class SystemStateViewModel : public QDeclarativeItem
     int ordinateValue;
     Q_PROPERTY(int Ordinate READ getOrdinate WRITE setOrdinate NOTIFY OrdinateChanged)
 
+    // Название ближайшей станции
+    QString nextStatinNameValue;
+    Q_PROPERTY(QString NextStatinName READ getNextStatinName WRITE setNextStatinName NOTIFY NextStatinNameChanged)
+
     // Тип ближайшей цели
     int nextTargetKindValue;
     Q_PROPERTY(int NextTargetKind READ getNextTargetKind WRITE setNextTargetKind NOTIFY NextTargetKindChanged)
@@ -239,6 +247,7 @@ public:
     const QString getPressureTC() const;
     const QString getPressureTM() const;
     const QString getPressureUR() const;
+    const double getBrakingCoefficient() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const bool getGpsValid() const;
@@ -264,6 +273,7 @@ public:
     const bool getIsTractionOn() const;
     const int getDirection() const;
     const int getOrdinate() const;
+    const QString getNextStatinName() const;
     const int getNextTargetKind() const;
     const QString getNextTargetName() const;
     const int getNextTargetDistance() const;
@@ -311,6 +321,7 @@ signals:
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
     void PressureURChanged(const QString value);
+    void BrakingCoefficientChanged(const double value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void gpsValidChanged(const bool value);
@@ -336,6 +347,7 @@ signals:
     void IsTractionOnChanged(const bool value);
     void DirectionChanged(const int value);
     void OrdinateChanged(const int value);
+    void NextStatinNameChanged(const QString value);
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
     void NextTargetDistanceChanged(const int value);
@@ -369,6 +381,7 @@ public slots:
     void setPressureTC(const QString);
     void setPressureTM(const QString);
     void setPressureUR(const QString);
+    void setBrakingCoefficient(const double);
     void setLongitude(const double);
     void setLatitude(const double);
     void setGpsValid(const bool);
@@ -394,6 +407,7 @@ public slots:
     void setIsTractionOn(const bool);
     void setDirection(const int);
     void setOrdinate(const int);
+    void setNextStatinName(const QString);
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
     void setNextTargetDistance(const int);

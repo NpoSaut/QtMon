@@ -94,7 +94,7 @@ Rectangle {
             width: contentArea.width * (2/7)
             color: "#00000000"
 
-            property int labelsColumnWidth: 100
+            property int labelsColumnWidth: width * (2/3)
 
             Column {
                 anchors.left: parent.left

@@ -94,6 +94,8 @@ Rectangle {
             width: contentArea.width * (2/7)
             color: "#00000000"
 
+            property int labelsColumnWidth: 100
+
             Column {
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -119,7 +121,7 @@ Rectangle {
                     text: "7"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor
@@ -230,7 +232,7 @@ Rectangle {
                     text: "-0,15"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor
@@ -244,7 +246,7 @@ Rectangle {
                     text: "0,32"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
-                    labelWidth: parent.width * 2.0 / 3.0
+                    labelWidth: leftColumn.labelsColumnWidth
                     accentColor: rootRect.accentColor
                     regularColor: rootRect.regularColor
                     backgroundColor: boxColor

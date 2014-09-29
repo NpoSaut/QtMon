@@ -5,11 +5,11 @@ Rectangle {
     property alias textColor: label.color
     property alias backgroundColor: box.backgroundColor
     property alias borderColor: box.borderColor
-    property alias boxHeight: box.height
+    property alias boxHeight: box.boxHeight
     property int fontHeight: boxHeight - 8
 
     color: "#00000000"
-    height: box.height
+    height: box.boxHeight
 
     Box {
         id: box
@@ -19,7 +19,7 @@ Rectangle {
     Text {
         id: label
         font.pixelSize: fontHeight
-        font.family: "Calibri"
+        font.family: "Helvetica"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }

@@ -23,7 +23,7 @@
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#ifdef WITH_CAN
+#ifdef LIB_SOCKET_CAN
 #include "qtCanLib/socketcan.h"
 #else
 #include "qtCanLib/dummycan.h"
@@ -175,6 +175,12 @@ void getParamsFromConsole ()
             systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
             out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
         }
+        // Фактическая частота АЛСН
+        else if (cmd.at(0) == "f")
+        {
+            systemState->setAlsnFreqFact( cmd.at(1).toInt() );
+            out << "Now ALSN Freq Fact is: " << systemState->getAlsnFreqFact() << endl;
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -190,6 +196,7 @@ void getParamsFromConsole ()
             out << "tsc {1/0} ТСКБМ: Машинист бодр" << endl;
             out << "tsv {1/0} ТСКБМ: Требуется подтверждение бодрости" << endl;
             out << "tsa {1/0} ТСКБМ: Предварительная сигнализация" << endl;
+            out << "f {25/50/75} Фактическая частота АЛСН" << endl;
         }
     }
 }
@@ -223,7 +230,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     levithan = new Levithan(systemState);
 
-#ifdef WITH_CAN
+#ifdef LIB_SOCKET_CAN
     can = new SocketCan();
 #else
     can = new DummyCan();

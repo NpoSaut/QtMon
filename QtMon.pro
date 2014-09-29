@@ -55,7 +55,8 @@ SOURCES += \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
     qtBlokLib/parsers/mm_alt_long.cpp \
-    qtBlokLib/parsers/mco_mode.cpp
+    qtBlokLib/parsers/mco_mode.cpp \
+    qtBlokLib/parsers/console_key.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -114,7 +115,8 @@ HEADERS += \
     autolockhandler.h \
     qtBlokLib/parsers/mm_alt_long.h \
     qtBlokLib/parsers/mco_mode.h \
-    qtBlokLib/parsers/autolockmode.h
+    qtBlokLib/parsers/autolockmode.h \
+    qtBlokLib/parsers/console_key.h
 
 CONFIG += console
 

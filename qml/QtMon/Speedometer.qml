@@ -246,6 +246,7 @@ Rectangle {
 
             // Индикатор отсутствия тяги вокруг кругляша скорости
             Rectangle {
+                opacity: 0
                 property int thick: 3
                 z: parent.z - 5
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -262,6 +263,7 @@ Rectangle {
                 id: speedLabel
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -22
 
                 text: stateView.SpeedIsValid ? stateView.Speed.toFixed() : "N/A"
                 color: !speedometerWarner.poolsed ? "#ff4600" : "#ff00c4"

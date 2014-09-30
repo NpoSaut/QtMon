@@ -19,7 +19,7 @@ Rectangle {
     Text {
         id: label
         font.pixelSize: fontHeight
-        font.family: "Helvetica"
+        font.family: "URW Gothic L"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }

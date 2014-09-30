@@ -27,7 +27,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             color: regularColor
             font.pixelSize: fontHeight
-            font.family: "Helvetica"
+            font.family: "PT Sans Caption"
         }
     }
     ParameterBox {

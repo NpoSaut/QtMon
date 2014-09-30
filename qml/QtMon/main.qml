@@ -80,7 +80,7 @@ Rectangle {
     Image {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "Slices/Background.jpg"
+        source: "Slices/Background.png"
     }
 
     Rectangle {

@@ -104,8 +104,7 @@ Rectangle {
                     text: parent.kph
                     color: "#ffffffff"
 
-                    font.pixelSize: fontHeight
-                    font.family: "PT Sans Caption"
+                    font.pixelSize: fontHeight + 2
                 }
             }
         }
@@ -261,7 +260,7 @@ Rectangle {
                 color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
                 font.pixelSize: parent.height * (3/7)
-                font.family: "PT Sans Caption"
+                font.family: "URW Gothic L"
                 font.bold: true
             }
 
@@ -283,7 +282,7 @@ Rectangle {
                     color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
                     font.pixelSize: speedLabel.height * (4/6)
-                    font.family: "PT Sans Caption"
+                    font.family: "URW Gothic L"
                     font.bold: true
                 }
             }

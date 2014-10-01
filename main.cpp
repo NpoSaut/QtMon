@@ -218,6 +218,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
 
     QmlApplicationViewer viewer;
+
+    QFont sansFont("PT Sans Caption");
+    sansFont.setStyleStrategy(QFont::NoAntialias);
+    app->setFont(sansFont);
+
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/QtMon/main.qml"));
 #ifdef ON_DEVICE

@@ -19,7 +19,6 @@ Rectangle {
     Text {
         id: label
         font.pixelSize: fontHeight
-        font.family: "PT Sans Caption"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }

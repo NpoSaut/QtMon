@@ -55,8 +55,8 @@ class SystemStateViewModel : public QDeclarativeItem
     Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
 
     // Коэффициент торможения
-    double brakingCoefficientValue;
-    Q_PROPERTY(double BrakingCoefficient READ getBrakingCoefficient WRITE setBrakingCoefficient NOTIFY BrakingCoefficientChanged)
+    float breakingFactorValue;
+    Q_PROPERTY(float BreakingFactor READ getBreakingFactor WRITE setBreakingFactor NOTIFY BreakingFactorChanged)
 
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
@@ -251,7 +251,7 @@ public:
     const QString getPressureTC() const;
     const QString getPressureTM() const;
     const QString getPressureUR() const;
-    const double getBrakingCoefficient() const;
+    const float getBreakingFactor() const;
     const double getLongitude() const;
     const double getLatitude() const;
     const bool getGpsValid() const;
@@ -326,7 +326,7 @@ signals:
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
     void PressureURChanged(const QString value);
-    void BrakingCoefficientChanged(const double value);
+    void BreakingFactorChanged(const float value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void gpsValidChanged(const bool value);
@@ -387,7 +387,7 @@ public slots:
     void setPressureTC(const QString);
     void setPressureTM(const QString);
     void setPressureUR(const QString);
-    void setBrakingCoefficient(const double);
+    void setBreakingFactor(const float);
     void setLongitude(const double);
     void setLatitude(const double);
     void setGpsValid(const bool);

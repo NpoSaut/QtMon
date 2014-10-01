@@ -367,6 +367,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
     QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
+    QObject::connect (&blokMessages->mmStation, SIGNAL(stationNameChanged(QString)), systemState, SLOT(setNextStatinName(QString)));
+
+    // САУТ
+    QObject::connect (&blokMessages->sautState, SIGNAL(distanceToTargetChanged(int)), systemState, SLOT(setSautTargetDistance(int)));
+    QObject::connect (&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Звуки
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));

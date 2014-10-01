@@ -138,7 +138,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "PT Sans Caption"
                         text: "ЧАСТОТА"
                     }
                     // Индикатор частоты
@@ -174,7 +173,6 @@ Rectangle {
                         text: "22:35:18"
                         color: "#95b3d7"
                         font.pixelSize: globalFontHeight * 2
-                        font.family: "PT Sans Caption"
                     }
                 }
 
@@ -187,7 +185,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "PT Sans Caption"
                         text: "ДАВЛЕНИЕ (МПа)"
                     }
                     Row {
@@ -316,7 +313,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "PT Sans Caption"
                         text: "РЕЖИМ"
                     }
 

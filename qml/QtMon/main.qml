@@ -6,7 +6,7 @@ Rectangle {
     height: 480
     id: rootRect
 
-    property color accentColor: "#ffc000"
+    property color accentColor: "#ffff00"
     property color regularColor: "#fff"
     property color boxColor: "#70000000"
 

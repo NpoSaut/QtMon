@@ -105,7 +105,7 @@ Rectangle {
                     color: "#ffffffff"
 
                     font.pixelSize: fontHeight
-                    font.family: "URW Gothic L"
+                    font.family: "PT Sans Caption"
                 }
             }
         }
@@ -261,7 +261,7 @@ Rectangle {
                 color: speedometerWarner.poolsed ? "#4999c9" : "#fff"
 
                 font.pixelSize: parent.height * (3/7)
-                font.family: "URW Gothic L"
+                font.family: "PT Sans Caption"
                 font.bold: true
             }
 
@@ -283,7 +283,7 @@ Rectangle {
                     color: speedometerWarner.warned ? "#ee1616" : "#c94949"
 
                     font.pixelSize: speedLabel.height * (4/6)
-                    font.family: "URW Gothic L"
+                    font.family: "PT Sans Caption"
                     font.bold: true
                 }
             }

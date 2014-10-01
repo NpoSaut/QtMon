@@ -104,8 +104,7 @@ Rectangle {
                     text: parent.kph
                     color: "#ffffffff"
 
-                    font.pixelSize: fontHeight
-                    font.family: "URW Gothic L"
+                    font.pixelSize: fontHeight + 2
                 }
             }
         }

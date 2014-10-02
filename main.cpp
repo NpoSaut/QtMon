@@ -34,6 +34,7 @@
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
+#include "ledtrafficlight.h"
 #include "alsnfreqhandler.h"
 #include "autolockhandler.h"
 
@@ -46,6 +47,7 @@ iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 TrafficlightAdaptor *trafficlightAdaptor;
+LedTrafficlight *ledTrafficlight;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
@@ -274,6 +276,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     trafficlightAdaptor = new TrafficlightAdaptor();
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
     QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), systemState, SLOT(setLight(int)));
+    ledTrafficlight = new LedTrafficlight();
+    QObject::connect(systemState, SIGNAL(LightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
     // частота
     alsnFreqHandler = new AlsnFreqHandler (can, blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));

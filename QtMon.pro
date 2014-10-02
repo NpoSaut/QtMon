@@ -61,7 +61,8 @@ SOURCES += \
     qtBlokLib/parsers/mm_station.cpp \
     gpio/linuxgpio.cpp \
     gpio/debuggpio.cpp \
-    gpio/gpioproducer.cpp
+    gpio/gpioproducer.cpp \
+    ledtrafficlight.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -128,7 +129,8 @@ HEADERS += \
     gpio/linuxgpio.h \
     gpio/dummygpio.h \
     gpio/debuggpio.h \
-    gpio/gpioproducer.h
+    gpio/gpioproducer.h \
+    ledtrafficlight.h
 
 CONFIG += console
 

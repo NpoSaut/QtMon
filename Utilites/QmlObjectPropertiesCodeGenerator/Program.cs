@@ -19,6 +19,7 @@ namespace QmlObjectPropertiesCodeGenerator
 
             string className = doc.Root.Element("ClassInfo").Attribute("name").Value;
             var modelSource = new SourceFile(sourcePaths, className);
+            var serializerSource = new SourceFile(sourcePaths, "StateSerializer");
 
             var privateProperties = new List<String>();
             var publicPropertyGetters = new List<String>();
@@ -26,6 +27,9 @@ namespace QmlObjectPropertiesCodeGenerator
             var propertiesSignals = new List<String>();
             var gettersAndSetters = new List<String>();
             var propertyInits = new List<String>();
+
+            var propertySerializers = new List<String>();
+            var propertyDeserializers = new List<String>();
 
             var replacements = new[]
                                {
@@ -36,9 +40,20 @@ namespace QmlObjectPropertiesCodeGenerator
                                    new CodeReplacement(new CodeLocation(modelSource.HeaderFilePath, "// properties signals {0}"), propertiesSignals),
                                    new CodeReplacement(new CodeLocation(modelSource.SourceFilePath, "// -- {0}: Properties Getters and Setters --"),
                                                        gettersAndSetters),
-                                   new CodeReplacement(new CodeLocation(modelSource.SourceFilePath, "// fileds init {0}"), propertyInits)
+                                   new CodeReplacement(new CodeLocation(modelSource.SourceFilePath, "// fileds init {0}"), propertyInits),
+                                   new CodeReplacement(new CodeLocation(serializerSource.SourceFilePath, "// save parameters {0}"), propertySerializers),
+                                   new CodeReplacement(new CodeLocation(serializerSource.SourceFilePath, "// load parameters {0}"), propertyDeserializers)
                                };
 
+            var typeConverters = new Dictionary<String, ITypeConverter>
+                                 {
+                                     { "double", new NumericTypeConverter("double") },
+                                     { "int", new NumericTypeConverter("int") },
+                                     { "QString", new QStringConverter() },
+                                     { "bool", new NumericTypeConverter("int") }
+                                 };
+
+            int i = 0;
             foreach (XElement XProperty in doc.Root.Element("Properties").Elements("Property"))
             {
                 string propertyName = XProperty.Attribute("name").Value;
@@ -67,6 +82,11 @@ namespace QmlObjectPropertiesCodeGenerator
                 gettersAndSetters.Add(String.Format(Resources.DefaultGetter, propertyType, getterName, filedName, className));
                 gettersAndSetters.Add(String.Format(Resources.DefaultSetter, propertyType, setterName, filedName, className, signalName));
                 gettersAndSetters.Add("");
+
+                propertyDeserializers.Add(String.Format("model->{0}({1});", setterName, typeConverters[propertyType].FromQString("parameters[{0}]", i)));
+                propertySerializers.Add(String.Format("parameters.append({0});", typeConverters[propertyType].ToQString("model->{0}()", getterName)));
+
+                i++;
             }
 
             foreach (var fileReplacements in replacements.GroupBy(r => r.Location.FileName))

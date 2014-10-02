@@ -58,7 +58,8 @@ SOURCES += \
     qtBlokLib/parsers/mco_mode.cpp \
     qtBlokLib/parsers/console_key.cpp \
     qtBlokLib/parsers/saut_state.cpp \
-    qtBlokLib/parsers/mm_station.cpp
+    qtBlokLib/parsers/mm_station.cpp \
+    stateserializer.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -120,7 +121,8 @@ HEADERS += \
     qtBlokLib/parsers/autolockmode.h \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
-    qtBlokLib/parsers/mm_station.h
+    qtBlokLib/parsers/mm_station.h \
+    stateserializer.h
 
 CONFIG += console
 

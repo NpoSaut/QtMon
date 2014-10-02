@@ -137,5 +137,5 @@ const QString StateSerializer::Serialize(const SystemStateViewModel *model)
     parameters.append(QString::number(model->getTsvcIsVigilanceRequired()));
     parameters.append(QString::number(model->getTsvcIsPreAlarmActive()));
     // save parameters end
-    return parameters.join(_separator) + "\n";
+    return parameters.join(_separator) + "\r\n";
 }

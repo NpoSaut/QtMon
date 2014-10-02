@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Xml.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using QmlObjectPropertiesCodeGenerator.Properties;
 
 namespace QmlObjectPropertiesCodeGenerator
 {
-    class Program
+    internal class Program
     {
         private static String ToFirstLower(String s)
         {
             if (s.Length < 2) return s.ToLower();
             return s.Substring(0, 1).ToLower() + s.Substring(1);
         }
+
         private static String ToFirstUpper(String s)
         {
             if (s.Length < 2) return s.ToUpper();
@@ -24,112 +25,93 @@ namespace QmlObjectPropertiesCodeGenerator
         private static Regex GetRegexForLabel(String LabelFormat)
         {
             return new Regex(String.Format("[ ]*{0}.*[ ]*{1}",
-                                                String.Format(LabelFormat.Trim(), "start"),
-                                                String.Format(LabelFormat.Trim(), "end")),
+                                           String.Format(LabelFormat.Trim(), "start"),
+                                           String.Format(LabelFormat.Trim(), "end")),
                              RegexOptions.Singleline);
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            string WorkigDirectory = (args.Length > 0) ? args[0] : "";
-            string TaskPath = Path.Combine(WorkigDirectory, "properties.xml");
-            string SourcePaths = WorkigDirectory;
+            string workingDirectory = (args.Length > 0) ? args[0] : "";
+            string taskPath = Path.Combine(workingDirectory, "properties.xml");
+            string sourcePaths = workingDirectory;
 
-            XDocument doc = XDocument.Load(TaskPath);
+            XDocument doc = XDocument.Load(taskPath);
 
-            string ClassName = doc.Root.Element("ClassInfo").Attribute("name").Value;
+            string className = doc.Root.Element("ClassInfo").Attribute("name").Value;
 
-            FileInfo hFile = new FileInfo(Path.Combine(SourcePaths, ClassName.ToLower() + ".h"));
-            FileInfo cppFile = new FileInfo(Path.Combine(SourcePaths, ClassName.ToLower() + ".cpp"));
+            var hFile = new FileInfo(Path.Combine(sourcePaths, className.ToLower() + ".h"));
+            var cppFile = new FileInfo(Path.Combine(sourcePaths, className.ToLower() + ".cpp"));
 
-            StringBuilder PrivateProperties = new StringBuilder();
-            StringBuilder PublicPropertyGetters = new StringBuilder();
-            StringBuilder PublicSlotsAndPropertySetters = new StringBuilder();
-            StringBuilder PropertiesSignals = new StringBuilder();
-            StringBuilder GettersAndSetters = new StringBuilder();
-            StringBuilder PropertyInits = new StringBuilder();
+            var privateProperties = new StringBuilder();
+            var publicPropertyGetters = new StringBuilder();
+            var publicSlotsAndPropertySetters = new StringBuilder();
+            var propertiesSignals = new StringBuilder();
+            var gettersAndSetters = new StringBuilder();
+            var propertyInits = new StringBuilder();
 
-            Dictionary<StringBuilder, String> LabelFormats = new Dictionary<StringBuilder, string>()
-            {
-                { PrivateProperties,              "    // private properties {0}" },
-                { PublicPropertyGetters,          "    // public properties getters {0}" },
-                { PublicSlotsAndPropertySetters,  "    // public properties setters {0}" },
-                { PropertiesSignals,              "    // properties signals {0}" },
-                { GettersAndSetters,              "// -- {0}: Properties Getters and Setters --" },
-                { PropertyInits,                  "    // fileds init {0}" }
-            };
-            //LabelFormats.Add(PrivateProperties, "    // private properties {0}");
-            //LabelFormats.Add(PublicPropertyGettersSetters, "    // public properties {0}");
-            //LabelFormats.Add(PropertiesSignals, "    // properties signals {0}");
-            //LabelFormats.Add(GettersAndSetters, "// -- {0}: Properties Getters and Setters --");
-            //LabelFormats.Add(PropertyInits, "    // fileds init start {0}");
+            var labelFormats = new Dictionary<StringBuilder, string>
+                               {
+                                   { privateProperties, "    // private properties {0}" },
+                                   { publicPropertyGetters, "    // public properties getters {0}" },
+                                   { publicSlotsAndPropertySetters, "    // public properties setters {0}" },
+                                   { propertiesSignals, "    // properties signals {0}" },
+                                   { gettersAndSetters, "// -- {0}: Properties Getters and Setters --" },
+                                   { propertyInits, "    // fileds init {0}" }
+                               };
 
-            foreach (var fl in LabelFormats)
+            foreach (var fl in labelFormats)
                 fl.Key.AppendFormat(fl.Value + "\n", "start");
 
-            //PrivateProperties.AppendLine("    // private properties start");
-            //PublicPropertyGettersSetters.AppendLine("    // public properties start");
-            //PropertiesSignals.AppendLine("    // properties signals start");
-            //GettersAndSetters.AppendLine("// -- start: Properties Getters and Setters --");
-            //PropertyInits.AppendLine("    // fileds init start");
-
-            foreach (var XProperty in doc.Root.Element("Properties").Elements("Property"))
+            foreach (XElement XProperty in doc.Root.Element("Properties").Elements("Property"))
             {
-                string PropertyName = XProperty.Attribute("name").Value;
-                string PropertyType = XProperty.Attribute("type").Value;
-                string PropertyDescription = (String)XProperty.Attribute("description");
-                //string FiledName = XProperty.Attribute("filed").Value;
-                string FiledValue = XProperty.Attribute("def").Value;
-                string FiledName = String.Format("{0}Value", ToFirstLower(PropertyName));
-                string GetterName = String.Format("get{0}", ToFirstUpper(PropertyName));
-                string SetterName = String.Format("set{0}", ToFirstUpper(PropertyName));
-                string SignalName = ((bool?)XProperty.Attribute("signalsafe") == true) ?
-                                        String.Format("{0}Changed", ToFirstLower(PropertyName)) :
-                                        String.Format("{0}Changed", PropertyName);
+                string propertyName = XProperty.Attribute("name").Value;
+                string propertyType = XProperty.Attribute("type").Value;
+                var propertyDescription = (String)XProperty.Attribute("description");
+                string filedValue = XProperty.Attribute("def").Value;
+                string filedName = String.Format("{0}Value", ToFirstLower(propertyName));
+                string getterName = String.Format("get{0}", ToFirstUpper(propertyName));
+                string setterName = String.Format("set{0}", ToFirstUpper(propertyName));
+                string signalName = ((bool?)XProperty.Attribute("signalsafe") == true)
+                                        ? String.Format("{0}Changed", ToFirstLower(propertyName))
+                                        : String.Format("{0}Changed", propertyName);
 
-                if (PropertyDescription != null) PrivateProperties.AppendFormat("    // {0}\n", PropertyDescription);
-                PrivateProperties.AppendFormat("    {0} {1};\n", PropertyType, FiledName);
-                PrivateProperties.AppendFormat("    Q_PROPERTY({0} {1} READ {2} WRITE {3} NOTIFY {4})\n\n",
-                                                                     PropertyType, PropertyName, GetterName, SetterName, SignalName);
+                if (propertyDescription != null) privateProperties.AppendFormat("    // {0}\n", propertyDescription);
+                privateProperties.AppendFormat("    {0} {1};\n", propertyType, filedName);
+                privateProperties.AppendFormat("    Q_PROPERTY({0} {1} READ {2} WRITE {3} NOTIFY {4})\n\n",
+                                               propertyType, propertyName, getterName, setterName, signalName);
 
-                //if (PropertyDescription != null) PublicPropertyGetters.AppendFormat("    // {0}\n", PropertyDescription);
-                PublicPropertyGetters.AppendFormat("    const {0} {1}() const;\n", PropertyType, GetterName);
-                PublicSlotsAndPropertySetters.AppendFormat("    void {1}(const {0});\n", PropertyType, SetterName);
+                publicPropertyGetters.AppendFormat("    const {0} {1}() const;\n", propertyType, getterName);
+                publicSlotsAndPropertySetters.AppendFormat("    void {1}(const {0});\n", propertyType, setterName);
 
-                PropertiesSignals.AppendFormat("    void {0}(const {1} value);\n", SignalName, PropertyType);
+                propertiesSignals.AppendFormat("    void {0}(const {1} value);\n", signalName, propertyType);
 
-                PropertyInits.AppendFormat("    {0} = {1};\n", FiledName, FiledValue);
-                if (PropertyDescription != null) GettersAndSetters.AppendFormat("// {0}\n", PropertyDescription);
-                GettersAndSetters.AppendFormat(Properties.Resources.DefaultGetter, PropertyType, GetterName, FiledName, ClassName);
-                GettersAndSetters.AppendFormat(Properties.Resources.DefaultSetter, PropertyType, SetterName, FiledName, ClassName, SignalName);
-                GettersAndSetters.AppendLine();
+                propertyInits.AppendFormat("    {0} = {1};\n", filedName, filedValue);
+                if (propertyDescription != null) gettersAndSetters.AppendFormat("// {0}\n", propertyDescription);
+                gettersAndSetters.AppendFormat(Resources.DefaultGetter, propertyType, getterName, filedName, className);
+                gettersAndSetters.AppendFormat(Resources.DefaultSetter, propertyType, setterName, filedName, className, signalName);
+                gettersAndSetters.AppendLine();
             }
 
-            //PrivateProperties.Append("    // private properties end");
-            //PublicPropertyGettersSetters.Append("    // public properties end");
-            //PropertiesSignals.Append("    // properties signals end");
-            //GettersAndSetters.Append("// -- end: Properties Getters and Setters --");
-            //PropertyInits.Append("    // fileds init end");
-
-            foreach (var fl in LabelFormats)
+            foreach (var fl in labelFormats)
                 fl.Key.AppendFormat(fl.Value, "end");
 
             string hLines = File.ReadAllText(hFile.FullName);
-            hLines = GetRegexForLabel(LabelFormats[PrivateProperties])
-                            .Replace(hLines, PrivateProperties.ToString());
-            hLines = GetRegexForLabel(LabelFormats[PublicPropertyGetters])
-                            .Replace(hLines, PublicPropertyGetters.ToString());
-            hLines = GetRegexForLabel(LabelFormats[PublicSlotsAndPropertySetters])
-                            .Replace(hLines, PublicSlotsAndPropertySetters.ToString());
-            hLines = GetRegexForLabel(LabelFormats[PropertiesSignals])
-                            .Replace(hLines, PropertiesSignals.ToString());
+            hLines = GetRegexForLabel(labelFormats[privateProperties])
+                .Replace(hLines, privateProperties.ToString());
+            hLines = GetRegexForLabel(labelFormats[publicPropertyGetters])
+                .Replace(hLines, publicPropertyGetters.ToString());
+            hLines = GetRegexForLabel(labelFormats[publicSlotsAndPropertySetters])
+                .Replace(hLines, publicSlotsAndPropertySetters.ToString());
+            hLines = GetRegexForLabel(labelFormats[propertiesSignals])
+                .Replace(hLines, propertiesSignals.ToString());
             File.WriteAllText(hFile.FullName, hLines);
 
             string cppLines = File.ReadAllText(cppFile.FullName);
-            cppLines = GetRegexForLabel(LabelFormats[PropertyInits])
-                            .Replace(cppLines, PropertyInits.ToString());
-            cppLines = GetRegexForLabel(LabelFormats[GettersAndSetters])
-                            .Replace(cppLines, GettersAndSetters.ToString());
+            cppLines = GetRegexForLabel(labelFormats[propertyInits])
+                .Replace(cppLines, propertyInits.ToString());
+            cppLines = GetRegexForLabel(labelFormats[gettersAndSetters])
+                .Replace(cppLines, gettersAndSetters.ToString());
             File.WriteAllText(cppFile.FullName, cppLines);
         }
     }

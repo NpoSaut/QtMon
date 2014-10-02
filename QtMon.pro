@@ -62,7 +62,8 @@ SOURCES += \
     gpio/linuxgpio.cpp \
     gpio/debuggpio.cpp \
     gpio/gpioproducer.cpp \
-    ledtrafficlight.cpp
+    ledtrafficlight.cpp \
+    ledvigilance.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -130,7 +131,8 @@ HEADERS += \
     gpio/dummygpio.h \
     gpio/debuggpio.h \
     gpio/gpioproducer.h \
-    ledtrafficlight.h
+    ledtrafficlight.h \
+    ledvigilance.h
 
 CONFIG += console
 

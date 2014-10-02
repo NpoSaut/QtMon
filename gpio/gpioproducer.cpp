@@ -18,7 +18,7 @@ Gpio *GpioProducer::produce(unsigned number)
     }
     else
     {
-        std::cerr << "GPIO: Trying produce (register) alrеady existence GPIO" << number << "." << endl;
+        std::cerr << "GPIO: Trying produce (register) alrеady existence GPIO" << number << "." << std::endl;
         return nullptr;
     }
 }

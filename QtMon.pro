@@ -58,7 +58,10 @@ SOURCES += \
     qtBlokLib/parsers/mco_mode.cpp \
     qtBlokLib/parsers/console_key.cpp \
     qtBlokLib/parsers/saut_state.cpp \
-    qtBlokLib/parsers/mm_station.cpp
+    qtBlokLib/parsers/mm_station.cpp \
+    gpio/linuxgpio.cpp \
+    gpio/debuggpio.cpp \
+    gpio/gpioproducer.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -120,7 +123,12 @@ HEADERS += \
     qtBlokLib/parsers/autolockmode.h \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
-    qtBlokLib/parsers/mm_station.h
+    qtBlokLib/parsers/mm_station.h \
+    gpio/gpio.h \
+    gpio/linuxgpio.h \
+    gpio/dummygpio.h \
+    gpio/debuggpio.h \
+    gpio/gpioproducer.h
 
 CONFIG += console
 

@@ -17,6 +17,19 @@ public:
     }
 };
 
+class OutFile : public ofstream
+{
+public:
+    OutFile (string op)
+        : ofstream (string("/sys/class/gpio/") + op)
+    {
+        if (!is_open())
+            cerr << "GPIO: OPERATION FAILED: Error open file: \""
+                 << string("/sys/class/gpio/") + op
+                 << "\"." << endl;
+    }
+};
+
 void LinuxGpio::setDirection(Gpio::Direction dir)
 {
     File file (number, "direction");
@@ -82,7 +95,7 @@ bool LinuxGpio::getValue()
 LinuxGpio::LinuxGpio(unsigned num)
     : number (num)
 {
-    File file (number, "export");
+    OutFile file ("export");
     if ( file.is_open() )
     {
         file << number;
@@ -91,7 +104,7 @@ LinuxGpio::LinuxGpio(unsigned num)
 
 LinuxGpio::~LinuxGpio()
 {
-    File file (number, "unexport");
+    OutFile file ("unexport");
     if ( file.is_open() )
     {
         file << number;

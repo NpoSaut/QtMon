@@ -61,11 +61,10 @@ namespace QmlObjectPropertiesCodeGenerator.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на const {0} {3}::{1}() const
+        ///   Ищет локализованную строку, похожую на {0} {3}::{1}() const
         ///{{
         ///    return {2};
-        ///}}
-        ///.
+        ///}}.
         /// </summary>
         internal static string DefaultGetter {
             get {
@@ -81,8 +80,7 @@ namespace QmlObjectPropertiesCodeGenerator.Properties {
         ///        {2} = value;
         ///        emit {4}(value);
         ///    }}
-        ///}}
-        ///.
+        ///}}.
         /// </summary>
         internal static string DefaultSetter {
             get {

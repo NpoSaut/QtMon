@@ -35,5 +35,6 @@ void StatePlayer::reset()
 
 void StatePlayer::playFrame()
 {
+    if (stream.atEnd()) reset();
     serializer.DeserializeFrom(state, &stream);
 }

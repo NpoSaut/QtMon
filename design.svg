@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="design.svg"
-   inkscape:export-filename="/home/anton/Qt/QtMon/qml/QtMon/Slices/InputMode-Background.png"
+   inkscape:export-filename="C:\Users\plyusnin\Qt\QtMon\qml\QtMon\Slices\Needle-Target-Speed.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -4538,10 +4538,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="394.07363"
+     inkscape:cx="222.57363"
      inkscape:cy="219.75937"
      inkscape:document-units="px"
-     inkscape:current-layer="layer12"
+     inkscape:current-layer="layer5"
      showgrid="false"
      borderlayer="false"
      inkscape:snap-grids="true"
@@ -4560,10 +4560,10 @@
      inkscape:snap-smooth-nodes="false"
      inkscape:snap-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:window-width="1600"
-     inkscape:window-height="853"
-     inkscape:window-x="-3"
-     inkscape:window-y="-6"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-nodes="true"
      inkscape:snap-global="false"
@@ -6016,8 +6016,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="Ж/Д режим"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="fill:#7d7d7d;fill-opacity:1;stroke:none"
        id="rect4874"
@@ -6088,7 +6087,7 @@
     <path
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/anton/Qt/QtMon/qml/QtMon/Slices/Needle-Target-Speed.png"
+       inkscape:export-filename="C:\Users\plyusnin\Qt\QtMon\qml\QtMon\Slices\Needle-Target-Speed.png"
        transform="matrix(0,-0.53641891,0.53641891,0,408.46992,333.35295)"
        d="m 319.52872,102.40458 -14.77233,-25.586416 29.54465,-10e-7 z"
        inkscape:randomized="0"
@@ -6102,13 +6101,13 @@
        sodipodi:cx="319.52872"
        sodipodi:sides="3"
        id="path5078"
-       style="fill:#ffff00;fill-opacity:1;stroke:#777300;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        sodipodi:type="star"
        inkscape:transform-center-x="-2.2875089" />
     <path
        inkscape:transform-center-x="-2.2875089"
        sodipodi:type="star"
-       style="fill:#c94949;fill-opacity:1;stroke:#c30000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ff3313;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="path5081"
        sodipodi:sides="3"
        sodipodi:cx="319.52872"
@@ -6122,7 +6121,7 @@
        inkscape:randomized="0"
        d="m 319.52872,102.40458 -14.77233,-25.586416 29.54465,-10e-7 z"
        transform="matrix(0,-0.53641891,0.53641891,0,381.48815,332.35129)"
-       inkscape:export-filename="/home/anton/Qt/QtMon/qml/QtMon/Slices/Restriction-Needle.png"
+       inkscape:export-filename="C:\Users\plyusnin\Qt\QtMon\qml\QtMon\Slices\Needle-Restriction.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <g
@@ -6162,7 +6161,7 @@
          style="fill:none;stroke:#00ff00;stroke-width:1.00517929px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       <path
          transform="matrix(1.4212954,0,0,1.4212954,-2.3051461,1031.6624)"
-         d="m 7.0079331,11.254757 c 0,1.359861 -1.1023854,2.462247 -2.4622469,2.462247 -1.3598614,0 -2.4622468,-1.102386 -2.4622468,-2.462247 0,-1.3598615 1.1023854,-2.462247 2.4622468,-2.462247 1.3598615,0 2.4622469,1.1023855 2.4622469,2.462247 z"
+         d="m 7.0079331,11.254757 a 2.4622469,2.4622469 0 1 1 -4.9244937,0 2.4622469,2.4622469 0 1 1 4.9244937,0 z"
          sodipodi:ry="2.4622469"
          sodipodi:rx="2.4622469"
          sodipodi:cy="11.254757"
@@ -6178,7 +6177,7 @@
          sodipodi:cy="11.254757"
          sodipodi:rx="2.4622469"
          sodipodi:ry="2.4622469"
-         d="m 7.0079331,11.254757 c 0,1.359861 -1.1023854,2.462247 -2.4622469,2.462247 -1.3598614,0 -2.4622468,-1.102386 -2.4622468,-2.462247 0,-1.3598615 1.1023854,-2.462247 2.4622468,-2.462247 1.3598615,0 2.4622469,1.1023855 2.4622469,2.462247 z"
+         d="m 7.0079331,11.254757 a 2.4622469,2.4622469 0 1 1 -4.9244937,0 2.4622469,2.4622469 0 1 1 4.9244937,0 z"
          transform="matrix(1.4212954,0,0,1.4212954,6.5156024,1031.6624)" />
     </g>
     <path
@@ -6796,7 +6795,7 @@
        inkscape:export-ydpi="90">
       <path
          transform="matrix(1.0495529,0,0,1.0495529,-2.4067882,4.6913051)"
-         d="m 70.840218,202.25 a 10.090218,10.090218 0 1 1 -20.180436,0 10.090218,10.090218 0 1 1 20.180436,0 z"
+         d="m 70.840218,202.25 c 0,5.57267 -4.517545,10.09022 -10.090218,10.09022 -5.572673,0 -10.090218,-4.51755 -10.090218,-10.09022 0,-5.57267 4.517545,-10.09022 10.090218,-10.09022 5.572673,0 10.090218,4.51755 10.090218,10.09022 z"
          sodipodi:ry="10.090218"
          sodipodi:rx="10.090218"
          sodipodi:cy="202.25"
@@ -6812,7 +6811,7 @@
          sodipodi:cy="202.25"
          sodipodi:rx="10.090218"
          sodipodi:ry="10.090218"
-         d="m 70.840218,202.25 a 10.090218,10.090218 0 1 1 -20.180436,0 10.090218,10.090218 0 1 1 20.180436,0 z"
+         d="m 70.840218,202.25 c 0,5.57267 -4.517545,10.09022 -10.090218,10.09022 -5.572673,0 -10.090218,-4.51755 -10.090218,-10.09022 0,-5.57267 4.517545,-10.09022 10.090218,-10.09022 5.572673,0 10.090218,4.51755 10.090218,10.09022 z"
          transform="translate(0.125,14.5)" />
     </g>
     <g
@@ -6853,11 +6852,11 @@
          sodipodi:cy="202.25"
          sodipodi:rx="10.090218"
          sodipodi:ry="10.090218"
-         d="m 70.840218,202.25 a 10.090218,10.090218 0 1 1 -20.180436,0 10.090218,10.090218 0 1 1 20.180436,0 z"
+         d="m 70.840218,202.25 c 0,5.57267 -4.517545,10.09022 -10.090218,10.09022 -5.572673,0 -10.090218,-4.51755 -10.090218,-10.09022 0,-5.57267 4.517545,-10.09022 10.090218,-10.09022 5.572673,0 10.090218,4.51755 10.090218,10.09022 z"
          transform="matrix(1.0495529,0,0,1.0495529,39.553114,4.6913051)" />
       <path
          transform="translate(42.084903,14.5)"
-         d="m 70.840218,202.25 a 10.090218,10.090218 0 1 1 -20.180436,0 10.090218,10.090218 0 1 1 20.180436,0 z"
+         d="m 70.840218,202.25 c 0,5.57267 -4.517545,10.09022 -10.090218,10.09022 -5.572673,0 -10.090218,-4.51755 -10.090218,-10.09022 0,-5.57267 4.517545,-10.09022 10.090218,-10.09022 5.572673,0 10.090218,4.51755 10.090218,10.09022 z"
          sodipodi:ry="10.090218"
          sodipodi:rx="10.090218"
          sodipodi:cy="202.25"
@@ -7956,7 +7955,7 @@
        transform="translate(-898.02561,0)">
       <path
          transform="translate(0,572.36218)"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          sodipodi:ry="9.5"
          sodipodi:rx="9.5"
          sodipodi:cy="68.5"
@@ -7972,11 +7971,11 @@
          sodipodi:cy="68.5"
          sodipodi:rx="9.5"
          sodipodi:ry="9.5"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          transform="translate(0,679.02887)" />
       <path
          transform="translate(0,785.69552)"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          sodipodi:ry="9.5"
          sodipodi:rx="9.5"
          sodipodi:cy="68.5"
@@ -7992,7 +7991,7 @@
          sodipodi:cy="68.5"
          sodipodi:rx="9.5"
          sodipodi:ry="9.5"
-         d="m 852,68.5 a 9.5,9.5 0 1 1 -19,0 9.5,9.5 0 1 1 19,0 z"
+         d="m 852,68.5 c 0,5.246705 -4.25329,9.5 -9.5,9.5 -5.24671,0 -9.5,-4.253295 -9.5,-9.5 0,-5.246705 4.25329,-9.5 9.5,-9.5 5.24671,0 9.5,4.253295 9.5,9.5 z"
          transform="translate(0,892.36218)" />
     </g>
   </g>

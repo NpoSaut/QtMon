@@ -59,6 +59,11 @@ SOURCES += \
     qtBlokLib/parsers/console_key.cpp \
     qtBlokLib/parsers/saut_state.cpp \
     qtBlokLib/parsers/mm_station.cpp \
+    gpio/linuxgpio.cpp \
+    gpio/debuggpio.cpp \
+    gpio/gpioproducer.cpp \
+    ledtrafficlight.cpp \
+    ledvigilance.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp
@@ -124,6 +129,13 @@ HEADERS += \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
     qtBlokLib/parsers/mm_station.h \
+    gpio/gpio.h \
+    gpio/linuxgpio.h \
+    gpio/dummygpio.h \
+    gpio/debuggpio.h \
+    gpio/gpioproducer.h \
+    ledtrafficlight.h \
+    ledvigilance.h \
     stateserializer.h \
     records/staterecorder.h \
     records/stateplayer.h
@@ -137,5 +149,5 @@ QMAKE_CXXFLAGS += -std=c++0x
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
 
 # Для работы нужны:
-DEFINES+=CPP11 #DEFINES+=WITH_CAN DEFINES+=ON_DEVICE
+DEFINES+=CPP11 #DEFINES+=LIB_SOCKET_CAN DEFINES+=ON_DEVICE
 

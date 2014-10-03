@@ -366,7 +366,7 @@ Rectangle {
 
                 HorizontalLabeledParameterBox {
                     labelText: "ДО ЦЕЛИ САУТ:"
-                    text: "315м"
+                    text: stateView.SautTargetDistance + "м"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: leftColumn.labelsColumnWidth
@@ -379,7 +379,11 @@ Rectangle {
 
                 HorizontalLabeledParameterBox {
                     labelText: "ЦЕЛЬ КЛУБ:"
-                    text: "Светофор Н3 через 500м"
+                    text: (stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
+                              getTargetKindName(stateView.NextTargetKind) + " " +
+                              stateView.NextTargetName +
+                              "через " + stateView.NextTargetDistance + "м"
+                              : "нет данных о цели" ;
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: leftColumn.labelsColumnWidth

@@ -21,7 +21,7 @@ void StateSerializer::Deserialize(SystemStateViewModel *model, const QString sta
     model->setPressureTC(parameters[8]);
     model->setPressureTM(parameters[9]);
     model->setPressureUR(parameters[10]);
-    model->setBrakingCoefficient(parameters[11].toDouble());
+    model->setBreakingFactor(parameters[11].toFloat());
     model->setLongitude(parameters[12].toDouble());
     model->setLatitude(parameters[13].toDouble());
     model->setGpsValid(parameters[14].toInt());
@@ -90,7 +90,7 @@ const QString StateSerializer::Serialize(const SystemStateViewModel *model)
     parameters.append(model->getPressureTC());
     parameters.append(model->getPressureTM());
     parameters.append(model->getPressureUR());
-    parameters.append(QString::number(model->getBrakingCoefficient()));
+    parameters.append(QString::number(model->getBreakingFactor()));
     parameters.append(QString::number(model->getLongitude()));
     parameters.append(QString::number(model->getLatitude()));
     parameters.append(QString::number(model->getGpsValid()));

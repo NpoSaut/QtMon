@@ -48,6 +48,7 @@ namespace QmlObjectPropertiesCodeGenerator
             var typeConverters = new Dictionary<String, ITypeConverter>
                                  {
                                      { "double", new NumericTypeConverter("double") },
+                                     { "float", new NumericTypeConverter("float") },
                                      { "int", new NumericTypeConverter("int") },
                                      { "QString", new QStringConverter() },
                                      { "bool", new NumericTypeConverter("int") }

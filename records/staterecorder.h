@@ -11,7 +11,7 @@ class StateRecorder : public QObject
 {
     Q_OBJECT
 public:
-    explicit StateRecorder(QFile &file, const SystemStateViewModel *state,  QObject *parent = 0);
+    explicit StateRecorder(QString fileName, const SystemStateViewModel *state,  QObject *parent = 0);
 
     void start ();
     void stop ();
@@ -22,7 +22,7 @@ private slots:
     void saveFrame ();
 
 private:
-    QFile &file;
+    QFile file;
     QTimer timer;
     const SystemStateViewModel *state;
     StateSerializer serializer;

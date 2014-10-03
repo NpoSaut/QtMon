@@ -1,9 +1,9 @@
 #include "records/staterecorder.h"
 
-StateRecorder::StateRecorder(QFile &file, const SystemStateViewModel *state, QObject *parent) :
+StateRecorder::StateRecorder(QString fileName, const SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
-    file (file),
-    timer (),
+    file (fileName),
+    timer (this),
     state (state),
     serializer()
 {

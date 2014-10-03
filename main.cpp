@@ -36,6 +36,8 @@
 #include "trafficlightadaptor.h"
 #include "alsnfreqhandler.h"
 #include "autolockhandler.h"
+#include "records/stateplayer.h"
+#include "records/staterecorder.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -372,6 +374,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     QtConcurrent::run(getParamsFromConsole);
+
+    // Кассета
+    if ( app->arguments().contains(QString("--play")) )
+    {
+        StatePlayer *player = new StatePlayer("states.txt", systemState);
+        player->start();
+    }
+    else if ( app->arguments().contains(QString("--record")) )
+    {
+        StateRecorder *recorder = new StateRecorder("states.txt", systemState);
+        recorder->start();
+    }
 
     return app->exec();
 }

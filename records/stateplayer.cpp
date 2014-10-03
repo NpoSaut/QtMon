@@ -1,8 +1,8 @@
 #include "stateplayer.h"
 
-StatePlayer::StatePlayer(QFile &file, const SystemStateViewModel *state, QObject *parent) :
+StatePlayer::StatePlayer(QString fileName, SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
-    file (file),
+    file (fileName),
     timer (),
     state (state),
     stream (&file),
@@ -35,5 +35,5 @@ void StatePlayer::reset()
 
 void StatePlayer::playFrame()
 {
-    serializer.SerializeTo(state, &stream);
+    serializer.DeserializeFrom(state, &stream);
 }

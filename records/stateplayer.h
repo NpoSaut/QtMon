@@ -11,7 +11,7 @@ class StatePlayer : public QObject
 {
     Q_OBJECT
 public:
-    explicit StatePlayer(QFile &file, const SystemStateViewModel *state,  QObject *parent = 0);
+    explicit StatePlayer(QString fileName, SystemStateViewModel *state,  QObject *parent = 0);
     ~StatePlayer ();
 
     void start ();
@@ -24,9 +24,9 @@ private slots:
     void playFrame ();
 
 private:
-    QFile &file;
+    QFile file;
     QTimer timer;
-    const SystemStateViewModel *state;
+    SystemStateViewModel *state;
     QTextStream stream;
     StateSerializer serializer;
 };

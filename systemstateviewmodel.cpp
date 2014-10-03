@@ -15,7 +15,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     pressureTCValue = "0.00";
     pressureTMValue = "0.00";
     pressureURValue = "0.00";
-    brakingCoefficientValue = 0;
+    breakingFactorValue = 0;
     longitudeValue = 60.4688;
     latitudeValue = 56.88397;
     gpsValidValue = false;
@@ -220,16 +220,16 @@ void SystemStateViewModel::setPressureUR(const QString value)
 }
 
 // Коэффициент торможения
-double SystemStateViewModel::getBrakingCoefficient() const
+float SystemStateViewModel::getBreakingFactor() const
 {
-    return brakingCoefficientValue;
+    return breakingFactorValue;
 }
-void SystemStateViewModel::setBrakingCoefficient(const double value)
+void SystemStateViewModel::setBreakingFactor(const float value)
 {
-    if (brakingCoefficientValue != value)
+    if (breakingFactorValue != value)
     {
-        brakingCoefficientValue = value;
-        emit BrakingCoefficientChanged(value);
+        breakingFactorValue = value;
+        emit BreakingFactorChanged(value);
     }
 }
 

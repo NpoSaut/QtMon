@@ -66,7 +66,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 
 // -- start: Properties Getters and Setters --
 // Текущая скорость
-const double SystemStateViewModel::getSpeed() const
+double SystemStateViewModel::getSpeed() const
 {
     return speedValue;
 }
@@ -80,7 +80,7 @@ void SystemStateViewModel::setSpeed(const double value)
 }
 
 // Корректность скорости
-const bool SystemStateViewModel::getSpeedIsValid() const
+bool SystemStateViewModel::getSpeedIsValid() const
 {
     return speedIsValidValue;
 }
@@ -94,7 +94,7 @@ void SystemStateViewModel::setSpeedIsValid(const bool value)
 }
 
 // Текущая скорость по GPS
-const double SystemStateViewModel::getSpeedFromSky() const
+double SystemStateViewModel::getSpeedFromSky() const
 {
     return speedFromSkyValue;
 }
@@ -108,7 +108,7 @@ void SystemStateViewModel::setSpeedFromSky(const double value)
 }
 
 // Текущая скорость от колеса
-const double SystemStateViewModel::getSpeedFromEarth() const
+double SystemStateViewModel::getSpeedFromEarth() const
 {
     return speedFromEarthValue;
 }
@@ -122,7 +122,7 @@ void SystemStateViewModel::setSpeedFromEarth(const double value)
 }
 
 // Ограничение скорости
-const int SystemStateViewModel::getSpeedRestriction() const
+int SystemStateViewModel::getSpeedRestriction() const
 {
     return speedRestrictionValue;
 }
@@ -136,7 +136,7 @@ void SystemStateViewModel::setSpeedRestriction(const int value)
 }
 
 // Целевая скорость
-const int SystemStateViewModel::getTargetSpeed() const
+int SystemStateViewModel::getTargetSpeed() const
 {
     return targetSpeedValue;
 }
@@ -150,7 +150,7 @@ void SystemStateViewModel::setTargetSpeed(const int value)
 }
 
 // Ускорение
-const double SystemStateViewModel::getAcceleration() const
+double SystemStateViewModel::getAcceleration() const
 {
     return accelerationValue;
 }
@@ -164,7 +164,7 @@ void SystemStateViewModel::setAcceleration(const double value)
 }
 
 // Конструктивная скорость
-const int SystemStateViewModel::getDesignSpeed() const
+int SystemStateViewModel::getDesignSpeed() const
 {
     return designSpeedValue;
 }
@@ -178,7 +178,7 @@ void SystemStateViewModel::setDesignSpeed(const int value)
 }
 
 // Давление ТЦ
-const QString SystemStateViewModel::getPressureTC() const
+QString SystemStateViewModel::getPressureTC() const
 {
     return pressureTCValue;
 }
@@ -192,7 +192,7 @@ void SystemStateViewModel::setPressureTC(const QString value)
 }
 
 // Давление ТМ
-const QString SystemStateViewModel::getPressureTM() const
+QString SystemStateViewModel::getPressureTM() const
 {
     return pressureTMValue;
 }
@@ -206,7 +206,7 @@ void SystemStateViewModel::setPressureTM(const QString value)
 }
 
 // Давление УР
-const QString SystemStateViewModel::getPressureUR() const
+QString SystemStateViewModel::getPressureUR() const
 {
     return pressureURValue;
 }
@@ -220,7 +220,7 @@ void SystemStateViewModel::setPressureUR(const QString value)
 }
 
 // Коэффициент торможения
-const float SystemStateViewModel::getBreakingFactor() const
+float SystemStateViewModel::getBreakingFactor() const
 {
     return breakingFactorValue;
 }
@@ -233,7 +233,7 @@ void SystemStateViewModel::setBreakingFactor(const float value)
     }
 }
 
-const double SystemStateViewModel::getLongitude() const
+double SystemStateViewModel::getLongitude() const
 {
     return longitudeValue;
 }
@@ -246,7 +246,7 @@ void SystemStateViewModel::setLongitude(const double value)
     }
 }
 
-const double SystemStateViewModel::getLatitude() const
+double SystemStateViewModel::getLatitude() const
 {
     return latitudeValue;
 }
@@ -259,7 +259,7 @@ void SystemStateViewModel::setLatitude(const double value)
     }
 }
 
-const bool SystemStateViewModel::getGpsValid() const
+bool SystemStateViewModel::getGpsValid() const
 {
     return gpsValidValue;
 }
@@ -273,7 +273,7 @@ void SystemStateViewModel::setGpsValid(const bool value)
 }
 
 // Общий уровень предупреждений
-const int SystemStateViewModel::getSystemWarningLevel() const
+int SystemStateViewModel::getSystemWarningLevel() const
 {
     return systemWarningLevelValue;
 }
@@ -287,7 +287,7 @@ void SystemStateViewModel::setSystemWarningLevel(const int value)
 }
 
 // Укомплектованность конфигурации
-const int SystemStateViewModel::getFullSetWarningLevel() const
+int SystemStateViewModel::getFullSetWarningLevel() const
 {
     return fullSetWarningLevelValue;
 }
@@ -301,7 +301,7 @@ void SystemStateViewModel::setFullSetWarningLevel(const int value)
 }
 
 // Давление в норме
-const bool SystemStateViewModel::getIsPressureOk() const
+bool SystemStateViewModel::getIsPressureOk() const
 {
     return isPressureOkValue;
 }
@@ -315,7 +315,7 @@ void SystemStateViewModel::setIsPressureOk(const bool value)
 }
 
 // Готовность ЭПК
-const bool SystemStateViewModel::getIsEpvReady() const
+bool SystemStateViewModel::getIsEpvReady() const
 {
     return isEpvReadyValue;
 }
@@ -329,7 +329,7 @@ void SystemStateViewModel::setIsEpvReady(const bool value)
 }
 
 // Признак срыва ЭПК
-const bool SystemStateViewModel::getIsEpvReleased() const
+bool SystemStateViewModel::getIsEpvReleased() const
 {
     return isEpvReleasedValue;
 }
@@ -343,7 +343,7 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
 }
 
 // Активность модулей
-const QString SystemStateViewModel::getModulesActivityString() const
+QString SystemStateViewModel::getModulesActivityString() const
 {
     return modulesActivityStringValue;
 }
@@ -357,7 +357,7 @@ void SystemStateViewModel::setModulesActivityString(const QString value)
 }
 
 // Проиденное расстояние
-const int SystemStateViewModel::getMilage() const
+int SystemStateViewModel::getMilage() const
 {
     return milageValue;
 }
@@ -371,7 +371,7 @@ void SystemStateViewModel::setMilage(const int value)
 }
 
 // Код сигнала светофора (0 - К, 1 - КЖ, ...)
-const int SystemStateViewModel::getLight() const
+int SystemStateViewModel::getLight() const
 {
     return lightValue;
 }
@@ -385,7 +385,7 @@ void SystemStateViewModel::setLight(const int value)
 }
 
 // Целевая Частота АЛСН
-const int SystemStateViewModel::getAlsnFreqTarget() const
+int SystemStateViewModel::getAlsnFreqTarget() const
 {
     return alsnFreqTargetValue;
 }
@@ -399,7 +399,7 @@ void SystemStateViewModel::setAlsnFreqTarget(const int value)
 }
 
 // Фактическая Частота АЛСН
-const int SystemStateViewModel::getAlsnFreqFact() const
+int SystemStateViewModel::getAlsnFreqFact() const
 {
     return alsnFreqFactValue;
 }
@@ -413,7 +413,7 @@ void SystemStateViewModel::setAlsnFreqFact(const int value)
 }
 
 // Целевой тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
-const int SystemStateViewModel::getAutolockTypeTarget() const
+int SystemStateViewModel::getAutolockTypeTarget() const
 {
     return autolockTypeTargetValue;
 }
@@ -427,7 +427,7 @@ void SystemStateViewModel::setAutolockTypeTarget(const int value)
 }
 
 // Фактический тип автоблокировки. 0 - АБ, 1 - ПАБ, 2 - ЗАБ.
-const int SystemStateViewModel::getAutolockTypeFact() const
+int SystemStateViewModel::getAutolockTypeFact() const
 {
     return autolockTypeFactValue;
 }
@@ -441,7 +441,7 @@ void SystemStateViewModel::setAutolockTypeFact(const int value)
 }
 
 // Время
-const QString SystemStateViewModel::getTime() const
+QString SystemStateViewModel::getTime() const
 {
     return timeValue;
 }
@@ -455,7 +455,7 @@ void SystemStateViewModel::setTime(const QString value)
 }
 
 // Дата
-const QString SystemStateViewModel::getDate() const
+QString SystemStateViewModel::getDate() const
 {
     return dateValue;
 }
@@ -469,7 +469,7 @@ void SystemStateViewModel::setDate(const QString value)
 }
 
 // Наличие кассеты регистрации
-const bool SystemStateViewModel::getIsRegistrationTapeActive() const
+bool SystemStateViewModel::getIsRegistrationTapeActive() const
 {
     return isRegistrationTapeActiveValue;
 }
@@ -483,7 +483,7 @@ void SystemStateViewModel::setIsRegistrationTapeActive(const bool value)
 }
 
 // Целевой Режим движения
-const int SystemStateViewModel::getDriveModeTarget() const
+int SystemStateViewModel::getDriveModeTarget() const
 {
     return driveModeTargetValue;
 }
@@ -497,7 +497,7 @@ void SystemStateViewModel::setDriveModeTarget(const int value)
 }
 
 // Фактический Режим движения (0 = П (поездной), 1 = М (маневровый), 2 = Р, 3 = Д)
-const int SystemStateViewModel::getDriveModeFact() const
+int SystemStateViewModel::getDriveModeFact() const
 {
     return driveModeFactValue;
 }
@@ -510,7 +510,7 @@ void SystemStateViewModel::setDriveModeFact(const int value)
     }
 }
 
-const bool SystemStateViewModel::getIronWheels() const
+bool SystemStateViewModel::getIronWheels() const
 {
     return ironWheelsValue;
 }
@@ -524,7 +524,7 @@ void SystemStateViewModel::setIronWheels(const bool value)
 }
 
 // Необходимость подтверждения бдительности
-const bool SystemStateViewModel::getIsVigilanceRequired() const
+bool SystemStateViewModel::getIsVigilanceRequired() const
 {
     return isVigilanceRequiredValue;
 }
@@ -538,7 +538,7 @@ void SystemStateViewModel::setIsVigilanceRequired(const bool value)
 }
 
 // Тяга включена
-const bool SystemStateViewModel::getIsTractionOn() const
+bool SystemStateViewModel::getIsTractionOn() const
 {
     return isTractionOnValue;
 }
@@ -552,7 +552,7 @@ void SystemStateViewModel::setIsTractionOn(const bool value)
 }
 
 // Режим движения (-1 = назад, 0 = стоим, +1 = вперёд)
-const int SystemStateViewModel::getDirection() const
+int SystemStateViewModel::getDirection() const
 {
     return directionValue;
 }
@@ -566,7 +566,7 @@ void SystemStateViewModel::setDirection(const int value)
 }
 
 // Текущая ордината
-const int SystemStateViewModel::getOrdinate() const
+int SystemStateViewModel::getOrdinate() const
 {
     return ordinateValue;
 }
@@ -580,7 +580,7 @@ void SystemStateViewModel::setOrdinate(const int value)
 }
 
 // Название ближайшей станции
-const QString SystemStateViewModel::getNextStatinName() const
+QString SystemStateViewModel::getNextStatinName() const
 {
     return nextStatinNameValue;
 }
@@ -594,7 +594,7 @@ void SystemStateViewModel::setNextStatinName(const QString value)
 }
 
 // Тип ближайшей цели
-const int SystemStateViewModel::getNextTargetKind() const
+int SystemStateViewModel::getNextTargetKind() const
 {
     return nextTargetKindValue;
 }
@@ -608,7 +608,7 @@ void SystemStateViewModel::setNextTargetKind(const int value)
 }
 
 // Название ближайшей цели
-const QString SystemStateViewModel::getNextTargetName() const
+QString SystemStateViewModel::getNextTargetName() const
 {
     return nextTargetNameValue;
 }
@@ -622,7 +622,7 @@ void SystemStateViewModel::setNextTargetName(const QString value)
 }
 
 // Расстояние до ближайшей цели
-const int SystemStateViewModel::getNextTargetDistance() const
+int SystemStateViewModel::getNextTargetDistance() const
 {
     return nextTargetDistanceValue;
 }
@@ -636,7 +636,7 @@ void SystemStateViewModel::setNextTargetDistance(const int value)
 }
 
 // Расстояние до цели САУТ
-const int SystemStateViewModel::getSautTargetDistance() const
+int SystemStateViewModel::getSautTargetDistance() const
 {
     return sautTargetDistanceValue;
 }
@@ -650,7 +650,7 @@ void SystemStateViewModel::setSautTargetDistance(const int value)
 }
 
 // Текст высокоприоритетного сообщения
-const QString SystemStateViewModel::getNotificationText() const
+QString SystemStateViewModel::getNotificationText() const
 {
     return notificationTextValue;
 }
@@ -664,7 +664,7 @@ void SystemStateViewModel::setNotificationText(const QString value)
 }
 
 // Номер пути
-const int SystemStateViewModel::getTrackNumber() const
+int SystemStateViewModel::getTrackNumber() const
 {
     return trackNumberValue;
 }
@@ -678,7 +678,7 @@ void SystemStateViewModel::setTrackNumber(const int value)
 }
 
 // Номер машиниста
-const int SystemStateViewModel::getMachinistNumber() const
+int SystemStateViewModel::getMachinistNumber() const
 {
     return machinistNumberValue;
 }
@@ -692,7 +692,7 @@ void SystemStateViewModel::setMachinistNumber(const int value)
 }
 
 // Номер поезда
-const int SystemStateViewModel::getTrainNumber() const
+int SystemStateViewModel::getTrainNumber() const
 {
     return trainNumberValue;
 }
@@ -706,7 +706,7 @@ void SystemStateViewModel::setTrainNumber(const int value)
 }
 
 // Длина поезда в условных вагонах
-const int SystemStateViewModel::getWagonCount() const
+int SystemStateViewModel::getWagonCount() const
 {
     return wagonCountValue;
 }
@@ -720,7 +720,7 @@ void SystemStateViewModel::setWagonCount(const int value)
 }
 
 // Длина поезда в осях
-const int SystemStateViewModel::getAxlesCount() const
+int SystemStateViewModel::getAxlesCount() const
 {
     return axlesCountValue;
 }
@@ -734,7 +734,7 @@ void SystemStateViewModel::setAxlesCount(const int value)
 }
 
 // Масса поезда
-const int SystemStateViewModel::getTrainMass() const
+int SystemStateViewModel::getTrainMass() const
 {
     return trainMassValue;
 }
@@ -748,7 +748,7 @@ void SystemStateViewModel::setTrainMass(const int value)
 }
 
 // Разрешение ручного ввода начальной ординаты. К сожалению, не используется. Смотрим на номер пути.
-const bool SystemStateViewModel::getManualOrdinateEnable() const
+bool SystemStateViewModel::getManualOrdinateEnable() const
 {
     return manualOrdinateEnableValue;
 }
@@ -762,7 +762,7 @@ void SystemStateViewModel::setManualOrdinateEnable(const bool value)
 }
 
 // Начальная ордината в ручном режиме
-const int SystemStateViewModel::getManualOrdinate() const
+int SystemStateViewModel::getManualOrdinate() const
 {
     return manualOrdinateValue;
 }
@@ -776,7 +776,7 @@ void SystemStateViewModel::setManualOrdinate(const int value)
 }
 
 // Увеличение ординаты в ручном режиме. 1 - вперёд, 0 - назад.
-const int SystemStateViewModel::getManualOrdinateIncreaseDirection() const
+int SystemStateViewModel::getManualOrdinateIncreaseDirection() const
 {
     return manualOrdinateIncreaseDirectionValue;
 }
@@ -790,7 +790,7 @@ void SystemStateViewModel::setManualOrdinateIncreaseDirection(const int value)
 }
 
 // Скорость на белый при ЗАБ
-const int SystemStateViewModel::getAutolockSpeed() const
+int SystemStateViewModel::getAutolockSpeed() const
 {
     return autolockSpeedValue;
 }
@@ -804,7 +804,7 @@ void SystemStateViewModel::setAutolockSpeed(const int value)
 }
 
 // ТСКБМ подключена
-const bool SystemStateViewModel::getTsvcIsOnline() const
+bool SystemStateViewModel::getTsvcIsOnline() const
 {
     return tsvcIsOnlineValue;
 }
@@ -818,7 +818,7 @@ void SystemStateViewModel::setTsvcIsOnline(const bool value)
 }
 
 // ТСКБМ: машинист бодр
-const bool SystemStateViewModel::getTsvcIsMachinistCheerful() const
+bool SystemStateViewModel::getTsvcIsMachinistCheerful() const
 {
     return tsvcIsMachinistCheerfulValue;
 }
@@ -832,7 +832,7 @@ void SystemStateViewModel::setTsvcIsMachinistCheerful(const bool value)
 }
 
 // ТСКБМ требует подтверждения бдительности
-const bool SystemStateViewModel::getTsvcIsVigilanceRequired() const
+bool SystemStateViewModel::getTsvcIsVigilanceRequired() const
 {
     return tsvcIsVigilanceRequiredValue;
 }
@@ -846,7 +846,7 @@ void SystemStateViewModel::setTsvcIsVigilanceRequired(const bool value)
 }
 
 // Предварительная сигнализация ТСКБМ активна
-const bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
+bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
 {
     return tsvcIsPreAlarmActiveValue;
 }

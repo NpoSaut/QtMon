@@ -63,7 +63,10 @@ SOURCES += \
     gpio/debuggpio.cpp \
     gpio/gpioproducer.cpp \
     ledtrafficlight.cpp \
-    ledvigilance.cpp
+    ledvigilance.cpp \
+    stateserializer.cpp \
+    records/staterecorder.cpp \
+    records/stateplayer.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -132,7 +135,10 @@ HEADERS += \
     gpio/debuggpio.h \
     gpio/gpioproducer.h \
     ledtrafficlight.h \
-    ledvigilance.h
+    ledvigilance.h \
+    stateserializer.h \
+    records/staterecorder.h \
+    records/stateplayer.h
 
 CONFIG += console
 

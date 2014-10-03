@@ -1,8 +1,9 @@
 #include "pressureselector.h"
 
-PressureSelector::PressureSelector(Unit unit, Parser *parser, QObject *parent) :
+PressureSelector::PressureSelector(Unit unit, bool showUnits, Parser *parser, QObject *parent) :
     QObject(parent),
-    parser (parser)
+    parser (parser),
+    showUnits (showUnits)
 {
     setUnit (unit);
 
@@ -40,7 +41,7 @@ void PressureSelector::updateTcPressure ()
     emit tcPressureChagned ( (
                              takeOne ( parser->uktolDd1.isFresh (), parser->uktolDd1.getTcPressure (),
                                        parser->mvdDd.isFresh (), parser->mvdDd.getTcPressure () )
-                             .*print)() );
+                             .*print)(showUnits) );
 }
 
 void PressureSelector::updateTmPressure ()
@@ -48,7 +49,7 @@ void PressureSelector::updateTmPressure ()
     emit tmPressureChanged ( (
                                  takeOne ( parser->uktolDd1.isFresh (), parser->uktolDd1.getTmPressure (),
                                            parser->mvdDd.isFresh (), parser->mvdDd.getTmPressure () )
-                                 .*print)() );
+                                 .*print)(showUnits) );
 }
 
 void PressureSelector::updateUrPressure ()
@@ -56,7 +57,7 @@ void PressureSelector::updateUrPressure ()
     emit urPressureChanged ( (
                                  takeOne ( parser->uktolDd1.isFresh (), parser->uktolDd1.getUrPressure (),
                                            false, parser->uktolDd1.getUrPressure () )
-                                 .*print)() );
+                                 .*print)(showUnits) );
 }
 
 const Pressure &PressureSelector::takeOne(bool aFresh, const Pressure &a, bool bFresh, const Pressure &b)

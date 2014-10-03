@@ -57,7 +57,7 @@ namespace QmlObjectPropertiesCodeGenerator
                 privateProperties.Add(String.Format("Q_PROPERTY({0} {1} READ {2} WRITE {3} NOTIFY {4})\n",
                                                     propertyType, propertyName, getterName, setterName, signalName));
 
-                publicPropertyGetters.Add(String.Format("const {0} {1}() const;", propertyType, getterName));
+                publicPropertyGetters.Add(String.Format("{0} {1}() const;", propertyType, getterName));
                 publicSlotsAndPropertySetters.Add(String.Format("void {1}(const {0});", propertyType, setterName));
 
                 propertiesSignals.Add(String.Format("void {0}(const {1} value);", signalName, propertyType));

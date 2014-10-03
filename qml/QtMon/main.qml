@@ -6,7 +6,7 @@ Rectangle {
     height: 480
     id: rootRect
 
-    property color accentColor: "#ffc000"
+    property color accentColor: "#ffff00"
     property color regularColor: "#fff"
     property color boxColor: "#70000000"
 
@@ -147,7 +147,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "URW Gothic L"
                         text: "ЧАСТОТА"
                     }
                     // Индикатор частоты
@@ -183,7 +182,6 @@ Rectangle {
                         text: stateView.Time
                         color: "#95b3d7"
                         font.pixelSize: globalFontHeight * 2
-                        font.family: "URW Gothic L"
                     }
                 }
 
@@ -196,7 +194,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "URW Gothic L"
                         text: "ДАВЛЕНИЕ (МПа)"
                     }
                     Row {
@@ -327,7 +324,6 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: accentColor
                         font.pixelSize: globalFontHeight
-                        font.family: "URW Gothic L"
                         text: "РЕЖИМ"
                     }
 

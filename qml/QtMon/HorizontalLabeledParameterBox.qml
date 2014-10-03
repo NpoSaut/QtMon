@@ -27,7 +27,6 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             color: regularColor
             font.pixelSize: fontHeight
-            font.family: "URW Gothic L"
         }
     }
     ParameterBox {

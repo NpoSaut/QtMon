@@ -34,8 +34,13 @@
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
+#include "gpio/gpioproducer.h"
+#include "ledtrafficlight.h"
+#include "ledvigilance.h"
 #include "alsnfreqhandler.h"
 #include "autolockhandler.h"
+#include "records/stateplayer.h"
+#include "records/staterecorder.h"
 
 SystemStateViewModel *systemState ;
 Levithan* levithan;
@@ -46,6 +51,9 @@ iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 TrafficlightAdaptor *trafficlightAdaptor;
+GpioProducer *gpioProducer;
+LedTrafficlight *ledTrafficlight;
+LedVigilance *ledVigilance;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
@@ -151,6 +159,11 @@ void getParamsFromConsole ()
             systemState->setNotificationText( cmd.at(1) );
             out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
         }
+        else if (cmd.at(0) == "vig")
+        {
+            systemState->setIsVigilanceRequired( cmd.at(1) == "1" );
+            out << "Now Vigilance is Required" << endl;
+        }
         // ТСКБМ: на связи
         else if (cmd.at(0) == "tso")
         {
@@ -218,6 +231,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
 
     QmlApplicationViewer viewer;
+
+    QFont sansFont("PT Sans Caption");
+    sansFont.setStyleStrategy(QFont::NoAntialias);
+    app->setFont(sansFont);
+
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/QtMon/main.qml"));
 #ifdef ON_DEVICE
@@ -243,6 +261,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
+    gpioProducer =
+#ifdef Q_OS_LINUX
+        new GpioProducer (GpioProducer::LINUX);
+#endif
+#ifdef Q_OS_WIN
+        new GpioProducer (GpioProducer::DUMMY);
+#endif
+
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
@@ -281,13 +307,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     trafficlightAdaptor = new TrafficlightAdaptor();
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
     QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), systemState, SLOT(setLight(int)));
+    ledTrafficlight = new LedTrafficlight (gpioProducer);
+    QObject::connect(systemState, SIGNAL(LightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
     // частота
     alsnFreqHandler = new AlsnFreqHandler (can, blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));
     QObject::connect (alsnFreqHandler, SIGNAL(targetAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqTarget(int)));
     QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), alsnFreqHandler, SLOT(proccessNewTargetAlsnFreq(int)));
 
+    // бдительность
     QObject::connect(iodriver, SIGNAL(signal_vigilance(bool)), systemState, SLOT(setIsVigilanceRequired(bool)));
+    ledVigilance = new LedVigilance (gpioProducer);
+    QObject::connect(systemState, SIGNAL(IsVigilanceRequiredChanged(bool)), ledVigilance, SLOT(doBlinking(bool)));
+
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));
     QObject::connect(iodriver, SIGNAL(signal_reg_tape_avl(bool)), systemState, SLOT(setIsRegistrationTapeActive(bool)));
 
@@ -367,6 +399,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
     QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
+    QObject::connect (&blokMessages->mmStation, SIGNAL(stationNameChanged(QString)), systemState, SLOT(setNextStatinName(QString)));
+
+    // САУТ
+    QObject::connect (&blokMessages->sautState, SIGNAL(distanceToTargetChanged(int)), systemState, SLOT(setSautTargetDistance(int)));
+    QObject::connect (&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Звуки
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
@@ -379,6 +416,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     QtConcurrent::run(getParamsFromConsole);
+
+    // Кассета
+    if ( app->arguments().contains(QString("--play")) )
+    {
+        StatePlayer *player = new StatePlayer("states.txt", systemState);
+        player->start();
+    }
+    else if ( app->arguments().contains(QString("--record")) )
+    {
+        StateRecorder *recorder = new StateRecorder("states.txt", systemState);
+        recorder->start();
+    }
 
     return app->exec();
 }

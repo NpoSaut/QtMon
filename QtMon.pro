@@ -59,7 +59,9 @@ SOURCES += \
     qtBlokLib/parsers/console_key.cpp \
     qtBlokLib/parsers/saut_state.cpp \
     qtBlokLib/parsers/mm_station.cpp \
-    stateserializer.cpp
+    stateserializer.cpp \
+    records/staterecorder.cpp \
+    records/stateplayer.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -122,7 +124,9 @@ HEADERS += \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
     qtBlokLib/parsers/mm_station.h \
-    stateserializer.h
+    stateserializer.h \
+    records/staterecorder.h \
+    records/stateplayer.h
 
 CONFIG += console
 

@@ -9,6 +9,7 @@
 #include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
+#include "stateserializer.h"
 #include "systemstateviewmodel.h"
 #include "levithan.h"
 
@@ -41,6 +42,8 @@ SystemStateViewModel *systemState ;
 Levithan* levithan;
 Notificator* notificator;
 DisplayStateSander* displayStateSander;
+StateSerializer *serializer;
+QTextStream *state_store_read_stream;
 
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
@@ -175,6 +178,20 @@ void getParamsFromConsole ()
             systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
             out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
         }
+        // Save state
+        else if (cmd.at(0) == "save")
+        {
+            QFile state_store_file("state.txt");
+            state_store_file.open(QIODevice::Append | QIODevice::WriteOnly);
+            QTextStream state_store_stream(&state_store_file);
+            serializer->SerializeTo(systemState, &state_store_stream);
+            state_store_file.close();
+        }
+        // Load state
+        else if (cmd.at(0) == "load")
+        {
+            serializer->DeserializeFrom(systemState, state_store_read_stream);
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -222,6 +239,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     levithan = new Levithan(systemState);
+
+    serializer = new StateSerializer();
+
+    QFile state_store_file("state.txt");
+    state_store_file.open(QIODevice::ReadOnly);
+    state_store_read_stream = new QTextStream(&state_store_file);
 
 #ifdef LIB_SOCKET_CAN
     can = new SocketCan();

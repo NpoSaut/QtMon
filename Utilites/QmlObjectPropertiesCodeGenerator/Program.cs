@@ -30,7 +30,7 @@ namespace QmlObjectPropertiesCodeGenerator
             var replacements = new[]
                                {
                                    new CodeReplacement(new CodeLocation(modelSource.HeaderFilePath, "// private properties {0}"), privateProperties),
-                                   new CodeReplacement(new CodeLocation(modelSource.SourceFilePath, "// public properties getters {0}"), publicPropertyGetters),
+                                   new CodeReplacement(new CodeLocation(modelSource.HeaderFilePath, "// public properties getters {0}"), publicPropertyGetters),
                                    new CodeReplacement(new CodeLocation(modelSource.HeaderFilePath, "// public properties setters {0}"),
                                                        publicSlotsAndPropertySetters),
                                    new CodeReplacement(new CodeLocation(modelSource.HeaderFilePath, "// properties signals {0}"), propertiesSignals),

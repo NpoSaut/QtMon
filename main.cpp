@@ -55,6 +55,28 @@ Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
 
+QDataStream &operator>>(QDataStream &ts, QObject &obj) {
+  QVariant var;
+  for(int i=0; i<obj.metaObject()->propertyCount(); ++i) {
+    if(obj.metaObject()->property(i).isStored(&obj)) {
+      ts >> var;
+      obj.metaObject()->property(i).write(&obj, var);
+    }
+  }
+  return ts;
+}
+
+QDataStream &operator<<(QDataStream &ts, QObject &obj) {
+//  QVariant var;
+  for(int i=0; i<obj.metaObject()->propertyCount(); ++i) {
+    if(obj.metaObject()->property(i).isStored(&obj)) {
+        qDebug() << obj.metaObject()->property(i).name() << " " << obj.metaObject()->property(i).read(&obj);
+//      qDebug() << obj.metaObject()->property(i).read(&obj);
+    }
+  }
+  return ts;
+}
+
 void getParamsFromConsole ()
 {
     qDebug() << "Starting reading console...";
@@ -175,6 +197,24 @@ void getParamsFromConsole ()
             systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
             out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
         }
+        // Save state
+        else if (cmd.at(0) == "save")
+        {
+            QFile file("state.txt");
+            file.open(QIODevice::Append | QIODevice::WriteOnly);
+            QDataStream stream(&file);
+            stream << *systemState;
+            file.close();
+        }
+        // Load state
+        else if (cmd.at(0) == "load")
+        {
+            QFile file("state.txt");
+            file.open(QIODevice::ReadOnly);
+            QDataStream stream(&file);
+            stream >> *systemState;
+            file.close();
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -193,6 +233,8 @@ void getParamsFromConsole ()
         }
     }
 }
+
+
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {

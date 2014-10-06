@@ -1,5 +1,26 @@
 #include "alsnfreqhandler.h"
 
+int AlsnFreqHandler::getIntFromFreq(const AlsnFrequency &freq)
+{
+    int out = 0;
+    switch (freq) {
+    case FREQ25:
+        out = 25;
+        break;
+    case FREQ50_A:
+    case FREQ50_E:
+        out = 50;
+        break;
+    case FREQ75:
+        out = 75;
+        break;
+    default:
+        out = 0;
+        break;
+    }
+    return out;
+}
+
 AlsnFreqPassHandler::AlsnFreqPassHandler(Parser *parser, QObject *parent) :
     AlsnFreqHandler (parent)
 {
@@ -8,7 +29,7 @@ AlsnFreqPassHandler::AlsnFreqPassHandler(Parser *parser, QObject *parent) :
 
 void AlsnFreqPassHandler::convertEnumToInt(AlsnFrequency freq)
 {
-    emit actualAlsnFreqChanged(int (freq));
+    emit actualAlsnFreqChanged(getIntFromFreq(freq));
 }
 
 AlsnFreqSettingHandler::AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent) :
@@ -52,26 +73,5 @@ void AlsnFreqSettingHandler::proccessNewMpMessage()
     {
         convergenceCounter = 0;
     }
-}
-
-int AlsnFreqSettingHandler::getIntFromFreq(const AlsnFrequency &freq)
-{
-    int out = 0;
-    switch (freq) {
-    case FREQ25:
-        out = 25;
-        break;
-    case FREQ50_A:
-    case FREQ50_E:
-        out = 50;
-        break;
-    case FREQ75:
-        out = 75;
-        break;
-    default:
-        out = 0;
-        break;
-    }
-    return out;
 }
 

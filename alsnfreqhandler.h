@@ -4,15 +4,53 @@
 #include <QObject>
 #include <qtBlokLib/parser.h>
 
-// Задатчик частоты АЛСН (наподобии задатчика РМП, хорошо бы их унаследовать от чего-то общего..)
-//  Из интерфейса принимает целевую частоу
-//  При инициализации устанавливает целевую частоту в интерфейсе равной фактической
-//  Натыкивает кнопкой F в CAN до тех пор, пока не получит фактическую частоту, равную целевой
 class AlsnFreqHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit AlsnFreqHandler(Can *can, Parser *parser, QObject *parent = 0);
+    explicit AlsnFreqHandler(QObject *parent = 0)
+        : QObject (parent) { }
+
+signals:
+    // При получении новой актуальной частоты МП-АЛС
+    void actualAlsnFreqChanged (int freq);
+    // Задаёт при инициализации целевую, равную актуальной
+    void targetAlsnFreqChanged (int freq);
+
+public slots:
+    // Принимает новую целевую частоту в качестве задания
+    virtual void proccessNewTargetAlsnFreq (int freq) = 0;
+};
+
+class AlsnFreqPassHandler : public AlsnFreqHandler
+{
+    Q_OBJECT
+public:
+    explicit AlsnFreqPassHandler(Parser *parser, QObject *parent = 0);
+
+signals:
+    // При получении новой актуальной частоты МП-АЛС
+    void actualAlsnFreqChanged (int freq);
+    // Задаёт при инициализации целевую, равную актуальной
+    void targetAlsnFreqChanged (int freq);
+
+public slots:
+    // Принимает новую целевую частоту в качестве задания
+    void proccessNewTargetAlsnFreq (int freq) { }
+
+private slots:
+    void convertEnumToInt (AlsnFrequency freq);
+};
+
+// Задатчик частоты АЛСН (наподобии задатчика РМП, хорошо бы их унаследовать от чего-то общего..)
+//  Из интерфейса принимает целевую частоу
+//  При инициализации устанавливает целевую частоту в интерфейсе равной фактической
+//  Натыкивает кнопкой F в CAN до тех пор, пока не получит фактическую частоту, равную целевой
+class AlsnFreqSettingHandler : public AlsnFreqHandler
+{
+    Q_OBJECT
+public:
+    explicit AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent = 0);
     
 signals:
     // При получении новой актуальной частоты МП-АЛС

@@ -272,7 +272,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
-    drivemodeHandler = new DrivemodeHandler(blokMessages, can);
+    drivemodeHandler = new DrivemodePassHandler(blokMessages);
     QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
@@ -310,7 +310,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     ledTrafficlight = new LedTrafficlight (gpioProducer);
     QObject::connect(systemState, SIGNAL(LightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
     // частота
-    alsnFreqHandler = new AlsnFreqHandler (can, blokMessages);
+    alsnFreqHandler = new AlsnFreqPassHandler (blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));
     QObject::connect (alsnFreqHandler, SIGNAL(targetAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqTarget(int)));
     QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), alsnFreqHandler, SLOT(proccessNewTargetAlsnFreq(int)));
@@ -331,7 +331,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(AutolockSpeedChanged(int)), autolockHandler, SLOT(setWhiteSpeed(int)));
 
     // Давление
-    pressureSelector = new PressureSelector (PressureSelector::MPA, blokMessages);
+    pressureSelector = new PressureSelector (PressureSelector::MPA, false, blokMessages);
     QObject::connect (pressureSelector, SIGNAL(tcPressureChagned(QString)), systemState, SLOT(setPressureTC(QString)));
     QObject::connect (pressureSelector, SIGNAL(tmPressureChanged(QString)), systemState, SLOT(setPressureTM(QString)));
     QObject::connect (pressureSelector, SIGNAL(urPressureChanged(QString)), systemState, SLOT(setPressureUR(QString)));

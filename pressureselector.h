@@ -27,7 +27,7 @@ public:
         BAR = 1,
         MPA = 2
     };
-    explicit PressureSelector(Unit unit, Parser *parser,  QObject *parent = 0);
+    explicit PressureSelector(Unit unit, bool showUnits, Parser *parser,  QObject *parent = 0);
 
     // Виберает в каких единицах выдавать давление
     void setUnit (Unit unit);
@@ -52,7 +52,9 @@ protected:
 
     Parser *parser;
     // Указатель на одну из функций класса Pressure, возвращающих давление в виде строки в заданных единицах
-    QString (Pressure::*print) () const;
+    QString (Pressure::*print) (bool) const;
+
+    bool showUnits;
 };
 
 #endif // PRESSURESELECTOR_H

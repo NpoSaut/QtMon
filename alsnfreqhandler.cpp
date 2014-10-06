@@ -1,7 +1,18 @@
 #include "alsnfreqhandler.h"
 
-AlsnFreqHandler::AlsnFreqHandler(Can *can, Parser *parser, QObject *parent) :
-    QObject(parent),
+AlsnFreqPassHandler::AlsnFreqPassHandler(Parser *parser, QObject *parent) :
+    AlsnFreqHandler (parent)
+{
+    QObject::connect(&parser->mpState, SIGNAL(frequencyChanged(AlsnFrequency)), this, SLOT(convertEnumToInt(AlsnFrequency)));
+}
+
+void AlsnFreqPassHandler::convertEnumToInt(AlsnFrequency freq)
+{
+    emit actualAlsnFreqChanged(int (freq));
+}
+
+AlsnFreqSettingHandler::AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent) :
+    AlsnFreqHandler(parent),
     can (can),
     parser (parser),
     target (-1),
@@ -12,12 +23,12 @@ AlsnFreqHandler::AlsnFreqHandler(Can *can, Parser *parser, QObject *parent) :
     QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessNewMpMessage()));
 }
 
-void AlsnFreqHandler::proccessNewTargetAlsnFreq(int freq)
+void AlsnFreqSettingHandler::proccessNewTargetAlsnFreq(int freq)
 {
     target = freq;
 }
 
-void AlsnFreqHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
+void AlsnFreqSettingHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
 {
     if ( init )
     {
@@ -27,7 +38,7 @@ void AlsnFreqHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
     emit actualAlsnFreqChanged (getIntFromFreq (freq));
 }
 
-void AlsnFreqHandler::proccessNewMpMessage()
+void AlsnFreqSettingHandler::proccessNewMpMessage()
 {
     if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )
     {
@@ -43,7 +54,7 @@ void AlsnFreqHandler::proccessNewMpMessage()
     }
 }
 
-int AlsnFreqHandler::getIntFromFreq(const AlsnFrequency &freq)
+int AlsnFreqSettingHandler::getIntFromFreq(const AlsnFrequency &freq)
 {
     int out = 0;
     switch (freq) {
@@ -63,3 +74,4 @@ int AlsnFreqHandler::getIntFromFreq(const AlsnFrequency &freq)
     }
     return out;
 }
+

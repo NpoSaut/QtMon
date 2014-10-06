@@ -235,7 +235,7 @@ Rectangle {
                 // Ускорение
                 HorizontalLabeledParameterBox {
                     labelText: "УСКОРЕНИЕ:"
-                    text: stateView.Acceleration
+                    text: stateView.Acceleration.toFixed(2);
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: leftColumn.labelsColumnWidth
@@ -401,7 +401,7 @@ Rectangle {
                     borderColor: accentColor
                     textColor: rootRect.regularColor
                     backgroundColor: boxColor
-                    text: "К777"
+                    text: ""
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                 }

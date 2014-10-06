@@ -395,7 +395,7 @@ Rectangle {
                     borderColor: accentColor
                     textColor: rootRect.regularColor
                     backgroundColor: boxColor
-                    text: "К777"
+                    text: ""
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                 }

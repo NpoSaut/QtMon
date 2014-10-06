@@ -20,6 +20,9 @@ signals:
 public slots:
     // Принимает новую целевую частоту в качестве задания
     virtual void proccessNewTargetAlsnFreq (int freq) = 0;
+
+protected:
+    int getIntFromFreq (const AlsnFrequency& freq);
 };
 
 class AlsnFreqPassHandler : public AlsnFreqHandler
@@ -74,8 +77,6 @@ protected slots:
     void proccessNewMpMessage ();
 
 protected:
-    int getIntFromFreq (const AlsnFrequency& freq);
-
     Can *can;
     Parser *parser;
 

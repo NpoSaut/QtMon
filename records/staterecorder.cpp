@@ -25,6 +25,7 @@ void StateRecorder::saveFrame()
 {
     file.open(QIODevice::Append | QIODevice::WriteOnly);
     QTextStream stream(&file);
+    stream.setCodec("UTF-8");
     serializer.SerializeTo(state, &stream);
     file.close();
 }

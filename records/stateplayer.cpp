@@ -9,6 +9,7 @@ StatePlayer::StatePlayer(QString fileName, SystemStateViewModel *state, QObject 
     serializer ()
 {
     file.open(QIODevice::ReadOnly);
+    stream.setCodec("UTF-8");
     timer.setInterval(500);
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(playFrame()));
 }

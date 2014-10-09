@@ -25,9 +25,9 @@
 #include "qtBlokLib/cookies.h"
 #ifdef LIB_SOCKET_CAN
 #include "qtCanLib/socketcan.h"
-#else
-#include "qtCanLib/dummycan.h"
 #endif
+#include "qtCanLib/dummycan.h"
+
 
 #include "notificator.h"
 #include "displaystatesender.h"
@@ -248,11 +248,28 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     levithan = new Levithan(systemState);
 
+    // Кассета
+    if ( app->arguments().contains(QString("--play")) )
+    {
+        can = new DummyCan();
+
+        StatePlayer *player = new StatePlayer("states.txt", systemState);
+        player->start();
+    }
+    else
+    {
 #ifdef LIB_SOCKET_CAN
-    can = new SocketCan();
+        can = new SocketCan();
 #else
-    can = new DummyCan();
+        can = new DummyCan();
 #endif
+
+        if ( app->arguments().contains(QString("--record")) )
+        {
+            StateRecorder *recorder = new StateRecorder("states.txt", systemState);
+            recorder->start();
+        }
+    }
 
     monitorSysDiagnostics = new SysDiagnostics(can);
     blokMessages = new Parser(can);
@@ -416,18 +433,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     QtConcurrent::run(getParamsFromConsole);
-
-    // Кассета
-    if ( app->arguments().contains(QString("--play")) )
-    {
-        StatePlayer *player = new StatePlayer("states.txt", systemState);
-        player->start();
-    }
-    else if ( app->arguments().contains(QString("--record")) )
-    {
-        StateRecorder *recorder = new StateRecorder("states.txt", systemState);
-        recorder->start();
-    }
 
     return app->exec();
 }

@@ -232,8 +232,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QmlApplicationViewer viewer;
 
-    QFont sansFont("PT Sans Caption");
-    sansFont.setStyleStrategy(QFont::NoAntialias);
+    QFont sansFont("URW Gothic L");
+//    sansFont.setStyleStrategy(QFont::NoAntialias);
     app->setFont(sansFont);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

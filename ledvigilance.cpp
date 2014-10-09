@@ -42,20 +42,20 @@ void LedVigilance::doStep(int s)
     switch (s) {
     case 0:
         red->setValue(1);
-        timer.start(50);
+        timer.start(500);
         break;
     case 1:
         red->setValue(0);
-        timer.start(20);
+        timer.start(500);
         break;
     case 2:
         red->setValue(1);
-        timer.start(50);
+        timer.start(500);
         break;
     case 3:
     default:
         red->setValue(0);
-        timer.start(1000);
+        timer.start(500);
         break;
     }
 }

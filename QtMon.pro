@@ -66,7 +66,8 @@ SOURCES += \
     ledvigilance.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
-    records/stateplayer.cpp
+    records/stateplayer.cpp \
+    keyretranslator.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -138,7 +139,8 @@ HEADERS += \
     ledvigilance.h \
     stateserializer.h \
     records/staterecorder.h \
-    records/stateplayer.h
+    records/stateplayer.h \
+    keyretranslator.h
 
 CONFIG += console
 

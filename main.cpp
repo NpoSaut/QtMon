@@ -31,6 +31,7 @@
 
 #include "notificator.h"
 #include "displaystatesender.h"
+#include "keyretranslator.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
@@ -43,9 +44,10 @@
 #include "records/staterecorder.h"
 
 SystemStateViewModel *systemState ;
-Levithan* levithan;
-Notificator* notificator;
-DisplayStateSander* displayStateSander;
+Levithan *levithan;
+Notificator *notificator;
+DisplayStateSander *displayStateSander;
+KeyRetranslator *keyRetranslator;
 
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
@@ -278,6 +280,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
+    keyRetranslator = new KeyRetranslator(can);
     gpioProducer =
 #ifdef Q_OS_LINUX
         new GpioProducer (GpioProducer::LINUX);
@@ -293,6 +296,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
+
+    // Ретрансляция кнопок
+    keyRetranslator->connect(&blokMessages->consoleKey1, SIGNAL(keyPressed(ConsoleKey::ConsKey)), SLOT(catchKeyPress(ConsoleKey::ConsKey)));
+    keyRetranslator->connect(&blokMessages->consoleKey1, SIGNAL(keyReleased(ConsoleKey::ConsKey)), SLOT(catchKeyReleased(ConsoleKey::ConsKey)));
 
     // Переносить ли эти события из iodrv в обработчики
     QObject::connect(&blokMessages->vdsState, SIGNAL(ironWheelsChagned(bool)), systemState, SLOT(setIronWheels(bool)));

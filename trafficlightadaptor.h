@@ -31,7 +31,7 @@ public:
 
 public slots:
     void proccessNewTrafficlight (Trafficlight trafficlight);
-    void setOnOffState (bool turnedOn);
+    void setOnState (bool turnedOn);
 
 private:
     bool on;

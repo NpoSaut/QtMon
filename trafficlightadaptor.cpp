@@ -129,7 +129,7 @@ void TrafficLightOnOffAdaptor::proccessNewTrafficlight(Trafficlight trafficlight
     sendToParent();
 }
 
-void TrafficLightOnOffAdaptor::setOnOffState(bool turnedOn)
+void TrafficLightOnOffAdaptor::setOnState(bool turnedOn)
 {
     on = turnedOn;
     sendToParent();

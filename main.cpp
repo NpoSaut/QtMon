@@ -321,11 +321,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Светофоры:
     // огонь
-    trafficlightAdaptor = new TrafficlightAdaptor();
+    trafficlightAdaptor = new TrafficLightOnOffAdaptor();
+    QObject::connect (&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), (TrafficLightOnOffAdaptor*)trafficlightAdaptor, SLOT(setOnState()));
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
     QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightCodeChanged(int)), systemState, SLOT(setLight(int)));
     ledTrafficlight = new LedTrafficlight (gpioProducer);
-    QObject::connect(systemState, SIGNAL(LightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
+    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
+    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightUpStateChanged(bool)), ledTrafficlight, SLOT(setLightUp(bool)));
     // частота
     alsnFreqHandler = new AlsnFreqPassHandler (blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));

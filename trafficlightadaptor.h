@@ -12,7 +12,12 @@ public:
     explicit TrafficlightAdaptor(QObject *parent = 0);
     
 signals:
-    void trafficlightChanged (int qmlLightCode);
+    void trafficlightCodeChanged (int qmlLightCode);
+
+    void trafficlightChanged (int light);
+    void trafficlightUpStateChanged (bool lightUp);
+    void freeBlockZonesNumberChanged (int freeZones);
+    void freeBlockZonesUpStateChanged (bool indicatorUp);
     
 public slots:
     void proccessNewTrafficlight (Trafficlight light);

@@ -323,7 +323,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // огонь
     trafficlightAdaptor = new TrafficlightAdaptor();
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
-    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), systemState, SLOT(setLight(int)));
+    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightCodeChanged(int)), systemState, SLOT(setLight(int)));
     ledTrafficlight = new LedTrafficlight (gpioProducer);
     QObject::connect(systemState, SIGNAL(LightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
     // частота

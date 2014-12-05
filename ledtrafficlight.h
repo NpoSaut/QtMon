@@ -12,10 +12,15 @@ public:
 
 public slots:
     void lightTrafficlight (int light);
+    void setLightUp (bool on);
 
 private:
     static constexpr unsigned count = 5;
     Gpio *gpios[count];
+    bool on;
+    int light;
+
+    void apply ();
 };
 
 #endif // LEDTRAFFICLIGHT_H

@@ -6,12 +6,16 @@ KeyRetranslator::KeyRetranslator(Can *can, QObject *parent) :
 
 void KeyRetranslator::catchKeyPress(ConsoleKey::ConsKey key)
 {
-    can->transmitMessage(SysKey(convert(key), SysKey::PRESS, this).encode());
+    auto k = convert(key);
+    if (k != SysKey::DUMMY)
+        can->transmitMessage(SysKey(k, SysKey::PRESS, this).encode());
 }
 
 void KeyRetranslator::catchKeyReleased(ConsoleKey::ConsKey key)
 {
-    can->transmitMessage(SysKey(convert(key), SysKey::RELEASE, this).encode());
+    auto k = convert(key);
+    if (k != SysKey::DUMMY)
+        can->transmitMessage(SysKey(k, SysKey::RELEASE, this).encode());
 }
 
 SysKey::Key KeyRetranslator::convert(ConsoleKey::ConsKey key)

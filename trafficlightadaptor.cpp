@@ -117,3 +117,27 @@ void TrafficlightAdaptor::proccessNewTrafficlight(Trafficlight light)
         break;
     }
 }
+
+
+TrafficLightOnOffAdaptor::TrafficLightOnOffAdaptor(QObject *parent)
+    : TrafficlightAdaptor (parent), on (false), light (Trafficlight::OFF)
+{ }
+
+void TrafficLightOnOffAdaptor::proccessNewTrafficlight(Trafficlight trafficlight)
+{
+    light = trafficlight;
+    sendToParent();
+}
+
+void TrafficLightOnOffAdaptor::setOnOffState(bool turnedOn)
+{
+    on = turnedOn;
+    sendToParent();
+}
+
+void TrafficLightOnOffAdaptor::sendToParent()
+{
+    TrafficlightAdaptor::proccessNewTrafficlight(on ? light : Trafficlight::OFF);
+}
+
+

@@ -18,7 +18,6 @@
 #endif
 
 #include "qtCanLib/can.h"
-#include "qtBlokLib/sysdiagnostics.h"
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
@@ -52,7 +51,6 @@ AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
 Can *can;
-SysDiagnostics *monitorSysDiagnostics;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
@@ -248,7 +246,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
     }
 
-    monitorSysDiagnostics = new SysDiagnostics(can);
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
     cookies = new Cookies(can);

@@ -28,37 +28,40 @@ SOURCES += \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     main.cpp \
-    qtBlokLib/sysdiagnostics.cpp \
     qtBlokLib/modulesactivity.cpp \
     qtBlokLib/iodrv.cpp \
     qtBlokLib/endecs.cpp \
     qtBlokLib/cookies.cpp \
     qtBlokLib/elmapforwardtarget.cpp \
+    qtBlokLib/parsers/aux_resource.cpp \
+    qtBlokLib/parsers/canblokmessage.cpp \
+    qtBlokLib/parsers/console_key.cpp \
+    qtBlokLib/parsers/display_state.cpp \
+    qtBlokLib/parsers/mco_limits.cpp \
+    qtBlokLib/parsers/mco_mode.cpp \
+    qtBlokLib/parsers/mco_state.cpp \
+    qtBlokLib/parsers/mm_alt_long.cpp \
+    qtBlokLib/parsers/mm_coord.cpp \
+    qtBlokLib/parsers/mm_data.cpp \
+    qtBlokLib/parsers/mm_station.cpp \
+    qtBlokLib/parsers/mp_state.cpp \
+    qtBlokLib/parsers/mvd_dd.cpp \
+    qtBlokLib/parsers/saut_state.cpp \
+    qtBlokLib/parsers/sys_diagnostics.cpp \
+    qtBlokLib/parsers/sys_key.cpp \
+    qtBlokLib/parsers/ipd_state.cpp \
+    qtBlokLib/parsers/ipd_date.cpp \
+    qtBlokLib/parsers/tskbm_state.cpp \
+    qtBlokLib/parsers/uktol_dd1.cpp \
+    qtBlokLib/parsers/vds_state.cpp \
     qtBlokLib/parser.cpp \
     notificator.cpp \
-    qtBlokLib/parsers/canblokmessage.cpp \
-    qtBlokLib/parsers/display_state.cpp \
-    qtBlokLib/parsers/mm_coord.cpp \
-    qtBlokLib/parsers/mco_limits.cpp \
-    qtBlokLib/parsers/ipd_state.cpp \
-    qtBlokLib/parsers/mco_state.cpp \
-    qtBlokLib/parsers/sys_key.cpp \
-    qtBlokLib/parsers/tskbm_state.cpp \
     drivemodehandler.cpp \
-    qtBlokLib/parsers/vds_state.cpp \
     displaystatesender.cpp \
-    qtBlokLib/parsers/uktol_dd1.cpp \
-    qtBlokLib/parsers/mvd_dd.cpp \
     pressureselector.cpp \
-    qtBlokLib/parsers/mp_state.cpp \
     trafficlightadaptor.cpp \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
-    qtBlokLib/parsers/mm_alt_long.cpp \
-    qtBlokLib/parsers/mco_mode.cpp \
-    qtBlokLib/parsers/console_key.cpp \
-    qtBlokLib/parsers/saut_state.cpp \
-    qtBlokLib/parsers/mm_station.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp
@@ -86,7 +89,6 @@ HEADERS += \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
-    qtBlokLib/sysdiagnostics.h \
     qtBlokLib/modulesactivity.h \
     qtBlokLib/iodrvmain.h \
     qtBlokLib/iodrv.h \
@@ -126,7 +128,11 @@ HEADERS += \
     qtBlokLib/parsers/mm_station.h \
     stateserializer.h \
     records/staterecorder.h \
-    records/stateplayer.h
+    records/stateplayer.h \
+    qtBlokLib/parsers/aux_resource.h \
+    qtBlokLib/parsers/ipd_date.h \
+    qtBlokLib/parsers/mm_data.h \
+    qtBlokLib/parsers/sys_diagnostics.h
 
 CONFIG += console
 

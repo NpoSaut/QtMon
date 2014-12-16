@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
 
@@ -8,6 +9,7 @@ namespace OsmTilesDownloader
     {
         private static void DownloadTiles(String OutDirectory, IndexRect r)
         {
+            Directory.CreateDirectory(OutDirectory);
             var c = new WebClient();
             Console.WriteLine("Идёт загрузка:");
             for (int x = r.Left; x <= r.Right; x++)
@@ -44,16 +46,31 @@ namespace OsmTilesDownloader
                 string key = args[1].Trim().ToLower();
                 if (key == "fromcenterbyindex" || key == "ci")
                 {
-                    int CentralHorizontalIndex = Int32.Parse(args[2]);
-                    int CentralVerticalIndex = Int32.Parse(args[3]);
+                    int centralHorizontalIndex = Int32.Parse(args[2]);
+                    int centralVerticalIndex = Int32.Parse(args[3]);
                     int radius = Int32.Parse(args[4]);
                     DownloadTiles(OutDirecory, new IndexRect
                                                {
-                                                   Left = CentralHorizontalIndex - radius,
-                                                   Right = CentralHorizontalIndex + radius,
-                                                   Top = CentralVerticalIndex - radius,
-                                                   Bottom = CentralVerticalIndex + radius
+                                                   Left = centralHorizontalIndex - radius,
+                                                   Right = centralHorizontalIndex + radius,
+                                                   Top = centralVerticalIndex - radius,
+                                                   Bottom = centralVerticalIndex + radius
                                                });
+                }
+                if (key == "fromcenterbylatlon" || key == "cll")
+                {
+                    var centerLatitude = Double.Parse(args[2], CultureInfo.InvariantCulture);
+                    var centerLongitude = Double.Parse(args[3], CultureInfo.InvariantCulture);
+                    int radius = Int32.Parse(args[4]);
+                    var centralHorizontalIndex = OsmIndexes.GetHorizontalIndex(centerLongitude, 13);
+                    var centralVerticalIndex = OsmIndexes.GetVerticalIndex(centerLatitude, 13);
+                    DownloadTiles(OutDirecory, new IndexRect
+                    {
+                        Left = centralHorizontalIndex - radius,
+                        Right = centralHorizontalIndex + radius,
+                        Top = centralVerticalIndex - radius,
+                        Bottom = centralVerticalIndex + radius
+                    });
                 }
 
                 Console.WriteLine("Готово");
@@ -67,6 +84,9 @@ namespace OsmTilesDownloader
                 Console.WriteLine("    Ключи:");
                 Console.WriteLine("      FromCenterByIndex гориз_индекс_центра вертик_индекс_центра радиус");
                 Console.WriteLine("        (сокр. ci)");
+                Console.WriteLine("        Загрузка области карты путём задания индекса центральной ячейки и радиуса");
+                Console.WriteLine("      FromCenterByLatLon широта долгота радиус");
+                Console.WriteLine("        (сокр. cll)");
                 Console.WriteLine("        Загрузка области карты путём задания индекса центральной ячейки и радиуса");
             }
         }

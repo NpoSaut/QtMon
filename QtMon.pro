@@ -71,7 +71,8 @@ SOURCES += \
     commands/keyboardmanager.cpp \
     commands/textmanager.cpp \
     commands/activities/inputparameteractivity.cpp \
-    commands/contexts/executecommandcontext.cpp
+    commands/contexts/executecommandcontext.cpp \
+    commands/activities/executecommandactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -146,7 +147,8 @@ HEADERS += \
     commands/keyboardmanager.h \
     commands/textmanager.h \
     commands/activities/inputparameteractivity.h \
-    commands/contexts/executecommandcontext.h
+    commands/contexts/executecommandcontext.h \
+    commands/activities/executecommandactivity.h
 
 CONFIG += console
 

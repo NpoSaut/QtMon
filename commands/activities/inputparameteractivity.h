@@ -7,6 +7,7 @@
 
 namespace Commands {
 namespace Activities {
+
 class InputParameterActivity : public Activity
 {
     Q_OBJECT

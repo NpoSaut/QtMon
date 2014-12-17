@@ -74,7 +74,11 @@ SOURCES += \
     interaction/contexts/executecommandcontext.cpp \
     interaction/activities/executecommandactivity.cpp \
     interaction/command.cpp \
-    interaction/commandmanager.cpp
+    interaction/commandmanager.cpp \
+    interaction/commands/configurecommand.cpp \
+    interaction/contexts/configurecontext.cpp \
+    interaction/activities/requestconfigurationactivity.cpp \
+    interaction/activities/submitconfigurationactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -152,7 +156,11 @@ HEADERS += \
     interaction/contexts/executecommandcontext.h \
     interaction/activities/executecommandactivity.h \
     interaction/command.h \
-    interaction/commandmanager.h
+    interaction/commandmanager.h \
+    interaction/commands/configurecommand.h \
+    interaction/contexts/configurecontext.h \
+    interaction/activities/requestconfigurationactivity.h \
+    interaction/activities/submitconfigurationactivity.h
 
 CONFIG += console
 

@@ -1,6 +1,6 @@
 #include "inputparameteractivity.h"
 
-namespace Commands {
+namespace Interaction {
 namespace Activities {
 
 InputParameterActivity::InputParameterActivity(QString outputFormat, int* valueRef, TextManager *textManager, QObject *parent) :

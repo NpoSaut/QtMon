@@ -65,16 +65,16 @@ SOURCES += \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp \
-    commands/activity.cpp \
-    commands/story.cpp \
-    commands/storymanager.cpp \
-    commands/keyboardmanager.cpp \
-    commands/textmanager.cpp \
-    commands/activities/inputparameteractivity.cpp \
-    commands/contexts/executecommandcontext.cpp \
-    commands/activities/executecommandactivity.cpp \
-    commands/command.cpp \
-    commands/commandmanager.cpp
+    interaction/activity.cpp \
+    interaction/story.cpp \
+    interaction/storymanager.cpp \
+    interaction/keyboardmanager.cpp \
+    interaction/textmanager.cpp \
+    interaction/activities/inputparameteractivity.cpp \
+    interaction/contexts/executecommandcontext.cpp \
+    interaction/activities/executecommandactivity.cpp \
+    interaction/command.cpp \
+    interaction/commandmanager.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -143,16 +143,16 @@ HEADERS += \
     qtBlokLib/parsers/ipd_date.h \
     qtBlokLib/parsers/mm_data.h \
     qtBlokLib/parsers/sys_diagnostics.h \
-    commands/activity.h \
-    commands/story.h \
-    commands/storymanager.h \
-    commands/keyboardmanager.h \
-    commands/textmanager.h \
-    commands/activities/inputparameteractivity.h \
-    commands/contexts/executecommandcontext.h \
-    commands/activities/executecommandactivity.h \
-    commands/command.h \
-    commands/commandmanager.h
+    interaction/activity.h \
+    interaction/story.h \
+    interaction/storymanager.h \
+    interaction/keyboardmanager.h \
+    interaction/textmanager.h \
+    interaction/activities/inputparameteractivity.h \
+    interaction/contexts/executecommandcontext.h \
+    interaction/activities/executecommandactivity.h \
+    interaction/command.h \
+    interaction/commandmanager.h
 
 CONFIG += console
 

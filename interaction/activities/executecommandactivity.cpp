@@ -1,6 +1,6 @@
 #include "executecommandactivity.h"
 
-namespace Commands {
+namespace Interaction {
 namespace Activities {
 
 ExecuteCommandActivity::ExecuteCommandActivity(Commands::Contexts::ExecuteCommandContext *context, QObject *parent)

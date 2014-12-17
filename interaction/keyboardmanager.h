@@ -7,7 +7,7 @@
 #include "textmanager.h"
 #include "commandmanager.h"
 
-namespace Commands {
+namespace Interaction {
 
 class KeyboardManager : public QObject
 {

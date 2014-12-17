@@ -5,7 +5,7 @@
 #include "../activity.h"
 #include "../textmanager.h"
 
-namespace Commands {
+namespace Interaction {
 namespace Activities {
 
 class InputParameterActivity : public Activity

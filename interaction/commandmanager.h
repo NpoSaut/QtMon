@@ -5,7 +5,7 @@
 #include "command.h"
 #include"storymanager.h"
 
-namespace Commands {
+namespace Interaction {
 
 class CommandManager
 {

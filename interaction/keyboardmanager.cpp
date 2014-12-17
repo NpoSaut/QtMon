@@ -3,7 +3,7 @@
 #include "activities/executecommandactivity.h"
 #include "contexts/executecommandcontext.h"
 
-namespace Commands {
+namespace Interaction {
 
 KeyboardManager::KeyboardManager(StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QObject *parent)
     : storyManager (storyManager), textManager(textManager), commandsManager (commandsManager),

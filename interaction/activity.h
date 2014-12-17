@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-namespace Commands {
+namespace Interaction {
 namespace Activities {
 
     class Activity : public QObject

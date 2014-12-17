@@ -5,7 +5,7 @@
 
 #include "story.h"
 
-namespace Commands {
+namespace Interaction {
 
 class StoryManager : public QObject
 {

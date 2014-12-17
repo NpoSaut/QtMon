@@ -3,7 +3,7 @@
 
 #include"story.h"
 
-namespace Commands {
+namespace Interaction {
 
 class Command
 {

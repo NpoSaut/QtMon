@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 
-namespace Commands {
+namespace Interaction {
 
 class TextManager : public QObject
 {

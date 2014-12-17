@@ -1,6 +1,6 @@
 #include "storymanager.h"
 
-namespace Commands {
+namespace Interaction {
 
 StoryManager::StoryManager(QObject *parent) :
     QObject(parent)

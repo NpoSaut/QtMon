@@ -1,7 +1,7 @@
 #include "command.h"
 
 
-namespace Commands {
+namespace Interaction {
 
 Command::Command(int id)
     : id (id)

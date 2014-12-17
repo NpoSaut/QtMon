@@ -5,7 +5,7 @@
 
 #include "activity.h"
 
-namespace Commands {
+namespace Interaction {
 
     class Story : public QList<Activities::Activity>
     {

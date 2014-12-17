@@ -5,7 +5,7 @@
 #include "../contexts/executecommandcontext.h"
 #include "../commandmanager.h"
 
-namespace Commands {
+namespace Interaction {
 namespace Activities {
 
 class ExecuteCommandActivity : public Activity

@@ -1,6 +1,6 @@
 #include "story.h"
 
-namespace Commands {
+namespace Interaction {
 
 Story::Story()
     : QList ()

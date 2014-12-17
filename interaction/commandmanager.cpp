@@ -1,6 +1,6 @@
 #include "commandmanager.h"
 
-namespace Commands {
+namespace Interaction {
 
 CommandManager::CommandManager(StoryManager *storyManager)
     : storyManager(storyManager)

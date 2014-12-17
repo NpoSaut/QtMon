@@ -1,7 +1,7 @@
 #ifndef EXECUTECOMMANDCONTEXT_H
 #define EXECUTECOMMANDCONTEXT_H
 
-namespace Commands {
+namespace Interaction {
 namespace Contexts {
 
 class ExecuteCommandContext

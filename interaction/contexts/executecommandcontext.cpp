@@ -1,6 +1,6 @@
 #include "executecommandcontext.h"
 
-namespace Commands {
+namespace Interaction {
 namespace Contexts {
 
 ExecuteCommandContext::ExecuteCommandContext() :

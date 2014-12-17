@@ -32,21 +32,21 @@ void TextManager::enterKeyPressed()
     emit submitted(getValue);
 }
 
-void TextManager::setOutputFormat(QString s)
+void TextManager::init(QString format)
 {
-    outputFormat = s;
+    init(format, 0);
+}
+
+void TextManager::init(QString format, int initialValue)
+{
+    outputFormat = format;
+    value = initialValue;
     emit outputStringChanged();
 }
 
 QString TextManager::getOuputString() const
 {
     return outputFormat.arg(value);
-}
-
-void TextManager::setValue(int v)
-{
-    value = v;
-    emit outputStringChanged();
 }
 
 int TextManager::getValue() const

@@ -25,7 +25,8 @@ public slots:
     void enterKeyPressed ();
 
 public:
-    void setOutputFormat (QString s); // %1 заменится на value
+    void init (QString format); // %1 заменится на value
+    void init (QString format, int initialValue); // %1 заменится на value
     QString getOuputString () const;
 
     void setValue (int v);

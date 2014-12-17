@@ -69,8 +69,8 @@ SOURCES += \
     commands/story.cpp \
     commands/storymanager.cpp \
     commands/keyboardmanager.cpp \
-    commands/activities/inputcommandactivity.cpp \
-    commands/textmanager.cpp
+    commands/textmanager.cpp \
+    commands/activities/inputparameteractivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -143,8 +143,8 @@ HEADERS += \
     commands/story.h \
     commands/storymanager.h \
     commands/keyboardmanager.h \
-    commands/activities/inputcommandactivity.h \
-    commands/textmanager.h
+    commands/textmanager.h \
+    commands/activities/inputparameteractivity.h
 
 CONFIG += console
 

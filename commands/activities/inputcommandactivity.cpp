@@ -10,7 +10,7 @@ InputCommandActivity::InputCommandActivity(TextManager *textManager, QObject *pa
 
 void InputCommandActivity::run()
 {
-    textManager->setOutputFormat("Комманда: %1");
+    textManager->init("Комманда: %1");
     connect(textManager, SIGNAL(submitted(int)), SLOT(submitted()));
 }
 

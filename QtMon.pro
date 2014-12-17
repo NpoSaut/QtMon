@@ -64,7 +64,13 @@ SOURCES += \
     autolockhandler.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
-    records/stateplayer.cpp
+    records/stateplayer.cpp \
+    commands/activity.cpp \
+    commands/story.cpp \
+    commands/storymanager.cpp \
+    commands/keyboardmanager.cpp \
+    commands/activities/inputcommandactivity.cpp \
+    commands/textmanager.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -132,7 +138,13 @@ HEADERS += \
     qtBlokLib/parsers/aux_resource.h \
     qtBlokLib/parsers/ipd_date.h \
     qtBlokLib/parsers/mm_data.h \
-    qtBlokLib/parsers/sys_diagnostics.h
+    qtBlokLib/parsers/sys_diagnostics.h \
+    commands/activity.h \
+    commands/story.h \
+    commands/storymanager.h \
+    commands/keyboardmanager.h \
+    commands/activities/inputcommandactivity.h \
+    commands/textmanager.h
 
 CONFIG += console
 

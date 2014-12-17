@@ -70,7 +70,8 @@ SOURCES += \
     commands/storymanager.cpp \
     commands/keyboardmanager.cpp \
     commands/textmanager.cpp \
-    commands/activities/inputparameteractivity.cpp
+    commands/activities/inputparameteractivity.cpp \
+    commands/contexts/executecommandcontext.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -144,7 +145,8 @@ HEADERS += \
     commands/storymanager.h \
     commands/keyboardmanager.h \
     commands/textmanager.h \
-    commands/activities/inputparameteractivity.h
+    commands/activities/inputparameteractivity.h \
+    commands/contexts/executecommandcontext.h
 
 CONFIG += console
 

@@ -72,7 +72,9 @@ SOURCES += \
     commands/textmanager.cpp \
     commands/activities/inputparameteractivity.cpp \
     commands/contexts/executecommandcontext.cpp \
-    commands/activities/executecommandactivity.cpp
+    commands/activities/executecommandactivity.cpp \
+    commands/command.cpp \
+    commands/commandmanager.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -148,7 +150,9 @@ HEADERS += \
     commands/textmanager.h \
     commands/activities/inputparameteractivity.h \
     commands/contexts/executecommandcontext.h \
-    commands/activities/executecommandactivity.h
+    commands/activities/executecommandactivity.h \
+    commands/command.h \
+    commands/commandmanager.h
 
 CONFIG += console
 

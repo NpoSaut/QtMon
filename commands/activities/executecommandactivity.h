@@ -3,6 +3,7 @@
 
 #include "../activity.h"
 #include "../contexts/executecommandcontext.h"
+#include "../commandmanager.h"
 
 namespace Commands {
 namespace Activities {
@@ -11,7 +12,7 @@ class ExecuteCommandActivity : public Activity
 {
     Q_OBJECT
 public:
-    explicit ExecuteCommandActivity(Contexts::ExecuteCommandContext *context, QObject *parent = 0);
+    explicit ExecuteCommandActivity(Contexts::ExecuteCommandContext *context, CommandManager *commandManager, QObject *parent = 0);
 
     virtual void run ();
     virtual void dispose ();\
@@ -22,6 +23,7 @@ signals:
 
 private:
     Contexts::ExecuteCommandContext *context;
+    CommandManager *commandManager;
 
 };
 

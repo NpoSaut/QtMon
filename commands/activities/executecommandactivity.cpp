@@ -4,14 +4,14 @@ namespace Commands {
 namespace Activities {
 
 ExecuteCommandActivity::ExecuteCommandActivity(Commands::Contexts::ExecuteCommandContext *context, QObject *parent)
-    : context (context)
+    : context (context), commandManager (commandManager)
 {
 
 }
 
 void ExecuteCommandActivity::run()
 {
-    // Сюда вставить код, который запустит команду из CommandManager-а
+    commandManager->ExecuteCommand(context->commandNumber);
     emit completed();
 }
 

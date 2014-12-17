@@ -2,9 +2,22 @@
 
 namespace Interaction {
 
-StoryManager::StoryManager(QObject *parent) :
-    QObject(parent)
+StoryManager::StoryManager()
 {
+}
+
+void StoryManager::beginStory(Story *story)
+{
+    if (currentStory != nullptr)
+        closeCurrentStory();
+    currentStory = story;
+    currentStory->Begin();
+}
+
+void StoryManager::closeCurrentStory()
+{
+    currentStory->Dispose();
+    delete currentStory;
 }
 
 }

@@ -15,7 +15,7 @@ KeyboardManager::KeyboardManager(StoryManager *storyManager, CommandManager *com
 void KeyboardManager::commandKeyPressed()
 {
     ExecuteCommandContext* context = new ExecuteCommandContext();
-    Story s = new Story();
+    Story s = new Story(context);
     s.append(new Activities::InputParameterActivity("Номер команды: %1", context->commandNumber*, TextManager));
     s.append(new Activities::ExecuteCommandActivity(context, commandsManager));
 }

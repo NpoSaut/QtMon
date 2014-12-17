@@ -15,7 +15,7 @@ ConfigureCommand::ConfigureCommand(TextManager *textManager)
 Story ConfigureCommand::getStory()
 {
     ConfigureContext *context = new ConfigureContext();
-    Story story();
+    Story story(context);
     story.append(new Activities::RequestConfigurationActivity(context, textManager));
     story.append(new Activities::InputParameterActivity("Категория поезда: %1", context->trainCategory, textManager));
     story.append(new Activities::InputParameterActivity("Время: %1 (0 - зимнее, 1 - летнее)", context->summerTime, textManager));

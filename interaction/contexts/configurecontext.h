@@ -1,6 +1,11 @@
 #ifndef CONFIGURECONTEXT_H
 #define CONFIGURECONTEXT_H
 
+#include "../context.h"
+
+namespace Interaction {
+namespace Contexts {
+
 class ConfigureContext : public Context
 {
 public:
@@ -18,5 +23,8 @@ public:
     int speedYellow;
     int sectionLength;
 };
+
+}
+}
 
 #endif // CONFIGURECONTEXT_H

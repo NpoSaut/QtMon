@@ -1,22 +1,20 @@
 #ifndef STORYMANAGER_H
 #define STORYMANAGER_H
 
-#include <QObject>
-
 #include "story.h"
 
 namespace Interaction {
 
-class StoryManager : public QObject
+class StoryManager
 {
-    Q_OBJECT
 public:
-    explicit StoryManager(QObject *parent = 0);
+    explicit StoryManager();
 
-    void beginStory (Story *);
+    void beginStory (Story *story);
 
 private:
     Story *currentStory;
+    void closeCurrentStory();
 };
 
 }

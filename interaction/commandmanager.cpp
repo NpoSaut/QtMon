@@ -2,8 +2,8 @@
 
 namespace Interaction {
 
-CommandManager::CommandManager(StoryManager *storyManager)
-    : storyManager(storyManager)
+CommandManager::CommandManager(StoryManager *storyManager, QVector<Commands *> commands)
+    : storyManager(storyManager), commands (commands)
 {
 }
 

@@ -11,7 +11,7 @@ namespace Interaction {
 class CommandManager
 {
 public:
-    CommandManager(StoryManager *storyManager, QVector<Commands *> commands);
+    CommandManager(StoryManager *storyManager, QVector<Command *> commands);
     bool executeCommand(int commandId);
 
 private:

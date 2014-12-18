@@ -15,7 +15,7 @@ void Story::begin()
 
 void Story::switchNext()
 {
-    if (currentActivityIndex > 0)
+    if (currentActivityIndex >= 0)
         disposeCurrent();
 
     if (currentActivityIndex < activities.count())

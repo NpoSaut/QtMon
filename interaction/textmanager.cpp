@@ -2,9 +2,13 @@
 
 namespace Interaction {
 
-TextManager::TextManager(QObject *parent) :
+TextManager::TextManager(Keyboard *keyboard, QObject *parent) :
     QObject(parent)
 {
+    connect (keyboard, SIGNAL(numberKeyDown(int)), this, SLOT(numericKeyPressed(int)));
+    connect (keyboard, SIGNAL(backspaceKeyDown()), this, SLOT(backscapeKeyPressed()));
+    connect (keyboard, SIGNAL(enterKeyDown()), this, SLOT(enterKeyPressed()));
+
     clear ();
 }
 

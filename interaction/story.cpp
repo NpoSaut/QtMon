@@ -24,16 +24,16 @@ void Story::switchNext()
 
 void Story::disposeCurrent()
 {
-    disconnect(activities[currentActivityIndex], SIGNAL(completed), this, SLOT(switchNext()));
-    disconnect(activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(abort()));
+    disconnect(activities[currentActivityIndex], SIGNAL(completed()), this, SLOT(switchNext()));
+    disconnect(activities[currentActivityIndex], SIGNAL(canselled()), this, SLOT(abort()));
     activities[currentActivityIndex]->dispose();
 }
 
 void Story::startNext()
 {
     currentActivityIndex++;
-    connect(activities[currentActivityIndex], SIGNAL(completed), this, SLOT(switchNext()));
-    connect(activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(abort()));
+    connect(activities[currentActivityIndex], SIGNAL(completed()), this, SLOT(switchNext()));
+    connect(activities[currentActivityIndex], SIGNAL(canselled()), this, SLOT(abort()));
     activities[currentActivityIndex]->run();
 }
 

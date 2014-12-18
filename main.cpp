@@ -39,6 +39,11 @@
 #include "records/staterecorder.h"
 
 #include "textmanagerviewmodel.h"
+#include "interaction/storymanager.h"
+#include "interaction/textmanager.h"
+#include "interaction/commandmanager.h"
+#include "interaction/commands/configurecommand.h"
+#include "interaction/keyboardmanager.h"
 
 SystemStateViewModel *systemState ;
 TextManagerViewModel *textManagerViewModel;
@@ -57,6 +62,11 @@ Can *can;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
+
+Interaction::StoryManager *storyManager;
+Interaction::TextManager *textManager;
+Interaction::CommandManager *commandManager;
+Interaction::KeyboardManager *keyboardManager;
 
 void getParamsFromConsole ()
 {
@@ -392,6 +402,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
+
+    // Взаимодествие с пользователем через команды
+    storyManager = new Interaction::StoryManager ();
+    textManager = new Interaction::TextManager ();
+    textManagerViewModel->assign(textManager);
+    commandManager = new Interaction::CommandManager (storyManager, {new Interaction::Commands::ConfigureCommand (textManager)});
+    keyboardManager = new Interaction::KeyboardManager (storyManager, commandManager, textManager );
 
     QtConcurrent::run(getParamsFromConsole);
 

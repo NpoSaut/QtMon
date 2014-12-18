@@ -65,7 +65,6 @@ SOURCES += \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp \
-    interaction/activity.cpp \
     interaction/story.cpp \
     interaction/storymanager.cpp \
     interaction/keyboardmanager.cpp \
@@ -73,13 +72,10 @@ SOURCES += \
     interaction/activities/inputparameteractivity.cpp \
     interaction/contexts/executecommandcontext.cpp \
     interaction/activities/executecommandactivity.cpp \
-    interaction/command.cpp \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
-    interaction/contexts/configurecontext.cpp \
     interaction/activities/requestconfigurationactivity.cpp \
-    interaction/activities/submitconfigurationactivity.cpp \
-    interaction/context.cpp
+    interaction/activities/submitconfigurationactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)

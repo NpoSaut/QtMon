@@ -12,7 +12,7 @@ class RequestConfigurationActivity : public Activity
 {
     Q_OBJECT
 public:
-    explicit RequestConfigurationActivity(ConfigureContext *context, TextManager *textManager, QObject *parent = 0);
+    explicit RequestConfigurationActivity(Contexts::ConfigureContext *context, TextManager *textManager, QObject *parent = 0);
 
     virtual void run ();
     virtual void dispose ();
@@ -22,7 +22,7 @@ signals:
     void canselled ();
 
 private:
-    ConfigureContext *context;
+    Contexts::ConfigureContext *context;
     TextManager *textManager;
 
 };

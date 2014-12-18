@@ -2,34 +2,36 @@
 #define STORY_H
 
 #include <QObject>
-#include <QList>
+#include <QVector>
 
-#include "context.h"
 #include "activity.h"
+#include "context.h"
 
 namespace Interaction {
 
+    // Занимается запуском активностей из списка по цепочке
     class Story : public QObject
     {
         Q_OBJECT
     public:
-        Story(Context *storyContext, QList<Activities::Activity> activities, QObject *parent = 0);
-        void Begin();
-        void Dispose();
+        Story(Context *context, QVector<Activities::Activity *> activities, QObject *parent = 0);
+        void begin();
+        void dispose();
+        ~Story();
 
     public slots:
-        void Abort();
+        void abort();
 
     private slots:
-        void SwitchNext();
+        void switchNext();
 
     private:
-        Context *context;
-        int currentActivityIndex;
-        QList<Activities::Activity> activities;
-        void DisposeCurrent();
-        void StartNext();
+        void disposeCurrent();
+        void startNext();
 
+        Context *context;
+        QVector<Activities::Activity *> activities;
+        int currentActivityIndex;
     };
 
 }

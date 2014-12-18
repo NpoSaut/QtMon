@@ -15,7 +15,7 @@ public:
     explicit ExecuteCommandActivity(Contexts::ExecuteCommandContext *context, CommandManager *commandManager, QObject *parent = 0);
 
     virtual void run ();
-    virtual void dispose ();\
+    virtual void dispose ();
 
 signals:
     void completed ();

@@ -3,21 +3,23 @@
 namespace Interaction {
 
 StoryManager::StoryManager()
-{
-}
+    : currentStory (nullptr)
+{ }
 
 void StoryManager::beginStory(Story *story)
 {
-    if (currentStory != nullptr)
-        closeCurrentStory();
+    closeCurrentStory();
     currentStory = story;
-    currentStory->Begin();
+    currentStory->begin();
 }
 
 void StoryManager::closeCurrentStory()
 {
-    currentStory->Dispose();
-    delete currentStory;
+    if (currentStory != nullptr)
+    {
+        currentStory->dispose();
+        delete currentStory;
+    }
 }
 
 }

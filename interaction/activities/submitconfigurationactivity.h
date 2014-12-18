@@ -13,7 +13,7 @@ class SubmitConfigurationActivity : public Activity
 {
     Q_OBJECT
 public:
-    explicit SubmitConfigurationActivity(ConfigureContext *context, TextManager *textManager, QObject *parent = 0);
+    explicit SubmitConfigurationActivity(Contexts::ConfigureContext *context, TextManager *textManager, QObject *parent = 0);
 
     virtual void run ();
     virtual void dispose ();
@@ -23,7 +23,7 @@ signals:
     void canselled ();
 
 private:
-    ConfigureContext *context;
+    Contexts::ConfigureContext *context;
     TextManager *textManager;
 
 };

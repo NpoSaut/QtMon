@@ -12,10 +12,10 @@ class InputParameterActivity : public Activity
 {
     Q_OBJECT
 public:
-    explicit InputParameterActivity(QString outputFormat, int* valueRef, TextManager *textManager, QObject *parent = 0);
+    explicit InputParameterActivity(QString outputFormat, int *value, TextManager *textManager, QObject *parent = 0);
 
     virtual void run ();
-    virtual void dispose ();\
+    virtual void dispose ();
 
 signals:
     void completed ();
@@ -27,7 +27,7 @@ private slots:
 private:
     TextManager *textManager;
     QString outputFormat;
-    int* valueRef;
+    int *value;
 
 };
 

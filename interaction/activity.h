@@ -10,6 +10,9 @@ namespace Activities {
     {
         Q_OBJECT
     public:
+        explicit Activity (QObject *parent)
+            : QObject (parent)
+        { }
         virtual void run () = 0;
         virtual void dispose () = 0;
 

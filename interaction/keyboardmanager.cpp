@@ -14,10 +14,17 @@ KeyboardManager::KeyboardManager(StoryManager *storyManager, CommandManager *com
 
 void KeyboardManager::commandKeyPressed()
 {
-    ExecuteCommandContext* context = new ExecuteCommandContext();
-    Story s = new Story(context);
-    s.append(new Activities::InputParameterActivity("Номер команды: %1", context->commandNumber*, TextManager));
-    s.append(new Activities::ExecuteCommandActivity(context, commandsManager));
+    auto *context = new Contexts::ExecuteCommandContext();
+    Story *s = new Story(context, {
+                            new Activities::InputParameterActivity("Номер команды: %1", &context->commandNumber, textManager),
+                            new Activities::ExecuteCommandActivity(context, commandsManager)
+                        });
+    storyManager->beginStory(s);
+}
+
+void KeyboardManager::cancelKeyPressed()
+{
+
 }
 
 }

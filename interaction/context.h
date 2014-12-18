@@ -5,8 +5,6 @@ namespace Interaction {
 
 class Context
 {
-public:
-    Context();
 };
 
 }

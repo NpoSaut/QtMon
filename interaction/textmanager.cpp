@@ -29,7 +29,7 @@ void TextManager::backscapeKeyPressed()
 
 void TextManager::enterKeyPressed()
 {
-    emit submitted(getValue);
+    emit submitted(getValue());
 }
 
 void TextManager::init(QString format)

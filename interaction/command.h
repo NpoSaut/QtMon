@@ -8,9 +8,10 @@ namespace Interaction {
 class Command
 {
 public:
-    Command(int id);
-    Story getStory() = 0;
-    int getId();
+    Command(int id) : id (id) { }
+    int getId() const { return id; }
+
+    virtual Story *createStory() = 0;
 
 private:
     int id;

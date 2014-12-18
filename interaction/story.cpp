@@ -2,56 +2,58 @@
 
 namespace Interaction {
 
-Story::Story(Context *storyContext, QList<Activities::Activity> activities, QObject *parent)
-    : context(storyContext), currentActivityIndex(-1), activities(activities),
+Story::Story(Context *context, QVector<Activities::Activity *> activities, QObject *parent)
+    : context (context), activities(activities), currentActivityIndex(-1),
       QObject(parent)
 { }
 
-void Story::Begin()
+void Story::begin()
 {
-    if (currentActivityIndex != -1) return;
-    SwitchNext();
+    if (currentActivityIndex == -1)
+        switchNext();
 }
 
-void Story::SwitchNext()
+void Story::switchNext()
 {
     if (currentActivityIndex > 0)
-        DisposeCurrent();
+        disposeCurrent();
 
     if (currentActivityIndex < activities.count())
-        StartNext();
+        startNext();
 }
 
-void Story::DisposeCurrent()
+void Story::disposeCurrent()
 {
-    disconnect(*activities[currentActivityIndex], SIGNAL(completed), this, SLOT(SwitchNext()));
-    dicconnect(*activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(Abort()));
-    activities[currentActivityIndex].dispose();
+    disconnect(activities[currentActivityIndex], SIGNAL(completed), this, SLOT(switchNext()));
+    disconnect(activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(abort()));
+    activities[currentActivityIndex]->dispose();
 }
 
-void Story::StartNext()
+void Story::startNext()
 {
     currentActivityIndex++;
-    connect(*activities[currentActivityIndex], SIGNAL(completed), this, SLOT(SwitchNext()));
-    connect(*activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(Abort()));
-    activities[currentActivityIndex].run();
+    connect(activities[currentActivityIndex], SIGNAL(completed), this, SLOT(switchNext()));
+    connect(activities[currentActivityIndex], SIGNAL(canselled), this, SLOT(abort()));
+    activities[currentActivityIndex]->run();
 }
 
-void Story::Dispose()
+void Story::dispose()
 {
-    for (int i = currentActivityIndex; i < activities.count(); i++)
-    {
-        // вроде как, мы принмаем этот список как копию,
-        // поэтому можно не удалять из него ничего, да?
-        activities[i].dispose();
+    disposeCurrent();
+}
+
+void Story::abort()
+{
+    disposeCurrent();
+}
+
+Story::~Story()
+{
+    foreach (Activities::Activity *activity, activities) {
+        delete activity;
     }
-    if (context != nullptr)
+    if (context)
         delete context;
-}
-
-void Story::Abort()
-{
-    DisposeCurrent();
 }
 
 }

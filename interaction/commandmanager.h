@@ -1,21 +1,22 @@
 #ifndef COMMANDMANAGER_H
 #define COMMANDMANAGER_H
 
-#include <QList>
+#include <QVector>
 #include "command.h"
-#include"storymanager.h"
+#include "storymanager.h"
 
 namespace Interaction {
 
+// Хранит команды и запускает нужную по номеру
 class CommandManager
 {
 public:
     CommandManager(StoryManager *storyManager);
-    bool ExecuteCommand(int commandId);
+    bool executeCommand(int commandId);
 
 private:
     StoryManager *storyManager;
-    QList<Command> commands;
+    QVector<Command *> commands;
 };
 
 }

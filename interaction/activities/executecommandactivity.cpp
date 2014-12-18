@@ -3,15 +3,15 @@
 namespace Interaction {
 namespace Activities {
 
-ExecuteCommandActivity::ExecuteCommandActivity(Commands::Contexts::ExecuteCommandContext *context, QObject *parent)
-    : context (context), commandManager (commandManager)
+ExecuteCommandActivity::ExecuteCommandActivity(Contexts::ExecuteCommandContext *context, CommandManager *commandManager, QObject *parent)
+    : context (context), commandManager (commandManager), Activity (parent)
 {
 
 }
 
 void ExecuteCommandActivity::run()
 {
-    commandManager->ExecuteCommand(context->commandNumber);
+    commandManager->executeCommand(context->commandNumber);
     emit completed();
 }
 

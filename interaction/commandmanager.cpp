@@ -7,15 +7,15 @@ CommandManager::CommandManager(StoryManager *storyManager)
 {
 }
 
-bool CommandManager::ExecuteCommand(int commandId)
+bool CommandManager::executeCommand(int commandId)
 {
     for (int i = 0; i < commands.count(); i++)
     {
-        if (commands[i].getId() == commandId)
+        if (commands[i]->getId() == commandId)
         {
             // чё-каво вот тут вот с указателем?
             // кто когда чего удалит?
-            storyManager->beginStory(*commands[i].getStory());
+            storyManager->beginStory(commands[i]->createStory());
             break;
         }
     }

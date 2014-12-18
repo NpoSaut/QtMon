@@ -5,6 +5,7 @@
 
 namespace Interaction {
 
+// Запускает, хранит и удаляет текущую историю
 class StoryManager
 {
 public:

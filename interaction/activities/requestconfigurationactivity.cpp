@@ -3,7 +3,7 @@
 namespace Interaction {
 namespace Activities {
 
-RequestConfigurationActivity::RequestConfigurationActivity(ConfigureContext *context, TextManager *textManager, QObject *parent)
+RequestConfigurationActivity::RequestConfigurationActivity(Contexts::ConfigureContext *context, TextManager *textManager, QObject *parent)
     : context(context), textManager (textManager), Activity(parent)
 {
 }

@@ -9,7 +9,7 @@ namespace Contexts {
 class ConfigureContext : public Context
 {
 public:
-    ConfigureContext();
+    ConfigureContext() { }
     int trainCategory;
     int summerTime;
     int locomotiveKind;

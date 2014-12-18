@@ -11,7 +11,7 @@ class ConfigureCommand : public Command
 {
 public:
     ConfigureCommand(TextManager *textManager);
-    Story getStory();
+    Story *createStory();
 
 private:
     TextManager *textManager;

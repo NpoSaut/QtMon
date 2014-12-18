@@ -6,7 +6,7 @@
 namespace Interaction {
 
 KeyboardManager::KeyboardManager(StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QObject *parent)
-    : storyManager (storyManager), textManager(textManager), commandsManager (commandsManager),
+    : storyManager (storyManager), commandsManager (commandsManager), textManager(textManager),
       QObject (parent)
 {
 

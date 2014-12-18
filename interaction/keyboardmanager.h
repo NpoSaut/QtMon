@@ -20,8 +20,8 @@ public slots:
     void cancelKeyPressed ();
 
 private:
-    CommandManager *commandsManager;
     StoryManager *storyManager;
+    CommandManager *commandsManager;
     TextManager *textManager;
 };
 

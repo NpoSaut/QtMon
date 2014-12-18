@@ -11,13 +11,10 @@ class QmlKeyboard : public Keyboard
     Q_OBJECT
 public:
     explicit QmlKeyboard(QObject *parent = 0);
-    void processKeyDowm(int key);
-    void processKeyUp(int key);
-
-signals:
 
 public slots:
-
+    void processKeyDown(int key);
+    void processKeyUp(int key);
 };
 
 }

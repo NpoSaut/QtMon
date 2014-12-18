@@ -39,7 +39,9 @@
 #include "records/staterecorder.h"
 
 #include "textmanagerviewmodel.h"
+#include "interaction/keyboards/cankeyboard.h"
 #include "interaction/keyboards/qmlkeyboard.h"
+#include "interaction/keyboards/compositekeyboard.h"
 #include "interaction/storymanager.h"
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
@@ -65,6 +67,7 @@ Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
 
+Interaction::Keyboard *keyboard;
 Interaction::StoryManager *storyManager;
 Interaction::TextManager *textManager;
 Interaction::CommandManager *commandManager;
@@ -408,11 +411,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     // Взаимодествие с пользователем через команды
+    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager ();
     textManagerViewModel->assign(textManager);
     commandManager = new Interaction::CommandManager (storyManager, {new Interaction::Commands::ConfigureCommand (textManager)});
-    keyboardManager = new Interaction::KeyboardManager (storyManager, commandManager, textManager );
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 
     QtConcurrent::run(getParamsFromConsole);
 

@@ -5,11 +5,12 @@
 
 namespace Interaction {
 
-KeyboardManager::KeyboardManager(StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QObject *parent)
-    : storyManager (storyManager), commandsManager (commandsManager), textManager(textManager),
+KeyboardManager::KeyboardManager(Keyboard *keyboard, StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QObject *parent)
+    : keyboard (keyboard), storyManager (storyManager), commandsManager (commandsManager), textManager(textManager),
       QObject (parent)
 {
-
+    connect (keyboard, SIGNAL(commandKeyDown()), this, SLOT(commandKeyPressed()));
+    connect (keyboard, SIGNAL(cancelKeyDown()), this, SLOT(cancelKeyPressed()));
 }
 
 void KeyboardManager::commandKeyPressed()
@@ -24,7 +25,7 @@ void KeyboardManager::commandKeyPressed()
 
 void KeyboardManager::cancelKeyPressed()
 {
-
+    storyManager->beginStory(new Story(nullptr, QVector<Activities::Activity *> (0)));
 }
 
 }

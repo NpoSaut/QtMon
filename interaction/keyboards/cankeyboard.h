@@ -13,22 +13,6 @@ class CanKeyboard : public Keyboard
 public:
     explicit CanKeyboard(ConsoleKey *consoleKey, QObject *parent = 0);
 
-signals:
-    void keyDown (Key);
-    void keyUp (Key);
-
-    void numberKeyDown (int);
-    void numberKeyUp (int);
-
-    void backspaceKeyDown ();
-    void backspaceKeyUp ();
-    void enterKeyDown ();
-    void enterKeyUp ();
-    void cancelKeyDown ();
-    void cancelKeyUp ();
-    void commandKeyDown ();
-    void commandKeyUp ();
-
 private slots:
     void consoleKeyPressed (ConsoleKey::ConsKey key);
     void consoleKeyReleased (ConsoleKey::ConsKey key);

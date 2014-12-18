@@ -32,8 +32,8 @@ signals:
     void keyDown (Key);
     void keyUp (Key);
 
-    void numberKeyDown (Key);
-    void numberKeyUp (Key);
+    void numberKeyDown (int);
+    void numberKeyUp (int);
 
     void backspaceKeyDown ();
     void backspaceKeyUp ();

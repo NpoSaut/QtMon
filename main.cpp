@@ -39,6 +39,7 @@
 #include "records/staterecorder.h"
 
 #include "textmanagerviewmodel.h"
+#include "interaction/keyboards/qmlkeyboard.h"
 #include "interaction/storymanager.h"
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
@@ -47,6 +48,7 @@
 
 SystemStateViewModel *systemState ;
 TextManagerViewModel *textManagerViewModel;
+Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
 DisplayStateSander* displayStateSander;
@@ -223,6 +225,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
     qmlRegisterType<TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
+    qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
@@ -236,6 +239,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
     textManagerViewModel = object->findChild<TextManagerViewModel*>("textManager");
+    qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
 
     levithan = new Levithan(systemState);
 

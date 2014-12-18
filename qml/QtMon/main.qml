@@ -284,6 +284,9 @@ Rectangle {
                 }
             }
         }
+
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyDowm(event.Key);
     }
 
     Keys.onReleased: {
@@ -321,6 +324,8 @@ Rectangle {
         if (altMode && event.key == Qt.Key_F3) {
         }
 
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyUp(event.Key);
     }
 
 
@@ -332,6 +337,11 @@ Rectangle {
             if (stateView.DriveModeFact == stateView.DriveModeTarget)
                 pageNum = getDriveModeLetter(stateView.DriveModeFact) == "Т" ? 1 : 0
         }
+    }
+
+    QmlKeyboard {
+        id: keyboardProxy
+        objectName: "keyboardProxy"
     }
 
     TextManagerViewModel {

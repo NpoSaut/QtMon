@@ -78,7 +78,8 @@ SOURCES += \
     interaction/activities/submitconfigurationactivity.cpp \
     textmanagerviewmodel.cpp \
     interaction/keyboard.cpp \
-    interaction/keyboards/cankeyboard.cpp
+    interaction/keyboards/cankeyboard.cpp \
+    interaction/keyboards/qmlkeyboard.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -164,7 +165,8 @@ HEADERS += \
     interaction/context.h \
     textmanagerviewmodel.h \
     interaction/keyboard.h \
-    interaction/keyboards/cankeyboard.h
+    interaction/keyboards/cankeyboard.h \
+    interaction/keyboards/qmlkeyboard.h
 
 CONFIG += console
 

@@ -38,7 +38,10 @@
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
 
+#include "textmanagerviewmodel.h"
+
 SystemStateViewModel *systemState ;
+TextManagerViewModel *textManagerViewModel;
 Levithan* levithan;
 Notificator* notificator;
 DisplayStateSander* displayStateSander;
@@ -209,6 +212,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(codec);
 
     qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
+    qmlRegisterType<TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
@@ -221,6 +225,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
+    textManagerViewModel = object->findChild<TextManagerViewModel*>("textManager");
+
     levithan = new Levithan(systemState);
 
     // Кассета

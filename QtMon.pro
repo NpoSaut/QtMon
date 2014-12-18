@@ -75,7 +75,8 @@ SOURCES += \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
     interaction/activities/requestconfigurationactivity.cpp \
-    interaction/activities/submitconfigurationactivity.cpp
+    interaction/activities/submitconfigurationactivity.cpp \
+    textmanagerviewmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -158,7 +159,8 @@ HEADERS += \
     interaction/contexts/configurecontext.h \
     interaction/activities/requestconfigurationactivity.h \
     interaction/activities/submitconfigurationactivity.h \
-    interaction/context.h
+    interaction/context.h \
+    textmanagerviewmodel.h
 
 CONFIG += console
 

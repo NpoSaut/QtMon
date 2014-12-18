@@ -334,6 +334,11 @@ Rectangle {
         }
     }
 
+    TextManagerViewModel {
+        id: textManager
+        objectName: "textManager"
+    }
+
     states: [
         State {
             name: "page1"

@@ -26,8 +26,8 @@ namespace Interaction {
         void switchNext();
 
     private:
-        void disposeCurrent();
-        void startNext();
+        void disposeActivity();
+        void startActivity();
 
         Context *context;
         QVector<Activities::Activity *> activities;

@@ -16,22 +16,22 @@ void Story::begin()
 void Story::switchNext()
 {
     if (currentActivityIndex >= 0)
-        disposeCurrent();
+        disposeActivity();
 
+    currentActivityIndex++;
     if (currentActivityIndex < activities.count())
-        startNext();
+        startActivity();
 }
 
-void Story::disposeCurrent()
+void Story::disposeActivity()
 {
     disconnect(activities[currentActivityIndex], SIGNAL(completed()), this, SLOT(switchNext()));
     disconnect(activities[currentActivityIndex], SIGNAL(canselled()), this, SLOT(abort()));
     activities[currentActivityIndex]->dispose();
 }
 
-void Story::startNext()
+void Story::startActivity()
 {
-    currentActivityIndex++;
     connect(activities[currentActivityIndex], SIGNAL(completed()), this, SLOT(switchNext()));
     connect(activities[currentActivityIndex], SIGNAL(canselled()), this, SLOT(abort()));
     activities[currentActivityIndex]->run();
@@ -39,12 +39,14 @@ void Story::startNext()
 
 void Story::dispose()
 {
-    disposeCurrent();
+    if (currentActivityIndex >= 0 && currentActivityIndex < activities.count())
+        disposeActivity();
 }
 
 void Story::abort()
 {
-    disposeCurrent();
+    if (currentActivityIndex >= 0 && currentActivityIndex < activities.count())
+        disposeActivity();
 }
 
 Story::~Story()

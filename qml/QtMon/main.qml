@@ -286,7 +286,7 @@ Rectangle {
         }
 
         // Keyboard Proxy! :3
-        keyboardProxy.processKeyDowm(event.Key);
+        keyboardProxy.processKeyDown(event.key);
     }
 
     Keys.onReleased: {
@@ -325,7 +325,7 @@ Rectangle {
         }
 
         // Keyboard Proxy! :3
-        keyboardProxy.processKeyUp(event.Key);
+        keyboardProxy.processKeyUp(event.key);
     }
 
 

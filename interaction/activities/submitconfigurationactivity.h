@@ -18,10 +18,6 @@ public:
     virtual void run ();
     virtual void dispose ();
 
-signals:
-    void completed ();
-    void canselled ();
-
 private:
     Contexts::ConfigureContext *context;
     TextManager *textManager;

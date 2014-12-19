@@ -14,6 +14,7 @@ void CanKeyboard::consoleKeyPressed(ConsoleKey::ConsKey key)
 {
     switch (key) {
     case ConsoleKey::BKSP:
+    case ConsoleKey::L: // Установлено опытным путём
         emit backspaceKeyDown();
         emit keyDown(Key::BACKSPACE);
         break;
@@ -76,6 +77,7 @@ void CanKeyboard::consoleKeyReleased(ConsoleKey::ConsKey key)
 {
     switch (key) {
     case ConsoleKey::BKSP:
+    case ConsoleKey::L: // Установлено опытным путём
         emit backspaceKeyUp();
         emit keyUp(Key::BACKSPACE);
         break;

@@ -80,7 +80,9 @@ SOURCES += \
     interaction/keyboard.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
-    interaction/keyboards/compositekeyboard.cpp
+    interaction/keyboards/compositekeyboard.cpp \
+    interaction/commands/modulesactivitycommand.cpp \
+    interaction/activities/modulesactivityactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -168,7 +170,9 @@ HEADERS += \
     interaction/keyboard.h \
     interaction/keyboards/cankeyboard.h \
     interaction/keyboards/qmlkeyboard.h \
-    interaction/keyboards/compositekeyboard.h
+    interaction/keyboards/compositekeyboard.h \
+    interaction/commands/modulesactivitycommand.h \
+    interaction/activities/modulesactivityactivity.h
 
 CONFIG += console
 

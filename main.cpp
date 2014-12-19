@@ -50,6 +50,7 @@
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
 #include "interaction/commands/configurecommand.h"
+#include "interaction/commands/modulesactivitycommand.h"
 #include "interaction/keyboardmanager.h"
 
 SystemStateViewModel *systemState ;
@@ -466,7 +467,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);
-    commandManager = new Interaction::CommandManager (storyManager, {new Interaction::Commands::ConfigureCommand (textManager)});
+    commandManager = new Interaction::CommandManager (storyManager, {
+                                                          new Interaction::Commands::ConfigureCommand (textManager),
+                                                          new Interaction::Commands::ModulesActivityCommand (textManager),
+                                                      });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 
     QtConcurrent::run(getParamsFromConsole);

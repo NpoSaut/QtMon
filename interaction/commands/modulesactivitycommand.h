@@ -3,6 +3,7 @@
 
 #include "../textmanager.h"
 #include "../command.h"
+#include "qtBlokLib/parsers/mco_state.h"
 
 namespace Interaction {
 namespace Commands {
@@ -10,10 +11,11 @@ namespace Commands {
 class ModulesActivityCommand : public Command
 {
 public:
-    ModulesActivityCommand(TextManager *textManager);
+    ModulesActivityCommand(McoState *mcoState, TextManager *textManager);
     Story *createStory();
 
 private:
+    McoState *mcoState;
     TextManager *textManager;
 };
 

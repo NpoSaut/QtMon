@@ -1,18 +1,21 @@
 #include "modulesactivitycommand.h"
-#include "../activities/modulesactivityactivity.h"
+#include "../activities/awaitmodulesactivityactivity.h"
+#include "../activities/displaymodulesactivityactivity.h"
 
 namespace Interaction {
 namespace Commands {
 
-ModulesActivityCommand::ModulesActivityCommand(TextManager *textManager)
-    : textManager (textManager), Command (71)
+ModulesActivityCommand::ModulesActivityCommand(McoState *mcoState, TextManager *textManager)
+    : mcoState(mcoState), textManager (textManager), Command (71)
 {
 }
 
 Story *ModulesActivityCommand::createStory()
 {
-    Story *story = new Story(nullptr, {
-                                new Activities::ModulesActivityActivity(textManager),
+    auto *context = new Contexts::ModulesActivityContext ();
+    Story *story = new Story(context, {
+                                 new Activities::AwaitModulesActivityActivity(context, mcoState, textManager),
+                                 new Activities::DisplayModulesActivityActivity(context, textManager)
                              });
     return story;
 }

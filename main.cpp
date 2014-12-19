@@ -418,7 +418,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     textManagerViewModel->assign(textManager);
     commandManager = new Interaction::CommandManager (storyManager, {
                                                           new Interaction::Commands::ConfigureCommand (textManager),
-                                                          new Interaction::Commands::ModulesActivityCommand (textManager),
+                                                          new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 

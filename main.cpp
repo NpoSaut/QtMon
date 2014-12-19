@@ -55,6 +55,9 @@ Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
 
+// PASSIVE MODE FLAG
+bool passiveMode = false;
+
 void getParamsFromConsole ()
 {
     qDebug() << "Starting reading console...";
@@ -238,6 +241,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #else
         can = new DummyCan();
 #endif
+        if (passiveMode)
+            can = new CanSilent (can);
 
         if ( app->arguments().contains(QString("--record")) )
         {

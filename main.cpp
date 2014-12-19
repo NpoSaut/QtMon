@@ -42,10 +42,22 @@
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
 
+#include "textmanagerviewmodel.h"
+#include "interaction/keyboards/cankeyboard.h"
+#include "interaction/keyboards/qmlkeyboard.h"
+#include "interaction/keyboards/compositekeyboard.h"
+#include "interaction/storymanager.h"
+#include "interaction/textmanager.h"
+#include "interaction/commandmanager.h"
+#include "interaction/commands/configurecommand.h"
+#include "interaction/keyboardmanager.h"
+
 SystemStateViewModel *systemState ;
-Levithan *levithan;
-Notificator *notificator;
-DisplayStateSander *displayStateSander;
+TextManagerViewModel *textManagerViewModel;
+Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
+Levithan* levithan;
+Notificator* notificator;
+DisplayStateSander* displayStateSander;
 KeyRetranslator *keyRetranslator;
 
 iodrv* iodriver;
@@ -62,6 +74,12 @@ Can *can;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
+
+Interaction::Keyboard *keyboard;
+Interaction::StoryManager *storyManager;
+Interaction::TextManager *textManager;
+Interaction::CommandManager *commandManager;
+Interaction::KeyboardManager *keyboardManager;
 
 void getParamsFromConsole ()
 {
@@ -229,6 +247,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings(codec);
 
     qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
+    qmlRegisterType<TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
+    qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
 
@@ -246,6 +266,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject *object = viewer.rootObject();
     systemState = object->findChild<SystemStateViewModel*>("stateView");
+    textManagerViewModel = object->findChild<TextManagerViewModel*>("textManager");
+    qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
+
     levithan = new Levithan(systemState);
 
     // Кассета
@@ -437,6 +460,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
+
+    // Взаимодествие с пользователем через команды
+    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
+    storyManager = new Interaction::StoryManager ();
+    textManager = new Interaction::TextManager (keyboard);
+    textManagerViewModel->assign(textManager);
+    commandManager = new Interaction::CommandManager (storyManager, {new Interaction::Commands::ConfigureCommand (textManager)});
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 
     QtConcurrent::run(getParamsFromConsole);
 

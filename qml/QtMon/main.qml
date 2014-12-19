@@ -62,9 +62,29 @@ Rectangle {
 
     focus: true
 
+    Keys.onPressed: {
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyDown(event.key);
+    }
+
+    Keys.onReleased: {
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyUp(event.key);
+    }
+
     SystemStateView {
         id: stateView
         objectName: "stateView"
+    }
+
+    QmlKeyboard {
+        id: keyboardProxy
+        objectName: "keyboardProxy"
+    }
+
+    TextManagerViewModel {
+        id: textManager
+        objectName: "textManager"
     }
 
     Timer {
@@ -395,7 +415,7 @@ Rectangle {
                     borderColor: accentColor
                     textColor: rootRect.regularColor
                     backgroundColor: boxColor
-                    text: ""
+                    text: textManager.Text
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                 }

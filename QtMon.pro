@@ -88,7 +88,8 @@ SOURCES += \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
     interaction/commands/modulesactivitycommand.cpp \
-    interaction/activities/modulesactivityactivity.cpp
+    interaction/activities/awaitmodulesactivityactivity.cpp \
+    interaction/activities/displaymodulesactivityactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -186,7 +187,9 @@ HEADERS += \
     interaction/keyboards/qmlkeyboard.h \
     interaction/keyboards/compositekeyboard.h \
     interaction/commands/modulesactivitycommand.h \
-    interaction/activities/modulesactivityactivity.h
+    interaction/activities/awaitmodulesactivityactivity.h \
+    interaction/contexts/modulesactivitycontext.h \
+    interaction/activities/displaymodulesactivityactivity.h
 
 CONFIG += console
 

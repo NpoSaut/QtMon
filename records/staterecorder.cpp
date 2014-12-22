@@ -1,6 +1,6 @@
 #include "records/staterecorder.h"
 
-StateRecorder::StateRecorder(QString fileName, const SystemStateViewModel *state, QObject *parent) :
+StateRecorder::StateRecorder(QString fileName, const ViewModels::SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
     file (fileName),
     timer (this),

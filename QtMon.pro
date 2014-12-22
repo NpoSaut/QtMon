@@ -23,7 +23,6 @@ SOURCES += \
     qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
     qtCanLib/socketcan/cansendqueue.cpp \
-    systemstateviewmodel.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
@@ -76,14 +75,16 @@ SOURCES += \
     interaction/commands/configurecommand.cpp \
     interaction/activities/requestconfigurationactivity.cpp \
     interaction/activities/submitconfigurationactivity.cpp \
-    textmanagerviewmodel.cpp \
     interaction/keyboard.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
     interaction/commands/modulesactivitycommand.cpp \
     interaction/activities/awaitmodulesactivityactivity.cpp \
-    interaction/activities/displaymodulesactivityactivity.cpp
+    interaction/activities/displaymodulesactivityactivity.cpp \
+    viewmodels/modulesactivityviewmodel.cpp \
+    viewmodels/systemstateviewmodel.cpp \
+    viewmodels/textmanagerviewmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -104,7 +105,6 @@ HEADERS += \
     qtDoodahLib/queues.h \
     qtCanLib/socketcan/sktcan.h \
     qtCanLib/socketcan/cansendqueue.h \
-    systemstateviewmodel.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
@@ -167,7 +167,6 @@ HEADERS += \
     interaction/activities/requestconfigurationactivity.h \
     interaction/activities/submitconfigurationactivity.h \
     interaction/context.h \
-    textmanagerviewmodel.h \
     interaction/keyboard.h \
     interaction/keyboards/cankeyboard.h \
     interaction/keyboards/qmlkeyboard.h \
@@ -175,7 +174,10 @@ HEADERS += \
     interaction/commands/modulesactivitycommand.h \
     interaction/activities/awaitmodulesactivityactivity.h \
     interaction/contexts/modulesactivitycontext.h \
-    interaction/activities/displaymodulesactivityactivity.h
+    interaction/activities/displaymodulesactivityactivity.h \
+    viewmodels/modulesactivityviewmodel.h \
+    viewmodels/systemstateviewmodel.h \
+    viewmodels/textmanagerviewmodel.h
 
 CONFIG += console
 

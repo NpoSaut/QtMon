@@ -1,12 +1,12 @@
 #include "stateserializer.h"
 
-void StateSerializer::DeserializeFrom(SystemStateViewModel *model, QTextStream *stream)
+void StateSerializer::DeserializeFrom(ViewModels::SystemStateViewModel *model, QTextStream *stream)
 {
     QString line = stream->readLine();
     Deserialize(model, line);
 }
 
-void StateSerializer::Deserialize(SystemStateViewModel *model, const QString stateLine)
+void StateSerializer::Deserialize(ViewModels::SystemStateViewModel *model, const QString stateLine)
 {
     QStringList parameters = stateLine.split(_separator);
     // load parameters start
@@ -70,12 +70,12 @@ void StateSerializer::Deserialize(SystemStateViewModel *model, const QString sta
     // load parameters end
 }
 
-void StateSerializer::SerializeTo(const SystemStateViewModel *model, QTextStream *stream)
+void StateSerializer::SerializeTo(const ViewModels::SystemStateViewModel *model, QTextStream *stream)
 {
     *stream << Serialize(model);
 }
 
-const QString StateSerializer::Serialize(const SystemStateViewModel *model)
+const QString StateSerializer::Serialize(const ViewModels::SystemStateViewModel *model)
 {
     QStringList parameters;
     // save parameters start

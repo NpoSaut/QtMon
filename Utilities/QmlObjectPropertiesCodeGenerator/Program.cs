@@ -14,11 +14,12 @@ namespace QmlObjectPropertiesCodeGenerator
             string workingDirectory = (args.Length > 0) ? args[0] : "";
             string taskPath = Path.Combine(workingDirectory, "properties.xml");
             string sourcePaths = workingDirectory;
+            string viewModelsPath = Path.Combine(workingDirectory, "viewmodels");
 
             XDocument doc = XDocument.Load(taskPath);
 
             string className = doc.Root.Element("ClassInfo").Attribute("name").Value;
-            var modelSource = new SourceFile(sourcePaths, className);
+            var modelSource = new SourceFile(viewModelsPath, className);
             var serializerSource = new SourceFile(sourcePaths, "StateSerializer");
 
             var privateProperties = new List<String>();

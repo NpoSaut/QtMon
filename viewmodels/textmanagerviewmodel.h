@@ -6,6 +6,9 @@
 
 #include <interaction/textmanager.h>
 
+namespace ViewModels
+{
+
 class TextManagerViewModel : public QObject
 {
     Q_OBJECT
@@ -30,5 +33,7 @@ private slots:
 private:
     Interaction::TextManager *textManager;
 };
+
+}
 
 #endif // TEXTMANAGERVIEWMODEL_H

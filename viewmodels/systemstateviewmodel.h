@@ -5,6 +5,9 @@
 
 #include "qtBlokLib/modulesactivity.h"
 
+namespace ViewModels
+{
+
 class SystemStateViewModel : public QDeclarativeItem
 {
     Q_OBJECT
@@ -436,5 +439,7 @@ public slots:
     // public properties setters end
     
 };
+
+}
 
 #endif // SYSTEMSTATEVIEWMODEL_H

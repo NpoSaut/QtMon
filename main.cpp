@@ -1,6 +1,3 @@
-#include <iostream>
-#include <math.h>
-
 #include <QApplication>
 #include <QtConcurrentRun>
 #include <QTextStream>
@@ -9,7 +6,7 @@
 #include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
-#include "systemstateviewmodel.h"
+#include "viewmodels/systemstateviewmodel.h"
 #include "levithan.h"
 
 #include "cDoodahLib/masqarade.h"
@@ -38,7 +35,7 @@
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
 
-#include "textmanagerviewmodel.h"
+#include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
 #include "interaction/keyboards/qmlkeyboard.h"
 #include "interaction/keyboards/compositekeyboard.h"
@@ -49,8 +46,8 @@
 #include "interaction/commands/modulesactivitycommand.h"
 #include "interaction/keyboardmanager.h"
 
-SystemStateViewModel *systemState ;
-TextManagerViewModel *textManagerViewModel;
+ViewModels::SystemStateViewModel *systemState ;
+ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
@@ -230,8 +227,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(codec);
 
-    qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
-    qmlRegisterType<TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
+    qmlRegisterType<ViewModels::SystemStateViewModel>("views", 1, 0, "SystemStateView");
+    qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
@@ -244,8 +241,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     QObject *object = viewer.rootObject();
-    systemState = object->findChild<SystemStateViewModel*>("stateView");
-    textManagerViewModel = object->findChild<TextManagerViewModel*>("textManager");
+    systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
+    textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
 
     levithan = new Levithan(systemState);

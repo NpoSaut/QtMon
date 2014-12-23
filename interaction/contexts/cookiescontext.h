@@ -25,9 +25,11 @@ public:
         QString text;
     };
 
-    CookiesContext(QVector<Record> records) : records (records) { }
+    CookiesContext(QVector<Record> records)
+        : records (records), resultMessage() { }
 
     QVector<Record> records;
+    QString resultMessage;
 };
 
 }

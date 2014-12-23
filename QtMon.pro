@@ -85,7 +85,8 @@ SOURCES += \
     viewmodels/textmanagerviewmodel.cpp \
     interaction/activities/requestcookiesactivity.cpp \
     interaction/activities/submitcookiesactivity.cpp \
-    interaction/activities/inputactivity.cpp
+    interaction/activities/inputactivity.cpp \
+    interaction/activities/popupactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -179,7 +180,8 @@ HEADERS += \
     interaction/activities/cookiesactiviybase.h \
     interaction/activities/requestcookiesactivity.h \
     interaction/activities/submitcookiesactivity.h \
-    interaction/activities/inputactivity.h
+    interaction/activities/inputactivity.h \
+    interaction/activities/popupactivity.h
 
 CONFIG += console
 

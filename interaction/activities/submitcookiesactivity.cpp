@@ -19,13 +19,14 @@ void SubmitCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
         if (p->cookie->getValue() == p->value)
             textManager->init(textManager->getOuputString().append("."));
 
-    // Добавить обработку ошибки
+    context->resultMessage = "Ошибка записи параметров";
     textManager->init(textManager->getOuputString().append("#"));
 }
 
 void SubmitCookiesActivity::run()
 {
     textManager->init("Запись характеристик");
+    context->resultMessage = "Параметры записаны";
     CookiesActiviyBase::run();
 }
 

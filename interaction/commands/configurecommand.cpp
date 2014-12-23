@@ -3,6 +3,7 @@
 #include "../activities/inputactivity.h"
 #include "../activities/requestcookiesactivity.h"
 #include "../activities/submitcookiesactivity.h"
+#include "../activities/popupactivity.h"
 
 namespace Interaction {
 namespace Commands {
@@ -38,6 +39,7 @@ Story *ConfigureCommand::createStory()
                               textManager));
     activities.append(new Activities::InputActivity("Нажмите ВВОД для подтверждения записи", nullptr, textManager));
     activities.append(new Activities::SubmitCookiesActivity(context, textManager));
+    activities.append(new Activities::PopupActivity(&(context->resultMessage), 5000, textManager));
 
     return new Story(context, activities);
 }

@@ -460,7 +460,7 @@ Rectangle {
                            anchors.horizontalCenter: parent.horizontalCenter
 
                            text: qsTr("КООРДИНАТА")
-                           color: "#ffffff00"
+                           color: "#fffffb00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
                        }
@@ -468,7 +468,7 @@ Rectangle {
                            color: "#20000000"
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
+                           border.color: "#fffffb00"
                            height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
@@ -493,7 +493,7 @@ Rectangle {
                            anchors.horizontalCenter: parent.horizontalCenter
 
                            text: qsTr("№ ПУТИ")
-                           color: "#ffffff00"
+                           color: "#fffffb00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
                        }
@@ -501,7 +501,7 @@ Rectangle {
                            color: "#20000000"
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
+                           border.color: "#fffffb00"
                            height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
@@ -524,7 +524,7 @@ Rectangle {
                           anchors.horizontalCenter: parent.horizontalCenter
 
                           text: qsTr("УСКОРЕНИЕ")
-                          color: "#ffffff00"
+                          color: "#fffffb00"
                           font.pixelSize: 14
                           font.family: "URW Gothic L"
                       }
@@ -532,7 +532,7 @@ Rectangle {
                           color: "#20000000"
                           anchors.left: parent.left
                           anchors.right: parent.right
-                          border.color: "#ffffff00"
+                          border.color: "#fffffb00"
                           height: 20
                           Text {
                               anchors.horizontalCenter: parent.horizontalCenter
@@ -554,7 +554,7 @@ Rectangle {
                          anchors.horizontalCenter: parent.horizontalCenter
 
                          text: qsTr("ТЦ")
-                         color: "#ffffff00"
+                         color: "#fffffb00"
                          font.pixelSize: 14
                          font.family: "URW Gothic L"
                      }
@@ -562,7 +562,7 @@ Rectangle {
                          color: "#20000000"
                          anchors.left: parent.left
                          anchors.right: parent.right
-                         border.color: "#ffffff00"
+                         border.color: "#fffffb00"
                          height: 20
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
@@ -583,7 +583,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         text: qsTr("ТМ")
-                        color: "#ffffff00"
+                        color: "#fffffb00"
                         font.pixelSize: 14
                         font.family: "URW Gothic L"
                     }
@@ -591,7 +591,7 @@ Rectangle {
                         color: "#20000000"
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        border.color: "#ffffff00"
+                        border.color: "#fffffb00"
                         height: 20
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -616,7 +616,7 @@ Rectangle {
                        anchors.horizontalCenter: parent.horizontalCenter
 
                        text: qsTr("ВРЕМЯ")
-                       color: "#ffffff00"
+                       color: "#fffffb00"
                        font.pixelSize: 14
                        font.family: "URW Gothic L"
                    }
@@ -624,7 +624,7 @@ Rectangle {
                        color: "#20000000"
                        anchors.left: parent.left
                        anchors.right: parent.right
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        height: 20
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
@@ -647,7 +647,7 @@ Rectangle {
                    // Буква режима движения
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 20
                        height: 20
                        Text {
@@ -664,7 +664,7 @@ Rectangle {
                    // Яйца
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 21
                        height: 20
                        Image {
@@ -678,7 +678,7 @@ Rectangle {
                    // Сигнал с небес (достоверность GPS)
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 21
                        height: 20
                        visible: debugModeEnableTimer.running
@@ -1058,25 +1058,31 @@ Rectangle {
 
             // Ближайшая цель
             Rectangle {
-                color: "#20000000"
+                color: textManager.Text === ""
+                            ? "#20000000"
+                            : "#25658C";
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.rightMargin: 200
                 anchors.leftMargin: 10
-                border.color: "#ffffff00"
+                border.color: textManager.Text === ""
+                                ? "#fffffb00"
+                                : "#4999C9"
                 height: 25
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    text: (stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
-                            getTargetKindName(stateView.NextTargetKind) + " " +
-                            stateView.NextTargetName +
-                            " через " + stateView.NextTargetDistance + "м"
-                            : textManager.Text ;
-                    color: "#ffffffff"
+                    text: textManager.Text === "" ?
+                            ((stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
+                                getTargetKindName(stateView.NextTargetKind) + " " +
+                                stateView.NextTargetName +
+                                " через " + stateView.NextTargetDistance + "м"
+                                : "нет данных о цели")
+                            : textManager.Text;
+                    color: "#fff";
                     font.pixelSize: 14
                     font.family: "URW Gothic L"
                 }
@@ -1091,7 +1097,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.leftMargin: -180
-                border.color: "#ffffff00"
+                border.color: "#fffffb00"
                 height: 25
                 visible: debugModeEnableTimer.running
 
@@ -1572,7 +1578,7 @@ Rectangle {
                                 Text {
                                     id: drivemodeSwitchItemLabel
                                     visible: modelData != " "
-                                    color: !parent.isTransport ? "#ccc" : "#ffffff00"
+                                    color: !parent.isTransport ? "#ccc" : "#fffffb00"
                                     text: modelData
                                     anchors.verticalCenter: parent.verticalCenter
                                 }

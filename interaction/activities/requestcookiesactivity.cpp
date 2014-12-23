@@ -19,11 +19,13 @@ void RequestCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
         p->value = p->cookie->getValue();
     else
         p->value = -1;
+
+    textManager->init(textManager->getOuputString().append("."));
 }
 
 void RequestCookiesActivity::run()
 {
-    textManager->init("Запрос параметров...");
+    textManager->init("Запрос параметров");
     CookiesActiviyBase::run();
 }
 

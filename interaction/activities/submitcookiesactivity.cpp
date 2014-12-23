@@ -17,13 +17,15 @@ void SubmitCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
 {
     if (p->cookie->isValid())
         if (p->cookie->getValue() == p->value)
-            return;
+            textManager->init(textManager->getOuputString().append("."));
+
     // Добавить обработку ошибки
+    textManager->init(textManager->getOuputString().append("#"));
 }
 
 void SubmitCookiesActivity::run()
 {
-    textManager->init("Запись характеристик...");
+    textManager->init("Запись характеристик");
     CookiesActiviyBase::run();
 }
 

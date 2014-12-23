@@ -73,18 +73,19 @@ SOURCES += \
     interaction/activities/executecommandactivity.cpp \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
-    interaction/activities/requestconfigurationactivity.cpp \
-    interaction/activities/submitconfigurationactivity.cpp \
     interaction/keyboard.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
     interaction/commands/modulesactivitycommand.cpp \
+    interaction/activities/cookiesactiviybase.cpp \
     interaction/activities/awaitmodulesactivityactivity.cpp \
     interaction/activities/displaymodulesactivityactivity.cpp \
     viewmodels/modulesactivityviewmodel.cpp \
     viewmodels/systemstateviewmodel.cpp \
-    viewmodels/textmanagerviewmodel.cpp
+    viewmodels/textmanagerviewmodel.cpp \
+    interaction/activities/requestcookiesactivity.cpp \
+    interaction/activities/submitcookiesactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -163,9 +164,6 @@ HEADERS += \
     interaction/command.h \
     interaction/commandmanager.h \
     interaction/commands/configurecommand.h \
-    interaction/contexts/configurecontext.h \
-    interaction/activities/requestconfigurationactivity.h \
-    interaction/activities/submitconfigurationactivity.h \
     interaction/context.h \
     interaction/keyboard.h \
     interaction/keyboards/cankeyboard.h \
@@ -177,7 +175,11 @@ HEADERS += \
     interaction/activities/displaymodulesactivityactivity.h \
     viewmodels/modulesactivityviewmodel.h \
     viewmodels/systemstateviewmodel.h \
-    viewmodels/textmanagerviewmodel.h
+    viewmodels/textmanagerviewmodel.h \
+    interaction/contexts/cookiescontext.h \
+    interaction/activities/cookiesactiviybase.h \
+    interaction/activities/requestcookiesactivity.h \
+    interaction/activities/submitcookiesactivity.h
 
 CONFIG += console
 

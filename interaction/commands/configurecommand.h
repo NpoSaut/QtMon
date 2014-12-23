@@ -3,6 +3,7 @@
 
 #include "../textmanager.h"
 #include "../command.h"
+#include "qtBlokLib/cookies.h"
 
 namespace Interaction {
 namespace Commands {
@@ -10,12 +11,12 @@ namespace Commands {
 class ConfigureCommand : public Command
 {
 public:
-    ConfigureCommand(TextManager *textManager);
+    ConfigureCommand(Cookies *cookies, TextManager *textManager);
     Story *createStory();
 
 private:
+    Cookies *cookies;
     TextManager *textManager;
-
 };
 
 }

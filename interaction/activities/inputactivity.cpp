@@ -11,7 +11,7 @@ InputActivity::InputActivity(QString outputFormat, int *value, TextManager *text
 
 void InputActivity::run()
 {
-    textManager->init(outputFormat, *value);
+    textManager->init(outputFormat, value ? *value : 0);
     connect(textManager, SIGNAL(submitted(int)), this, SLOT(submitted()));
 }
 
@@ -23,7 +23,8 @@ void InputActivity::dispose()
 
 void InputActivity::submitted()
 {
-    *value = textManager->getValue();
+    if (value)
+        *value = textManager->getValue();
     emit completed();
 }
 

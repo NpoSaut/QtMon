@@ -1,6 +1,6 @@
 #include "configurecommand.h"
 #include "../contexts/cookiescontext.h"
-#include "../activities/inputparameteractivity.h"
+#include "../activities/inputactivity.h"
 #include "../activities/requestcookiesactivity.h"
 #include "../activities/submitcookiesactivity.h"
 
@@ -32,7 +32,7 @@ Story *ConfigureCommand::createStory()
     QVector<Activities::Activity *> activities;
     activities.append(new Activities::RequestCookiesActivity(context, textManager));
     for (int i = 0; i < context->records.count(); i ++)
-        activities.append(new Activities::InputParameterActivity(
+        activities.append(new Activities::InputActivity(
                               context->records[i].text,
                               &(context->records[i].value),
                               textManager));

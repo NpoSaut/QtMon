@@ -1075,7 +1075,7 @@ Rectangle {
                             getTargetKindName(stateView.NextTargetKind) + " " +
                             stateView.NextTargetName +
                             " через " + stateView.NextTargetDistance + "м"
-                            : "нет данных о цели" ;
+                            : textManager.Text ;
                     color: "#ffffffff"
                     font.pixelSize: 14
                     font.family: "URW Gothic L"

@@ -68,7 +68,6 @@ SOURCES += \
     interaction/storymanager.cpp \
     interaction/keyboardmanager.cpp \
     interaction/textmanager.cpp \
-    interaction/activities/inputparameteractivity.cpp \
     interaction/contexts/executecommandcontext.cpp \
     interaction/activities/executecommandactivity.cpp \
     interaction/commandmanager.cpp \
@@ -85,7 +84,8 @@ SOURCES += \
     viewmodels/systemstateviewmodel.cpp \
     viewmodels/textmanagerviewmodel.cpp \
     interaction/activities/requestcookiesactivity.cpp \
-    interaction/activities/submitcookiesactivity.cpp
+    interaction/activities/submitcookiesactivity.cpp \
+    interaction/activities/inputactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -158,7 +158,6 @@ HEADERS += \
     interaction/storymanager.h \
     interaction/keyboardmanager.h \
     interaction/textmanager.h \
-    interaction/activities/inputparameteractivity.h \
     interaction/contexts/executecommandcontext.h \
     interaction/activities/executecommandactivity.h \
     interaction/command.h \
@@ -179,7 +178,8 @@ HEADERS += \
     interaction/contexts/cookiescontext.h \
     interaction/activities/cookiesactiviybase.h \
     interaction/activities/requestcookiesactivity.h \
-    interaction/activities/submitcookiesactivity.h
+    interaction/activities/submitcookiesactivity.h \
+    interaction/activities/inputactivity.h
 
 CONFIG += console
 

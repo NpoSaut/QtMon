@@ -1,27 +1,27 @@
-#include "inputparameteractivity.h"
+#include "inputactivity.h"
 
 namespace Interaction {
 namespace Activities {
 
-InputParameterActivity::InputParameterActivity(QString outputFormat, int *value, TextManager *textManager, QObject *parent) :
+InputActivity::InputActivity(QString outputFormat, int *value, TextManager *textManager, QObject *parent) :
     outputFormat (outputFormat), value (value),
     textManager (textManager), Activity(parent)
 {
 }
 
-void InputParameterActivity::run()
+void InputActivity::run()
 {
     textManager->init(outputFormat, *value);
     connect(textManager, SIGNAL(submitted(int)), this, SLOT(submitted()));
 }
 
-void InputParameterActivity::dispose()
+void InputActivity::dispose()
 {
     textManager->clear();
     disconnect(textManager, SIGNAL(submitted(int)), this, SLOT(submitted()));
 }
 
-void InputParameterActivity::submitted()
+void InputActivity::submitted()
 {
     *value = textManager->getValue();
     emit completed();

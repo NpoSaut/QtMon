@@ -21,19 +21,24 @@ void TextManager::clear()
 
 void TextManager::numericKeyPressed(int digit)
 {
-    value = value * 10 + digit;
+    value = positiveOrZero(value) * 10 + digit;
     emit outputStringChanged();
 }
 
 void TextManager::backscapeKeyPressed()
 {
-    value /= 10;
+    value = positiveOrZero(value) / 10;
     emit outputStringChanged();
 }
 
 void TextManager::enterKeyPressed()
 {
     emit submitted(getValue());
+}
+
+int TextManager::positiveOrZero(int x)
+{
+    return x > 0 ? x : 0;
 }
 
 void TextManager::init(QString format)

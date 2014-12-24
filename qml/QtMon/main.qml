@@ -349,6 +349,11 @@ Rectangle {
         objectName: "textManager"
     }
 
+    ModulesActivityViewModel {
+        id: modulesActivity
+        objectName: "modulesActivity"
+    }
+
     states: [
         State {
             name: "page1"

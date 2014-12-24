@@ -87,6 +87,11 @@ Rectangle {
         objectName: "textManager"
     }
 
+    ModulesActivityViewModel {
+        id: modulesActivity
+        objectName: "modulesActivity"
+    }
+
     Timer {
         id: inputBlinker
         property bool blink: false

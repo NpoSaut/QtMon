@@ -7,6 +7,7 @@
 #include <qmlapplicationviewer.h>
 
 #include "viewmodels/systemstateviewmodel.h"
+#include "viewmodels/modulesactivityviewmodel.h"
 #include "levithan.h"
 
 #include "cDoodahLib/masqarade.h"
@@ -250,6 +251,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<ViewModels::SystemStateViewModel>("views", 1, 0, "SystemStateView");
     qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
+    qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;

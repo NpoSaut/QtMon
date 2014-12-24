@@ -15,12 +15,15 @@ void SubmitCookiesActivity::startRecord(Contexts::CookiesContext::Record *p)
 
 void SubmitCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
 {
-    if (p->cookie->isValid())
-        if (p->cookie->getValue() == p->value)
-            textManager->init(textManager->getOuputString().append("."));
-
-    context->resultMessage = "Ошибка записи параметров";
-    textManager->init(textManager->getOuputString().append("#"));
+    if (p->cookie->isValid() && p->cookie->getValue() == p->value )
+    {
+        textManager->init(textManager->getOuputString().append("."));
+    }
+    else
+    {
+        textManager->init(textManager->getOuputString().append("#"));
+        context->resultMessage = "Ошибка записи параметров";
+    }
 }
 
 void SubmitCookiesActivity::run()

@@ -40,19 +40,13 @@ void CookiesActiviyBase::next()
 void CookiesActiviyBase::attachCookie()
 {
     if ( i >= 0 && i < context->records.count() )
-    {
-        connect (context->records[i].cookie, SIGNAL(onChange(int)), this, SLOT(cookieOnCompleted()));
-        connect (context->records[i].cookie, SIGNAL(onValidChange(bool)), this, SLOT(cookieOnCompleted()));
-    }
+        connect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted()));
 }
 
 void CookiesActiviyBase::detachCookie()
 {
     if ( i >= 0 && i < context->records.count() )
-    {
-        disconnect (context->records[i].cookie, SIGNAL(onChange(int)), this, SLOT(cookieOnCompleted()));
-        disconnect (context->records[i].cookie, SIGNAL(onValidChange(bool)), this, SLOT(cookieOnCompleted()));
-    }
+        disconnect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted()));
 }
 
 }

@@ -1,5 +1,5 @@
 #include "keyboardmanager.h"
-#include "activities/inputparameteractivity.h"
+#include "activities/inputactivity.h"
 #include "activities/executecommandactivity.h"
 #include "contexts/executecommandcontext.h"
 
@@ -17,7 +17,7 @@ void KeyboardManager::commandKeyPressed()
 {
     auto *context = new Contexts::ExecuteCommandContext();
     Story *s = new Story(context, {
-                            new Activities::InputParameterActivity("Номер команды: %1", &context->commandNumber, textManager),
+                            new Activities::InputActivity("Номер команды: %1", &context->commandNumber, textManager),
                             new Activities::ExecuteCommandActivity(context, commandsManager)
                         });
     storyManager->beginStory(s);

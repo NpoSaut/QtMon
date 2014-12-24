@@ -18,7 +18,7 @@ void StoryManager::closeCurrentStory()
     if (currentStory != nullptr)
     {
         currentStory->dispose();
-//        delete currentStory;
+        //delete currentStory;
     }
 }
 

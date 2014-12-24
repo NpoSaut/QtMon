@@ -1,15 +1,15 @@
 #include "stateserializer.h"
 
-void StateSerializer::DeserializeFrom(SystemStateViewModel *model, QTextStream *stream)
+void StateSerializer::DeserializeFrom(ViewModels::SystemStateViewModel *model, QTextStream *stream)
 {
     QString line = stream->readLine();
     Deserialize(model, line);
 }
 
-void StateSerializer::Deserialize(SystemStateViewModel *model, const QString stateLine)
+void StateSerializer::Deserialize(ViewModels::SystemStateViewModel *model, const QString stateLine)
 {
     QStringList parameters = stateLine.split(_separator);
-    // load parameters start
+    // load parameters start : SystemStateViewModel
     model->setSpeed(parameters[0].toDouble());
     model->setSpeedIsValid(parameters[1].toInt());
     model->setSpeedFromSky(parameters[2].toDouble());
@@ -67,18 +67,18 @@ void StateSerializer::Deserialize(SystemStateViewModel *model, const QString sta
     model->setTsvcIsMachinistCheerful(parameters[54].toInt());
     model->setTsvcIsVigilanceRequired(parameters[55].toInt());
     model->setTsvcIsPreAlarmActive(parameters[56].toInt());
-    // load parameters end
+    // load parameters end : SystemStateViewModel
 }
 
-void StateSerializer::SerializeTo(const SystemStateViewModel *model, QTextStream *stream)
+void StateSerializer::SerializeTo(const ViewModels::SystemStateViewModel *model, QTextStream *stream)
 {
     *stream << Serialize(model);
 }
 
-const QString StateSerializer::Serialize(const SystemStateViewModel *model)
+const QString StateSerializer::Serialize(const ViewModels::SystemStateViewModel *model)
 {
     QStringList parameters;
-    // save parameters start
+    // save parameters start : SystemStateViewModel
     parameters.append(QString::number(model->getSpeed()));
     parameters.append(QString::number(model->getSpeedIsValid()));
     parameters.append(QString::number(model->getSpeedFromSky()));
@@ -136,6 +136,6 @@ const QString StateSerializer::Serialize(const SystemStateViewModel *model)
     parameters.append(QString::number(model->getTsvcIsMachinistCheerful()));
     parameters.append(QString::number(model->getTsvcIsVigilanceRequired()));
     parameters.append(QString::number(model->getTsvcIsPreAlarmActive()));
-    // save parameters end
+    // save parameters end : SystemStateViewModel
     return parameters.join(_separator) + "\r\n";
 }

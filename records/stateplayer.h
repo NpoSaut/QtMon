@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QFile>
 #include <QTimer>
-#include "systemstateviewmodel.h"
+#include "viewmodels/systemstateviewmodel.h"
 #include "../stateserializer.h"
 
 class StatePlayer : public QObject
 {
     Q_OBJECT
 public:
-    explicit StatePlayer(QString fileName, SystemStateViewModel *state,  QObject *parent = 0);
+    explicit StatePlayer(QString fileName, ViewModels::SystemStateViewModel *state,  QObject *parent = 0);
     ~StatePlayer ();
 
     void start ();
@@ -26,7 +26,7 @@ private slots:
 private:
     QFile file;
     QTimer timer;
-    SystemStateViewModel *state;
+    ViewModels::SystemStateViewModel *state;
     QTextStream stream;
     StateSerializer serializer;
 };

@@ -1,5 +1,8 @@
 #include "textmanagerviewmodel.h"
 
+namespace ViewModels
+{
+
 TextManagerViewModel::TextManagerViewModel(QObject *parent) :
     textManager (nullptr), QObject(parent)
 {
@@ -26,4 +29,6 @@ QString TextManagerViewModel::getText() const
 void TextManagerViewModel::update()
 {
     emit TextChanged();
+}
+
 }

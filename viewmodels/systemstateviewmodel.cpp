@@ -1,5 +1,8 @@
 #include "systemstateviewmodel.h"
 
+namespace ViewModels
+{
+
 SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     QDeclarativeItem(parent)
 {
@@ -861,6 +864,7 @@ void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
 
 // -- end: Properties Getters and Setters --
 
+}
 
 
 

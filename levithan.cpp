@@ -3,7 +3,7 @@
 
 using namespace sound;
 
-Levithan::Levithan(SystemStateViewModel *state, QObject *parent) :
+Levithan::Levithan(ViewModels::SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
     state (state),
     speaker(),

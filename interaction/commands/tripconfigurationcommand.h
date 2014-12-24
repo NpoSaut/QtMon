@@ -1,5 +1,5 @@
-#ifndef CONFIGURECOMMAND_H
-#define CONFIGURECOMMAND_H
+#ifndef TRIPCONFIGURATIONCOMMAND_H
+#define TRIPCONFIGURATIONCOMMAND_H
 
 #include "../textmanager.h"
 #include "../command.h"
@@ -8,10 +8,10 @@
 namespace Interaction {
 namespace Commands {
 
-class ConfigureCommand : public Command
+class TripConfigurationCommand : public Command
 {
 public:
-    ConfigureCommand(Cookies *cookies, TextManager *textManager);
+    TripConfigurationCommand(Cookies *cookies, TextManager *textManager);
     Story *createStory();
 
 private:
@@ -22,4 +22,4 @@ private:
 }
 }
 
-#endif // CONFIGURECOMMAND_H
+#endif // TRIPCONFIGURATIONCOMMAND_H

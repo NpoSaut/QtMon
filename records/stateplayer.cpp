@@ -1,6 +1,6 @@
 #include "stateplayer.h"
 
-StatePlayer::StatePlayer(QString fileName, SystemStateViewModel *state, QObject *parent) :
+StatePlayer::StatePlayer(QString fileName, ViewModels::SystemStateViewModel *state, QObject *parent) :
     QObject(parent),
     file (fileName),
     timer (),

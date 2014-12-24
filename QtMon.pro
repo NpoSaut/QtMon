@@ -23,7 +23,6 @@ SOURCES += \
     qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
     qtCanLib/socketcan/cansendqueue.cpp \
-    systemstateviewmodel.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
@@ -75,21 +74,26 @@ SOURCES += \
     interaction/storymanager.cpp \
     interaction/keyboardmanager.cpp \
     interaction/textmanager.cpp \
-    interaction/activities/inputparameteractivity.cpp \
     interaction/contexts/executecommandcontext.cpp \
     interaction/activities/executecommandactivity.cpp \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
-    interaction/activities/requestconfigurationactivity.cpp \
-    interaction/activities/submitconfigurationactivity.cpp \
-    textmanagerviewmodel.cpp \
     interaction/keyboard.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
     interaction/commands/modulesactivitycommand.cpp \
+    interaction/activities/cookiesactiviybase.cpp \
     interaction/activities/awaitmodulesactivityactivity.cpp \
-    interaction/activities/displaymodulesactivityactivity.cpp
+    interaction/activities/displaymodulesactivityactivity.cpp \
+    viewmodels/modulesactivityviewmodel.cpp \
+    viewmodels/systemstateviewmodel.cpp \
+    viewmodels/textmanagerviewmodel.cpp \
+    interaction/activities/requestcookiesactivity.cpp \
+    interaction/activities/submitcookiesactivity.cpp \
+    interaction/activities/inputactivity.cpp \
+    interaction/activities/popupactivity.cpp \
+    interaction/commands/tripconfigurationcommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -110,7 +114,6 @@ HEADERS += \
     qtDoodahLib/queues.h \
     qtCanLib/socketcan/sktcan.h \
     qtCanLib/socketcan/cansendqueue.h \
-    systemstateviewmodel.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
@@ -171,17 +174,12 @@ HEADERS += \
     interaction/storymanager.h \
     interaction/keyboardmanager.h \
     interaction/textmanager.h \
-    interaction/activities/inputparameteractivity.h \
     interaction/contexts/executecommandcontext.h \
     interaction/activities/executecommandactivity.h \
     interaction/command.h \
     interaction/commandmanager.h \
     interaction/commands/configurecommand.h \
-    interaction/contexts/configurecontext.h \
-    interaction/activities/requestconfigurationactivity.h \
-    interaction/activities/submitconfigurationactivity.h \
     interaction/context.h \
-    textmanagerviewmodel.h \
     interaction/keyboard.h \
     interaction/keyboards/cankeyboard.h \
     interaction/keyboards/qmlkeyboard.h \
@@ -189,7 +187,17 @@ HEADERS += \
     interaction/commands/modulesactivitycommand.h \
     interaction/activities/awaitmodulesactivityactivity.h \
     interaction/contexts/modulesactivitycontext.h \
-    interaction/activities/displaymodulesactivityactivity.h
+    interaction/activities/displaymodulesactivityactivity.h \
+    viewmodels/modulesactivityviewmodel.h \
+    viewmodels/systemstateviewmodel.h \
+    viewmodels/textmanagerviewmodel.h \
+    interaction/contexts/cookiescontext.h \
+    interaction/activities/cookiesactiviybase.h \
+    interaction/activities/requestcookiesactivity.h \
+    interaction/activities/submitcookiesactivity.h \
+    interaction/activities/inputactivity.h \
+    interaction/activities/popupactivity.h \
+    interaction/commands/tripconfigurationcommand.h
 
 CONFIG += console
 

@@ -1,6 +1,3 @@
-#include <iostream>
-#include <math.h>
-
 #include <QApplication>
 #include <QtConcurrentRun>
 #include <QTextStream>
@@ -9,7 +6,7 @@
 #include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
-#include "systemstateviewmodel.h"
+#include "viewmodels/systemstateviewmodel.h"
 #include "levithan.h"
 
 #include "cDoodahLib/masqarade.h"
@@ -42,7 +39,7 @@
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
 
-#include "textmanagerviewmodel.h"
+#include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
 #include "interaction/keyboards/qmlkeyboard.h"
 #include "interaction/keyboards/compositekeyboard.h"
@@ -50,11 +47,12 @@
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
 #include "interaction/commands/configurecommand.h"
+#include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/modulesactivitycommand.h"
 #include "interaction/keyboardmanager.h"
 
-SystemStateViewModel *systemState ;
-TextManagerViewModel *textManagerViewModel;
+ViewModels::SystemStateViewModel *systemState ;
+ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
@@ -250,8 +248,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(codec);
 
-    qmlRegisterType<SystemStateViewModel>("views", 1, 0, "SystemStateView");
-    qmlRegisterType<TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
+    qmlRegisterType<ViewModels::SystemStateViewModel>("views", 1, 0, "SystemStateView");
+    qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
@@ -269,8 +267,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     QObject *object = viewer.rootObject();
-    systemState = object->findChild<SystemStateViewModel*>("stateView");
-    textManagerViewModel = object->findChild<TextManagerViewModel*>("textManager");
+    systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
+    textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
 
     levithan = new Levithan(systemState);
@@ -409,20 +407,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies->lengthInWagons, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies->mass, SLOT(setVaule(int)));
     // Чтение параметров
-    QObject::connect (&cookies->trackNumberInMph, SIGNAL(onChange(int)), systemState, SLOT(setTrackNumber(int)));
-    QObject::connect (&cookies->machinistNumber, SIGNAL(onChange(int)), systemState, SLOT(setMachinistNumber(int)));
-    QObject::connect (&cookies->trainNumber, SIGNAL(onChange(int)), systemState, SLOT(setTrainNumber(int)));
-    QObject::connect (&cookies->lengthInWheels, SIGNAL(onChange(int)), systemState, SLOT(setAxlesCount(int)));
-    QObject::connect (&cookies->lengthInWagons, SIGNAL(onChange(int)), systemState, SLOT(setWagonCount(int)));
-    QObject::connect (&cookies->mass, SIGNAL(onChange(int)), systemState, SLOT(setTrainMass(int)));
+    QObject::connect (&cookies->trackNumberInMph, SIGNAL(updated(int,bool)), systemState, SLOT(setTrackNumber(int)));
+    QObject::connect (&cookies->machinistNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setMachinistNumber(int)));
+    QObject::connect (&cookies->trainNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainNumber(int)));
+    QObject::connect (&cookies->lengthInWheels, SIGNAL(updated(int,bool)), systemState, SLOT(setAxlesCount(int)));
+    QObject::connect (&cookies->lengthInWagons, SIGNAL(updated(int,bool)), systemState, SLOT(setWagonCount(int)));
+    QObject::connect (&cookies->mass, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainMass(int)));
 
-    QObject::connect (&cookies->designSpeed, SIGNAL(onChange(int)), systemState, SLOT(setDesignSpeed(int)));
+    QObject::connect (&cookies->designSpeed, SIGNAL(updated(int,bool)), systemState, SLOT(setDesignSpeed(int)));
 
     // Ручной ввод начальной координаты
     QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));
     QObject::connect (systemState, SIGNAL(ManualOrdinateIncreaseDirectionChanged(int)), &cookies->ordinateIncreaseDirection, SLOT(setVaule(int)));
-//    QObject::connect (&cookies->startOrdinate, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinate(int)));
-    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(onChange(int)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
+//    QObject::connect (&cookies->startOrdinate, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinate(int)));
+    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
 
 #ifdef WITH_SERIAL
     // Если компилируем с поддержкой COM-порта, то берём GPS-данные из NMEA
@@ -473,7 +471,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);
     commandManager = new Interaction::CommandManager (storyManager, {
-                                                          new Interaction::Commands::ConfigureCommand (textManager),
+                                                          new Interaction::Commands::ConfigureCommand (cookies, textManager),
+                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
                                                           new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );

@@ -1,5 +1,5 @@
-#ifndef INPUTPARAMETERACTIVITY_H
-#define INPUTPARAMETERACTIVITY_H
+#ifndef INPUTACTIVITY_H
+#define INPUTACTIVITY_H
 
 #include <QObject>
 #include "../activity.h"
@@ -8,11 +8,11 @@
 namespace Interaction {
 namespace Activities {
 
-class InputParameterActivity : public Activity
+class InputActivity : public Activity
 {
     Q_OBJECT
 public:
-    explicit InputParameterActivity(QString outputFormat, int *value, TextManager *textManager, QObject *parent = 0);
+    explicit InputActivity(QString outputFormat, int *value, TextManager *textManager, QObject *parent = 0);
 
     virtual void run ();
     virtual void dispose ();
@@ -30,4 +30,4 @@ private:
 }
 }
 
-#endif // INPUTPARAMETERACTIVITY_H
+#endif // INPUTACTIVITY_H

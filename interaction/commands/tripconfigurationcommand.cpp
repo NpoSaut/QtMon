@@ -1,4 +1,4 @@
-#include "TripConfigurationCommand.h"
+#include "tripconfigurationcommand.h"
 #include "../contexts/cookiescontext.h"
 #include "../activities/inputactivity.h"
 #include "../activities/requestcookiesactivity.h"

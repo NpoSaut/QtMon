@@ -97,7 +97,9 @@ RESOURCES +=
 
 OTHER_FILES += \
     properties.xml \
-    !TODO.txt
+    !TODO.txt \
+    viewmodels/modulesacrivityviewmodel.xml \
+    viewmodels/properties.xml
 
 HEADERS += \
     cDoodahLib/packing.h \

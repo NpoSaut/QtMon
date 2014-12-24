@@ -86,7 +86,8 @@ SOURCES += \
     interaction/activities/requestcookiesactivity.cpp \
     interaction/activities/submitcookiesactivity.cpp \
     interaction/activities/inputactivity.cpp \
-    interaction/activities/popupactivity.cpp
+    interaction/activities/popupactivity.cpp \
+    interaction/commands/tripconfigurationcommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -181,7 +182,8 @@ HEADERS += \
     interaction/activities/requestcookiesactivity.h \
     interaction/activities/submitcookiesactivity.h \
     interaction/activities/inputactivity.h \
-    interaction/activities/popupactivity.h
+    interaction/activities/popupactivity.h \
+    interaction/commands/tripconfigurationcommand.h
 
 CONFIG += console
 

@@ -43,6 +43,7 @@
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
 #include "interaction/commands/configurecommand.h"
+#include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/modulesactivitycommand.h"
 #include "interaction/keyboardmanager.h"
 
@@ -420,6 +421,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     textManagerViewModel->assign(textManager);
     commandManager = new Interaction::CommandManager (storyManager, {
                                                           new Interaction::Commands::ConfigureCommand (cookies, textManager),
+                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
                                                           new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );

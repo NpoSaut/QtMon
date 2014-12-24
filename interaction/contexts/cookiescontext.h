@@ -25,11 +25,19 @@ public:
         QString text;
     };
 
-    CookiesContext(QVector<Record> records)
-        : records (records), resultMessage() { }
+    CookiesContext(QVector<Record> records,
+                   QString successMessageText = "Параметры записаны",
+                   QString failureMessageText = "Ошибка записи параметров")
+        : records (records), resultMessage(),
+          successMessageText (successMessageText),
+          failureMessageText (failureMessageText)
+    { }
 
     QVector<Record> records;
     QString resultMessage;
+
+    QString successMessageText;
+    QString failureMessageText;
 };
 
 }

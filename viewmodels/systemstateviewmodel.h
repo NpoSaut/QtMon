@@ -378,6 +378,8 @@ signals:
     // properties signals end
 
 public slots:
+    void setDesignSpeed(int value, bool valid);
+
     // public properties setters start
     void setSpeed(const double);
     void setSpeedIsValid(const bool);

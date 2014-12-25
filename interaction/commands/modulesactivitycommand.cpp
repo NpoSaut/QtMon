@@ -1,5 +1,4 @@
 #include "modulesactivitycommand.h"
-#include "../activities/awaitmodulesactivityactivity.h"
 #include "../activities/displaymodulesactivityactivity.h"
 
 namespace Interaction {
@@ -12,10 +11,8 @@ ModulesActivityCommand::ModulesActivityCommand(McoState *mcoState, TextManager *
 
 Story *ModulesActivityCommand::createStory()
 {
-    auto *context = new Contexts::ModulesActivityContext ();
-    Story *story = new Story(context, {
-                                 new Activities::AwaitModulesActivityActivity(context, mcoState, textManager),
-                                 new Activities::DisplayModulesActivityActivity(context, textManager)
+    Story *story = new Story(nullptr, {
+                                 new Activities::DisplayModulesActivityActivity(mcoState, textManager)
                              });
     return story;
 }

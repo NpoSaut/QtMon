@@ -78,7 +78,6 @@ SOURCES += \
     interaction/keyboards/compositekeyboard.cpp \
     interaction/commands/modulesactivitycommand.cpp \
     interaction/activities/cookiesactiviybase.cpp \
-    interaction/activities/awaitmodulesactivityactivity.cpp \
     interaction/activities/displaymodulesactivityactivity.cpp \
     viewmodels/modulesactivityviewmodel.cpp \
     viewmodels/systemstateviewmodel.cpp \
@@ -173,8 +172,6 @@ HEADERS += \
     interaction/keyboards/qmlkeyboard.h \
     interaction/keyboards/compositekeyboard.h \
     interaction/commands/modulesactivitycommand.h \
-    interaction/activities/awaitmodulesactivityactivity.h \
-    interaction/contexts/modulesactivitycontext.h \
     interaction/activities/displaymodulesactivityactivity.h \
     viewmodels/modulesactivityviewmodel.h \
     viewmodels/systemstateviewmodel.h \

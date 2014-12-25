@@ -67,6 +67,11 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init end
 }
 
+void SystemStateViewModel::setDesignSpeed(int value, bool valid)
+{
+    setDesignSpeed(valid ? value : 150);
+}
+
 // -- start: Properties Getters and Setters --
 // Текущая скорость
 double SystemStateViewModel::getSpeed() const
@@ -853,6 +858,7 @@ bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
 {
     return tsvcIsPreAlarmActiveValue;
 }
+
 void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
 {
     if (tsvcIsPreAlarmActiveValue != value)

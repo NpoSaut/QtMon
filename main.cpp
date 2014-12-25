@@ -371,7 +371,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&cookies->lengthInWagons, SIGNAL(updated(int,bool)), systemState, SLOT(setWagonCount(int)));
     QObject::connect (&cookies->mass, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainMass(int)));
 
-    QObject::connect (&cookies->designSpeed, SIGNAL(updated(int,bool)), systemState, SLOT(setDesignSpeed(int)));
+    QObject::connect (&cookies->designSpeed, SIGNAL(updated(int,bool)), systemState, SLOT(setDesignSpeed(int,bool)));
 
     // Ручной ввод начальной координаты
     QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));

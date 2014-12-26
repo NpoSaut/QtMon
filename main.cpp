@@ -430,7 +430,24 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           new Interaction::Commands::ManualcoordinateCommand (cookies, textManager),
                                                           new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
                                                           new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
-                                                          vrcf.produceCommand(261, "ЦО", SysDiagnostics::CO, {AuxResource::MCO_A, AuxResource::MCO_B}),
+                                                          // Запрос версий
+                                                          vrcf.produceCommand(0,    "Монитор", SysDiagnostics::BIL, {AuxResource::BIL_A}),
+                                                          vrcf.produceCommand(261,  "ЦО", SysDiagnostics::CO, {AuxResource::MCO_A, AuxResource::MCO_B}),
+                                                          vrcf.produceCommand(517,  "ЭК", SysDiagnostics::MM, {AuxResource::MM}),
+                                                          vrcf.produceCommand(773,  "МП-АЛС", SysDiagnostics::MP_ALS, {AuxResource::MP1_A, AuxResource::MP2_B}),
+                                                          vrcf.produceCommand(1029, "ИПД", SysDiagnostics::IPD, {AuxResource::IPD_A, AuxResource::IPD_B}),
+                                                          vrcf.produceCommand(1541, "РК", SysDiagnostics::RC, {AuxResource::RC_A, AuxResource::RC_B}),
+                                                          vrcf.produceCommand(2053, "ВС-САУТ", SysDiagnostics::SAUT, {AuxResource::SAUT_A, AuxResource::SAUT_B}),
+                                                          vrcf.produceCommand(2309, "ТСКБМ-К", SysDiagnostics::TSKBM_K, {AuxResource::TSKBM_K_A, AuxResource::TSKBM_K_B}),
+                                                          vrcf.produceCommand(2821, "Шлюз", SysDiagnostics::SHLUZ, {AuxResource::GT_A, AuxResource::GT_B}),
+                                                          vrcf.produceCommand(3589, "БС-СН", SysDiagnostics::BS_SN, {AuxResource::AMR}),
+                                                          vrcf.produceCommand(3845, "ТСКБМ-П", SysDiagnostics::TSKBM_P, {AuxResource::TSKBM_P_A, AuxResource::TSKBM_P_B}),
+                                                          vrcf.produceCommand(4084, "ВДС", SysDiagnostics::VDS, {AuxResource::VDS_A, AuxResource::VDS_B}),
+                                                          vrcf.produceCommand(4101, "БС-ДПС", SysDiagnostics::BS_DPS, {AuxResource::BS_DPS_A, AuxResource::BS_DPS_B}),
+                                                          vrcf.produceCommand(4357, "ПТК", SysDiagnostics::PTK, {AuxResource::SAUT_PTK_A, AuxResource::SAUT_PTK_B}),
+                                                          vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUT, {AuxResource::OUT_A, AuxResource::OUT_B}),
+                                                          vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
+                                                          vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 

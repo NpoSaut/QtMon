@@ -48,6 +48,7 @@
 #include "interaction/commands/modulesactivitycommand.h"
 #include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/versionrequestcommand.h"
+#include "interaction/commands/versionrequestcommandfactory.h"
 #include "interaction/keyboardmanager.h"
 
 ViewModels::SystemStateViewModel *systemState ;
@@ -423,12 +424,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);
+    Interaction::Commands::VersionRequestCommandFactory vrcf (can, blokMessages, textManager);
     commandManager = new Interaction::CommandManager (storyManager, {
                                                           new Interaction::Commands::ConfigureCommand (cookies, textManager),
                                                           new Interaction::Commands::ManualcoordinateCommand (cookies, textManager),
                                                           new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
                                                           new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
-      new Interaction::Commands::VersionRequestCommand(261, "ЦО", SysDiagnostics::CO, {blokMessages->auxResources[AuxResource::MCO_A], blokMessages->auxResources[AuxResource::MCO_B]}, can, textManager)
+                                                          vrcf.produceCommand(261, "ЦО", SysDiagnostics::CO, {AuxResource::MCO_A, AuxResource::MCO_B}),
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 

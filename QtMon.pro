@@ -87,7 +87,9 @@ SOURCES += \
     interaction/activities/inputactivity.cpp \
     interaction/activities/popupactivity.cpp \
     interaction/commands/tripconfigurationcommand.cpp \
-    interaction/commands/manualcoordinatecommand.cpp
+    interaction/commands/manualcoordinatecommand.cpp \
+    interaction/commands/versionrequestcommand.cpp \
+    interaction/activities/versionrequestactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -184,7 +186,10 @@ HEADERS += \
     interaction/activities/inputactivity.h \
     interaction/activities/popupactivity.h \
     interaction/commands/tripconfigurationcommand.h \
-    interaction/commands/manualcoordinatecommand.h
+    interaction/commands/manualcoordinatecommand.h \
+    interaction/commands/versionrequestcommand.h \
+    interaction/contexts/versionrequestcontext.h \
+    interaction/activities/versionrequestactivity.h
 
 CONFIG += console
 

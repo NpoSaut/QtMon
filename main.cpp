@@ -45,8 +45,9 @@
 #include "interaction/commandmanager.h"
 #include "interaction/commands/configurecommand.h"
 #include "interaction/commands/manualcoordinatecommand.h"
-#include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/modulesactivitycommand.h"
+#include "interaction/commands/tripconfigurationcommand.h"
+#include "interaction/commands/versionrequestcommand.h"
 #include "interaction/keyboardmanager.h"
 
 ViewModels::SystemStateViewModel *systemState ;
@@ -425,8 +426,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     commandManager = new Interaction::CommandManager (storyManager, {
                                                           new Interaction::Commands::ConfigureCommand (cookies, textManager),
                                                           new Interaction::Commands::ManualcoordinateCommand (cookies, textManager),
-                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
                                                           new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
+                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
+      new Interaction::Commands::VersionRequestCommand(261, "ЦО", SysDiagnostics::CO, {blokMessages->auxResources[AuxResource::MCO_A], blokMessages->auxResources[AuxResource::MCO_B]}, can, textManager)
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
 

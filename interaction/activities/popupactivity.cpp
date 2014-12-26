@@ -11,7 +11,7 @@ PopupActivity::PopupActivity(QString message, int durationMs, TextManager *textM
 }
 
 PopupActivity::PopupActivity(QString message, TextManager *textManager, QObject *parent)
-    : PopupActivity (message, 1000, textManager, parent)
+    : PopupActivity (message, 5000, textManager, parent)
 { }
 
 PopupActivity::PopupActivity(QString *message, int durationMs, TextManager *textManager, QObject *parent)
@@ -22,7 +22,7 @@ PopupActivity::PopupActivity(QString *message, int durationMs, TextManager *text
 }
 
 PopupActivity::PopupActivity(QString *message, TextManager *textManager, QObject *parent)
-    : PopupActivity (message, 1000, textManager, parent)
+    : PopupActivity (message, 5000, textManager, parent)
 { }
 
 void PopupActivity::run()

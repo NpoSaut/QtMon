@@ -455,24 +455,4 @@ Rectangle {
             }
         }
     }
-
-
-    Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: modulesActivityView.width+6
-        height: modulesActivityView.height+6
-        color: "#000"
-
-        ModulesActivityView {
-            id: modulesActivityView
-            model: modulesActivity;
-            fontHeight: globalFontHeight
-            textColor: accentColor
-            foreground: regularColor
-            background: "#121212"
-            anchors.verticalCenter: parent.verticalCenter;
-            anchors.horizontalCenter: parent.horizontalCenter;
-        }
-    }
 }

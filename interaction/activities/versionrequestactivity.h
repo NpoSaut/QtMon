@@ -19,8 +19,8 @@ class VersionHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit VersionHandler (QObject *parent = 0);
-    explicit VersionHandler (int version, int subversion, int checksum, QObject *parent = 0);
+    explicit VersionHandler (AuxResourceVersion *auxResource, QObject *parent = 0);
+    ~VersionHandler ();
 
     bool isInitialized () const { return initialized; }
     int getVersion () const { return version; }
@@ -33,12 +33,13 @@ public:
     bool operator != (const VersionHandler &b) const;
 
 public slots:
-    void update (int version, int subversion, int checksum);
+    void update ();
 
 signals:
     void updated ();
 
 private:
+    AuxResourceVersion *auxResource;
     bool initialized;
     int version;
     int subversion;
@@ -56,8 +57,6 @@ public:
 
     virtual void run ();
     virtual void dispose ();
-
-    ~VersionRequestActivity ();
 
 private slots:
     void onVersionUpdate ();

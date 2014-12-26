@@ -67,10 +67,10 @@ void VersionRequestActivity::baybay()
 {
     QStringList versionsString;
     for (int i = 0; i < versionHandlers.count(); i++)
-        versionsString << versionHandlers[i]->toString();
-    versionsString.removeDuplicates();
+        versionsString << QString("    ПК%1 ").arg(i+1) << versionHandlers[i]->toString();
+//    versionsString.removeDuplicates();
 
-    context->versionString = QString("Версия модуля ") + moduleName + ": " + versionsString.join(" | ") + ".";
+    context->versionString = QString("Версия модуля ") + moduleName + ": " + versionsString.join(" ");
     emit completed();
 }
 
@@ -88,8 +88,8 @@ VersionRequestInternals::VersionHandler::~VersionHandler()
 QString VersionRequestInternals::VersionHandler::toString() const
 {
     return initialized
-            ? QString("%1.%2/%3").arg(version).arg(subversion).arg(checksum, 4, 16)
-            : QString("-");
+            ? QString("%1.%2-%3").arg(version).arg(subversion).arg(quint8(checksum), 2, 16, QChar('0'))
+            : QString("-----");
 }
 
 bool VersionRequestInternals::VersionHandler::operator ==(const VersionRequestInternals::VersionHandler &b) const

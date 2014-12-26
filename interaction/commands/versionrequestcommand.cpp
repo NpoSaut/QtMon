@@ -17,7 +17,7 @@ Story *VersionRequestCommand::createStory()
     auto context = new Contexts::VersionRequestContext ();
     Story *story = new Story(context, {
                                 new Activities::VersionRequestActivity(moduleName, moduleId, auxResources, context, can, textManager),
-                                new Activities::PopupActivity(&(context->versionString), 10000, textManager)
+                                new Activities::PopupActivity(&(context->versionString), 20000, textManager)
                              });
     return story;
 }

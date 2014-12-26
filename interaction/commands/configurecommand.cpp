@@ -39,7 +39,7 @@ Story *ConfigureCommand::createStory()
                               textManager));
     activities.append(new Activities::InputActivity("Нажмите ВВОД для подтверждения записи", nullptr, textManager));
     activities.append(new Activities::SubmitCookiesActivity(context, textManager));
-    activities.append(new Activities::PopupActivity(&(context->resultMessage), 5000, textManager));
+    activities.append(new Activities::PopupActivity(&(context->resultMessage), textManager));
 
     return new Story(context, activities);
 }

@@ -91,7 +91,8 @@ SOURCES += \
     interaction/commands/versionrequestcommand.cpp \
     interaction/activities/versionrequestactivity.cpp \
     interaction/commands/versionrequestcommandfactory.cpp \
-    interaction/commands/activehalfsetidicationcommand.cpp
+    interaction/commands/activehalfsetidicationcommand.cpp \
+    interaction/commands/activedpsindicationcommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -193,7 +194,8 @@ HEADERS += \
     interaction/contexts/versionrequestcontext.h \
     interaction/activities/versionrequestactivity.h \
     interaction/commands/versionrequestcommandfactory.h \
-    interaction/commands/activehalfsetidicationcommand.h
+    interaction/commands/activehalfsetidicationcommand.h \
+    interaction/commands/activedpsindicationcommand.h
 
 CONFIG += console
 

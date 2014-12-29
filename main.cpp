@@ -485,7 +485,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(0,    "Монитор", SysDiagnostics::BIL, {AuxResource::BIL_A}),
                                                           vrcf.produceCommand(261,  "ЦО", SysDiagnostics::CO, {AuxResource::MCO_A, AuxResource::MCO_B}),
                                                           vrcf.produceCommand(517,  "ЭК", SysDiagnostics::MM, {AuxResource::MM}),
-                                                          vrcf.produceCommand(773,  "МП-АЛС", SysDiagnostics::MP_ALS, {AuxResource::MP1_A, AuxResource::MP2_B}),
+                                                          vrcf.produceCommand(773,  "МП-АЛС", SysDiagnostics::MP_ALS, {AuxResource::MP1_A, AuxResource::MP1_B}),
                                                           vrcf.produceCommand(1029, "ИПД", SysDiagnostics::IPD, {AuxResource::IPD_A, AuxResource::IPD_B}),
                                                           vrcf.produceCommand(1541, "РК", SysDiagnostics::RC, {AuxResource::RC_A, AuxResource::RC_B}),
                                                           vrcf.produceCommand(2053, "ВС-САУТ", SysDiagnostics::SAUT, {AuxResource::SAUT_A, AuxResource::SAUT_B}),

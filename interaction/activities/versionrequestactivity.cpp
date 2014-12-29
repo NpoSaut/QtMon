@@ -13,9 +13,6 @@ VersionRequestActivity::VersionRequestActivity(QString moduleName, SysDiagnostic
       moduleName (moduleName), moduleId (moduleId), auxResources (auxResources), versionHandlers (auxResources.count()),
       Activity (parent)
 {
-    for(int i = 0; i < versionHandlers.count(); i ++)
-        versionHandlers[i] = new VersionRequestInternals::VersionHandler ();
-
     timer.setInterval(1000);
     timer.setSingleShot(true);
 }
@@ -24,7 +21,7 @@ void VersionRequestActivity::run()
 {
     for (int i = 0; i < auxResources.count(); i++)
     {
-        QObject::connect(auxResources[i], SIGNAL(updated(int,int,int)), versionHandlers[i], SLOT(update(int,int,int)));
+        versionHandlers[i] = new VersionRequestInternals::VersionHandler (auxResources[i], this);
         connect(versionHandlers[i], SIGNAL(updated()), this, SLOT(onVersionUpdate()));
     }
     connect (&timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
@@ -45,16 +42,10 @@ void VersionRequestActivity::dispose()
 
     for (int i = 0; i < auxResources.count(); i++)
     {
-        disconnect(auxResources[i], SIGNAL(updated(int,int,int)), versionHandlers[i], SLOT(update(int,int,int)));
         disconnect(versionHandlers[i], SIGNAL(updated()), this, SLOT(onVersionUpdate()));
+        delete versionHandlers[i];
     }
     disconnect (&timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
-}
-
-VersionRequestActivity::~VersionRequestActivity()
-{
-    for(int i = 0; i < versionHandlers.count(); i ++)
-        delete versionHandlers[i];
 }
 
 void VersionRequestActivity::onVersionUpdate()
@@ -76,26 +67,29 @@ void VersionRequestActivity::baybay()
 {
     QStringList versionsString;
     for (int i = 0; i < versionHandlers.count(); i++)
-        versionsString << versionHandlers[i]->toString();
-    versionsString.removeDuplicates();
+        versionsString << QString("    ПК%1 ").arg(i+1) << versionHandlers[i]->toString();
+//    versionsString.removeDuplicates();
 
-    context->versionString = QString("Версия модуля ") + moduleName + ": " + versionsString.join(" | ") + ".";
+    context->versionString = QString("Версия модуля ") + moduleName + ": " + versionsString.join(" ");
     emit completed();
 }
 
-VersionRequestInternals::VersionHandler::VersionHandler(QObject *parent)
-    : initialized (false), version (-1), subversion(-1), QObject (parent)
-{ }
+VersionRequestInternals::VersionHandler::VersionHandler(AuxResourceVersion *auxResource, QObject *parent)
+    : auxResource (auxResource), initialized(false), version (-1), subversion (-1), checksum (-1), QObject (parent)
+{
+    connect(auxResource, SIGNAL(messageReceived()), this, SLOT(update()));
+}
 
-VersionRequestInternals::VersionHandler::VersionHandler(int version, int subversion, int checksum, QObject *parent)
-    : initialized(true), version (version), subversion (subversion), checksum (checksum), QObject (parent)
-{ }
+VersionRequestInternals::VersionHandler::~VersionHandler()
+{
+    disconnect(auxResource, SIGNAL(messageReceived()), this, SLOT(update()));
+}
 
 QString VersionRequestInternals::VersionHandler::toString() const
 {
     return initialized
-            ? QString("%1.%2/%3").arg(version).arg(subversion).arg(checksum, 4, 16)
-            : QString("-");
+            ? QString("%1.%2-%3").arg(version).arg(subversion).arg(quint8(checksum), 2, 16, QChar('0'))
+            : QString("-----");
 }
 
 bool VersionRequestInternals::VersionHandler::operator ==(const VersionRequestInternals::VersionHandler &b) const
@@ -108,12 +102,13 @@ bool VersionRequestInternals::VersionHandler::operator !=(const VersionRequestIn
     return !(*this == b);
 }
 
-void VersionRequestInternals::VersionHandler::update(int version, int subversion, int checksum)
+void VersionRequestInternals::VersionHandler::update()
 {
     initialized = true;
-    this->version = version;
-    this->subversion = subversion;
-    this->checksum = checksum;
+    version = auxResource->getVersion();
+    subversion = auxResource->getSubversion();
+    checksum = auxResource->getChecksum();
+    emit updated ();
 }
 
 }

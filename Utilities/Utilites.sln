@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsmTilesDownloader", "OsmTilesDownloader\OsmTilesDownloader.csproj", "{A8FB884F-7C49-4BB4-B580-371C758EBC1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QmlObjectPropertiesCodeGenerator", "QmlObjectPropertiesCodeGenerator\QmlObjectPropertiesCodeGenerator.csproj", "{875AD1A9-DC2F-4B5D-9D5F-08F520E7B20D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QmlObjectPropertiesCodeGenerator", "netQtCodegen\QmlObjectPropertiesCodeGenerator.csproj", "{875AD1A9-DC2F-4B5D-9D5F-08F520E7B20D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2792,6 +2792,9 @@ Rectangle {
         warningRed:        "#ff3b30"
         warningYellow:     "#ffc830"
         visible: screen2
+        time: stateView.Time
+        date: stateView.Date
+        speed: stateView.Speed
     }
 
 }

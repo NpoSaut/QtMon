@@ -17,6 +17,10 @@ Rectangle {
     property color pressureColorA: "#D9D0AB"
     property color pressureColorB: "#7ABE42"
 
+    property string date: "0:0:0"
+    property string time: "0:0:0"
+    property double speed: 88
+
     function pad(n, width, z) {
       z = z || '0';
       n = n + '';
@@ -169,14 +173,14 @@ Rectangle {
             font.pixelSize: root.labelPixelSize
             font.family: labelFontFamily
             color: labelsColor
-            text: "%1.%2.%3".arg(Math.floor(root.state.Day)).arg(pad(root.state.Month,2)).arg(root.state.Year)
+            text: root.date
         }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: root.labelPixelSize * 1.9
             font.family: labelFontFamily
             color: labelsColor
-            text: "%1:%2:%3".arg(root.state.Hours).arg(pad(root.state.Minutes,2)).arg(pad(Math.floor(root.state.Seconds),2))
+            text: root.time
         }
     }
 
@@ -353,7 +357,7 @@ Rectangle {
                 font.pixelSize: root.labelPixelSize * (40 / 12)
                 font.family: contentFontFamily
                 color: root.pressureColorB
-                text: "88.0"
+                text: root.speed.toFixed(0)
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter

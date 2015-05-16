@@ -295,7 +295,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
-    cookies = new Cookies(can);
+    //cookies = new Cookies(can);
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
@@ -372,29 +372,29 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(systemState, SIGNAL(DisableRedButtonPressed()), iodriver, SLOT(slot_vk_key_down()));
     QObject::connect(systemState, SIGNAL(DisableRedButtonReleased()), iodriver, SLOT(slot_vk_key_up()));
 
-    // Ввод параметров
-    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumbetNotSaved, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies->trainNumber, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies->lengthInWheels, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies->lengthInWagons, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies->mass, SLOT(setVaule(int)));
-    // Чтение параметров
-    QObject::connect (&cookies->trackNumberInMph, SIGNAL(updated(int,bool)), systemState, SLOT(setTrackNumber(int)));
-    QObject::connect (&cookies->machinistNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setMachinistNumber(int)));
-    QObject::connect (&cookies->trainNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainNumber(int)));
-    QObject::connect (&cookies->lengthInWheels, SIGNAL(updated(int,bool)), systemState, SLOT(setAxlesCount(int)));
-    QObject::connect (&cookies->lengthInWagons, SIGNAL(updated(int,bool)), systemState, SLOT(setWagonCount(int)));
-    QObject::connect (&cookies->mass, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainMass(int)));
+//    // Ввод параметров
+//    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumberInMph, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(TrackNumberChanged(int)), &cookies->trackNumbetNotSaved, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(MachinistNumberChanged(int)), &cookies->machinistNumber, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(TrainNumberChanged(int)), &cookies->trainNumber, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(AxlesCountChanged(int)), &cookies->lengthInWheels, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(WagonCountChanged(int)), &cookies->lengthInWagons, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(TrainMassChanged(int)), &cookies->mass, SLOT(setVaule(int)));
+//    // Чтение параметров
+//    QObject::connect (&cookies->trackNumberInMph, SIGNAL(updated(int,bool)), systemState, SLOT(setTrackNumber(int)));
+//    QObject::connect (&cookies->machinistNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setMachinistNumber(int)));
+//    QObject::connect (&cookies->trainNumber, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainNumber(int)));
+//    QObject::connect (&cookies->lengthInWheels, SIGNAL(updated(int,bool)), systemState, SLOT(setAxlesCount(int)));
+//    QObject::connect (&cookies->lengthInWagons, SIGNAL(updated(int,bool)), systemState, SLOT(setWagonCount(int)));
+//    QObject::connect (&cookies->mass, SIGNAL(updated(int,bool)), systemState, SLOT(setTrainMass(int)));
 
-    QObject::connect (&cookies->designSpeed, SIGNAL(updated(int,bool)), systemState, SLOT(setDesignSpeed(int,bool)));
+//    QObject::connect (&cookies->designSpeed, SIGNAL(updated(int,bool)), systemState, SLOT(setDesignSpeed(int,bool)));
 
-    // Ручной ввод начальной координаты
-    QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));
-    QObject::connect (systemState, SIGNAL(ManualOrdinateIncreaseDirectionChanged(int)), &cookies->ordinateIncreaseDirection, SLOT(setVaule(int)));
-//    QObject::connect (&cookies->startOrdinate, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinate(int)));
-    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
+//    // Ручной ввод начальной координаты
+//    QObject::connect (systemState, SIGNAL(ManualOrdinateChanged(int)), &cookies->startOrdinate, SLOT(setVaule(int)));
+//    QObject::connect (systemState, SIGNAL(ManualOrdinateIncreaseDirectionChanged(int)), &cookies->ordinateIncreaseDirection, SLOT(setVaule(int)));
+////    QObject::connect (&cookies->startOrdinate, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinate(int)));
+//    QObject::connect (&cookies->ordinateIncreaseDirection, SIGNAL(updated(int,bool)), systemState, SLOT(setManualOrdinateIncreaseDirection(int)));
 
 #ifdef WITH_SERIAL
     // Если компилируем с поддержкой COM-порта, то берём GPS-данные из NMEA
@@ -404,19 +404,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     iodriver->start(gps_data_source_can);
 #endif
 
-    cookies->trackNumberInMph.requestValue ();
-    cookies->machinistNumber.requestValue ();
-    cookies->trainNumber.requestValue ();
-    cookies->lengthInWheels.requestValue ();
-    cookies->lengthInWagons.requestValue ();
-    cookies->mass.requestValue ();
-    cookies->designSpeed.requestValue ();
-    cookies->startOrdinate.requestValue ();
-    cookies->ordinateIncreaseDirection.requestValue ();
-    // Для регистрации
-    cookies->speedLimitGreen.requestValue ();
-    cookies->speedLimitRedYellow.requestValue ();
-    cookies->speedLimitWhite.requestValue ();
+//    cookies->trackNumberInMph.requestValue ();
+//    cookies->machinistNumber.requestValue ();
+//    cookies->trainNumber.requestValue ();
+//    cookies->lengthInWheels.requestValue ();
+//    cookies->lengthInWagons.requestValue ();
+//    cookies->mass.requestValue ();
+//    cookies->designSpeed.requestValue ();
+//    cookies->startOrdinate.requestValue ();
+//    cookies->ordinateIncreaseDirection.requestValue ();
+//    // Для регистрации
+//    cookies->speedLimitGreen.requestValue ();
+//    cookies->speedLimitRedYellow.requestValue ();
+//    cookies->speedLimitWhite.requestValue ();
 
     // Электронная карта
     QObject::connect (elmapForwardTarget, SIGNAL(nameChanged(QString)), systemState, SLOT(setNextTargetName(QString)));
@@ -441,10 +441,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     textManagerViewModel->assign(textManager);
     Interaction::Commands::VersionRequestCommandFactory vrcf (can, blokMessages, textManager);
     commandManager = new Interaction::CommandManager (storyManager, {
-                                                          new Interaction::Commands::ConfigureCommand (cookies, textManager),
-                                                          new Interaction::Commands::ManualcoordinateCommand (cookies, textManager),
-                                                          new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
-                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
+//                                                          new Interaction::Commands::ConfigureCommand (cookies, textManager),
+//                                                          new Interaction::Commands::ManualcoordinateCommand (cookies, textManager),
+//                                                          new Interaction::Commands::ModulesActivityCommand (&blokMessages->mcoState, textManager),
+//                                                          new Interaction::Commands::TripConfigurationCommand (cookies, textManager),
                                                           // Запрос версий
                                                           vrcf.produceCommand(0,    "Монитор", SysDiagnostics::BIL, {AuxResource::BIL_A}),
                                                           vrcf.produceCommand(261,  "ЦО", SysDiagnostics::CO, {AuxResource::MCO_A, AuxResource::MCO_B}),

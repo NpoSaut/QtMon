@@ -82,6 +82,8 @@ Rectangle {
 
     focus: true
 
+    property bool screen2: false
+
     // Указывает, что нажата кнопка-модификатор альтернативного режима клавиш
     property bool altMode: false
 
@@ -171,7 +173,7 @@ Rectangle {
 
                 debugModeEnterTimer.restart()
                 if ( debugModeEnterTimer.pushCounter++ >= debugModeEnterTimer.maxPushCounter )
-                    debugModeEnableTimer.restart()
+                    screen2 = !screen2
             }
         }
         else
@@ -2775,6 +2777,12 @@ Rectangle {
             }
         }
 
+    }
+
+    Image {
+        anchors.fill: parent
+        source: "Slices/screen2.png"
+        visible: screen2
     }
 
 }

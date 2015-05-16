@@ -9,6 +9,7 @@ Rectangle {
     id: rootRect
 
     property int pageNum: 0
+    property bool screen2: false
 
     property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
     property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed/45)/Math.log(2))));
@@ -173,7 +174,7 @@ Rectangle {
 
                 debugModeEnterTimer.restart()
                 if ( debugModeEnterTimer.pushCounter++ >= debugModeEnterTimer.maxPushCounter )
-                    debugModeEnableTimer.restart()
+                    screen2 = !screen2
             }
         }
         else
@@ -2790,6 +2791,7 @@ Rectangle {
         contentFontFamily: "Roboto"
         warningRed:        "#ff3b30"
         warningYellow:     "#ffc830"
+        visible: screen2
     }
 
 }

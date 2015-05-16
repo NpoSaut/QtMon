@@ -5,6 +5,8 @@
 #include <QString>
 #include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
+#include <QFontDatabase>
+#include <QDirIterator>
 
 #include "controls/arc.h"
 #include "controls/needle.h"
@@ -243,6 +245,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Регистрируем элементы интерфейса
     qmlRegisterType<Arc>("CustomComponents", 1, 0, "Arc");
     qmlRegisterType<Needle>("CustomComponents", 1, 0, "Needle");
+
+    // Загребаем все шрифты из папки "шрифты"
+    QDirIterator it("fonts", QStringList() << "*.ttf", QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        QFontDatabase::addApplicationFont(it.next());
+    }
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

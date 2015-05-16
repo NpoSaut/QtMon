@@ -1,5 +1,7 @@
 import QtQuick 1.1
 import views 1.0
+import "controls"
+import "pages"
 
 Rectangle {
     width: 800
@@ -2775,6 +2777,19 @@ Rectangle {
             }
         }
 
+    }
+
+
+    HydroPage {
+        anchors.fill:      parent
+        gridColor:         "#ddd"
+        labelsColor:       "#fff"
+        contentColor:      "#ffc830"
+        accentColor:       "#ffc830"
+        labelFontFamily:   "Roboto Condensed"
+        contentFontFamily: "Roboto"
+        warningRed:        "#ff3b30"
+        warningYellow:     "#ffc830"
     }
 
 }

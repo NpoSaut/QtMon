@@ -90,7 +90,9 @@ SOURCES += \
     interaction/commands/manualcoordinatecommand.cpp \
     interaction/commands/versionrequestcommand.cpp \
     interaction/activities/versionrequestactivity.cpp \
-    interaction/commands/versionrequestcommandfactory.cpp
+    interaction/commands/versionrequestcommandfactory.cpp \
+    controls/arc.cpp \
+    controls/needle.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -191,7 +193,9 @@ HEADERS += \
     interaction/commands/versionrequestcommand.h \
     interaction/contexts/versionrequestcontext.h \
     interaction/activities/versionrequestactivity.h \
-    interaction/commands/versionrequestcommandfactory.h
+    interaction/commands/versionrequestcommandfactory.h \
+    controls/arc.h \
+    controls/needle.h
 
 CONFIG += console
 

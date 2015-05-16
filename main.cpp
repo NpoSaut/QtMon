@@ -6,6 +6,9 @@
 #include <QtConcurrentRun>
 #include <qmlapplicationviewer.h>
 
+#include "controls/arc.h"
+#include "controls/needle.h"
+
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
 #include "levithan.h"
@@ -236,6 +239,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
     qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
+
+    // Регистрируем элементы интерфейса
+    qmlRegisterType<Arc>("CustomComponents", 1, 0, "Arc");
+    qmlRegisterType<Needle>("CustomComponents", 1, 0, "Needle");
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

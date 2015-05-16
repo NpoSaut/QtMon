@@ -11,7 +11,7 @@ Rectangle {
     property int pageNum: 0
     property bool screen2: false
 
-    property double maxSpeed: 20 * Math.ceil(stateView.DesignSpeed * 1.35 / 20);
+    property double maxSpeed: 20 * Math.ceil(80 * 1.35 / 20);
     property double speedStep: 5 * (Math.pow(2, Math.floor(Math.log(maxSpeed/45)/Math.log(2))));
 
     function switchPage() {

@@ -27,6 +27,16 @@ Rectangle {
       return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
     }
 
+    Timer {
+        id: movingFrames
+        property double x: 0
+        interval: 30
+        repeat: true
+        running: true
+        onTriggered: x += 0.03
+    }
+
+
     Rectangle {
         anchors.horizontalCenter: root.horizontalCenter
         anchors.verticalCenter: root.verticalCenter
@@ -34,6 +44,7 @@ Rectangle {
         width: 300
         height: 200
         color: "#00000000"
+        property double loh: 700 + 35 * Math.sin(15.2 * movingFrames.x + 1.9) +  70 * Math.sin(4.2 * movingFrames.x + 2.9)
         Text {
             color: root.labelsColor; font.family: root.labelFontFamily; font.pixelSize: labelPixelSize
             anchors.horizontalCenter: parent.horizontalCenter
@@ -57,7 +68,7 @@ Rectangle {
             step: 4
             cutRadius: 1 / 2
             smallTicksPerStep: 4
-            values: [ 0.7, 0.8 ]
+            values: [ 0.7, (parent.loh)/1000 ]
         }
         Text {
             color: root.labelsColor; font.family: root.labelFontFamily; font.pixelSize: labelPixelSize; font.bold: true
@@ -74,7 +85,7 @@ Rectangle {
             Repeater {
                 model: [
                     { label: "Заданная", value: 700, color: Qt.darker(root.accentColor) },
-                    { label: "Текущая",  value: 800, color: root.accentColor }
+                    { label: "Текущая",  value: parent.parent.loh, color: root.accentColor }
                 ]
                 Column {
                     spacing: -4
@@ -83,7 +94,7 @@ Rectangle {
                         font.family: root.contentFontFamily;
                         color: modelData.color
                         font.pixelSize: labelPixelSize * (20 / 12)
-                        text: modelData.value
+                        text: modelData.value.toFixed(0)
                     }
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -192,17 +203,19 @@ Rectangle {
         Repeater {
             model: [
                 {
-                    pA: 150, pB: 117,
+                    pA: 180 + 20 * Math.sin(1.2 * movingFrames.x + 2.9),
+                    pB: 117 + 30 * Math.sin(0.7 * movingFrames.x + 0.9),
                     motors: [
-                        { name: "1", speed: 110 },
-                        { name: "2", speed: 120 },
+                        { name: "1", speed: 110 + 3 * Math.sin(1.2 * movingFrames.x) },
+                        { name: "2", speed: 120 + 3 * Math.sin(0.7 * movingFrames.x + 0.9) },
                     ]
                 },
                 {
-                    pA: 17, pB: 420,
+                    pA: 17  + 20 * Math.sin(0.9 * movingFrames.x + 0.4),
+                    pB: 420 + 30 * Math.sin(1.2 * movingFrames.x + 2.9),
                     motors: [
-                        { name: "3", speed: 130 },
-                        { name: "4", speed: 140 },
+                        { name: "3", speed: 130 + 3 * Math.sin(0.7 * movingFrames.x + 0.9) },
+                        { name: "4", speed: 140 + 3 * Math.sin(0.9 * movingFrames.x + 0.2) },
                     ]
                 },
             ]
@@ -251,7 +264,7 @@ Rectangle {
                         color: root.accentColor; font.family: contentFontFamily;
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: parent.parent.height / 8
-                        text: modelData.pB - modelData.pA
+                        text: (modelData.pB - modelData.pA).toFixed(0)
                     }
                     Text {
                         color: root.accentColor; font.family: root.contentFontFamily;
@@ -272,8 +285,8 @@ Rectangle {
                         text: "Давление А"
                     }
                     Text {
+                        color: "#78be41"
                         font.family: root.labelFontFamily; font.bold: true;
-                        color: root.pressureColorB
                         font.pixelSize: labelPixelSize
                         text: "Давление Б"
                     }
@@ -297,7 +310,7 @@ Rectangle {
                             contentFontFamily: root.contentFontFamily
 
                             labelText: "Скорость мотора " + modelData.name
-                            text: modelData.speed
+                            text: modelData.speed.toFixed(0)
                             units: "об/мин"
                         }
                     }

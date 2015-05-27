@@ -90,7 +90,8 @@ SOURCES += \
     interaction/commands/manualcoordinatecommand.cpp \
     interaction/commands/versionrequestcommand.cpp \
     interaction/activities/versionrequestactivity.cpp \
-    interaction/commands/versionrequestcommandfactory.cpp
+    interaction/commands/versionrequestcommandfactory.cpp \
+    illumination/Edisson.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -191,7 +192,11 @@ HEADERS += \
     interaction/commands/versionrequestcommand.h \
     interaction/contexts/versionrequestcontext.h \
     interaction/activities/versionrequestactivity.h \
-    interaction/commands/versionrequestcommandfactory.h
+    interaction/commands/versionrequestcommandfactory.h \
+    illumination/IAnalogDevice.h \
+    illumination/Edisson.h \
+    illumination/IIntensityConverter.h \
+    illumination/LinearIntensityConverter.h
 
 CONFIG += console
 

@@ -91,7 +91,8 @@ SOURCES += \
     interaction/commands/versionrequestcommand.cpp \
     interaction/activities/versionrequestactivity.cpp \
     interaction/commands/versionrequestcommandfactory.cpp \
-    illumination/Edisson.cpp
+    illumination/Edisson.cpp \
+    illumination/WeightedCompositeAnalogDevice.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -196,7 +197,8 @@ HEADERS += \
     illumination/IAnalogDevice.h \
     illumination/Edisson.h \
     illumination/IIntensityConverter.h \
-    illumination/LinearIntensityConverter.h
+    illumination/LinearIntensityConverter.h \
+    illumination/WeightedCompositeAnalogDevice.h
 
 CONFIG += console
 

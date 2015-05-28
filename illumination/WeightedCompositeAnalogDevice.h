@@ -4,7 +4,7 @@
 #include "IAnalogDevice.h"
 #include <QVector>
 
-class WeightedCompositeAnalogDevice : IAnalogDevice
+class WeightedCompositeAnalogDevice : public IAnalogDevice
 {
     class WeightedAnalogDeviceLeaf
     {

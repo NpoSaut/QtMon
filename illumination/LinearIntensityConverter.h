@@ -3,7 +3,7 @@
 
 #include "IIntensityConverter.h"
 
-class LinearIntensityConverter : IIntensityConverter
+class LinearIntensityConverter : public IIntensityConverter
 {
     double _scaleFactor;
 

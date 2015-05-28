@@ -19,6 +19,8 @@ CompositeKeyboard::CompositeKeyboard(QVector<Keyboard *> keyboards, QObject *par
         connect (keyboard, SIGNAL(cancelKeyUp()), this, SLOT(onCancelKeyUp()));
         connect (keyboard, SIGNAL(commandKeyDown()), this, SLOT(onCommandKeyDown()));
         connect (keyboard, SIGNAL(commandKeyUp()), this, SLOT(onCommandKeyUp()));
+        connect (keyboard, SIGNAL(brightnessKeyDown()), this, SLOT(onBrightnessKeyDown()));
+        connect (keyboard, SIGNAL(brightnessKeyUp()), this, SLOT(onBrightnessKeyUp()));
     }
 }
 
@@ -80,6 +82,16 @@ void CompositeKeyboard::onCommandKeyDown()
 void CompositeKeyboard::onCommandKeyUp()
 {
     emit commandKeyUp();
+}
+
+void CompositeKeyboard::onBrightnessKeyDown()
+{
+    emit brightnessKeyDown();
+}
+
+void CompositeKeyboard::onBrightnessKeyUp()
+{
+    emit brightnessKeyUp();
 }
 
 }

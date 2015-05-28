@@ -30,6 +30,10 @@ void CanKeyboard::consoleKeyPressed(ConsoleKey::ConsKey key)
         emit commandKeyDown();
         emit keyDown(Key::COMMAND);
         break;
+    case ConsoleKey::LGHT:
+        emit brightnessKeyDown();
+        emit keyDown(Key::K_9);
+        break;
     case ConsoleKey::F0:
         emit numberKeyDown(0);
         emit keyDown(Key::K_0);
@@ -92,6 +96,10 @@ void CanKeyboard::consoleKeyReleased(ConsoleKey::ConsKey key)
     case ConsoleKey::K:
         emit commandKeyUp();
         emit keyUp(Key::COMMAND);
+        break;
+    case ConsoleKey::LGHT:
+        emit brightnessKeyUp();
+        emit keyUp(Key::BRIGHTNESS);
         break;
     case ConsoleKey::F0:
         emit numberKeyUp(0);

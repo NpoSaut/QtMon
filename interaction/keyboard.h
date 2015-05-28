@@ -25,7 +25,8 @@ public:
         BACKSPACE = 10,
         ENTER = 11,
         CANCEL = 12,
-        COMMAND = 13
+        COMMAND = 13,
+        BRIGHTNESS = 14
     };
 
 signals:
@@ -43,6 +44,8 @@ signals:
     void cancelKeyUp ();
     void commandKeyDown ();
     void commandKeyUp ();
+    void brightnessKeyDown ();
+    void brightnessKeyUp ();
 };
 
 }

@@ -28,6 +28,8 @@ private slots:
     void onCancelKeyUp ();
     void onCommandKeyDown ();
     void onCommandKeyUp ();
+    void onBrightnessKeyDown ();
+    void onBrightnessKeyUp ();
 };
 
 }

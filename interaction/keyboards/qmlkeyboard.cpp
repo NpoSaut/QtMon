@@ -28,6 +28,10 @@ void QmlKeyboard::processKeyDown(int key)
         emit commandKeyDown();
         emit keyDown(Key::COMMAND);
         break;
+    case Qt::Key_L:
+        emit brightnessKeyDown();
+        emit keyDown(Key::BRIGHTNESS);
+        break;
     case Qt::Key_0:
         emit numberKeyDown(0);
         emit keyDown(Key::K_0);
@@ -89,6 +93,10 @@ void QmlKeyboard::processKeyUp(int key)
     case Qt::Key_K:
         emit commandKeyUp();
         emit keyUp(Key::COMMAND);
+        break;
+    case Qt::Key_L:
+        emit brightnessKeyUp();
+        emit keyUp(Key::BRIGHTNESS);
         break;
     case Qt::Key_0:
         emit numberKeyUp(0);

@@ -51,6 +51,12 @@
 #include "interaction/commands/versionrequestcommandfactory.h"
 #include "interaction/keyboardmanager.h"
 
+#include "illumination/Edisson.h"
+#include "illumination/implementations/DebugAnalogDevice.h"
+#include "illumination/implementations/DummyIlluminationSettings.h"
+#include "illumination/implementations/LinearIntensityConverter.h"
+#include "illumination/implementations/WeightedCompositeAnalogDevice.h"
+
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
@@ -75,6 +81,8 @@ Interaction::StoryManager *storyManager;
 Interaction::TextManager *textManager;
 Interaction::CommandManager *commandManager;
 Interaction::KeyboardManager *keyboardManager;
+
+IIlluminationManager *illuminationManager;
 
 // PASSIVE MODE FLAG
 bool passiveMode = false;
@@ -419,6 +427,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
+    // Управление яркостью
+    illuminationManager = new Edisson(new DebugAnalogDevice("Display"), new LinearIntensityConverter(255), new DummyIlluminationSettings());
+
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
     storyManager = new Interaction::StoryManager ();
@@ -449,7 +460,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
                                                           vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
                                                       });
-    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, illuminationManager );
 
     QtConcurrent::run(getParamsFromConsole);
 

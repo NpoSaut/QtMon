@@ -8,16 +8,19 @@
 #include "commandmanager.h"
 #include "keyboard.h"
 
+#include "illumination/interfaces/IIlluminationManager.h"
+
 namespace Interaction {
 
 class KeyboardManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit KeyboardManager(Keyboard *keyboard, StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QObject *parent = 0);
+    explicit KeyboardManager(Keyboard *keyboard, StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, IIlluminationManager *illumonationManager, QObject *parent = 0);
 
 private slots:
     void commandKeyPressed ();
+    void brightnessKeyPressed ();
     void cancelKeyPressed ();
 
 private:
@@ -25,6 +28,7 @@ private:
     StoryManager *storyManager;
     CommandManager *commandsManager;
     TextManager *textManager;
+    IIlluminationManager *illumonationManager;
 };
 
 }

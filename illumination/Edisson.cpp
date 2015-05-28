@@ -7,7 +7,7 @@ Edisson::Edisson(IAnalogDevice *outputDevice, IIntensityConverter *intensityConv
     setIllumination(storedIllumination);
 }
 
-double Edisson::Illumination()
+double Edisson::illumination()
 {
     return _currentIllumination;
 }

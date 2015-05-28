@@ -1,11 +1,12 @@
 #ifndef EDISSON_H
 #define EDISSON_H
 
+#include "interfaces/IIlluminationManager.h"
 #include "interfaces/IAnalogDevice.h"
 #include "interfaces/IIntensityConverter.h"
 #include "interfaces/IIlluminationSettings.h"
 
-class Edisson
+class Edisson : public IIlluminationManager
 {
     double _currentIllumination;
     IAnalogDevice *_outputDevice;
@@ -15,7 +16,7 @@ class Edisson
 public:
     Edisson(IAnalogDevice *outputDevice, IIntensityConverter *intensityConverter, IIlluminationSettings *settings);
 
-    double Illumination();
+    double illumination();
     void setIllumination(double value);
 
 private:

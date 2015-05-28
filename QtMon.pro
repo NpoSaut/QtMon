@@ -200,7 +200,8 @@ HEADERS += \
     illumination/interfaces/IIntensityConverter.h \
     illumination/implementations/DummyIlluminationSettings.h \
     illumination/implementations/LinearIntensityConverter.h \
-    illumination/implementations/WeightedCompositeAnalogDevice.h
+    illumination/implementations/WeightedCompositeAnalogDevice.h \
+    illumination/interfaces/IIlluminationManager.h
 
 CONFIG += console
 

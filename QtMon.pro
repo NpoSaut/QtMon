@@ -198,7 +198,9 @@ HEADERS += \
     illumination/Edisson.h \
     illumination/IIntensityConverter.h \
     illumination/LinearIntensityConverter.h \
-    illumination/WeightedCompositeAnalogDevice.h
+    illumination/WeightedCompositeAnalogDevice.h \
+    illumination/IIlluminationSettings.h \
+    illumination/DummyIlluminationSettings.h
 
 CONFIG += console
 

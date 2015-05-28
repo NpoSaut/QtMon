@@ -6,22 +6,25 @@
 
 class WeightedCompositeAnalogDevice : public IAnalogDevice
 {
-    class WeightedAnalogDeviceLeaf
+public:
+    class Leaf
     {
         double _weight;
         IAnalogDevice *_device;
     public:
-        WeightedAnalogDeviceLeaf(double weight, IAnalogDevice *device) :
+        Leaf(double weight, IAnalogDevice *device) :
             _weight(weight), _device(device)
         { }
         double weight() const { return _weight; }
         IAnalogDevice *device() const { return _device; }
     };
 
-    QVector<WeightedAnalogDeviceLeaf*> _children;
+private:
+
+    QVector<Leaf*> _children;
 
 public:
-    WeightedCompositeAnalogDevice(QVector<WeightedAnalogDeviceLeaf*> children);
+    WeightedCompositeAnalogDevice(QVector<Leaf*> children);
 
     virtual void setValue(double value);
 };

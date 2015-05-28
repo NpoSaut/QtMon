@@ -93,7 +93,8 @@ SOURCES += \
     interaction/commands/versionrequestcommandfactory.cpp \
     illumination/implementations/WeightedCompositeAnalogDevice.cpp \
     illumination/Edisson.cpp \
-    illumination/implementations/DebugAnalogDevice.cpp
+    illumination/implementations/DebugAnalogDevice.cpp \
+    interaction/activities/changebrightnessactivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -203,7 +204,9 @@ HEADERS += \
     illumination/implementations/LinearIntensityConverter.h \
     illumination/implementations/WeightedCompositeAnalogDevice.h \
     illumination/interfaces/IIlluminationManager.h \
-    illumination/implementations/DebugAnalogDevice.h
+    illumination/implementations/DebugAnalogDevice.h \
+    interaction/contexts/changebrightnesscontext.h \
+    interaction/activities/changebrightnessactivity.h
 
 CONFIG += console
 

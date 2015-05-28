@@ -1,7 +1,7 @@
 #ifndef LINEARINTENSITYCONVERTER_H
 #define LINEARINTENSITYCONVERTER_H
 
-#include "IIntensityConverter.h"
+#include "../interfaces/IIntensityConverter.h"
 
 class LinearIntensityConverter : public IIntensityConverter
 {

@@ -1,7 +1,7 @@
 #ifndef WEIGHTEDCOMPOSITEANALOGDEVICE_H
 #define WEIGHTEDCOMPOSITEANALOGDEVICE_H
 
-#include "IAnalogDevice.h"
+#include "../interfaces/IAnalogDevice.h"
 #include <QVector>
 
 class WeightedCompositeAnalogDevice : public IAnalogDevice

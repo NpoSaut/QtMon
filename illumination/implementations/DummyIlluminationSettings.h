@@ -1,7 +1,7 @@
 #ifndef DUMMYILLUMINATIONSETTINGS_H
 #define DUMMYILLUMINATIONSETTINGS_H
 
-#include "IIlluminationSettings.h"
+#include "../interfaces/IIlluminationSettings.h"
 
 class DummyIlluminationSettings : public IIlluminationSettings
 {

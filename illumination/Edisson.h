@@ -1,8 +1,8 @@
 #ifndef EDISSON_H
 #define EDISSON_H
 
-#include "IAnalogDevice.h"
-#include "IIntensityConverter.h"
+#include "interfaces/IAnalogDevice.h"
+#include "interfaces/IIntensityConverter.h"
 
 class Edisson
 {

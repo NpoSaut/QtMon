@@ -6,7 +6,8 @@
 class DummyIlluminationSettings : public IIlluminationSettings
 {
 public:
-    DummyIlluminationSettings();
+    DummyIlluminationSettings() { }
+
     double getIlluminationValue() { return 1.0; }
     void storeIlluminationValue(double value) { }
 };

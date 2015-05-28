@@ -4,7 +4,7 @@
 class IIlluminationSettings
 {
 public:
-    IIlluminationSettings();
+    IIlluminationSettings() { }
     virtual double getIlluminationValue() = 0;
     virtual void storeIlluminationValue(double value) = 0;
 };

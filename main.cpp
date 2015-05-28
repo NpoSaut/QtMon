@@ -428,7 +428,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     // Управление яркостью
-    illuminationManager = new Edisson(new DebugAnalogDevice("Display"), new LinearIntensityConverter(255), new DummyIlluminationSettings());
+    QVector<WeightedCompositeAnalogDevice::Leaf *> lightControllers =
+    {
+        new WeightedCompositeAnalogDevice::Leaf(1.0, new DebugAnalogDevice("Display")),
+        new WeightedCompositeAnalogDevice::Leaf(0.5, new DebugAnalogDevice("Lights"))
+    };
+    illuminationManager = new Edisson(new WeightedCompositeAnalogDevice(lightControllers),
+                                      new LinearIntensityConverter(255), new DummyIlluminationSettings());
 
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});

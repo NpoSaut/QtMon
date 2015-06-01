@@ -53,7 +53,7 @@
 
 #include "illumination/Edisson.h"
 #include "illumination/implementations/DebugAnalogDevice.h"
-#include "illumination/implementations/LinuxBacklightAnalogDevice.h"
+#include "illumination/implementations/LinuxBacklightAnalogDeviceFactory.h"
 #include "illumination/implementations/DummyIlluminationSettings.h"
 #include "illumination/implementations/LinearIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
@@ -431,12 +431,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Управление яркостью
     IIntensityConverter *intensityConverter = new LinearIntensityConverter(255);
-
+    LinuxBacklightAnalogDeviceFactory linuxBacklightFactory;
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
     {
 #ifdef ON_DEVICE
-        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(0))),
-        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(1)))
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(0))),
+        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(1)))
 #else
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
         new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights")))

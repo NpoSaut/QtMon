@@ -96,7 +96,8 @@ SOURCES += \
     interaction/activities/changebrightnessactivity.cpp \
     illumination/implementations/IlluminationDevice.cpp \
     illumination/implementations/WeightedCompositeIlluminationDevice.cpp \
-    illumination/implementations/LinuxBacklightAnalogDevice.cpp
+    illumination/implementations/FileAnalogDevice.cpp \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp
 
 
 # Please do not modify the following two lines. Required for deployment.
@@ -212,7 +213,8 @@ HEADERS += \
     illumination/interfaces/IIlluminationDevice.h \
     illumination/implementations/IlluminationDevice.h \
     illumination/implementations/WeightedCompositeIlluminationDevice.h \
-    illumination/implementations/LinuxBacklightAnalogDevice.h
+    illumination/implementations/FileAnalogDevice.h \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.h
 
 CONFIG += console
 

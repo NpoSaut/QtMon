@@ -53,6 +53,7 @@
 
 #include "illumination/Edisson.h"
 #include "illumination/implementations/DebugAnalogDevice.h"
+#include "illumination/implementations/LinuxBacklightAnalogDevice.h"
 #include "illumination/implementations/DummyIlluminationSettings.h"
 #include "illumination/implementations/LinearIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
@@ -430,12 +431,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Управление яркостью
     IIntensityConverter *intensityConverter = new LinearIntensityConverter(255);
+
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
     {
         new WeightedCompositeIlluminationDevice::Leaf(1.0,
-                                                      new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
+                                                      new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(0))),
         new WeightedCompositeIlluminationDevice::Leaf(0.5,
-                                                      new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights")))
+                                                      new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(1)))
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());

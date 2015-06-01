@@ -55,7 +55,8 @@
 #include "illumination/implementations/DebugAnalogDevice.h"
 #include "illumination/implementations/DummyIlluminationSettings.h"
 #include "illumination/implementations/LinearIntensityConverter.h"
-#include "illumination/implementations/WeightedCompositeAnalogDevice.h"
+#include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
+#include "illumination/implementations/IlluminationDevice.h"
 
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
@@ -428,13 +429,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     // Управление яркостью
-    QVector<WeightedCompositeAnalogDevice::Leaf *> lightControllers =
+    IIntensityConverter *intensityConverter = new LinearIntensityConverter(255);
+    QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
     {
-        new WeightedCompositeAnalogDevice::Leaf(1.0, new DebugAnalogDevice("Display")),
-        new WeightedCompositeAnalogDevice::Leaf(0.5, new DebugAnalogDevice("Lights"))
+        new WeightedCompositeIlluminationDevice::Leaf(1.0,
+                                                      new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
+        new WeightedCompositeIlluminationDevice::Leaf(0.5,
+                                                      new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights")))
     };
-    illuminationManager = new Edisson(new WeightedCompositeAnalogDevice(lightControllers),
-                                      new LinearIntensityConverter(255), new DummyIlluminationSettings());
+    illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
+                                      new DummyIlluminationSettings());
 
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});

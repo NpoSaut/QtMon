@@ -95,7 +95,9 @@ SOURCES += \
     illumination/implementations/DebugAnalogDevice.cpp \
     interaction/activities/changebrightnessactivity.cpp \
     illumination/implementations/IlluminationDevice.cpp \
-    illumination/implementations/WeightedCompositeIlluminationDevice.cpp
+    illumination/implementations/WeightedCompositeIlluminationDevice.cpp \
+    illumination/implementations/LinuxBacklightAnalogDevice.cpp
+
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -209,7 +211,8 @@ HEADERS += \
     interaction/activities/changebrightnessactivity.h \
     illumination/interfaces/IIlluminationDevice.h \
     illumination/implementations/IlluminationDevice.h \
-    illumination/implementations/WeightedCompositeIlluminationDevice.h
+    illumination/implementations/WeightedCompositeIlluminationDevice.h \
+    illumination/implementations/LinuxBacklightAnalogDevice.h
 
 CONFIG += console
 

@@ -7,4 +7,5 @@ LinuxBacklightAnalogDevice::LinuxBacklightAnalogDevice(int number)
 void LinuxBacklightAnalogDevice::setValue(double value)
 {
     brightnessFile << int (value);
+    brightnessFile.flush();
 }

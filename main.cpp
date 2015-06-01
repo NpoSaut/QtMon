@@ -434,10 +434,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
     {
-        new WeightedCompositeIlluminationDevice::Leaf(1.0,
-                                                      new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(0))),
-        new WeightedCompositeIlluminationDevice::Leaf(0.5,
-                                                      new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(1)))
+#ifdef ON_DEVICE
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(0))),
+        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new LinuxBacklightAnalogDevice(1)))
+#else
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
+        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights")))
+#endif
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());

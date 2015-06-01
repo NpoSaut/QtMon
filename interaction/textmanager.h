@@ -36,6 +36,7 @@ private slots:
     void enterKeyPressed ();
 
 private:
+    bool firstHit;
     int positiveOrZero (int x);
     int value;
     QString outputFormat;

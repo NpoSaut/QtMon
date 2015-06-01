@@ -3,7 +3,7 @@
 namespace Interaction {
 
 TextManager::TextManager(Keyboard *keyboard, QObject *parent) :
-    QObject(parent)
+    firstHit(false), QObject(parent)
 {
     connect (keyboard, SIGNAL(numberKeyDown(int)), this, SLOT(numericKeyPressed(int)));
     connect (keyboard, SIGNAL(backspaceKeyDown()), this, SLOT(backscapeKeyPressed()));
@@ -21,6 +21,11 @@ void TextManager::clear()
 
 void TextManager::numericKeyPressed(int digit)
 {
+    if (firstHit)
+    {
+        value = 0;
+        firstHit = false;
+    }
     value = positiveOrZero(value) * 10 + digit;
     emit outputStringChanged();
 }
@@ -28,6 +33,7 @@ void TextManager::numericKeyPressed(int digit)
 void TextManager::backscapeKeyPressed()
 {
     value = positiveOrZero(value) / 10;
+    firstHit = false;
     emit outputStringChanged();
 }
 
@@ -50,6 +56,7 @@ void TextManager::init(QString format, int initialValue)
 {
     outputFormat = format;
     value = initialValue;
+    firstHit = true;
     emit outputStringChanged();
 }
 

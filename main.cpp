@@ -58,6 +58,7 @@
 #include "illumination/implementations/LinearIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
 #include "illumination/implementations/IlluminationDevice.h"
+#include "CanBilLcdIlluminationAnalogDevice.h"
 
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
@@ -431,6 +432,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Управление яркостью
     IIntensityConverter *intensityConverter = new LinearIntensityConverter(255);
+    IIntensityConverter *to7IntensityConverter = new LinearIntensityConverter(7);
     LinuxBacklightAnalogDeviceFactory linuxBacklightFactory;
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
     {
@@ -439,8 +441,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(1)))
 #else
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
-        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights")))
+        new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights"))),
 #endif
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, new CanBilLcdIlluminationAnalogDevice(can, 1)))
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());

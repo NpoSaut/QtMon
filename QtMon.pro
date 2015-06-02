@@ -97,7 +97,9 @@ SOURCES += \
     illumination/implementations/IlluminationDevice.cpp \
     illumination/implementations/WeightedCompositeIlluminationDevice.cpp \
     illumination/implementations/FileAnalogDevice.cpp \
-    illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
+    qtBlokLib/parsers/BilLcd.cpp \
+    CanBilLcdIlluminationAnalogDevice.cpp
 
 
 # Please do not modify the following two lines. Required for deployment.
@@ -214,7 +216,9 @@ HEADERS += \
     illumination/implementations/IlluminationDevice.h \
     illumination/implementations/WeightedCompositeIlluminationDevice.h \
     illumination/implementations/FileAnalogDevice.h \
-    illumination/implementations/LinuxBacklightAnalogDeviceFactory.h
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
+    qtBlokLib/parsers/BilLcd.h \
+    CanBilLcdIlluminationAnalogDevice.h
 
 CONFIG += console
 

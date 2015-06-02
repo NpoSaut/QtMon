@@ -1,4 +1,4 @@
-#include "linuxbacklightanalogdevicefactory.h"
+#include "LinuxBacklightAnalogDeviceFactory.h"
 #include "FileAnalogDevice.h"
 
 LinuxBacklightAnalogDeviceFactory::LinuxBacklightAnalogDeviceFactory()

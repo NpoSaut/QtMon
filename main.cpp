@@ -441,7 +441,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     {
 #ifdef ON_DEVICE
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(0))),
-        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(1)))
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(1))),
 #else
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights"))),

@@ -56,6 +56,7 @@
 #include "illumination/implementations/LinuxBacklightAnalogDeviceFactory.h"
 #include "illumination/implementations/DummyIlluminationSettings.h"
 #include "illumination/implementations/LinearIntensityConverter.h"
+#include "illumination/implementations/ExponentialIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
 #include "illumination/implementations/IlluminationDevice.h"
 #include "CanBilLcdIlluminationAnalogDevice.h"
@@ -431,7 +432,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     // Управление яркостью
-    IIntensityConverter *intensityConverter = new LinearIntensityConverter(255);
+    IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(255);
     IIntensityConverter *to7IntensityConverter = new LinearIntensityConverter(7);
     LinuxBacklightAnalogDeviceFactory linuxBacklightFactory;
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =

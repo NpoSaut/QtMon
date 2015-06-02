@@ -99,7 +99,8 @@ SOURCES += \
     illumination/implementations/FileAnalogDevice.cpp \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
     qtBlokLib/parsers/BilLcd.cpp \
-    CanBilLcdIlluminationAnalogDevice.cpp
+    CanBilLcdIlluminationAnalogDevice.cpp \
+    illumination/implementations/ExponentialIntensityConverter.cpp
 
 
 # Please do not modify the following two lines. Required for deployment.
@@ -218,7 +219,8 @@ HEADERS += \
     illumination/implementations/FileAnalogDevice.h \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
     qtBlokLib/parsers/BilLcd.h \
-    CanBilLcdIlluminationAnalogDevice.h
+    CanBilLcdIlluminationAnalogDevice.h \
+    illumination/implementations/ExponentialIntensityConverter.h
 
 CONFIG += console
 

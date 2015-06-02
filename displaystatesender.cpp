@@ -12,6 +12,11 @@ DisplayStateSander::DisplayStateSander(Parser *parser, Can *can, QObject *parent
     this->startTimer (500);
 }
 
+void DisplayStateSander::setValue(double backlightLevel)
+{
+    this->backlightLevel = backlightLevel;
+}
+
 void DisplayStateSander::timerEvent(QTimerEvent *event)
 {
     DisplayStateA dsa;
@@ -24,6 +29,7 @@ void DisplayStateSander::timerEvent(QTimerEvent *event)
     dsa.setOc (parser->sysKey.isKeyPressed (SysKey::OC));
     dsa.setK20 (parser->sysKey.isKeyPressed (SysKey::K20));
     dsa.setFreq (parser->sysKey.isKeyPressed (SysKey::FREQ));
+    dsa.setBacklightLevel(backlightLevel);
     can->transmitMessage (dsa.encode ());
 
     DisplayStateB dsb;

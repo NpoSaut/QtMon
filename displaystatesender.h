@@ -5,14 +5,16 @@
 
 #include "qtCanLib/can.h"
 #include "qtBlokLib/parser.h"
+#include "illumination/interfaces/IAnalogDevice.h"
 
 // Отправляет периодические сообщения с состоянием монитора
 //  - отслеживает нажатие кнопок и дублирует их в своём периодическом сообщении
-class DisplayStateSander : public QObject
+class DisplayStateSander : public QObject, public IAnalogDevice
 {
     Q_OBJECT
 public:
     explicit DisplayStateSander(Parser *parser, Can *can, QObject *parent = 0);
+    void setValue(double backlightLevel);
     
 signals:
     
@@ -24,6 +26,7 @@ protected:
 private:
     Can *can;
     Parser *parser;
+    int backlightLevel;
 };
 
 #endif // DISPLAYSTATE_H

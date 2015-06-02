@@ -443,7 +443,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
         new WeightedCompositeIlluminationDevice::Leaf(0.5, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights"))),
 #endif
-        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, new CanBilLcdIlluminationAnalogDevice(can, 1)))
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, new CanBilLcdIlluminationAnalogDevice(can, 1))),
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, displayStateSander))
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());

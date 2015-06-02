@@ -100,8 +100,9 @@ SOURCES += \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
     qtBlokLib/parsers/BilLcd.cpp \
     CanBilLcdIlluminationAnalogDevice.cpp \
-    illumination/implementations/ExponentialIntensityConverter.cpp
-
+    illumination/implementations/ExponentialIntensityConverter.cpp \
+    interaction/commands/activehalfsetidicationcommand.cpp \
+    interaction/commands/activedpsindicationcommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -220,7 +221,9 @@ HEADERS += \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
     qtBlokLib/parsers/BilLcd.h \
     CanBilLcdIlluminationAnalogDevice.h \
-    illumination/implementations/ExponentialIntensityConverter.h
+    illumination/implementations/ExponentialIntensityConverter.h \
+    interaction/commands/activehalfsetidicationcommand.h \
+    interaction/commands/activedpsindicationcommand.h
 
 CONFIG += console
 

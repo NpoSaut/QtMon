@@ -43,6 +43,8 @@
 #include "interaction/storymanager.h"
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
+#include "interaction/commands/activedpsindicationcommand.h"
+#include "interaction/commands/activehalfsetidicationcommand.h"
 #include "interaction/commands/configurecommand.h"
 #include "interaction/commands/manualcoordinatecommand.h"
 #include "interaction/commands/modulesactivitycommand.h"
@@ -479,6 +481,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUT, {AuxResource::OUT_A, AuxResource::OUT_B}),
                                                           vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
                                                           vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
+                                                          // Работа с комплектами ЦО
+                                                          new Interaction::Commands::ActiveHalfsetIdicationCommand(&blokMessages->mcoState, textManager),
+                                                          //
+                                                          new Interaction::Commands::ActiveDpsIndicationCommand(&blokMessages->ipdState, textManager),
                                                       });
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, illuminationManager );
 

@@ -155,6 +155,7 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);             _offset += 4;
+                input = fillInputArray(input, _offset, 1, 7);                               _offset += 1;
                 input = fillInputArray(input, _offset, 6, (stateView.Ordinate + 1000)/100); _offset += 6;
                 input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
@@ -263,6 +264,7 @@ Rectangle {
                     stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
                     stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    var brightness            =  fillInputParameter(_offset, 1);  _offset += 1;
                     if (stateView.TrackNumber == 0)
                     {
                         stateView.ManualOrdinate = stateView.Ordinate // HACK
@@ -272,6 +274,7 @@ Rectangle {
                     }
 
                     if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                    console.log(brightness);
                 }
 
                 if (inputSpeedMode)
@@ -382,9 +385,9 @@ Rectangle {
     property bool inputSpeedMode:false
     property int inputCursorIndex: 0
     property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
-    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0]
-    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
+    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 7
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 0]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
     property int inputSpeedCursorIndex: 0
     property variant inputSpeedPositions: [0, 1, 2]
@@ -2391,7 +2394,7 @@ Rectangle {
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 60
+                spacing: 35
 
                 // Ввод количества вагонов
                 Rectangle{
@@ -2536,6 +2539,54 @@ Rectangle {
                         }
                     }
                 }
+
+                // ввод яркости экрана состава
+                Rectangle{
+                    id: inputModeBrightness
+                    property int startPosition: 21
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("☺")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             Row {
@@ -2556,7 +2607,7 @@ Rectangle {
                 // ввод ординаты (км)
                 Rectangle{
                     id: inputModeOrdinateKm
-                    property int startPosition: 21
+                    property int startPosition: 22
                     property int positionsCount: 5
                     width: 17*positionsCount
                     height: 64
@@ -2605,7 +2656,7 @@ Rectangle {
                 // ввод ординаты (пк)
                 Rectangle{
                     id: inputModeDirectoinPc
-                    property int startPosition: 26
+                    property int startPosition: 27
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64
@@ -2657,7 +2708,7 @@ Rectangle {
                 // Направления движения
                 Rectangle{
                     id: inputModeDirectoin
-                    property int startPosition: 27
+                    property int startPosition: 28
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64

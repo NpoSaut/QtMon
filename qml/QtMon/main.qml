@@ -194,8 +194,10 @@ Rectangle {
                     {
                         input[1] = 5;
                     }
-
                     inputPositions = input;
+
+                    if (inputCursorIndex === 21)
+                        brightnessViewModel.brightness = inputPositions[inputCursorIndex]
                 }
 
                 if (inputSpeedMode)

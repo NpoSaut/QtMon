@@ -155,7 +155,7 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);             _offset += 4;
-                input = fillInputArray(input, _offset, 1, 7);                               _offset += 1;
+                input = fillInputArray(input, _offset, 1, brightnessViewModel.brightness);  _offset += 1;
                 input = fillInputArray(input, _offset, 6, (stateView.Ordinate + 1000)/100); _offset += 6;
                 input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
@@ -259,12 +259,12 @@ Rectangle {
                     {
                         stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
                     }
-                    stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
-                    var brightness            =  fillInputParameter(_offset, 1);  _offset += 1;
+                    stateView.MachinistNumber       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.TrainNumber           =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.WagonCount            =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.AxlesCount            =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.TrainMass             =  fillInputParameter(_offset, 4);  _offset += 4;
+                    brightnessViewModel.brightness  =  fillInputParameter(_offset, 1);  _offset += 1;
                     if (stateView.TrackNumber == 0)
                     {
                         stateView.ManualOrdinate = stateView.Ordinate // HACK
@@ -355,6 +355,11 @@ Rectangle {
     ModulesActivityViewModel {
         id: modulesActivity
         objectName: "modulesActivity"
+    }
+
+    BrightnessViewModel {
+        id: brightnessViewModel
+        objectName: "brightnessViewModel"
     }
 
     states: [

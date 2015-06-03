@@ -62,6 +62,7 @@
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
 #include "illumination/implementations/IlluminationDevice.h"
 #include "CanBilLcdIlluminationAnalogDevice.h"
+#include "viewmodels/brightnessviewmodel.h"
 
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
@@ -89,6 +90,7 @@ Interaction::CommandManager *commandManager;
 Interaction::KeyboardManager *keyboardManager;
 
 IIlluminationManager *illuminationManager;
+ViewModels::BrightnessViewModel *brightnessViewModel;
 
 // PASSIVE MODE FLAG
 bool passiveMode = false;
@@ -249,6 +251,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<ViewModels::SystemStateViewModel>("views", 1, 0, "SystemStateView");
     qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
     qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
+    qmlRegisterType<ViewModels::BrightnessViewModel>("views", 1, 0, "BrightnessViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
@@ -264,6 +267,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
     textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
+    brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
     levithan = new Levithan(systemState);
 
@@ -451,6 +455,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());
+    if (brightnessViewModel)
+        brightnessViewModel->associateManager(illuminationManager);
 
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});

@@ -102,7 +102,8 @@ SOURCES += \
     CanBilLcdIlluminationAnalogDevice.cpp \
     illumination/implementations/ExponentialIntensityConverter.cpp \
     interaction/commands/activehalfsetidicationcommand.cpp \
-    interaction/commands/activedpsindicationcommand.cpp
+    interaction/commands/activedpsindicationcommand.cpp \
+    viewmodels/brightnessviewmodel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -223,7 +224,8 @@ HEADERS += \
     CanBilLcdIlluminationAnalogDevice.h \
     illumination/implementations/ExponentialIntensityConverter.h \
     interaction/commands/activehalfsetidicationcommand.h \
-    interaction/commands/activedpsindicationcommand.h
+    interaction/commands/activedpsindicationcommand.h \
+    viewmodels/brightnessviewmodel.h
 
 CONFIG += console
 

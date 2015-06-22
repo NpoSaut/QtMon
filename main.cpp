@@ -438,7 +438,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
     // Управление яркостью
-    IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(0, 0.2*255, 255);
+    IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(10, 0.4*255, 255);
     IIntensityConverter *to7IntensityConverter = new LinearIntensityConverter(7);
     LinuxBacklightAnalogDeviceFactory linuxBacklightFactory;
     QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =

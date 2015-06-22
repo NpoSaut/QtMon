@@ -35,6 +35,7 @@
 #include "autolockhandler.h"
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
+#include "HardcodedVersion.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
@@ -82,6 +83,7 @@ Can *can;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
+HardcodedVersion *hardcodedVersion;
 
 Interaction::Keyboard *keyboard;
 Interaction::StoryManager *storyManager;
@@ -302,6 +304,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
+    hardcodedVersion = new HardcodedVersion(1, 0, can);
+
+    // Выдаёт версию по AUX_RESOURCE
+    QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-

@@ -103,7 +103,8 @@ SOURCES += \
     illumination/implementations/ExponentialIntensityConverter.cpp \
     interaction/commands/activehalfsetidicationcommand.cpp \
     interaction/commands/activedpsindicationcommand.cpp \
-    viewmodels/brightnessviewmodel.cpp
+    viewmodels/brightnessviewmodel.cpp \
+    HardcodedVersion.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -225,7 +226,8 @@ HEADERS += \
     illumination/implementations/ExponentialIntensityConverter.h \
     interaction/commands/activehalfsetidicationcommand.h \
     interaction/commands/activedpsindicationcommand.h \
-    viewmodels/brightnessviewmodel.h
+    viewmodels/brightnessviewmodel.h \
+    HardcodedVersion.h
 
 CONFIG += console
 

@@ -2564,7 +2564,7 @@ Rectangle {
                         font.pixelSize: 16
                         font.bold: true
                         color: "#ffe0e0e0"
-                        text: qsTr("☺")
+                        text: qsTr("☀")
                     }
 
                     Row {

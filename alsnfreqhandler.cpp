@@ -1,48 +1,5 @@
 #include "alsnfreqhandler.h"
 
-AlsnFreqHandler::AlsnFreqHandler(Can *can, Parser *parser, QObject *parent) :
-    QObject(parent),
-    can (can),
-    parser (parser),
-    target (-1),
-    convergenceCounter (0),
-    init (true)
-{
-    QObject::connect (&parser->mpState, SIGNAL(frequencyChanged(AlsnFrequency)), this, SLOT(proccessNewActualAlsnFreq(AlsnFrequency)));
-    QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessNewMpMessage()));
-}
-
-void AlsnFreqHandler::proccessNewTargetAlsnFreq(int freq)
-{
-    target = freq;
-}
-
-void AlsnFreqHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
-{
-    if ( init )
-    {
-        init = false;
-        emit targetAlsnFreqChanged (getIntFromFreq (freq));
-    }
-    emit actualAlsnFreqChanged (getIntFromFreq (freq));
-}
-
-void AlsnFreqHandler::proccessNewMpMessage()
-{
-    if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )
-    {
-        if ( ++convergenceCounter >= 2 )
-        {
-            convergenceCounter = 0;
-            can->transmitMessage (SysKey(SysKey::FREQ, SysKey::PRESS).encode ());
-        }
-    }
-    else
-    {
-        convergenceCounter = 0;
-    }
-}
-
 int AlsnFreqHandler::getIntFromFreq(const AlsnFrequency &freq)
 {
     int out = 0;
@@ -63,3 +20,58 @@ int AlsnFreqHandler::getIntFromFreq(const AlsnFrequency &freq)
     }
     return out;
 }
+
+AlsnFreqPassHandler::AlsnFreqPassHandler(Parser *parser, QObject *parent) :
+    AlsnFreqHandler (parent)
+{
+    QObject::connect(&parser->mpState, SIGNAL(frequencyChanged(AlsnFrequency)), this, SLOT(convertEnumToInt(AlsnFrequency)));
+}
+
+void AlsnFreqPassHandler::convertEnumToInt(AlsnFrequency freq)
+{
+    emit actualAlsnFreqChanged(getIntFromFreq(freq));
+}
+
+AlsnFreqSettingHandler::AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent) :
+    AlsnFreqHandler(parent),
+    can (can),
+    parser (parser),
+    target (-1),
+    convergenceCounter (0),
+    init (true)
+{
+    QObject::connect (&parser->mpState, SIGNAL(frequencyChanged(AlsnFrequency)), this, SLOT(proccessNewActualAlsnFreq(AlsnFrequency)));
+    QObject::connect (&parser->mpState, SIGNAL(messageReceived()), this, SLOT(proccessNewMpMessage()));
+}
+
+void AlsnFreqSettingHandler::proccessNewTargetAlsnFreq(int freq)
+{
+    target = freq;
+}
+
+void AlsnFreqSettingHandler::proccessNewActualAlsnFreq(AlsnFrequency freq)
+{
+    if ( init )
+    {
+        init = false;
+        emit targetAlsnFreqChanged (getIntFromFreq (freq));
+    }
+    emit actualAlsnFreqChanged (getIntFromFreq (freq));
+}
+
+void AlsnFreqSettingHandler::proccessNewMpMessage()
+{
+    if ( getIntFromFreq (parser->mpState.getFrequense ()) != target )
+    {
+        if ( ++convergenceCounter >= 2 )
+        {
+            convergenceCounter = 0;
+            can->transmitMessage (SysKey(SysKey::FREQ, SysKey::PRESS).encode ());
+        }
+    }
+    else
+    {
+        convergenceCounter = 0;
+    }
+}
+

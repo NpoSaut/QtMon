@@ -10,31 +10,134 @@ TrafficlightAdaptor::TrafficlightAdaptor(QObject *parent) :
 
 void TrafficlightAdaptor::proccessNewTrafficlight(Trafficlight light)
 {
-    int code;
+    emit trafficlightCodeChanged (int (light));
+
     switch (light) {
+    case WHITE:
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
     case RED:
-    case RED_EN:
-        code = 0;
+        emit trafficlightChanged(1);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
         break;
     case YELLOW_RED:
-    case YELLOW_RED_EN:
-        code = 1;
+        emit trafficlightChanged(2);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
         break;
     case YELLOW:
-    case YELLOW_EN:
-        code = 2;
+        emit trafficlightChanged(3);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(1);
+        emit freeBlockZonesUpStateChanged(false);
         break;
     case GREEN:
-    case GREEN_1_EN:
-    case GREEN_2_EN:
-    case GREEN_3_EN:
-    case GREEN_4_EN:
-        code = 3;
+        emit trafficlightChanged(4);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(2);
+        emit freeBlockZonesUpStateChanged(false);
         break;
-    case WHITE:
+    case OFF:
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(false);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case OFF1:
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(false);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case OFF2:
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(false);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case WHITE_BLINK:
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case RED_EN:
+        emit trafficlightChanged(1);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case YELLOW_RED_EN:
+        emit trafficlightChanged(2);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case FREE_ZONE_1:
+        emit trafficlightChanged(3);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(1);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case FREE_ZONE_2:
+        emit trafficlightChanged(4);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(2);
+        emit freeBlockZonesUpStateChanged(false);
+        break;
+    case FREE_ZONE_3:
+        emit trafficlightChanged(4);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(3);
+        emit freeBlockZonesUpStateChanged(true);
+        break;
+    case FREE_ZONE_4:
+        emit trafficlightChanged(4);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(4);
+        emit freeBlockZonesUpStateChanged(true);
+        break;
+    case FREE_ZONE_5:
+        emit trafficlightChanged(4);
+        emit trafficlightUpStateChanged(true);
+        emit freeBlockZonesNumberChanged(5);
+        emit freeBlockZonesUpStateChanged(true);
+        break;
     default:
-        code = -1;
+        emit trafficlightChanged(0);
+        emit trafficlightUpStateChanged(false);
+        emit freeBlockZonesNumberChanged(0);
+        emit freeBlockZonesUpStateChanged(false);
         break;
     }
-    emit trafficlightChanged (code);
 }
+
+
+TrafficLightOnOffAdaptor::TrafficLightOnOffAdaptor(QObject *parent)
+    : TrafficlightAdaptor (parent), on (false), light (Trafficlight::OFF)
+{ }
+
+void TrafficLightOnOffAdaptor::proccessNewTrafficlight(Trafficlight trafficlight)
+{
+    light = trafficlight;
+    sendToParent();
+}
+
+void TrafficLightOnOffAdaptor::setOnOffState(bool turnedOn)
+{
+    on = turnedOn;
+    sendToParent();
+}
+
+void TrafficLightOnOffAdaptor::sendToParent()
+{
+    TrafficlightAdaptor::proccessNewTrafficlight(on ? light : Trafficlight::OFF);
+}
+
+

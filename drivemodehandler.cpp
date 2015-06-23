@@ -1,8 +1,19 @@
 #include "drivemodehandler.h"
 #include <QDebug>
 
-DrivemodeHandler::DrivemodeHandler(Parser *parser, Can *can, QObject *parent) :
-    QObject(parent), parser (parser), can (can),
+DrivemodePassHandler::DrivemodePassHandler(Parser *parser, QObject *parent) :
+    DrivemodeHandler(parent)
+{
+    QObject::connect(&parser->mcoLimits, SIGNAL(driveModeChanged(DriveMode)), this, SLOT(convertEnumToInt(DriveMode)));
+}
+
+void DrivemodePassHandler::convertEnumToInt(DriveMode dm)
+{
+    emit actualDrivemodeChanged(int (dm));
+}
+
+DrivemodeSettingHandler::DrivemodeSettingHandler(Parser *parser, Can *can, QObject *parent) :
+    DrivemodeHandler(parent), parser (parser), can (can),
     target (parser->mcoLimits.getDriveMode ()),
     convergenceCounter (0)
 {
@@ -11,7 +22,7 @@ DrivemodeHandler::DrivemodeHandler(Parser *parser, Can *can, QObject *parent) :
     QObject::connect (&parser->vdsState, SIGNAL(ironWheelsChagned(bool)), this, SLOT(processIronWheelsChange(bool)));
 }
 
-void DrivemodeHandler::processIronWheelsChange(bool ironWheels)
+void DrivemodeSettingHandler::processIronWheelsChange(bool ironWheels)
 {
     if (ironWheels)
     {
@@ -24,12 +35,12 @@ void DrivemodeHandler::processIronWheelsChange(bool ironWheels)
     }
 }
 
-void DrivemodeHandler::processActualDrivemodeChage(DriveMode dm)
+void DrivemodeSettingHandler::processActualDrivemodeChage(DriveMode dm)
 {
     emit actualDrivemodeChanged (quint8(dm));
 }
 
-void DrivemodeHandler::processNewState()
+void DrivemodeSettingHandler::processNewState()
 {
     if ( parser->mcoLimits.getDriveMode () != target )
     {
@@ -45,7 +56,7 @@ void DrivemodeHandler::processNewState()
     }
 }
 
-void DrivemodeHandler::setTarget(DriveMode tm)
+void DrivemodeSettingHandler::setTarget(DriveMode tm)
 {
     if ( target != tm )
     {
@@ -54,12 +65,12 @@ void DrivemodeHandler::setTarget(DriveMode tm)
     }
 }
 
-DriveMode DrivemodeHandler::getTarget() const
+DriveMode DrivemodeSettingHandler::getTarget() const
 {
     return target;
 }
 
-void DrivemodeHandler::drivemodeChangeButtonPressed()
+void DrivemodeSettingHandler::drivemodeChangeButtonPressed()
 {
     switch(getTarget ())
     {
@@ -81,3 +92,4 @@ void DrivemodeHandler::drivemodeChangeButtonPressed()
             break;
     }
 }
+

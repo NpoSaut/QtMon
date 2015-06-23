@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSound>
 
-#include "systemstateviewmodel.h"
+#include "viewmodels/systemstateviewmodel.h"
 
 #include "sound/speakingthread.h"
 
@@ -16,7 +16,7 @@ private:
     sound::Speaker speaker;
 
 public:
-    explicit Levithan(SystemStateViewModel *state, QObject *parent = 0);
+    explicit Levithan(ViewModels::SystemStateViewModel *state, QObject *parent = 0);
     
 signals:
     
@@ -41,7 +41,8 @@ private slots:
     void onStateVigilanceRequiredChanged (bool value) { if (!value) beepConfirmation (); }
 
 private:
-    const SystemStateViewModel *state;
+    const ViewModels::SystemStateViewModel *state;
+    int prevLightIndex;
 };
 
 #endif // LEVITHAN_H

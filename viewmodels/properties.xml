@@ -18,6 +18,9 @@
     <Property type="QString" name="PressureTM" def="&quot;0.00&quot;" description="Давление ТМ" source="UKTOL_DD1 | MVD_DD"/> <!-- два знака после запятой. Макс 1.00 -->
     <Property type="QString" name="PressureUR" def="&quot;0.00&quot;" description="Давление УР" source="UKTOL_DD1"/> <!-- два знака после запятой. Макс 1.00 -->
 
+    <!-- Торможение -->
+    <Property type="float" name="BreakingFactor" def="0" description="Коэффициент торможения" />
+
     <!-- GPS-координаты -->
     <Property type="double" name="Longitude" def="60.4688" />
     <Property type="double" name="Latitude" def="56.88397" />
@@ -62,9 +65,11 @@
 
     <!-- Координата и номер пути для регистарции: как вводить и откуда брать ???? -->
     <Property type="int" name="Ordinate" def="0" description="Текущая ордината" />
+    <Property type="QString" name="NextStatinName" def="&quot;---&quot;" description="Название ближайшей станции" />
     <Property type="int" name="NextTargetKind" def="-1" description="Тип ближайшей цели" />
     <Property type="QString" name="NextTargetName" def="&quot;&quot;" description="Название ближайшей цели" />
     <Property type="int" name="NextTargetDistance" def="0" description="Расстояние до ближайшей цели" />
+    <Property type="int" name="SautTargetDistance" def="0" description="Расстояние до цели САУТ" />
 
     <!-- Строки предупреждений -->
     <Property type="QString" name="NotificationText" def="&quot;&quot;" description="Текст высокоприоритетного сообщения"/>

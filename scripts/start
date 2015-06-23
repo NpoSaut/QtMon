@@ -1,0 +1,7 @@
+ #!/bin/sh
+
+export QWS_DISPLAY="Transformed:Rot180"
+
+./QtMon -qws -nomouse &> /dev/null
+
+exit 0

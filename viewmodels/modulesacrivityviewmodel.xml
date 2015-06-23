@@ -1,0 +1,17 @@
+﻿<Task>
+  <ClassInfo name="ModulesActivityViewModel" />
+  <Properties>
+    <Property type="bool" name="bsDpsActivity" def="false" description="БС-ДПС" />
+    <Property type="bool" name="monitorActivity" def="false" description="Монитор" />
+    <Property type="bool" name="ipdActivity" def="false" description="ИПД" />
+    <Property type="bool" name="mpAlsActivity" def="false" description="МП-АЛС" />
+    <Property type="bool" name="electronicMapActivity" def="false" description="ЭК" />
+    <Property type="bool" name="gpsActivity" def="false" description="GPS" />
+    <Property type="bool" name="uktolOrVdsActivity" def="false" description="УКТОЛ (ВДС)" />
+    <Property type="bool" name="sautActivity" def="false" description="САУТ" />
+    <Property type="bool" name="radioOrCanMvb2Activity" def="false" description="РК (Шлюз CAN-MVB2)" />
+    <Property type="bool" name="epk151dOrOutputActivity" def="false" description="ЭПК-151Д (Вывод)" />
+    <Property type="bool" name="tskbmActivity" def="false" description="ТСКБМ-К" />
+    <Property type="bool" name="msulActivity" def="false" description="МСУЛ" />
+  </Properties>
+</Task>

@@ -155,6 +155,7 @@ Rectangle {
                 input = fillInputArray(input, _offset, 3, stateView.WagonCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 3, stateView.AxlesCount);            _offset += 3;
                 input = fillInputArray(input, _offset, 4, stateView.TrainMass);             _offset += 4;
+                input = fillInputArray(input, _offset, 1, brightnessViewModel.brightness);  _offset += 1;
                 input = fillInputArray(input, _offset, 6, (stateView.Ordinate + 1000)/100); _offset += 6;
                 input = fillInputArray(input, _offset, 1, stateView.ManualOrdinateIncreaseDirection); _offset += 1;
 
@@ -193,8 +194,10 @@ Rectangle {
                     {
                         input[1] = 5;
                     }
-
                     inputPositions = input;
+
+                    if (inputCursorIndex === 21)
+                        brightnessViewModel.brightness = inputPositions[inputCursorIndex]
                 }
 
                 if (inputSpeedMode)
@@ -258,11 +261,12 @@ Rectangle {
                     {
                         stateView.TrackNumber = fillInputParameter(_offset, 2) + 15;  _offset += 3;
                     }
-                    stateView.MachinistNumber =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.TrainNumber     =  fillInputParameter(_offset, 4);  _offset += 4;
-                    stateView.WagonCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.AxlesCount      =  fillInputParameter(_offset, 3);  _offset += 3;
-                    stateView.TrainMass       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.MachinistNumber       =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.TrainNumber           =  fillInputParameter(_offset, 4);  _offset += 4;
+                    stateView.WagonCount            =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.AxlesCount            =  fillInputParameter(_offset, 3);  _offset += 3;
+                    stateView.TrainMass             =  fillInputParameter(_offset, 4);  _offset += 4;
+                    brightnessViewModel.brightness  =  fillInputParameter(_offset, 1);  _offset += 1;
                     if (stateView.TrackNumber == 0)
                     {
                         stateView.ManualOrdinate = stateView.Ordinate // HACK
@@ -272,6 +276,7 @@ Rectangle {
                     }
 
                     if (inputPositions[0] == 0 && inputPositions[1] == 0) stateView.TrackNumber = 0;
+                    console.log(brightness);
                 }
 
                 if (inputSpeedMode)
@@ -284,6 +289,9 @@ Rectangle {
                 }
             }
         }
+
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyDown(event.key);
     }
 
     Keys.onReleased: {
@@ -321,6 +329,8 @@ Rectangle {
         if (altMode && event.key == Qt.Key_F3) {
         }
 
+        // Keyboard Proxy! :3
+        keyboardProxy.processKeyUp(event.key);
     }
 
 
@@ -332,6 +342,26 @@ Rectangle {
             if (stateView.DriveModeFact == stateView.DriveModeTarget)
                 pageNum = getDriveModeLetter(stateView.DriveModeFact) == "Т" ? 1 : 0
         }
+    }
+
+    QmlKeyboard {
+        id: keyboardProxy
+        objectName: "keyboardProxy"
+    }
+
+    TextManagerViewModel {
+        id: textManager
+        objectName: "textManager"
+    }
+
+    ModulesActivityViewModel {
+        id: modulesActivity
+        objectName: "modulesActivity"
+    }
+
+    BrightnessViewModel {
+        id: brightnessViewModel
+        objectName: "brightnessViewModel"
     }
 
     states: [
@@ -362,9 +392,9 @@ Rectangle {
     property bool inputSpeedMode:false
     property int inputCursorIndex: 0
     property bool manualOrdinateEnable: inputPositions[0] === 0 && inputPositions[1] === 0
-    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 8
-    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 0]
-    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
+    property int maxInputCursorIndex: manualOrdinateEnable ? inputPositions.length : inputPositions.length - 7
+    property variant inputPositions:       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 0]
+    property variant inputPositionsLength: [2, 10, 2, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2]
 
     property int inputSpeedCursorIndex: 0
     property variant inputSpeedPositions: [0, 1, 2]
@@ -445,7 +475,7 @@ Rectangle {
                            anchors.horizontalCenter: parent.horizontalCenter
 
                            text: qsTr("КООРДИНАТА")
-                           color: "#ffffff00"
+                           color: "#fffffb00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
                        }
@@ -453,7 +483,7 @@ Rectangle {
                            color: "#20000000"
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
+                           border.color: "#fffffb00"
                            height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
@@ -478,7 +508,7 @@ Rectangle {
                            anchors.horizontalCenter: parent.horizontalCenter
 
                            text: qsTr("№ ПУТИ")
-                           color: "#ffffff00"
+                           color: "#fffffb00"
                            font.pixelSize: 14
                            font.family: "URW Gothic L"
                        }
@@ -486,7 +516,7 @@ Rectangle {
                            color: "#20000000"
                            anchors.left: parent.left
                            anchors.right: parent.right
-                           border.color: "#ffffff00"
+                           border.color: "#fffffb00"
                            height: 20
                            Text {
                                anchors.horizontalCenter: parent.horizontalCenter
@@ -509,7 +539,7 @@ Rectangle {
                           anchors.horizontalCenter: parent.horizontalCenter
 
                           text: qsTr("УСКОРЕНИЕ")
-                          color: "#ffffff00"
+                          color: "#fffffb00"
                           font.pixelSize: 14
                           font.family: "URW Gothic L"
                       }
@@ -517,7 +547,7 @@ Rectangle {
                           color: "#20000000"
                           anchors.left: parent.left
                           anchors.right: parent.right
-                          border.color: "#ffffff00"
+                          border.color: "#fffffb00"
                           height: 20
                           Text {
                               anchors.horizontalCenter: parent.horizontalCenter
@@ -539,7 +569,7 @@ Rectangle {
                          anchors.horizontalCenter: parent.horizontalCenter
 
                          text: qsTr("ТЦ")
-                         color: "#ffffff00"
+                         color: "#fffffb00"
                          font.pixelSize: 14
                          font.family: "URW Gothic L"
                      }
@@ -547,7 +577,7 @@ Rectangle {
                          color: "#20000000"
                          anchors.left: parent.left
                          anchors.right: parent.right
-                         border.color: "#ffffff00"
+                         border.color: "#fffffb00"
                          height: 20
                          Text {
                              anchors.horizontalCenter: parent.horizontalCenter
@@ -568,7 +598,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         text: qsTr("ТМ")
-                        color: "#ffffff00"
+                        color: "#fffffb00"
                         font.pixelSize: 14
                         font.family: "URW Gothic L"
                     }
@@ -576,7 +606,7 @@ Rectangle {
                         color: "#20000000"
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        border.color: "#ffffff00"
+                        border.color: "#fffffb00"
                         height: 20
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -601,7 +631,7 @@ Rectangle {
                        anchors.horizontalCenter: parent.horizontalCenter
 
                        text: qsTr("ВРЕМЯ")
-                       color: "#ffffff00"
+                       color: "#fffffb00"
                        font.pixelSize: 14
                        font.family: "URW Gothic L"
                    }
@@ -609,7 +639,7 @@ Rectangle {
                        color: "#20000000"
                        anchors.left: parent.left
                        anchors.right: parent.right
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        height: 20
                        Text {
                            anchors.horizontalCenter: parent.horizontalCenter
@@ -632,7 +662,7 @@ Rectangle {
                    // Буква режима движения
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 20
                        height: 20
                        Text {
@@ -649,7 +679,7 @@ Rectangle {
                    // Яйца
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 21
                        height: 20
                        Image {
@@ -663,7 +693,7 @@ Rectangle {
                    // Сигнал с небес (достоверность GPS)
                    Rectangle {
                        color: "#20000000"
-                       border.color: "#ffffff00"
+                       border.color: "#fffffb00"
                        width: 21
                        height: 20
                        visible: debugModeEnableTimer.running
@@ -1043,25 +1073,31 @@ Rectangle {
 
             // Ближайшая цель
             Rectangle {
-                color: "#20000000"
+                color: textManager.Text === ""
+                            ? "#20000000"
+                            : "#25658C";
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.rightMargin: 200
                 anchors.leftMargin: 10
-                border.color: "#ffffff00"
+                border.color: textManager.Text === ""
+                                ? "#fffffb00"
+                                : "#4999C9"
                 height: 25
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    text: (stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
-                            getTargetKindName(stateView.NextTargetKind) + " " +
-                            stateView.NextTargetName +
-                            "через " + stateView.NextTargetDistance + "м"
-                            : "нет данных о цели" ;
-                    color: "#ffffffff"
+                    text: textManager.Text === "" ?
+                            ((stateView.NextTargetKind > 0 && stateView.NextTargetDistance > 0) ?
+                                getTargetKindName(stateView.NextTargetKind) + " " +
+                                stateView.NextTargetName +
+                                " через " + stateView.NextTargetDistance + "м"
+                                : "нет данных о цели")
+                            : textManager.Text;
+                    color: "#fff";
                     font.pixelSize: 14
                     font.family: "URW Gothic L"
                 }
@@ -1076,7 +1112,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.leftMargin: -180
-                border.color: "#ffffff00"
+                border.color: "#fffffb00"
                 height: 25
                 visible: debugModeEnableTimer.running
 
@@ -1557,7 +1593,7 @@ Rectangle {
                                 Text {
                                     id: drivemodeSwitchItemLabel
                                     visible: modelData != " "
-                                    color: !parent.isTransport ? "#ccc" : "#ffffff00"
+                                    color: !parent.isTransport ? "#ccc" : "#fffffb00"
                                     text: modelData
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
@@ -2365,7 +2401,7 @@ Rectangle {
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 60
+                spacing: 35
 
                 // Ввод количества вагонов
                 Rectangle{
@@ -2510,6 +2546,54 @@ Rectangle {
                         }
                     }
                 }
+
+                // ввод яркости экрана состава
+                Rectangle{
+                    id: inputModeBrightness
+                    property int startPosition: 21
+                    property int positionsCount: 1
+                    width: 20*positionsCount
+                    height: 64
+                    color: "#00000000"
+
+                    Text{
+                        anchors.top: parent.top
+                        anchors.topMargin: 30
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.family: "URW Gothic L"
+                        font.pixelSize: 16
+                        font.bold: true
+                        color: "#ffe0e0e0"
+                        text: qsTr("☀")
+                    }
+
+                    Row {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        height: 26
+                        spacing: 0
+                        Repeater {
+                            model: parent.parent.positionsCount
+                            Image {
+                                property int myCursorIndex: parent.parent.startPosition+index
+                                property bool blink: (myCursorIndex == inputCursorIndex) && inputBlinker.blink
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: blink ? "Slices/InputMode-InputPositionInverted.png" : "Slices/InputMode-InputPosition.png"
+                                height: 26
+                                width: 17
+                                Text {
+                                    text: inputPositions[parent.myCursorIndex]
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.pixelSize: 21
+                                    font.family: "URW Gothic L"
+                                    font.bold: true
+                                    color: parent.blink ?  "#ccc" : "#ff474747"
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             Row {
@@ -2530,7 +2614,7 @@ Rectangle {
                 // ввод ординаты (км)
                 Rectangle{
                     id: inputModeOrdinateKm
-                    property int startPosition: 21
+                    property int startPosition: 22
                     property int positionsCount: 5
                     width: 17*positionsCount
                     height: 64
@@ -2579,7 +2663,7 @@ Rectangle {
                 // ввод ординаты (пк)
                 Rectangle{
                     id: inputModeDirectoinPc
-                    property int startPosition: 26
+                    property int startPosition: 27
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64
@@ -2631,7 +2715,7 @@ Rectangle {
                 // Направления движения
                 Rectangle{
                     id: inputModeDirectoin
-                    property int startPosition: 27
+                    property int startPosition: 28
                     property int positionsCount: 1
                     width: 20*positionsCount
                     height: 64

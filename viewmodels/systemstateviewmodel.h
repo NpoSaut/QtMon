@@ -5,6 +5,9 @@
 
 #include "qtBlokLib/modulesactivity.h"
 
+namespace ViewModels
+{
+
 class SystemStateViewModel : public QDeclarativeItem
 {
     Q_OBJECT
@@ -53,6 +56,10 @@ class SystemStateViewModel : public QDeclarativeItem
     // Давление УР
     QString pressureURValue;
     Q_PROPERTY(QString PressureUR READ getPressureUR WRITE setPressureUR NOTIFY PressureURChanged)
+
+    // Коэффициент торможения
+    float breakingFactorValue;
+    Q_PROPERTY(float BreakingFactor READ getBreakingFactor WRITE setBreakingFactor NOTIFY BreakingFactorChanged)
 
     double longitudeValue;
     Q_PROPERTY(double Longitude READ getLongitude WRITE setLongitude NOTIFY LongitudeChanged)
@@ -150,6 +157,10 @@ class SystemStateViewModel : public QDeclarativeItem
     int ordinateValue;
     Q_PROPERTY(int Ordinate READ getOrdinate WRITE setOrdinate NOTIFY OrdinateChanged)
 
+    // Название ближайшей станции
+    QString nextStatinNameValue;
+    Q_PROPERTY(QString NextStatinName READ getNextStatinName WRITE setNextStatinName NOTIFY NextStatinNameChanged)
+
     // Тип ближайшей цели
     int nextTargetKindValue;
     Q_PROPERTY(int NextTargetKind READ getNextTargetKind WRITE setNextTargetKind NOTIFY NextTargetKindChanged)
@@ -161,6 +172,10 @@ class SystemStateViewModel : public QDeclarativeItem
     // Расстояние до ближайшей цели
     int nextTargetDistanceValue;
     Q_PROPERTY(int NextTargetDistance READ getNextTargetDistance WRITE setNextTargetDistance NOTIFY NextTargetDistanceChanged)
+
+    // Расстояние до цели САУТ
+    int sautTargetDistanceValue;
+    Q_PROPERTY(int SautTargetDistance READ getSautTargetDistance WRITE setSautTargetDistance NOTIFY SautTargetDistanceChanged)
 
     // Текст высокоприоритетного сообщения
     QString notificationTextValue;
@@ -228,60 +243,63 @@ public:
     explicit SystemStateViewModel(QDeclarativeItem *parent = 0);
 
     // public properties getters start
-    const double getSpeed() const;
-    const bool getSpeedIsValid() const;
-    const double getSpeedFromSky() const;
-    const double getSpeedFromEarth() const;
-    const int getSpeedRestriction() const;
-    const int getTargetSpeed() const;
-    const double getAcceleration() const;
-    const int getDesignSpeed() const;
-    const QString getPressureTC() const;
-    const QString getPressureTM() const;
-    const QString getPressureUR() const;
-    const double getLongitude() const;
-    const double getLatitude() const;
-    const bool getGpsValid() const;
-    const int getSystemWarningLevel() const;
-    const int getFullSetWarningLevel() const;
-    const bool getIsPressureOk() const;
-    const bool getIsEpvReady() const;
-    const bool getIsEpvReleased() const;
-    const QString getModulesActivityString() const;
-    const int getMilage() const;
-    const int getLight() const;
-    const int getAlsnFreqTarget() const;
-    const int getAlsnFreqFact() const;
-    const int getAutolockTypeTarget() const;
-    const int getAutolockTypeFact() const;
-    const QString getTime() const;
-    const QString getDate() const;
-    const bool getIsRegistrationTapeActive() const;
-    const int getDriveModeTarget() const;
-    const int getDriveModeFact() const;
-    const bool getIronWheels() const;
-    const bool getIsVigilanceRequired() const;
-    const bool getIsTractionOn() const;
-    const int getDirection() const;
-    const int getOrdinate() const;
-    const int getNextTargetKind() const;
-    const QString getNextTargetName() const;
-    const int getNextTargetDistance() const;
-    const QString getNotificationText() const;
-    const int getTrackNumber() const;
-    const int getMachinistNumber() const;
-    const int getTrainNumber() const;
-    const int getWagonCount() const;
-    const int getAxlesCount() const;
-    const int getTrainMass() const;
-    const bool getManualOrdinateEnable() const;
-    const int getManualOrdinate() const;
-    const int getManualOrdinateIncreaseDirection() const;
-    const int getAutolockSpeed() const;
-    const bool getTsvcIsOnline() const;
-    const bool getTsvcIsMachinistCheerful() const;
-    const bool getTsvcIsVigilanceRequired() const;
-    const bool getTsvcIsPreAlarmActive() const;
+    double getSpeed() const;
+    bool getSpeedIsValid() const;
+    double getSpeedFromSky() const;
+    double getSpeedFromEarth() const;
+    int getSpeedRestriction() const;
+    int getTargetSpeed() const;
+    double getAcceleration() const;
+    int getDesignSpeed() const;
+    QString getPressureTC() const;
+    QString getPressureTM() const;
+    QString getPressureUR() const;
+    float getBreakingFactor() const;
+    double getLongitude() const;
+    double getLatitude() const;
+    bool getGpsValid() const;
+    int getSystemWarningLevel() const;
+    int getFullSetWarningLevel() const;
+    bool getIsPressureOk() const;
+    bool getIsEpvReady() const;
+    bool getIsEpvReleased() const;
+    QString getModulesActivityString() const;
+    int getMilage() const;
+    int getLight() const;
+    int getAlsnFreqTarget() const;
+    int getAlsnFreqFact() const;
+    int getAutolockTypeTarget() const;
+    int getAutolockTypeFact() const;
+    QString getTime() const;
+    QString getDate() const;
+    bool getIsRegistrationTapeActive() const;
+    int getDriveModeTarget() const;
+    int getDriveModeFact() const;
+    bool getIronWheels() const;
+    bool getIsVigilanceRequired() const;
+    bool getIsTractionOn() const;
+    int getDirection() const;
+    int getOrdinate() const;
+    QString getNextStatinName() const;
+    int getNextTargetKind() const;
+    QString getNextTargetName() const;
+    int getNextTargetDistance() const;
+    int getSautTargetDistance() const;
+    QString getNotificationText() const;
+    int getTrackNumber() const;
+    int getMachinistNumber() const;
+    int getTrainNumber() const;
+    int getWagonCount() const;
+    int getAxlesCount() const;
+    int getTrainMass() const;
+    bool getManualOrdinateEnable() const;
+    int getManualOrdinate() const;
+    int getManualOrdinateIncreaseDirection() const;
+    int getAutolockSpeed() const;
+    bool getTsvcIsOnline() const;
+    bool getTsvcIsMachinistCheerful() const;
+    bool getTsvcIsVigilanceRequired() const;
+    bool getTsvcIsPreAlarmActive() const;
     // public properties getters end
 
 signals:
@@ -311,6 +329,7 @@ signals:
     void PressureTCChanged(const QString value);
     void PressureTMChanged(const QString value);
     void PressureURChanged(const QString value);
+    void BreakingFactorChanged(const float value);
     void LongitudeChanged(const double value);
     void LatitudeChanged(const double value);
     void gpsValidChanged(const bool value);
@@ -336,9 +355,11 @@ signals:
     void IsTractionOnChanged(const bool value);
     void DirectionChanged(const int value);
     void OrdinateChanged(const int value);
+    void NextStatinNameChanged(const QString value);
     void NextTargetKindChanged(const int value);
     void NextTargetNameChanged(const QString value);
     void NextTargetDistanceChanged(const int value);
+    void SautTargetDistanceChanged(const int value);
     void NotificationTextChanged(const QString value);
     void TrackNumberChanged(const int value);
     void MachinistNumberChanged(const int value);
@@ -357,6 +378,8 @@ signals:
     // properties signals end
 
 public slots:
+    void setDesignSpeed(int value, bool valid);
+
     // public properties setters start
     void setSpeed(const double);
     void setSpeedIsValid(const bool);
@@ -369,6 +392,7 @@ public slots:
     void setPressureTC(const QString);
     void setPressureTM(const QString);
     void setPressureUR(const QString);
+    void setBreakingFactor(const float);
     void setLongitude(const double);
     void setLatitude(const double);
     void setGpsValid(const bool);
@@ -394,9 +418,11 @@ public slots:
     void setIsTractionOn(const bool);
     void setDirection(const int);
     void setOrdinate(const int);
+    void setNextStatinName(const QString);
     void setNextTargetKind(const int);
     void setNextTargetName(const QString);
     void setNextTargetDistance(const int);
+    void setSautTargetDistance(const int);
     void setNotificationText(const QString);
     void setTrackNumber(const int);
     void setMachinistNumber(const int);
@@ -415,5 +441,7 @@ public slots:
     // public properties setters end
     
 };
+
+}
 
 #endif // SYSTEMSTATEVIEWMODEL_H

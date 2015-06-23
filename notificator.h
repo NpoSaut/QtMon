@@ -14,7 +14,7 @@ class Notificator : public QObject
 {
     Q_OBJECT
 public:
-    explicit Notificator(Parser *onParser, QObject *parent = 0);
+    explicit Notificator(bool handbrakeHintRequired, Parser *onParser, QObject *parent = 0);
     
 signals:
     void notificationTextChanged (QString text);
@@ -28,6 +28,7 @@ private:
     
     QTimer handbrakeHintTimeout;
     bool handbrakeHint;
+    bool handbrakeHintRequired;
 };
 
 #endif // NOTIFICATOR_H

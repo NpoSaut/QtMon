@@ -1,31 +1,38 @@
 #include "notificator.h"
 
-Notificator::Notificator(Parser *onParser, QObject *parent) :
+Notificator::Notificator(bool handbrakeHintRequired, Parser *onParser, QObject *parent) :
     QObject(parent),
-    parser(onParser)
+    parser(onParser),
+    handbrakeHintRequired (handbrakeHintRequired)
 {
     this->connect (onParser, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
 
-    handbrakeHintTimeout.setSingleShot (true);
-    handbrakeHintTimeout.setInterval (15000);
-    this->connect (&handbrakeHintTimeout, SIGNAL(timeout()), SLOT(handbrakeHintShow()));
+    if (handbrakeHintRequired)
+    {
+        handbrakeHintTimeout.setSingleShot (true);
+        handbrakeHintTimeout.setInterval (15000);
+        this->connect (&handbrakeHintTimeout, SIGNAL(timeout()), SLOT(handbrakeHintShow()));
+    }
 }
 
 
 void Notificator::getStateChangedSignal()
 {
-    // Подними ручник
-    if ( parser->mcoLimits.getDriveMode () != ROAD
-     && !parser->ipdState.isInMotion ()
-     &&  parser->mcoState.isTraction ()  )
+    if (handbrakeHintRequired)
     {
-        if ( !handbrakeHintTimeout.isActive () )
-            handbrakeHintTimeout.start ();
-    }
-    else
-    {
-        handbrakeHintTimeout.stop ();
-        handbrakeHint = false;
+        // Подними ручник
+        if ( parser->mcoLimits.getDriveMode () != ROAD
+         && !parser->ipdState.isInMotion ()
+         &&  parser->mcoState.isTraction ()  )
+        {
+            if ( !handbrakeHintTimeout.isActive () )
+                handbrakeHintTimeout.start ();
+        }
+        else
+        {
+            handbrakeHintTimeout.stop ();
+            handbrakeHint = false;
+        }
     }
 
     if ( !parser->mcoState.isEpvReady () )

@@ -303,16 +303,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
     cookies = new Cookies(can);
-    elmapForwardTarget = new ElmapForwardTarget(can);
-    notificator = new Notificator(blokMessages);
-    displayStateSander = new DisplayStateSander(blokMessages, can);
-    hardcodedVersion = new HardcodedVersion(1, 0, can);
 
     // Выдаёт версию по AUX_RESOURCE
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Читаем конфигурацию
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
+
+    elmapForwardTarget = new ElmapForwardTarget(can);
+    notificator = new Notificator(configuration->isBreakAssistRequired(), blokMessages);
+    displayStateSander = new DisplayStateSander(blokMessages, can);
+    hardcodedVersion = new HardcodedVersion(1, 0, can);
+
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-

@@ -23,40 +23,88 @@ SOURCES += \
     qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
     qtCanLib/socketcan/cansendqueue.cpp \
-    systemstateviewmodel.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     main.cpp \
-    qtBlokLib/sysdiagnostics.cpp \
     qtBlokLib/modulesactivity.cpp \
     qtBlokLib/iodrv.cpp \
     qtBlokLib/endecs.cpp \
     qtBlokLib/cookies.cpp \
     qtBlokLib/elmapforwardtarget.cpp \
+    qtBlokLib/parsers/aux_resource.cpp \
+    qtBlokLib/parsers/canblokmessage.cpp \
+    qtBlokLib/parsers/console_key.cpp \
+    qtBlokLib/parsers/display_state.cpp \
+    qtBlokLib/parsers/mco_limits.cpp \
+    qtBlokLib/parsers/mco_mode.cpp \
+    qtBlokLib/parsers/mco_state.cpp \
+    qtBlokLib/parsers/mm_alt_long.cpp \
+    qtBlokLib/parsers/mm_coord.cpp \
+    qtBlokLib/parsers/mm_data.cpp \
+    qtBlokLib/parsers/mm_station.cpp \
+    qtBlokLib/parsers/mp_state.cpp \
+    qtBlokLib/parsers/mvd_dd.cpp \
+    qtBlokLib/parsers/saut_state.cpp \
+    qtBlokLib/parsers/sys_diagnostics.cpp \
+    qtBlokLib/parsers/sys_key.cpp \
+    qtBlokLib/parsers/ipd_state.cpp \
+    qtBlokLib/parsers/ipd_date.cpp \
+    qtBlokLib/parsers/tskbm_state.cpp \
+    qtBlokLib/parsers/uktol_dd1.cpp \
+    qtBlokLib/parsers/vds_state.cpp \
     qtBlokLib/parser.cpp \
     notificator.cpp \
-    qtBlokLib/parsers/canblokmessage.cpp \
-    qtBlokLib/parsers/display_state.cpp \
-    qtBlokLib/parsers/mm_coord.cpp \
-    qtBlokLib/parsers/mco_limits.cpp \
-    qtBlokLib/parsers/ipd_state.cpp \
-    qtBlokLib/parsers/mco_state.cpp \
-    qtBlokLib/parsers/sys_key.cpp \
-    qtBlokLib/parsers/tskbm_state.cpp \
     drivemodehandler.cpp \
-    qtBlokLib/parsers/vds_state.cpp \
     displaystatesender.cpp \
-    qtBlokLib/parsers/uktol_dd1.cpp \
-    qtBlokLib/parsers/mvd_dd.cpp \
     pressureselector.cpp \
-    qtBlokLib/parsers/mp_state.cpp \
     trafficlightadaptor.cpp \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
-    qtBlokLib/parsers/mm_alt_long.cpp \
-    qtBlokLib/parsers/mco_mode.cpp \
-    qtBlokLib/parsers/console_key.cpp
+    stateserializer.cpp \
+    records/staterecorder.cpp \
+    records/stateplayer.cpp \
+    interaction/story.cpp \
+    interaction/storymanager.cpp \
+    interaction/keyboardmanager.cpp \
+    interaction/textmanager.cpp \
+    interaction/contexts/executecommandcontext.cpp \
+    interaction/activities/executecommandactivity.cpp \
+    interaction/commandmanager.cpp \
+    interaction/commands/configurecommand.cpp \
+    interaction/keyboard.cpp \
+    interaction/keyboards/cankeyboard.cpp \
+    interaction/keyboards/qmlkeyboard.cpp \
+    interaction/keyboards/compositekeyboard.cpp \
+    interaction/commands/modulesactivitycommand.cpp \
+    interaction/activities/cookiesactiviybase.cpp \
+    interaction/activities/displaymodulesactivityactivity.cpp \
+    viewmodels/modulesactivityviewmodel.cpp \
+    viewmodels/systemstateviewmodel.cpp \
+    viewmodels/textmanagerviewmodel.cpp \
+    interaction/activities/requestcookiesactivity.cpp \
+    interaction/activities/submitcookiesactivity.cpp \
+    interaction/activities/inputactivity.cpp \
+    interaction/activities/popupactivity.cpp \
+    interaction/commands/tripconfigurationcommand.cpp \
+    interaction/commands/manualcoordinatecommand.cpp \
+    interaction/commands/versionrequestcommand.cpp \
+    interaction/activities/versionrequestactivity.cpp \
+    interaction/commands/versionrequestcommandfactory.cpp \
+    illumination/Edisson.cpp \
+    illumination/implementations/DebugAnalogDevice.cpp \
+    interaction/activities/changebrightnessactivity.cpp \
+    illumination/implementations/IlluminationDevice.cpp \
+    illumination/implementations/WeightedCompositeIlluminationDevice.cpp \
+    illumination/implementations/FileAnalogDevice.cpp \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
+    qtBlokLib/parsers/BilLcd.cpp \
+    CanBilLcdIlluminationAnalogDevice.cpp \
+    illumination/implementations/ExponentialIntensityConverter.cpp \
+    interaction/commands/activehalfsetidicationcommand.cpp \
+    interaction/commands/activedpsindicationcommand.cpp \
+    viewmodels/brightnessviewmodel.cpp \
+    HardcodedVersion.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -66,7 +114,9 @@ RESOURCES +=
 
 OTHER_FILES += \
     properties.xml \
-    !TODO.txt
+    !TODO.txt \
+    viewmodels/modulesacrivityviewmodel.xml \
+    viewmodels/properties.xml
 
 HEADERS += \
     cDoodahLib/packing.h \
@@ -77,11 +127,9 @@ HEADERS += \
     qtDoodahLib/queues.h \
     qtCanLib/socketcan/sktcan.h \
     qtCanLib/socketcan/cansendqueue.h \
-    systemstateviewmodel.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
-    qtBlokLib/sysdiagnostics.h \
     qtBlokLib/modulesactivity.h \
     qtBlokLib/iodrvmain.h \
     qtBlokLib/iodrv.h \
@@ -116,7 +164,70 @@ HEADERS += \
     qtBlokLib/parsers/mm_alt_long.h \
     qtBlokLib/parsers/mco_mode.h \
     qtBlokLib/parsers/autolockmode.h \
-    qtBlokLib/parsers/console_key.h
+    qtBlokLib/parsers/console_key.h \
+    qtBlokLib/parsers/saut_state.h \
+    qtBlokLib/parsers/mm_station.h \
+    stateserializer.h \
+    records/staterecorder.h \
+    records/stateplayer.h \
+    qtBlokLib/parsers/aux_resource.h \
+    qtBlokLib/parsers/ipd_date.h \
+    qtBlokLib/parsers/mm_data.h \
+    qtBlokLib/parsers/sys_diagnostics.h \
+    interaction/activity.h \
+    interaction/story.h \
+    interaction/storymanager.h \
+    interaction/keyboardmanager.h \
+    interaction/textmanager.h \
+    interaction/contexts/executecommandcontext.h \
+    interaction/activities/executecommandactivity.h \
+    interaction/command.h \
+    interaction/commandmanager.h \
+    interaction/commands/configurecommand.h \
+    interaction/context.h \
+    interaction/keyboard.h \
+    interaction/keyboards/cankeyboard.h \
+    interaction/keyboards/qmlkeyboard.h \
+    interaction/keyboards/compositekeyboard.h \
+    interaction/commands/modulesactivitycommand.h \
+    interaction/activities/displaymodulesactivityactivity.h \
+    viewmodels/modulesactivityviewmodel.h \
+    viewmodels/systemstateviewmodel.h \
+    viewmodels/textmanagerviewmodel.h \
+    interaction/contexts/cookiescontext.h \
+    interaction/activities/cookiesactiviybase.h \
+    interaction/activities/requestcookiesactivity.h \
+    interaction/activities/submitcookiesactivity.h \
+    interaction/activities/inputactivity.h \
+    interaction/activities/popupactivity.h \
+    interaction/commands/tripconfigurationcommand.h \
+    interaction/commands/manualcoordinatecommand.h \
+    interaction/commands/versionrequestcommand.h \
+    interaction/contexts/versionrequestcontext.h \
+    interaction/activities/versionrequestactivity.h \
+    interaction/commands/versionrequestcommandfactory.h \
+    illumination/Edisson.h \
+    illumination/interfaces/IAnalogDevice.h \
+    illumination/interfaces/IIlluminationSettings.h \
+    illumination/interfaces/IIntensityConverter.h \
+    illumination/implementations/DummyIlluminationSettings.h \
+    illumination/implementations/LinearIntensityConverter.h \
+    illumination/interfaces/IIlluminationManager.h \
+    illumination/implementations/DebugAnalogDevice.h \
+    interaction/contexts/changebrightnesscontext.h \
+    interaction/activities/changebrightnessactivity.h \
+    illumination/interfaces/IIlluminationDevice.h \
+    illumination/implementations/IlluminationDevice.h \
+    illumination/implementations/WeightedCompositeIlluminationDevice.h \
+    illumination/implementations/FileAnalogDevice.h \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
+    qtBlokLib/parsers/BilLcd.h \
+    CanBilLcdIlluminationAnalogDevice.h \
+    illumination/implementations/ExponentialIntensityConverter.h \
+    interaction/commands/activehalfsetidicationcommand.h \
+    interaction/commands/activedpsindicationcommand.h \
+    viewmodels/brightnessviewmodel.h \
+    HardcodedVersion.h
 
 CONFIG += console
 

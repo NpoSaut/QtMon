@@ -104,7 +104,8 @@ SOURCES += \
     interaction/commands/activehalfsetidicationcommand.cpp \
     interaction/commands/activedpsindicationcommand.cpp \
     viewmodels/brightnessviewmodel.cpp \
-    HardcodedVersion.cpp
+    HardcodedVersion.cpp \
+    configuration/CookieConfiguration.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -227,7 +228,9 @@ HEADERS += \
     interaction/commands/activehalfsetidicationcommand.h \
     interaction/commands/activedpsindicationcommand.h \
     viewmodels/brightnessviewmodel.h \
-    HardcodedVersion.h
+    HardcodedVersion.h \
+    configuration/IConfiguration.h \
+    configuration/CookieConfiguration.h
 
 CONFIG += console
 

@@ -36,6 +36,7 @@
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
 #include "HardcodedVersion.h"
+#include "configuration/CookieConfiguration.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
@@ -84,6 +85,7 @@ Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
 HardcodedVersion *hardcodedVersion;
+IConfiguration *configuration;
 
 Interaction::Keyboard *keyboard;
 Interaction::StoryManager *storyManager;
@@ -308,6 +310,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Выдаёт версию по AUX_RESOURCE
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
+
+    // Читаем конфигурацию
+    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-

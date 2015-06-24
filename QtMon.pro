@@ -230,7 +230,10 @@ HEADERS += \
     viewmodels/brightnessviewmodel.h \
     HardcodedVersion.h \
     configuration/IConfiguration.h \
-    configuration/CookieConfiguration.h
+    configuration/CookieConfiguration.h \
+    qtDoodahLib/queues/IThreadSafeQueue.h \
+    qtDoodahLib/queues/LinerThreadSafeQueue.h \
+    qtDoodahLib/queues/PriorityThreadSafeQueue.h
 
 CONFIG += console
 

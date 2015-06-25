@@ -2,7 +2,9 @@
 #define ALSNFREQHANDLER_H
 
 #include <QObject>
-#include <qtBlokLib/parser.h>
+
+#include "qtCanLib/ICan.h"
+#include "qtBlokLib/parser.h"
 
 class AlsnFreqHandler : public QObject
 {
@@ -53,7 +55,7 @@ class AlsnFreqSettingHandler : public AlsnFreqHandler
 {
     Q_OBJECT
 public:
-    explicit AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent = 0);
+    explicit AlsnFreqSettingHandler(ICan *can, Parser *parser, QObject *parent = 0);
     
 signals:
     // При получении новой актуальной частоты МП-АЛС
@@ -77,7 +79,7 @@ protected slots:
     void proccessNewMpMessage ();
 
 protected:
-    Can *can;
+    ICan *can;
     Parser *parser;
 
     int target;

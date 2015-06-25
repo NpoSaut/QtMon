@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parser.h"
 #include "illumination/interfaces/IAnalogDevice.h"
 
@@ -13,7 +13,7 @@ class DisplayStateSander : public QObject, public IAnalogDevice
 {
     Q_OBJECT
 public:
-    explicit DisplayStateSander(Parser *parser, Can *can, QObject *parent = 0);
+    explicit DisplayStateSander(Parser *parser, ICan *can, QObject *parent = 0);
     void setValue(double backlightLevel);
     
 signals:
@@ -24,7 +24,7 @@ protected:
     void timerEvent(QTimerEvent *event);
 
 private:
-    Can *can;
+    ICan *can;
     Parser *parser;
     int backlightLevel;
 };

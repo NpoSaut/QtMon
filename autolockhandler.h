@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/parsers/autolockmode.h"
 
@@ -15,7 +15,7 @@ class AutolockHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit AutolockHandler(Can *can, Parser *parser, QObject *parent = 0);
+    explicit AutolockHandler(ICan *can, Parser *parser, QObject *parent = 0);
     
 signals:
     // Испускается при изменении акутального (фактического) режима
@@ -36,7 +36,7 @@ protected slots:
     void proccessAutolockStateChange (AutolockMode mode);
     
 protected:
-    Can *can;
+    ICan *can;
     Parser *parser;
 
     AutolockMode target;

@@ -7,7 +7,7 @@
 #include "../activity.h"
 #include "../textmanager.h"
 #include "../contexts/versionrequestcontext.h"
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parsers/sys_diagnostics.h"
 #include "qtBlokLib/parsers/aux_resource.h"
 
@@ -52,7 +52,7 @@ class VersionRequestActivity : public Activity
     Q_OBJECT
 public:
     explicit VersionRequestActivity(QString moduleName, SysDiagnostics::AuxModule moduleId, QVector<AuxResourceVersion *> auxResources,
-                                    Contexts::VersionRequestContext *context, Can *can, TextManager *textManager,
+                                    Contexts::VersionRequestContext *context, ICan *can, TextManager *textManager,
                                     QObject *parent = 0);
 
     virtual void run ();
@@ -66,7 +66,7 @@ private:
     void baybay ();
 
     Contexts::VersionRequestContext *context;
-    Can *can;
+    ICan *can;
     TextManager *textManager;
     QTimer timer;
 

@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-DisplayStateSander::DisplayStateSander(Parser *parser, Can *can, QObject *parent) :
+DisplayStateSander::DisplayStateSander(Parser *parser, ICan *can, QObject *parent) :
     QObject(parent),
     can (can),
     parser (parser)
@@ -30,10 +30,10 @@ void DisplayStateSander::timerEvent(QTimerEvent *event)
     dsa.setK20 (parser->sysKey.isKeyPressed (SysKey::K20));
     dsa.setFreq (parser->sysKey.isKeyPressed (SysKey::FREQ));
     dsa.setBacklightLevel(backlightLevel);
-    can->transmitMessage (dsa.encode ());
+    can->send (dsa.encode ());
 
     DisplayStateB dsb;
     dsb.setRb (parser->sysKey.isKeyPressed (SysKey::RB));
     dsb.setRbs (parser->sysKey.isKeyPressed (SysKey::RBS));
-    can->transmitMessage (dsb.encode ());
+    can->send (dsb.encode ());
 }

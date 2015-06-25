@@ -2,18 +2,18 @@
 #define CANBILLCDILLUMINATIONANALOGDEVICE_H
 
 #include "illumination/interfaces/IAnalogDevice.h"
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parsers/BilLcd.h"
 
 class CanBilLcdIlluminationAnalogDevice : public IAnalogDevice
 {
 public:
-    CanBilLcdIlluminationAnalogDevice(Can *can, int cabine);
+    CanBilLcdIlluminationAnalogDevice(ICan *can, int cabine);
 
     void setValue(double value);
 
 private:
-    Can *can;
+    ICan *can;
     BilLcd message;
 };
 

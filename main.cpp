@@ -15,16 +15,15 @@
     HANDLE winConsoleandler;
 #endif
 
-#include "qtCanLib/can.h"
+#include "qtCanLib/AsyncCan.h"
+#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
+#include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h"
+#include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h"
+#endif
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#ifdef LIB_SOCKET_CAN
-#include "qtCanLib/socketcan.h"
-#endif
-#include "qtCanLib/dummycan.h"
-
 
 #include "notificator.h"
 #include "displaystatesender.h"
@@ -80,7 +79,7 @@ TrafficlightAdaptor *trafficlightAdaptor;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
-Can *can;
+ICan *can;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
@@ -275,30 +274,39 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     levithan = new Levithan(systemState);
 
-    // Кассета
-    if ( app->arguments().contains(QString("--play")) )
-    {
-        can = new DummyCan();
+//    // Кассета
+//    if ( app->arguments().contains(QString("--play")) )
+//    {
+////        can = new DummyCan();
 
-        StatePlayer *player = new StatePlayer("states.txt", systemState);
-        player->start();
-    }
-    else
-    {
-#ifdef LIB_SOCKET_CAN
-        can = new SocketCan();
+//        StatePlayer *player = new StatePlayer("states.txt", systemState);
+//        player->start();
+//    }
+//    else
+//    {
+    qDebug() << "Start creating can";
+#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
+        auto asyncCan = new AsyncCan (
+                                new LinuxSocketCanReceiverFactory ("can0"),
+                                new LinuxSocketCanSenderFactory ("can0")
+                                );
+        qDebug() << "Start running can";
+        asyncCan->start();
+        qDebug() << "end running can";
+        can = asyncCan;
 #else
-        can = new DummyCan();
+//        can = new DummyCan();
 #endif
-        if (passiveMode)
-            can = new CanSilent (can);
+//        if (passiveMode)
+////            can = new CanSilent (can);
 
-        if ( app->arguments().contains(QString("--record")) )
-        {
-            StateRecorder *recorder = new StateRecorder("states.txt", systemState);
-            recorder->start();
-        }
-    }
+//        if ( app->arguments().contains(QString("--record")) )
+//        {
+//            StateRecorder *recorder = new StateRecorder("states.txt", systemState);
+//            recorder->start();
+//        }
+//    }
+    qDebug() << "Go ...";
 
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);

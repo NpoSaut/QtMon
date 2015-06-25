@@ -8,7 +8,7 @@ namespace Commands {
 
 VersionRequestCommand::VersionRequestCommand(int commandNumber,
                                              QString moduleName, SysDiagnostics::AuxModule moduleId, QVector<AuxResourceVersion *> auxResources,
-                                             Can *can, TextManager *textManager)
+                                             ICan *can, TextManager *textManager)
     : can (can), textManager (textManager), moduleName (moduleName), moduleId (moduleId), auxResources (auxResources), Command (commandNumber)
 { }
 

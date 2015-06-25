@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 
-HardcodedVersion::HardcodedVersion(int version, int subversion, Can *can, QObject *parent) :
+HardcodedVersion::HardcodedVersion(int version, int subversion, ICan *can, QObject *parent) :
     QObject(parent), can (can), aux (AuxResource::Descriptor::BIL_A, this)
 {
     aux.setVersion(version);
@@ -16,11 +16,11 @@ HardcodedVersion::HardcodedVersion(int version, int subversion, Can *can, QObjec
         aux.setChecksum(int(cs[1])*256 + cs[0]);
     }
 
-    can->transmitMessage(aux.encode());
+    can->send(aux.encode());
 }
 
 void HardcodedVersion::onVersionRequest(SysDiagnostics::AuxModule blockId)
 {
     if (blockId == SysDiagnostics::AuxModule::BIL)
-        can->transmitMessage(aux.encode());
+        can->send(aux.encode());
 }

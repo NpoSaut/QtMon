@@ -18,7 +18,6 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
-    qtCanLib/canframe.cpp \
     qtCanLib/socketcan/sktcan.cpp \
     qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
@@ -105,7 +104,15 @@ SOURCES += \
     interaction/commands/activedpsindicationcommand.cpp \
     viewmodels/brightnessviewmodel.cpp \
     HardcodedVersion.cpp \
-    configuration/CookieConfiguration.cpp
+    configuration/CookieConfiguration.cpp \
+    qtCanLib/CanFrame.cpp \
+    qtCanLib/ICan.cpp \
+    qtCanLib/AsyncCan.cpp \
+    qtCanLib/AsyncCan/SendWorker.cpp \
+    qtCanLib/AsyncCan/ReceiveWorker.cpp \
+    qtDoodahLib/IThreadWorker.cpp \
+    qtCanLib/AsyncCan/CanPriorityQueue.cpp \
+    qtDoodahLib/ThreadWithWorker.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -123,7 +130,6 @@ HEADERS += \
     cDoodahLib/packing.h \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
-    qtCanLib/canframe.h \
     qtCanLib/can.h \
     qtDoodahLib/queues.h \
     qtCanLib/socketcan/sktcan.h \
@@ -233,7 +239,19 @@ HEADERS += \
     configuration/CookieConfiguration.h \
     qtDoodahLib/queues/IThreadSafeQueue.h \
     qtDoodahLib/queues/LinerThreadSafeQueue.h \
-    qtDoodahLib/queues/PriorityThreadSafeQueue.h
+    qtDoodahLib/queues/PriorityThreadSafeQueue.h \
+    qtCanLib/IBlockedSender.h \
+    qtCanLib/CanFrame.h \
+    qtCanLib/IBlockedReceiver.h \
+    qtCanLib/ICan.h \
+    qtCanLib/IBlockedSenderFactory.h \
+    qtCanLib/IBlockedReceiverFactory.h \
+    qtCanLib/AsyncCan.h \
+    qtCanLib/AsyncCan/SendWorker.h \
+    qtCanLib/AsyncCan/ReceiveWorker.h \
+    qtDoodahLib/IThreadWorker.h \
+    qtCanLib/AsyncCan/CanPriorityQueue.h \
+    qtDoodahLib/ThreadWithWorker.h
 
 CONFIG += console
 

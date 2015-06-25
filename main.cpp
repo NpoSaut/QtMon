@@ -15,7 +15,10 @@
     HANDLE winConsoleandler;
 #endif
 
+#include "qtCanLib/DummyCan.h"
 #include "qtCanLib/AsyncCan.h"
+#include "qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h"
+#include "qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h"
 #ifdef LIB_LINUX_SOCKET_CAN_DRIVER
 #include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h"
 #include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h"
@@ -274,39 +277,37 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     levithan = new Levithan(systemState);
 
-//    // Кассета
-//    if ( app->arguments().contains(QString("--play")) )
-//    {
-////        can = new DummyCan();
+    // Кассета
+    if ( app->arguments().contains(QString("--play")) )
+    {
+        can = new DummyCan();
 
-//        StatePlayer *player = new StatePlayer("states.txt", systemState);
-//        player->start();
-//    }
-//    else
-//    {
-    qDebug() << "Start creating can";
-#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
+        StatePlayer *player = new StatePlayer("states.txt", systemState);
+        player->start();
+    }
+    else
+    {
         auto asyncCan = new AsyncCan (
+#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
                                 new LinuxSocketCanReceiverFactory ("can0"),
                                 new LinuxSocketCanSenderFactory ("can0")
-                                );
-        qDebug() << "Start running can";
-        asyncCan->start();
-        qDebug() << "end running can";
-        can = asyncCan;
 #else
-//        can = new DummyCan();
+                                new DummyCanReceiverFactory (),
+                                new DummyCanSenderFactory ()
 #endif
-//        if (passiveMode)
-////            can = new CanSilent (can);
+                                );
+        asyncCan->start();
+        can = asyncCan;
 
-//        if ( app->arguments().contains(QString("--record")) )
-//        {
-//            StateRecorder *recorder = new StateRecorder("states.txt", systemState);
-//            recorder->start();
-//        }
-//    }
-    qDebug() << "Go ...";
+        if (passiveMode)
+//            can = new CanSilent (can);
+
+        if ( app->arguments().contains(QString("--record")) )
+        {
+            StateRecorder *recorder = new StateRecorder("states.txt", systemState);
+            recorder->start();
+        }
+    }
 
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
@@ -316,10 +317,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Читаем конфигурацию
-    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
+//    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
 
     elmapForwardTarget = new ElmapForwardTarget(can);
-    notificator = new Notificator(configuration->isBreakAssistRequired(), blokMessages);
+    notificator = new Notificator(false, blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
     hardcodedVersion = new HardcodedVersion(1, 0, can);
 

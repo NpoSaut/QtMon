@@ -112,7 +112,8 @@ SOURCES += \
     qtCanLib/AsyncCan/ReceiveWorker.cpp \
     qtDoodahLib/IThreadWorker.cpp \
     qtCanLib/AsyncCan/CanPriorityQueue.cpp \
-    qtDoodahLib/ThreadWithWorker.cpp
+    qtDoodahLib/ThreadWithWorker.cpp \
+    qtCanLib/DummyCan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -153,7 +154,6 @@ HEADERS += \
     qtBlokLib/parsers/sys_key.h \
     qtBlokLib/parsers/tskbm_state.h \
     qtCanLib/socketcan.h \
-    qtCanLib/dummycan.h \
     notificator.h \
     displaystatesender.h \
     drivemodehandler.h \
@@ -251,7 +251,12 @@ HEADERS += \
     qtCanLib/drivers/IBlockedReceiver.h \
     qtCanLib/drivers/IBlockedReceiverFactory.h \
     qtCanLib/drivers/IBlockedSender.h \
-    qtCanLib/drivers/IBlockedSenderFactory.h
+    qtCanLib/drivers/IBlockedSenderFactory.h \
+    qtCanLib/drivers/DummyCan/DummyCanReceiver.h \
+    qtCanLib/drivers/DummyCan/DummyCanSender.h \
+    qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h \
+    qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h \
+    qtCanLib/DummyCan.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

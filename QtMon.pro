@@ -240,18 +240,35 @@ HEADERS += \
     qtDoodahLib/queues/IThreadSafeQueue.h \
     qtDoodahLib/queues/LinerThreadSafeQueue.h \
     qtDoodahLib/queues/PriorityThreadSafeQueue.h \
-    qtCanLib/IBlockedSender.h \
     qtCanLib/CanFrame.h \
-    qtCanLib/IBlockedReceiver.h \
     qtCanLib/ICan.h \
-    qtCanLib/IBlockedSenderFactory.h \
-    qtCanLib/IBlockedReceiverFactory.h \
     qtCanLib/AsyncCan.h \
     qtCanLib/AsyncCan/SendWorker.h \
     qtCanLib/AsyncCan/ReceiveWorker.h \
     qtDoodahLib/IThreadWorker.h \
     qtCanLib/AsyncCan/CanPriorityQueue.h \
-    qtDoodahLib/ThreadWithWorker.h
+    qtDoodahLib/ThreadWithWorker.h \
+    qtCanLib/drivers/IBlockedReceiver.h \
+    qtCanLib/drivers/IBlockedReceiverFactory.h \
+    qtCanLib/drivers/IBlockedSender.h \
+    qtCanLib/drivers/IBlockedSenderFactory.h
+
+LIB_LINUX_SOCKET_CAN_DRIVER {
+    SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.cpp
+
+    HEADERS +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocket.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.h
+
+    DEFINES += LIB_LINUX_SOCKET_CAN_DRIVER
+}
 
 CONFIG += console
 
@@ -262,5 +279,5 @@ QMAKE_CXXFLAGS += -std=c++0x
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
 
 # Для работы нужны:
-# DEFINES+=CPP11 DEFINES+=WITH_CAN DEFINES+=ON_DEVICE
+# DEFINES+=CPP11 DEFINES+=WITH_CAN DEFINES+=ON_DEVICE CONFIG+=LIB_LINUX_SOCKET_CAN_DRIVER
 

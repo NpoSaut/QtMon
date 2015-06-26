@@ -287,20 +287,23 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     }
     else
     {
-        auto asyncCan = new AsyncCan (
+        IBlockedReceiverFactory *receiverFactory;
+        IBlockedSenderFactory *senderFactory;
 #ifdef LIB_LINUX_SOCKET_CAN_DRIVER
-                                new LinuxSocketCanReceiverFactory ("can0"),
-                                new LinuxSocketCanSenderFactory ("can0")
+        receiverFactory = new LinuxSocketCanReceiverFactory ("can0");
+        senderFactory   = new LinuxSocketCanSenderFactory ("can0");
 #else
-                                new DummyCanReceiverFactory (),
-                                new DummyCanSenderFactory ()
+        receiverFactory = new DummyCanReceiverFactory ();
+        senderFactory   = new DummyCanSenderFactory ();
 #endif
-                                );
-        asyncCan->start();
-        can = asyncCan;
-
         if (passiveMode)
-//            can = new CanSilent (can);
+        {
+            delete senderFactory;
+            senderFactory = new DummyCanSenderFactory ();
+        }
+        asyncCan->start();
+        QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
+        can = asyncCan;
 
         if ( app->arguments().contains(QString("--record")) )
         {

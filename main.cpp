@@ -277,8 +277,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     levithan = new Levithan(systemState);
 
-    // Кассета
-    if ( app->arguments().contains(QString("--play")) )
+    // Создание CAN
+    QThread canThread;
+    if ( app->arguments().contains(QString("--play")) ) // Кассета
     {
         can = new DummyCan();
 
@@ -301,7 +302,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
             delete senderFactory;
             senderFactory = new DummyCanSenderFactory ();
         }
-        asyncCan->start();
+        auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
         QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
         can = asyncCan;
 
@@ -311,6 +312,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
             recorder->start();
         }
     }
+    can->moveToThread(&canThread);
+    canThread.start();
 
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);

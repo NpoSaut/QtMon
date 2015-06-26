@@ -18,10 +18,7 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
-    qtCanLib/socketcan/sktcan.cpp \
-    qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
-    qtCanLib/socketcan/cansendqueue.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
@@ -133,10 +130,7 @@ HEADERS += \
     cDoodahLib/packing.h \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
-    qtCanLib/can.h \
     qtDoodahLib/queues.h \
-    qtCanLib/socketcan/sktcan.h \
-    qtCanLib/socketcan/cansendqueue.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
@@ -155,7 +149,6 @@ HEADERS += \
     qtBlokLib/parsers/mco_state.h \
     qtBlokLib/parsers/sys_key.h \
     qtBlokLib/parsers/tskbm_state.h \
-    qtCanLib/socketcan.h \
     notificator.h \
     displaystatesender.h \
     drivemodehandler.h \

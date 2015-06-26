@@ -259,14 +259,16 @@ LIB_LINUX_SOCKET_CAN_DRIVER {
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.cpp \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.cpp \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.cpp \
-                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.cpp
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/cSocketCanLib/src/SocketCanLib.c
 
     HEADERS +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.h \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.h \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h \
                 qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocket.h \
-                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.h
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/cSocketCanLib/src/SocketCanLib.h
 
     DEFINES += LIB_LINUX_SOCKET_CAN_DRIVER
 }

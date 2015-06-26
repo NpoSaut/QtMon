@@ -14,10 +14,13 @@ class Notificator : public QObject
 {
     Q_OBJECT
 public:
-    explicit Notificator(bool handbrakeHintRequired, Parser *onParser, QObject *parent = 0);
+    explicit Notificator(Parser *onParser, QObject *parent = 0);
     
 signals:
     void notificationTextChanged (QString text);
+
+public slots:
+    void setHandbrakeHintRequired (bool v);
     
 private slots:
     void getStateChangedSignal ();

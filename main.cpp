@@ -319,11 +319,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Выдаёт версию по AUX_RESOURCE
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
-    // Читаем конфигурацию
-//    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
+    // Конфигурация
+    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
+    QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
 
     elmapForwardTarget = new ElmapForwardTarget(can);
-    notificator = new Notificator(false, blokMessages);
+    notificator = new Notificator(blokMessages);
     displayStateSander = new DisplayStateSander(blokMessages, can);
     hardcodedVersion = new HardcodedVersion(1, 0, can);
 

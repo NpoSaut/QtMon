@@ -13,10 +13,10 @@ void RequestCookiesActivity::startRecord(Contexts::CookiesContext::Record *p)
     p->cookie->requestValue(true);
 }
 
-void RequestCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
+void RequestCookiesActivity::processRecord(Contexts::CookiesContext::Record *p, int value, bool valid)
 {
-    if (p->cookie->isValid())
-        p->value = p->cookie->getValue();
+    if (valid)
+        p->value = value;
     else
         p->value = -1;
 

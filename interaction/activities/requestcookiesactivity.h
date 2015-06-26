@@ -14,7 +14,7 @@ public:
     explicit RequestCookiesActivity(Contexts::CookiesContext *context, TextManager *textManager, QObject *parent = 0);
 
     virtual void startRecord (Contexts::CookiesContext::Record *p);
-    virtual void processRecord (Contexts::CookiesContext::Record *p);
+    virtual void processRecord (Contexts::CookiesContext::Record *p, int value, bool valid);
 
     void run();
     void dispose();

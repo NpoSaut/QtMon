@@ -13,9 +13,9 @@ void SubmitCookiesActivity::startRecord(Contexts::CookiesContext::Record *p)
     p->cookie->setVaule(p->value);
 }
 
-void SubmitCookiesActivity::processRecord(Contexts::CookiesContext::Record *p)
+void SubmitCookiesActivity::processRecord(Contexts::CookiesContext::Record *p, int value, bool valid)
 {
-    if (p->cookie->isValid() && p->cookie->getValue() == p->value )
+    if (valid && value == p->value)
     {
         textManager->init(textManager->getOuputString().append("."));
     }

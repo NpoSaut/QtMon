@@ -113,7 +113,9 @@ SOURCES += \
     qtDoodahLib/IThreadWorker.cpp \
     qtCanLib/AsyncCan/CanPriorityQueue.cpp \
     qtDoodahLib/ThreadWithWorker.cpp \
-    qtCanLib/DummyCan.cpp
+    qtCanLib/DummyCan.cpp \
+    configuration/IConfiguration.cpp \
+    configuration/BaseConfiguration.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -256,7 +258,8 @@ HEADERS += \
     qtCanLib/drivers/DummyCan/DummyCanSender.h \
     qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h \
     qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h \
-    qtCanLib/DummyCan.h
+    qtCanLib/DummyCan.h \
+    configuration/BaseConfiguration.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

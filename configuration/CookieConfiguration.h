@@ -1,18 +1,24 @@
 #ifndef COOKIECONFIGURATION_H
 #define COOKIECONFIGURATION_H
 
-#include "IConfiguration.h"
+#include "BaseConfiguration.h"
 #include "qtBlokLib/cookies.h"
 
-class CookieConfiguration : public IConfiguration
+class CookieConfiguration : public BaseConfiguration
 {
+    Q_OBJECT
 public:
-    CookieConfiguration(Cookie *cookie);
+    CookieConfiguration(Cookie *cookie, QObject *parent = 0);
 
-    virtual bool isBreakAssistRequired() const;
+public slots:
+    virtual void update ();
+
+private slots:
+    void onCookieUpdate (int value, bool valid);
 
 private:
-    bool breakAssistRequired;
+    Cookie *cookie;
+    bool forceSignal;
 };
 
 #endif // COOKIECONFIGURATION_H

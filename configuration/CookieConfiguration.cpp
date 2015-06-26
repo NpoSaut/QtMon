@@ -1,16 +1,24 @@
 #include "CookieConfiguration.h"
 
-CookieConfiguration::CookieConfiguration(Cookie *cookie)
-    : breakAssistRequired (false)
+CookieConfiguration::CookieConfiguration(Cookie *cookie, QObject *parent)
+    : BaseConfiguration (parent),
+      cookie (cookie),
+      forceSignal (false)
 {
-    int config = cookie->getValue();
-    if (cookie->isValid())
-    {
-        breakAssistRequired = (bool) (config & (1 << 0));
-    }
+    QObject::connect(cookie, SIGNAL(updated(int,bool)), this, SLOT(onCookieUpdate(int,bool)));
 }
 
-bool CookieConfiguration::isBreakAssistRequired() const
+void CookieConfiguration::update()
 {
-    return breakAssistRequired;
+    forceSignal = true;
+    cookie->requestValue(true);
+}
+
+void CookieConfiguration::onCookieUpdate(int value, bool valid)
+{
+    if (valid)
+    {
+        setBreakAssistRequired ((bool) (value & (1 << 0)), forceSignal);
+        forceSignal = false;
+    }
 }

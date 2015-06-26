@@ -1,10 +1,20 @@
 #ifndef ICONFIGURATION_H
 #define ICONFIGURATION_H
 
-class IConfiguration
+#include <QObject>
+
+class IConfiguration : public QObject
 {
+    Q_OBJECT
 public:
-    virtual bool isBreakAssistRequired() const = 0; // Напоминание о необходимости поднять ручник после остановки
+    explicit IConfiguration (QObject *parent = 0);
+
+public slots:
+    virtual void update () = 0; // Обновляет значение свойств и вызывает испускание всех сигналов
+
+signals:
+    void breakAssistRequiredChanged (bool); // Напоминание о необходимости поднять ручник после остановки
 };
 
 #endif // ICONFIGURATION_H
+

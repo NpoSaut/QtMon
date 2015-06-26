@@ -19,9 +19,9 @@ void CookiesActiviyBase::dispose()
     detachCookie();
 }
 
-void CookiesActiviyBase::cookieOnCompleted()
+void CookiesActiviyBase::cookieOnCompleted(int value, bool valid)
 {
-    processRecord (&context->records[i]);
+    processRecord (&context->records[i], value, valid);
     next ();
 }
 
@@ -40,13 +40,13 @@ void CookiesActiviyBase::next()
 void CookiesActiviyBase::attachCookie()
 {
     if ( i >= 0 && i < context->records.count() )
-        connect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted()));
+        connect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted(int,bool)));
 }
 
 void CookiesActiviyBase::detachCookie()
 {
     if ( i >= 0 && i < context->records.count() )
-        disconnect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted()));
+        disconnect (context->records[i].cookie, SIGNAL(updated(int,bool)), this, SLOT(cookieOnCompleted(int,bool)));
 }
 
 }

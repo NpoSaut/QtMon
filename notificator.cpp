@@ -1,9 +1,9 @@
 #include "notificator.h"
 
-Notificator::Notificator(bool handbrakeHintRequired, Parser *onParser, QObject *parent) :
+Notificator::Notificator(Parser *onParser, QObject *parent) :
     QObject(parent),
     parser(onParser),
-    handbrakeHintRequired (handbrakeHintRequired)
+    handbrakeHintRequired (false)
 {
     this->connect (onParser, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));
 
@@ -15,6 +15,11 @@ Notificator::Notificator(bool handbrakeHintRequired, Parser *onParser, QObject *
     }
 }
 
+void Notificator::setHandbrakeHintRequired(bool v)
+{
+    handbrakeHintRequired = v;
+    getStateChangedSignal();
+}
 
 void Notificator::getStateChangedSignal()
 {

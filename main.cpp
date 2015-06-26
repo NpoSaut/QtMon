@@ -298,10 +298,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         senderFactory   = new DummyCanSenderFactory ();
 #endif
         if (passiveMode)
-        {
-            delete senderFactory;
             senderFactory = new DummyCanSenderFactory ();
-        }
         auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
         QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
         can = asyncCan;

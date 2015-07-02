@@ -284,6 +284,7 @@ LIB_APPI_CAN_DRIVER {
     LIBS    +=  -L"$$_PRO_FILE_PWD_/qtCanLib/drivers/AppiCan/" -lusb-1.0
 
     DEFINES += LIB_APPI_CAN_DRIVER
+    DEFINES += WIN32
 }
 
 CONFIG += console

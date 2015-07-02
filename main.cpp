@@ -23,6 +23,9 @@
 #include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h"
 #include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h"
 #endif
+#ifdef LIB_APPI_CAN_DRIVER
+#include "qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h"
+#endif
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
@@ -510,7 +513,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(4084, "ВДС", SysDiagnostics::VDS, {AuxResource::VDS_A, AuxResource::VDS_B}),
                                                           vrcf.produceCommand(4101, "БС-ДПС", SysDiagnostics::BS_DPS, {AuxResource::BS_DPS_A, AuxResource::BS_DPS_B}),
                                                           vrcf.produceCommand(4357, "ПТК", SysDiagnostics::PTK, {AuxResource::SAUT_PTK_A, AuxResource::SAUT_PTK_B}),
-                                                          vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUT, {AuxResource::OUT_A, AuxResource::OUT_B}),
+                                                          vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUTPUT, {AuxResource::OUTPUT_A, AuxResource::OUTPUT_B}),
                                                           vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
                                                           vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
                                                           // Работа с комплектами ЦО

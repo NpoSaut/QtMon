@@ -273,6 +273,19 @@ LIB_LINUX_SOCKET_CAN_DRIVER {
     DEFINES += LIB_LINUX_SOCKET_CAN_DRIVER
 }
 
+LIB_APPI_CAN_DRIVER {
+    SOURCES +=  qtCanLib/drivers/AppiCan/LibusbDevice.cpp \
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.cpp
+
+    HEADERS +=  qtCanLib/drivers/AppiCan/libusb.h \
+                qtCanLib/drivers/AppiCan/LibusbDevice.h \
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h
+
+    LIBS    +=  -L"$$_PRO_FILE_PWD_/qtCanLib/drivers/AppiCan/" -lusb-1.0
+
+    DEFINES += LIB_APPI_CAN_DRIVER
+}
+
 CONFIG += console
 
 QMAKE_CXXFLAGS += -std=c++0x

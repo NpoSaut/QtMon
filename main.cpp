@@ -316,17 +316,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     iodriver = new iodrv(can);
     cookies = new Cookies(can);
 
-    // Выдаёт версию по AUX_RESOURCE
-    QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
+    elmapForwardTarget = new ElmapForwardTarget(can);
+    notificator = new Notificator(blokMessages);
+    displayStateSander = new DisplayStateSander(blokMessages, can);
 
     // Конфигурация
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
 
-    elmapForwardTarget = new ElmapForwardTarget(can);
-    notificator = new Notificator(blokMessages);
-    displayStateSander = new DisplayStateSander(blokMessages, can);
+    // Выдаёт версию по AUX_RESOURCE
     hardcodedVersion = new HardcodedVersion(1, 0, can);
+    QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
 
     // Создание и подключение «обработчиков»

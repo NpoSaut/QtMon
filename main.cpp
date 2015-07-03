@@ -45,6 +45,7 @@
 #include "records/staterecorder.h"
 #include "HardcodedVersion.h"
 #include "configuration/CookieConfiguration.h"
+#include "DateTimeConverter.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
@@ -402,8 +403,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(latitudeChanged(double)), systemState, SLOT(setLatitude(double)));
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(longitudeChanged(double)), systemState, SLOT(setLongitude(double)));
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(validChanged(bool)), systemState, SLOT(setGpsValid(bool)));
-    QObject::connect(iodriver, SIGNAL(signal_time(QString)), systemState, SLOT(setTime(QString)));
-    QObject::connect(iodriver, SIGNAL(signal_date(QString)), systemState, SLOT(setDate(QString)));
+    DateTimeConverter dateTimeConverter;
+    QObject::connect(&blokMessages->ipdDate, SIGNAL(dateTimeChanged(QDateTime)), &dateTimeConverter, SLOT(processDateTime(QDateTime)));
+    QObject::connect(&dateTimeConverter, SIGNAL(dateChanged(QString)), systemState, SLOT(setDate(QString)));
+    QObject::connect(&dateTimeConverter, SIGNAL(timeChanged(QString)), systemState, SLOT(setTime(QString)));
 
     QObject::connect(&blokMessages->mcoState, SIGNAL(tractionChanged(bool)), systemState, SLOT(setIsTractionOn(bool)));
 

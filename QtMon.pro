@@ -112,7 +112,8 @@ SOURCES += \
     qtDoodahLib/ThreadWithWorker.cpp \
     qtCanLib/DummyCan.cpp \
     configuration/IConfiguration.cpp \
-    configuration/BaseConfiguration.cpp
+    configuration/BaseConfiguration.cpp \
+    DateTimeConverter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -252,7 +253,8 @@ HEADERS += \
     qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h \
     qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h \
     qtCanLib/DummyCan.h \
-    configuration/BaseConfiguration.h
+    configuration/BaseConfiguration.h \
+    DateTimeConverter.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

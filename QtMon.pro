@@ -275,11 +275,17 @@ LIB_LINUX_SOCKET_CAN_DRIVER {
 
 LIB_APPI_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/AppiCan/LibusbDevice.cpp \
-                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.cpp
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.cpp \
+                qtCanLib/drivers/AppiCan/AppiCan.cpp \
+                qtCanLib/drivers/AppiCan/AppiBlockCan1.cpp
 
     HEADERS +=  qtCanLib/drivers/AppiCan/libusb.h \
                 qtCanLib/drivers/AppiCan/LibusbDevice.h \
-                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h \
+                qtCanLib/drivers/AppiCan/AppiCan.h \
+                qtCanLib/drivers/AppiCan/AppiCanReceiverFactory.h \
+                qtCanLib/drivers/AppiCan/AppiCanSenderFactory.h \
+                qtCanLib/drivers/AppiCan/AppiBlockCan1.h
 
     LIBS    +=  -L"$$_PRO_FILE_PWD_/qtCanLib/drivers/AppiCan/" -lusb-1.0
 

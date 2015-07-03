@@ -25,6 +25,9 @@
 #endif
 #ifdef LIB_APPI_CAN_DRIVER
 #include "qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiCanReceiverFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiCanSenderFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiBlockCan1.h"
 #endif
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/elmapforwardtarget.h"
@@ -280,6 +283,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     levithan = new Levithan(systemState);
 
+//    LibusbDeviceFactory usbFactory (3);
+//    auto usbDevice = usbFactory.produce(0x1992, 0x1972, 1);
+//    std::vector<uint8_t> data (2048);
+//    usbDevice->receieve(2, data, 1000);
+//    for (int i = 0; i < 20; i ++)
+//    {
+//        qDebug() << "GET: " << QString("%1 - %2").arg(i,2).arg(data[i],2,16);
+//    }
+
     // Создание CAN
     QThread canThread;
     if ( app->arguments().contains(QString("--play")) ) // Кассета
@@ -296,6 +308,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #ifdef LIB_LINUX_SOCKET_CAN_DRIVER
         receiverFactory = new LinuxSocketCanReceiverFactory ("can0");
         senderFactory   = new LinuxSocketCanSenderFactory ("can0");
+#elif defined (LIB_APPI_CAN_DRIVER)
+        auto *appiCan = new AppiBlockCan1 (new LibusbDeviceFactory (1));
+        receiverFactory = new AppiCanReceiverFactory (appiCan);
+        senderFactory = new AppiCanSenderFactory (appiCan);
 #else
         receiverFactory = new DummyCanReceiverFactory ();
         senderFactory   = new DummyCanSenderFactory ();

@@ -283,15 +283,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     levithan = new Levithan(systemState);
 
-//    LibusbDeviceFactory usbFactory (3);
-//    auto usbDevice = usbFactory.produce(0x1992, 0x1972, 1);
-//    std::vector<uint8_t> data (2048);
-//    usbDevice->receieve(2, data, 1000);
-//    for (int i = 0; i < 20; i ++)
-//    {
-//        qDebug() << "GET: " << QString("%1 - %2").arg(i,2).arg(data[i],2,16);
-//    }
-
     // Создание CAN
     QThread canThread;
     if ( app->arguments().contains(QString("--play")) ) // Кассета
@@ -344,9 +335,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
 
     // Выдаёт версию по AUX_RESOURCE
-    hardcodedVersion = new HardcodedVersion(1, 0, can);
+    hardcodedVersion = new HardcodedVersion(3, 0, can);
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
-
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-

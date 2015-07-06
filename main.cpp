@@ -354,7 +354,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 //    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
     systemState->setSpeedIsValid (true); // HACK для Патриота
     QObject::connect(&blokMessages->mcoState, SIGNAL(speedRestrictionChanged(int)), systemState, SLOT(setSpeedRestriction(int)));
-    QObject::connect(iodriver, SIGNAL(signal_target_speed(int)), systemState, SLOT(setTargetSpeed(int)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(targetSpeedChanged(int)), systemState, SLOT(setTargetSpeed(int)));
     QObject::connect(iodriver, SIGNAL(signal_acceleration(double)), systemState, SLOT(setAcceleration(double)));
     //Состояние системы
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));

@@ -113,7 +113,8 @@ SOURCES += \
     qtCanLib/DummyCan.cpp \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
-    DateTimeConverter.cpp
+    DateTimeConverter.cpp \
+    ModulesActivityToStringConverter.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -254,7 +255,8 @@ HEADERS += \
     qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
-    DateTimeConverter.h
+    DateTimeConverter.h \
+    ModulesActivityToStringConverter.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

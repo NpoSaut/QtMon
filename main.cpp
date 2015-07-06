@@ -46,6 +46,7 @@
 #include "HardcodedVersion.h"
 #include "configuration/CookieConfiguration.h"
 #include "DateTimeConverter.h"
+#include "ModulesActivityToStringConverter.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
@@ -359,7 +360,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Состояние системы
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
-    QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
+    ModulesActivityToStringConverter modulesActivityToStringConverter;
+    QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), &modulesActivityToStringConverter, SLOT(processActivity(ModulesActivity)));
+    QObject::connect(&modulesActivityToStringConverter, SIGNAL(activityChanged(QString)), systemState, SLOT(setModulesActivityString(QString)));
 
     // Уведомления
     QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));

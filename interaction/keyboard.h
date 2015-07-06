@@ -26,12 +26,20 @@ public:
         ENTER = 11,
         CANCEL = 12,
         COMMAND = 13,
-        BRIGHTNESS = 14
+        BRIGHTNESS = 14,
+        P = 15,
+        VK = 16,
+        RMP = 17,
+        F = 18,
+        K20 = 20,
+        OC = 21,
+        OTPR = 22,
+        PODT = 23
     };
 
 signals:
-    void keyDown (Key);
-    void keyUp (Key);
+    void keyDown (Interaction::Keyboard::Key);
+    void keyUp (Interaction::Keyboard::Key);
 
     void numberKeyDown (int);
     void numberKeyUp (int);
@@ -46,6 +54,22 @@ signals:
     void commandKeyUp ();
     void brightnessKeyDown ();
     void brightnessKeyUp ();
+    void pKeyUp ();
+    void pKeyDown ();
+    void vkKeyUp ();
+    void vkKeyDown ();
+    void rmpKeyUp ();
+    void rmpKeyDown ();
+    void fKeyUp ();
+    void fKeyDown ();
+    void k20KeyUp ();
+    void k20KeyDown ();
+    void ocKeyUp ();
+    void ocKeyDown ();
+    void otprKeyUp ();
+    void otprKeyDown ();
+    void podtKeyUp ();
+    void podtKeyDown ();
 };
 
 }

@@ -63,6 +63,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     tsvcIsVigilanceRequiredValue = false;
     tsvcIsPreAlarmActiveValue = false;
     // fileds init end
+
+    QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(convertModulesActivityObjectToString(ModulesActivity)));
 }
 
 void SystemStateViewModel::setDesignSpeed(int value, bool valid)
@@ -320,7 +322,7 @@ void SystemStateViewModel::setIsEpvReleased(const bool value)
     }
 }
 
-// Активность модулей
+// Строка с активностью модулей
 QString SystemStateViewModel::getModulesActivityString() const
 {
     return modulesActivityStringValue;
@@ -828,6 +830,7 @@ bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
 {
     return tsvcIsPreAlarmActiveValue;
 }
+
 void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
 {
     if (tsvcIsPreAlarmActiveValue != value)
@@ -838,6 +841,25 @@ void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
 }
 
 // -- end: Properties Getters and Setters --
+
+ModulesActivity SystemStateViewModel::getModulesActivityObject() const
+{
+    return modulesActivityObjectValue;
+}
+
+void SystemStateViewModel::setModulesActivityObject(const ModulesActivity ma)
+{
+    if (modulesActivityObjectValue != ma)
+    {
+        modulesActivityObjectValue = ma;
+        emit ModulesActivityObjectChanged(ma);
+    }
+}
+
+void SystemStateViewModel::convertModulesActivityObjectToString(ModulesActivity ma)
+{
+    setModulesActivityString(ma.toString());
+}
 
 }
 

@@ -82,7 +82,7 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isEpvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
 
-    // Активность модулей
+    // Строка с активностью модулей
     QString modulesActivityStringValue;
     Q_PROPERTY(QString ModulesActivityString READ getModulesActivityString WRITE setModulesActivityString NOTIFY ModulesActivityStringChanged)
 
@@ -231,6 +231,13 @@ class SystemStateViewModel : public QDeclarativeItem
 
     // private properties end
 
+    // Активность модулей
+    ModulesActivity modulesActivityObjectValue;
+    Q_PROPERTY(ModulesActivity ModulesActivityObject READ getModulesActivityObject WRITE setModulesActivityObject NOTIFY ModulesActivityObjectChanged)
+
+private slots:
+    void convertModulesActivityObjectToString (ModulesActivity ma);
+
 public:
     explicit SystemStateViewModel(QDeclarativeItem *parent = 0);
 
@@ -291,6 +298,8 @@ public:
     bool getTsvcIsVigilanceRequired() const;
     bool getTsvcIsPreAlarmActive() const;
     // public properties getters end
+
+    ModulesActivity getModulesActivityObject() const;
 
 signals:
     // Для привязки звуков
@@ -365,6 +374,8 @@ signals:
     void TsvcIsPreAlarmActiveChanged(const bool value);
     // properties signals end
 
+    void ModulesActivityObjectChanged(const ModulesActivity value);
+
 public slots:
     void setDesignSpeed(int value, bool valid);
 
@@ -426,6 +437,7 @@ public slots:
     void setTsvcIsPreAlarmActive(const bool);
     // public properties setters end
     
+    void setModulesActivityObject(const ModulesActivity ma);
 };
 
 }

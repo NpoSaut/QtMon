@@ -115,7 +115,6 @@ SOURCES += \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
     DateTimeConverter.cpp \
-    ModulesActivityToStringConverter.cpp \
     SysKeySender.cpp
 
 # Please do not modify the following two lines. Required for deployment.
@@ -259,7 +258,6 @@ HEADERS += \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
     DateTimeConverter.h \
-    ModulesActivityToStringConverter.h \
     SysKeySender.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {

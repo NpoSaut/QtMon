@@ -30,7 +30,7 @@
     <Property type="bool" name="IsPressureOk" def="true" description="Давление в норме" />
     <Property type="bool" name="IsEpvReady" def="true" description="Готовность ЭПК" />
     <Property type="bool" name="IsEpvReleased" def="false" description="Признак срыва ЭПК" /> 
-    <Property type="QString" name="ModulesActivityString" def="&quot;------------&quot;" description="Активность модулей" />
+    <Property type="QString" name="ModulesActivityString" def="&quot;------------&quot;" description="Строка с активностью модулей" />
 
     <!-- Одометр -->
     <Property type="int" name="Milage" def="0" description="Проиденное расстояние" />

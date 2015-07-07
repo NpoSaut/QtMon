@@ -38,7 +38,7 @@ void DisplayStateSender::timerEvent(QTimerEvent *event)
     dsa.setOc (keyboardState->isPressed (Keyboard::Key::OC));
     dsa.setK20 (keyboardState->isPressed (Keyboard::Key::K20));
     dsa.setFreq (keyboardState->isPressed (Keyboard::Key::F));
-//    dsa.setTvk (keyboardState->isPressed(Keyboard::Key::TVK));
+    dsa.setTvk (keyboardState->isPressed(Keyboard::Key::TVK));
 
     dsa.setBacklightLevel(backlightLevel);
     dsa.setDriveMode (DriveMode(driveMode));

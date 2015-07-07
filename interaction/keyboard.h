@@ -31,6 +31,7 @@ public:
         VK = 16,
         RMP = 17,
         F = 18,
+        TVK = 19,
         K20 = 20,
         OC = 21,
         OTPR = 22,
@@ -65,6 +66,8 @@ signals:
     void rmpKeyDown ();
     void fKeyUp ();
     void fKeyDown ();
+    void tvkKeyUp ();
+    void tvkKeyDown ();
     void k20KeyUp ();
     void k20KeyDown ();
     void ocKeyUp ();

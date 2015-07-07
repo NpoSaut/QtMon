@@ -90,6 +90,10 @@ void CanKeyboard::consoleKeyPressed(ConsoleKey::ConsKey key)
         emit fKeyDown();
         emit keyDown(Keyboard::Key::F);
         break;
+    case ConsoleKey::TVK:
+        emit tvkKeyDown();
+        emit keyDown(Keyboard::Key::TVK);
+        break;
     case ConsoleKey::K20:
         emit k20KeyDown();
         emit keyDown(Keyboard::Key::K20);
@@ -200,6 +204,10 @@ void CanKeyboard::consoleKeyReleased(ConsoleKey::ConsKey key)
     case ConsoleKey::F:
         emit fKeyUp();
         emit keyUp(Keyboard::Key::F);
+        break;
+    case ConsoleKey::TVK:
+        emit tvkKeyUp();
+        emit keyUp(Keyboard::Key::TVK);
         break;
     case ConsoleKey::K20:
         emit k20KeyUp();

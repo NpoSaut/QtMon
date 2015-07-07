@@ -2,8 +2,6 @@
 
 #include "qtBlokLib/parsers/display_state.h"
 
-#include "QDebug"
-
 using namespace Interaction;
 
 DisplayStateSender::DisplayStateSender(Interaction::KeyboardState *keyboardState, ICan *can, QObject *parent) :
@@ -28,6 +26,8 @@ void DisplayStateSender::setDriveMode(int dm)
 
 void DisplayStateSender::timerEvent(QTimerEvent *event)
 {
+    Q_UNUSED(event);
+
     DisplayStateA dsa;
 
     dsa.setRb (keyboardState->isPressed (Keyboard::Key::RB));
@@ -44,7 +44,6 @@ void DisplayStateSender::timerEvent(QTimerEvent *event)
     dsa.setDriveMode (DriveMode(driveMode));
 
     can->send (dsa.encode ());
-    qDebug() << dsa.encode().toString().c_str();
 
     DisplayStateB dsb;
     dsb.setRb (keyboardState->isPressed (Keyboard::Key::RB));

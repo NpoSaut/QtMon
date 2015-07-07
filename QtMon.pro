@@ -69,6 +69,7 @@ SOURCES += \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
     interaction/keyboard.cpp \
+    interaction/KeyboardState.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
@@ -190,6 +191,7 @@ HEADERS += \
     interaction/commands/configurecommand.h \
     interaction/context.h \
     interaction/keyboard.h \
+    interaction/KeyboardState.h \
     interaction/keyboards/cankeyboard.h \
     interaction/keyboards/qmlkeyboard.h \
     interaction/keyboards/compositekeyboard.h \

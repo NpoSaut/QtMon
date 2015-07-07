@@ -52,6 +52,7 @@
 #include "interaction/keyboards/cankeyboard.h"
 #include "interaction/keyboards/qmlkeyboard.h"
 #include "interaction/keyboards/compositekeyboard.h"
+#include "interaction/KeyboardState.h"
 #include "interaction/storymanager.h"
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
@@ -81,7 +82,7 @@ ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
-DisplayStateSander* displayStateSander;
+DisplayStateSender* displayStateSender;
 
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
@@ -98,6 +99,7 @@ HardcodedVersion *hardcodedVersion;
 IConfiguration *configuration;
 
 Interaction::Keyboard *keyboard;
+Interaction::KeyboardState *keyboardState;
 Interaction::StoryManager *storyManager;
 Interaction::TextManager *textManager;
 Interaction::CommandManager *commandManager;
@@ -330,7 +332,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
-    displayStateSander = new DisplayStateSander(blokMessages, can);
 
     // Конфигурация
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
@@ -474,6 +475,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
+    // Клавиатуры и кнопки
+    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
+    keyboardState = new Interaction::KeyboardState (keyboard);
+    displayStateSender = new DisplayStateSender(keyboardState, can);
+    QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), displayStateSender, SLOT(setDriveMode(int)));
+
     // Управление яркостью
     IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(10, 0.4*255, 255);
     IIntensityConverter *to7IntensityConverter = new LinearIntensityConverter(7);
@@ -488,7 +495,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights"))),
 #endif
         new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, new CanBilLcdIlluminationAnalogDevice(can, 1))),
-        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, displayStateSander))
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, displayStateSender))
     };
     illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
                                       new DummyIlluminationSettings());
@@ -496,7 +503,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         brightnessViewModel->associateManager(illuminationManager);
 
     // Взаимодествие с пользователем через команды
-    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);

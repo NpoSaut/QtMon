@@ -34,7 +34,10 @@ public:
         K20 = 20,
         OC = 21,
         OTPR = 22,
-        PODT = 23
+        PODT = 23,
+        RB = 24,
+        RBS = 25,
+        RBP = 26
     };
 
 signals:
@@ -70,6 +73,12 @@ signals:
     void otprKeyDown ();
     void podtKeyUp ();
     void podtKeyDown ();
+    void rbKeyDown ();
+    void rbKeyUp ();
+    void rbsKeyDown ();
+    void rbsKeyUp ();
+    void rbpKeyDown ();
+    void rbpKeyUp ();
 };
 
 }

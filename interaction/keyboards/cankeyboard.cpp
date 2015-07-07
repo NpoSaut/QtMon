@@ -106,6 +106,18 @@ void CanKeyboard::consoleKeyPressed(ConsoleKey::ConsKey key)
         emit podtKeyDown();
         emit keyDown(Keyboard::Key::PODT);
         break;
+    case ConsoleKey::RB:
+        emit rbKeyDown();
+        emit keyDown(Keyboard::Key::RB);
+        break;
+    case ConsoleKey::RBS:
+        emit rbsKeyDown();
+        emit keyDown(Keyboard::Key::RBS);
+        break;
+    case ConsoleKey::RBP:
+        emit rbpKeyDown();
+        emit keyDown(Keyboard::Key::RBP);
+        break;
     }
 }
 
@@ -189,10 +201,6 @@ void CanKeyboard::consoleKeyReleased(ConsoleKey::ConsKey key)
         emit fKeyUp();
         emit keyUp(Keyboard::Key::F);
         break;
-    case ConsoleKey::K:
-        emit kKeyUp();
-        emit keyUp(Keyboard::Key::K);
-        break;
     case ConsoleKey::K20:
         emit k20KeyUp();
         emit keyUp(Keyboard::Key::K20);
@@ -208,6 +216,18 @@ void CanKeyboard::consoleKeyReleased(ConsoleKey::ConsKey key)
     case ConsoleKey::POD:
         emit podtKeyUp();
         emit keyUp(Keyboard::Key::PODT);
+        break;
+    case ConsoleKey::RB:
+        emit rbKeyUp();
+        emit keyUp(Keyboard::Key::RB);
+        break;
+    case ConsoleKey::RBS:
+        emit rbsKeyUp();
+        emit keyUp(Keyboard::Key::RBS);
+        break;
+    case ConsoleKey::RBP:
+        emit rbpKeyUp();
+        emit keyUp(Keyboard::Key::RBP);
         break;
     }
 }

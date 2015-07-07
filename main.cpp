@@ -64,6 +64,7 @@
 #include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/versionrequestcommand.h"
 #include "interaction/commands/versionrequestcommandfactory.h"
+#include "interaction/commands/ChangeBrightnessCommand.h"
 #include "interaction/keyboardmanager.h"
 
 #include "illumination/Edisson.h"
@@ -535,7 +536,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           //
                                                           new Interaction::Commands::ActiveDpsIndicationCommand(&blokMessages->ipdState, textManager),
                                                       });
-    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, illuminationManager );
+
+    QMap<Interaction::Keyboard::Key, Interaction::Command*> hotkeys;
+    hotkeys[Interaction::Keyboard::Key::BRIGHTNESS] = new Interaction::Commands::ChangeBrightnessCommand(illuminationManager, textManager);
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
 
     QtConcurrent::run(getParamsFromConsole);
 

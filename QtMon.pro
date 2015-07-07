@@ -115,7 +115,9 @@ SOURCES += \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
     DateTimeConverter.cpp \
-    SysKeySender.cpp
+    ModulesActivityToStringConverter.cpp \
+    SysKeySender.cpp \
+    interaction/commands/ChangeBrightnessCommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -258,7 +260,9 @@ HEADERS += \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
     DateTimeConverter.h \
-    SysKeySender.h
+    ModulesActivityToStringConverter.h \
+    SysKeySender.h \
+    interaction/commands/ChangeBrightnessCommand.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

@@ -2,18 +2,16 @@
 #include "activities/inputactivity.h"
 #include "activities/executecommandactivity.h"
 #include "contexts/executecommandcontext.h"
-#include "activities/changebrightnessactivity.h"
-#include "contexts/changebrightnesscontext.h"
 
 namespace Interaction {
 
-KeyboardManager::KeyboardManager(Keyboard *keyboard, StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, IIlluminationManager *illumonationManager, QObject *parent)
-    : keyboard (keyboard), storyManager (storyManager), commandsManager (commandsManager), textManager(textManager), illumonationManager(illumonationManager),
+KeyboardManager::KeyboardManager(Keyboard *keyboard, StoryManager *storyManager, CommandManager *commandsManager, TextManager *textManager, QMap<Keyboard::Key, Command*> *hotkeys, QObject *parent)
+    : keyboard (keyboard), storyManager (storyManager), commandsManager (commandsManager), textManager(textManager), hotkeys(hotkeys),
       QObject (parent)
 {
     connect (keyboard, SIGNAL(commandKeyDown()), this, SLOT(commandKeyPressed()));
-    connect (keyboard, SIGNAL(brightnessKeyDown()), this, SLOT(brightnessKeyPressed()));
     connect (keyboard, SIGNAL(cancelKeyDown()), this, SLOT(cancelKeyPressed()));
+    connect (keyboard, SIGNAL(keyDown(Interaction::Keyboard::Key)), this, SLOT(anyKeyPressed(Interaction::Keyboard::Key)));
 }
 
 void KeyboardManager::commandKeyPressed()
@@ -26,19 +24,19 @@ void KeyboardManager::commandKeyPressed()
     storyManager->beginStory(s);
 }
 
-void KeyboardManager::brightnessKeyPressed()
-{
-    auto *context = new Contexts::ChangeBrightnessContext(illumonationManager->illumination() * 10);
-    Story *s = new Story(context, {
-                            new Activities::InputActivity("Установить яркость: %1 (0-10)", &context->brightness, textManager),
-                            new Activities::ChangeBrightnessActivity(context, illumonationManager)
-                        });
-    storyManager->beginStory(s);
-}
-
 void KeyboardManager::cancelKeyPressed()
 {
     storyManager->beginStory(new Story(nullptr, QVector<Activities::Activity *> (0)));
+}
+
+void KeyboardManager::anyKeyPressed(Keyboard::Key key)
+{
+    if (hotkeys->contains(key))
+    {
+        Command *command = (*hotkeys)[key];
+        Story *story = command->createStory();
+        storyManager->beginStory(story);
+    }
 }
 
 }

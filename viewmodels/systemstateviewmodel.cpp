@@ -26,6 +26,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isEpvReadyValue = true;
     isEpvReleasedValue = false;
     modulesActivityStringValue = "------------";
+    sautIsOutNotifierValue = true;
     milageValue = 0;
     lightValue = -2;
     alsnFreqTargetValue = -1;
@@ -65,6 +66,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     // fileds init end
 
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(convertModulesActivityObjectToString(ModulesActivity)));
+    QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(checkSautIsOut(ModulesActivity)));
 }
 
 void SystemStateViewModel::setDesignSpeed(int value, bool valid)
@@ -333,6 +335,20 @@ void SystemStateViewModel::setModulesActivityString(const QString value)
     {
         modulesActivityStringValue = value;
         emit ModulesActivityStringChanged(value);
+    }
+}
+
+// Напоминание о выключенности САУТ
+bool SystemStateViewModel::getSautIsOutNotifier() const
+{
+    return sautIsOutNotifierValue;
+}
+void SystemStateViewModel::setSautIsOutNotifier(const bool value)
+{
+    if (sautIsOutNotifierValue != value)
+    {
+        sautIsOutNotifierValue = value;
+        emit SautIsOutNotifierChanged(value);
     }
 }
 
@@ -830,7 +846,6 @@ bool SystemStateViewModel::getTsvcIsPreAlarmActive() const
 {
     return tsvcIsPreAlarmActiveValue;
 }
-
 void SystemStateViewModel::setTsvcIsPreAlarmActive(const bool value)
 {
     if (tsvcIsPreAlarmActiveValue != value)
@@ -859,6 +874,11 @@ void SystemStateViewModel::setModulesActivityObject(const ModulesActivity ma)
 void SystemStateViewModel::convertModulesActivityObjectToString(ModulesActivity ma)
 {
     setModulesActivityString(ma.toString());
+}
+
+void SystemStateViewModel::checkSautIsOut(ModulesActivity ma)
+{
+    setSautIsOutNotifier(!ma.saut);
 }
 
 }

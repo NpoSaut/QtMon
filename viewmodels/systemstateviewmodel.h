@@ -86,6 +86,10 @@ class SystemStateViewModel : public QDeclarativeItem
     QString modulesActivityStringValue;
     Q_PROPERTY(QString ModulesActivityString READ getModulesActivityString WRITE setModulesActivityString NOTIFY ModulesActivityStringChanged)
 
+    // Напоминание о выключенности САУТ
+    bool sautIsOutNotifierValue;
+    Q_PROPERTY(bool SautIsOutNotifier READ getSautIsOutNotifier WRITE setSautIsOutNotifier NOTIFY SautIsOutNotifierChanged)
+
     // Проиденное расстояние
     int milageValue;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
@@ -237,6 +241,7 @@ class SystemStateViewModel : public QDeclarativeItem
 
 private slots:
     void convertModulesActivityObjectToString (ModulesActivity ma);
+    void checkSautIsOut (ModulesActivity ma);
 
 public:
     explicit SystemStateViewModel(QDeclarativeItem *parent = 0);
@@ -261,6 +266,7 @@ public:
     bool getIsEpvReady() const;
     bool getIsEpvReleased() const;
     QString getModulesActivityString() const;
+    bool getSautIsOutNotifier() const;
     int getMilage() const;
     int getLight() const;
     int getAlsnFreqTarget() const;
@@ -336,6 +342,7 @@ signals:
     void IsEpvReadyChanged(const bool value);
     void IsEpvReleasedChanged(const bool value);
     void ModulesActivityStringChanged(const QString value);
+    void SautIsOutNotifierChanged(const bool value);
     void MilageChanged(const int value);
     void LightChanged(const int value);
     void AlsnFreqTargetChanged(const int value);
@@ -399,6 +406,7 @@ public slots:
     void setIsEpvReady(const bool);
     void setIsEpvReleased(const bool);
     void setModulesActivityString(const QString);
+    void setSautIsOutNotifier(const bool);
     void setMilage(const int);
     void setLight(const int);
     void setAlsnFreqTarget(const int);

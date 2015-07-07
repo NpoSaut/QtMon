@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parser.h"
 
 class DrivemodeHandler : public QObject
@@ -61,7 +61,7 @@ class DrivemodeSettingHandler : public DrivemodeHandler
 public:
     // Parser для получения информации о акутальном режиме и положении катков
     // Can для оптавки команды SYS_KEY на смену режима
-    explicit DrivemodeSettingHandler(Parser *parser, Can *can, QObject *parent = 0);
+    explicit DrivemodeSettingHandler(Parser *parser, ICan *can, QObject *parent = 0);
     
 signals:
     // Принудительное изменение целевого режима. Возникает при смене пложения катков.
@@ -83,7 +83,7 @@ private:
     DriveMode getTarget () const;
 
     Parser *parser;
-    Can *can;
+    ICan *can;
     DriveMode target;
     quint8 convergenceCounter; // счётчик сообщений ЦО с режимом, не совпадающим с целевым
 };

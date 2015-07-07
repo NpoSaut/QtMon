@@ -21,14 +21,6 @@ class SystemStateViewModel : public QDeclarativeItem
     bool speedIsValidValue;
     Q_PROPERTY(bool SpeedIsValid READ getSpeedIsValid WRITE setSpeedIsValid NOTIFY SpeedIsValidChanged)
 
-    // Текущая скорость по GPS
-    double speedFromSkyValue;
-    Q_PROPERTY(double SpeedFromSky READ getSpeedFromSky WRITE setSpeedFromSky NOTIFY SpeedFromSkyChanged)
-
-    // Текущая скорость от колеса
-    double speedFromEarthValue;
-    Q_PROPERTY(double SpeedFromEarth READ getSpeedFromEarth WRITE setSpeedFromEarth NOTIFY SpeedFromEarthChanged)
-
     // Ограничение скорости
     int speedRestrictionValue;
     Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
@@ -245,8 +237,6 @@ public:
     // public properties getters start
     double getSpeed() const;
     bool getSpeedIsValid() const;
-    double getSpeedFromSky() const;
-    double getSpeedFromEarth() const;
     int getSpeedRestriction() const;
     int getTargetSpeed() const;
     double getAcceleration() const;
@@ -320,8 +310,6 @@ signals:
     // properties signals start
     void SpeedChanged(const double value);
     void SpeedIsValidChanged(const bool value);
-    void SpeedFromSkyChanged(const double value);
-    void SpeedFromEarthChanged(const double value);
     void SpeedRestrictionChanged(const int value);
     void TargetSpeedChanged(const int value);
     void AccelerationChanged(const double value);
@@ -383,8 +371,6 @@ public slots:
     // public properties setters start
     void setSpeed(const double);
     void setSpeedIsValid(const bool);
-    void setSpeedFromSky(const double);
-    void setSpeedFromEarth(const double);
     void setSpeedRestriction(const int);
     void setTargetSpeed(const int);
     void setAcceleration(const double);

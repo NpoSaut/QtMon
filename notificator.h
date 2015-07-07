@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QTimer>
 
 #include "qtBlokLib/parser.h"
 
@@ -17,13 +18,20 @@ public:
     
 signals:
     void notificationTextChanged (QString text);
+
+public slots:
+    void setHandbrakeHintRequired (bool v);
     
 private slots:
     void getStateChangedSignal ();
+    void handbrakeHintShow ();
     
 private:
     Parser *parser;
-
+    
+    QTimer handbrakeHintTimeout;
+    bool handbrakeHint;
+    bool handbrakeHintRequired;
 };
 
 #endif // NOTIFICATOR_H

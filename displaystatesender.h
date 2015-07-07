@@ -2,28 +2,32 @@
 #define DISPLAYSTATE_H
 
 #include <QObject>
+#include <QVector>
 
-#include "qtCanLib/can.h"
-#include "qtBlokLib/parser.h"
+#include "qtCanLib/ICan.h"
+#include "illumination/interfaces/IAnalogDevice.h"
+#include "interaction/KeyboardState.h"
 
 // Отправляет периодические сообщения с состоянием монитора
 //  - отслеживает нажатие кнопок и дублирует их в своём периодическом сообщении
-class DisplayStateSander : public QObject
+class DisplayStateSender : public QObject, public IAnalogDevice
 {
     Q_OBJECT
 public:
-    explicit DisplayStateSander(Parser *parser, Can *can, QObject *parent = 0);
-    
-signals:
-    
-public slots:
+    explicit DisplayStateSender(Interaction::KeyboardState *keyboardState, ICan *can, QObject *parent = 0);
 
-protected:
-    void timerEvent(QTimerEvent *event);
+    void setValue(double backlightLevel);
+
+public slots:
+    void setDriveMode (int driveMode);
 
 private:
-    Can *can;
-    Parser *parser;
+    void timerEvent(QTimerEvent *event);
+
+    Interaction::KeyboardState *keyboardState;
+    ICan *can;
+    int backlightLevel;
+    int driveMode;
 };
 
 #endif // DISPLAYSTATE_H

@@ -12,7 +12,7 @@ void DrivemodePassHandler::convertEnumToInt(DriveMode dm)
     emit actualDrivemodeChanged(int (dm));
 }
 
-DrivemodeSettingHandler::DrivemodeSettingHandler(Parser *parser, Can *can, QObject *parent) :
+DrivemodeSettingHandler::DrivemodeSettingHandler(Parser *parser, ICan *can, QObject *parent) :
     DrivemodeHandler(parent), parser (parser), can (can),
     target (parser->mcoLimits.getDriveMode ()),
     convergenceCounter (0)
@@ -47,7 +47,7 @@ void DrivemodeSettingHandler::processNewState()
         if (++convergenceCounter >= 2)
         {
             convergenceCounter = 0;
-            can->transmitMessage (SysKey(SysKey::RMP, SysKey::PRESS).encode ());
+            can->send (SysKey(SysKey::RMP, SysKey::PRESS).encode ());
         }
     }
     else

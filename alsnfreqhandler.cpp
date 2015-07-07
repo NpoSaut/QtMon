@@ -32,7 +32,7 @@ void AlsnFreqPassHandler::convertEnumToInt(AlsnFrequency freq)
     emit actualAlsnFreqChanged(getIntFromFreq(freq));
 }
 
-AlsnFreqSettingHandler::AlsnFreqSettingHandler(Can *can, Parser *parser, QObject *parent) :
+AlsnFreqSettingHandler::AlsnFreqSettingHandler(ICan *can, Parser *parser, QObject *parent) :
     AlsnFreqHandler(parent),
     can (can),
     parser (parser),
@@ -66,7 +66,7 @@ void AlsnFreqSettingHandler::proccessNewMpMessage()
         if ( ++convergenceCounter >= 2 )
         {
             convergenceCounter = 0;
-            can->transmitMessage (SysKey(SysKey::FREQ, SysKey::PRESS).encode ());
+            can->send (SysKey(SysKey::FREQ, SysKey::PRESS).encode ());
         }
     }
     else

@@ -7,7 +7,7 @@ namespace Interaction {
 namespace Activities {
 
 VersionRequestActivity::VersionRequestActivity(QString moduleName, SysDiagnostics::AuxModule moduleId, QVector<AuxResourceVersion *> auxResources,
-                                               Contexts::VersionRequestContext *context, Can *can, TextManager *textManager,
+                                               Contexts::VersionRequestContext *context, ICan *can, TextManager *textManager,
                                                QObject *parent)
     : context (context), can (can), textManager (textManager), timer(),
       moduleName (moduleName), moduleId (moduleId), auxResources (auxResources), versionHandlers (auxResources.count()),
@@ -30,7 +30,7 @@ void VersionRequestActivity::run()
     SysDiagnostics sd;
     sd.setModule(moduleId);
     sd.setOperation(SysDiagnostics::GET_VERSION);
-    can->transmitMessage(sd.encode());
+    can->send(sd.encode());
 
     textManager->init(QString("Запрос версиии от модуля ") + moduleName + QString("..."));
     timer.start();

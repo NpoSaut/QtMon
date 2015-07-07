@@ -19,10 +19,10 @@ public:
 
 protected:
     virtual void startRecord (Contexts::CookiesContext::Record *p) = 0;
-    virtual void processRecord (Contexts::CookiesContext::Record *p) = 0;
+    virtual void processRecord (Contexts::CookiesContext::Record *p, int value, bool valid) = 0;
 
 private slots:
-    void cookieOnCompleted ();
+    void cookieOnCompleted (int value, bool valid);
 
 private:
     void next ();

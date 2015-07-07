@@ -3,7 +3,7 @@
 namespace Interaction {
 namespace Commands {
 
-VersionRequestCommandFactory::VersionRequestCommandFactory(Can *can, Parser *parser, TextManager *textManager)
+VersionRequestCommandFactory::VersionRequestCommandFactory(ICan *can, Parser *parser, TextManager *textManager)
     : can (can), parser (parser), textManager (textManager)
 {
 }

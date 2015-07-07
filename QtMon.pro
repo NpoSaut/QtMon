@@ -18,11 +18,7 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
-    qtCanLib/canframe.cpp \
-    qtCanLib/socketcan/sktcan.cpp \
-    qtCanLib/socketcan.cpp \
     qtDoodahLib/queues.cpp \
-    qtCanLib/socketcan/cansendqueue.cpp \
     levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
@@ -69,7 +65,6 @@ SOURCES += \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp \
-    keyretranslator.cpp \
     interaction/story.cpp \
     interaction/storymanager.cpp \
     interaction/keyboardmanager.cpp \
@@ -79,6 +74,7 @@ SOURCES += \
     interaction/commandmanager.cpp \
     interaction/commands/configurecommand.cpp \
     interaction/keyboard.cpp \
+    interaction/KeyboardState.cpp \
     interaction/keyboards/cankeyboard.cpp \
     interaction/keyboards/qmlkeyboard.cpp \
     interaction/keyboards/compositekeyboard.cpp \
@@ -96,7 +92,36 @@ SOURCES += \
     interaction/commands/manualcoordinatecommand.cpp \
     interaction/commands/versionrequestcommand.cpp \
     interaction/activities/versionrequestactivity.cpp \
-    interaction/commands/versionrequestcommandfactory.cpp
+    interaction/commands/versionrequestcommandfactory.cpp \
+    illumination/Edisson.cpp \
+    illumination/implementations/DebugAnalogDevice.cpp \
+    interaction/activities/changebrightnessactivity.cpp \
+    illumination/implementations/IlluminationDevice.cpp \
+    illumination/implementations/WeightedCompositeIlluminationDevice.cpp \
+    illumination/implementations/FileAnalogDevice.cpp \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
+    qtBlokLib/parsers/BilLcd.cpp \
+    CanBilLcdIlluminationAnalogDevice.cpp \
+    illumination/implementations/ExponentialIntensityConverter.cpp \
+    interaction/commands/activehalfsetidicationcommand.cpp \
+    interaction/commands/activedpsindicationcommand.cpp \
+    viewmodels/brightnessviewmodel.cpp \
+    HardcodedVersion.cpp \
+    configuration/CookieConfiguration.cpp \
+    qtCanLib/CanFrame.cpp \
+    qtCanLib/ICan.cpp \
+    qtCanLib/AsyncCan.cpp \
+    qtCanLib/AsyncCan/SendWorker.cpp \
+    qtCanLib/AsyncCan/ReceiveWorker.cpp \
+    qtDoodahLib/IThreadWorker.cpp \
+    qtCanLib/AsyncCan/CanPriorityQueue.cpp \
+    qtDoodahLib/ThreadWithWorker.cpp \
+    qtCanLib/DummyCan.cpp \
+    configuration/IConfiguration.cpp \
+    configuration/BaseConfiguration.cpp \
+    DateTimeConverter.cpp \
+    ModulesActivityToStringConverter.cpp \
+    SysKeySender.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -114,11 +139,7 @@ HEADERS += \
     cDoodahLib/packing.h \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
-    qtCanLib/canframe.h \
-    qtCanLib/can.h \
     qtDoodahLib/queues.h \
-    qtCanLib/socketcan/sktcan.h \
-    qtCanLib/socketcan/cansendqueue.h \
     levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
@@ -137,8 +158,6 @@ HEADERS += \
     qtBlokLib/parsers/mco_state.h \
     qtBlokLib/parsers/sys_key.h \
     qtBlokLib/parsers/tskbm_state.h \
-    qtCanLib/socketcan.h \
-    qtCanLib/dummycan.h \
     notificator.h \
     displaystatesender.h \
     drivemodehandler.h \
@@ -169,7 +188,6 @@ HEADERS += \
     stateserializer.h \
     records/staterecorder.h \
     records/stateplayer.h \
-    keyretranslator.h \
     qtBlokLib/parsers/aux_resource.h \
     qtBlokLib/parsers/ipd_date.h \
     qtBlokLib/parsers/mm_data.h \
@@ -186,6 +204,7 @@ HEADERS += \
     interaction/commands/configurecommand.h \
     interaction/context.h \
     interaction/keyboard.h \
+    interaction/KeyboardState.h \
     interaction/keyboards/cankeyboard.h \
     interaction/keyboards/qmlkeyboard.h \
     interaction/keyboards/compositekeyboard.h \
@@ -205,7 +224,94 @@ HEADERS += \
     interaction/commands/versionrequestcommand.h \
     interaction/contexts/versionrequestcontext.h \
     interaction/activities/versionrequestactivity.h \
-    interaction/commands/versionrequestcommandfactory.h
+    interaction/commands/versionrequestcommandfactory.h \
+    illumination/Edisson.h \
+    illumination/interfaces/IAnalogDevice.h \
+    illumination/interfaces/IIlluminationSettings.h \
+    illumination/interfaces/IIntensityConverter.h \
+    illumination/implementations/DummyIlluminationSettings.h \
+    illumination/implementations/LinearIntensityConverter.h \
+    illumination/interfaces/IIlluminationManager.h \
+    illumination/implementations/DebugAnalogDevice.h \
+    interaction/contexts/changebrightnesscontext.h \
+    interaction/activities/changebrightnessactivity.h \
+    illumination/interfaces/IIlluminationDevice.h \
+    illumination/implementations/IlluminationDevice.h \
+    illumination/implementations/WeightedCompositeIlluminationDevice.h \
+    illumination/implementations/FileAnalogDevice.h \
+    illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
+    qtBlokLib/parsers/BilLcd.h \
+    CanBilLcdIlluminationAnalogDevice.h \
+    illumination/implementations/ExponentialIntensityConverter.h \
+    interaction/commands/activehalfsetidicationcommand.h \
+    interaction/commands/activedpsindicationcommand.h \
+    viewmodels/brightnessviewmodel.h \
+    HardcodedVersion.h \
+    configuration/IConfiguration.h \
+    configuration/CookieConfiguration.h \
+    qtDoodahLib/queues/IThreadSafeQueue.h \
+    qtDoodahLib/queues/LinerThreadSafeQueue.h \
+    qtDoodahLib/queues/PriorityThreadSafeQueue.h \
+    qtCanLib/CanFrame.h \
+    qtCanLib/ICan.h \
+    qtCanLib/AsyncCan.h \
+    qtCanLib/AsyncCan/SendWorker.h \
+    qtCanLib/AsyncCan/ReceiveWorker.h \
+    qtDoodahLib/IThreadWorker.h \
+    qtCanLib/AsyncCan/CanPriorityQueue.h \
+    qtDoodahLib/ThreadWithWorker.h \
+    qtCanLib/drivers/IBlockedReceiver.h \
+    qtCanLib/drivers/IBlockedReceiverFactory.h \
+    qtCanLib/drivers/IBlockedSender.h \
+    qtCanLib/drivers/IBlockedSenderFactory.h \
+    qtCanLib/drivers/DummyCan/DummyCanReceiver.h \
+    qtCanLib/drivers/DummyCan/DummyCanSender.h \
+    qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h \
+    qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h \
+    qtCanLib/DummyCan.h \
+    configuration/BaseConfiguration.h \
+    DateTimeConverter.h \
+    ModulesActivityToStringConverter.h \
+    SysKeySender.h
+
+LIB_LINUX_SOCKET_CAN_DRIVER {
+    SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.cpp \
+                qtCanLib/drivers/LinuxSocketCan/cSocketCanLib/src/SocketCanLib.c
+
+    HEADERS +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSender.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocket.h \
+                qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSocketFactory.h \
+                qtCanLib/drivers/LinuxSocketCan/cSocketCanLib/src/SocketCanLib.h
+
+    DEFINES += LIB_LINUX_SOCKET_CAN_DRIVER
+}
+
+LIB_APPI_CAN_DRIVER {
+    SOURCES +=  qtCanLib/drivers/AppiCan/LibusbDevice.cpp \
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.cpp \
+                qtCanLib/drivers/AppiCan/AppiCan.cpp \
+                qtCanLib/drivers/AppiCan/AppiBlockCan1.cpp
+
+    HEADERS +=  qtCanLib/drivers/AppiCan/libusb.h \
+                qtCanLib/drivers/AppiCan/LibusbDevice.h \
+                qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h \
+                qtCanLib/drivers/AppiCan/AppiCan.h \
+                qtCanLib/drivers/AppiCan/AppiCanReceiverFactory.h \
+                qtCanLib/drivers/AppiCan/AppiCanSenderFactory.h \
+                qtCanLib/drivers/AppiCan/AppiBlockCan1.h
+
+    LIBS    +=  -L"$$_PRO_FILE_PWD_/qtCanLib/drivers/AppiCan/" -lusb-1.0
+
+    DEFINES += LIB_APPI_CAN_DRIVER
+    DEFINES += WIN32
+}
 
 CONFIG += console
 
@@ -216,5 +322,5 @@ QMAKE_CXXFLAGS += -std=c++0x
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
 
 # Для работы нужны:
-DEFINES+=CPP11 #DEFINES+=LIB_SOCKET_CAN DEFINES+=ON_DEVICE
+# DEFINES+=CPP11 DEFINES+=ON_DEVICE CONFIG+=LIB_LINUX_SOCKET_CAN_DRIVER
 

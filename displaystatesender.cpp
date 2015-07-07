@@ -2,32 +2,51 @@
 
 #include "qtBlokLib/parsers/display_state.h"
 
-#include <QDebug>
+using namespace Interaction;
 
-DisplayStateSander::DisplayStateSander(Parser *parser, Can *can, QObject *parent) :
-    QObject(parent),
+DisplayStateSender::DisplayStateSender(Interaction::KeyboardState *keyboardState, ICan *can, QObject *parent) :
+    QObject (parent),
+    keyboardState (keyboardState),
     can (can),
-    parser (parser)
+    backlightLevel (0),
+    driveMode (0)
 {
     this->startTimer (500);
 }
 
-void DisplayStateSander::timerEvent(QTimerEvent *event)
+void DisplayStateSender::setValue(double backlightLevel)
 {
+    this->backlightLevel = backlightLevel;
+}
+
+void DisplayStateSender::setDriveMode(int dm)
+{
+    driveMode = dm;
+}
+
+void DisplayStateSender::timerEvent(QTimerEvent *event)
+{
+    Q_UNUSED(event);
+
     DisplayStateA dsa;
-    dsa.setRb (parser->sysKey.isKeyPressed (SysKey::RB));
-    dsa.setRbs (parser->sysKey.isKeyPressed (SysKey::RBS));
-    dsa.setVk (parser->sysKey.isKeyPressed (SysKey::VK));
-//    dsa.setDriveMode (parser->sysKey.isKeyPressed (SysKey::));
-    dsa.setPull (parser->sysKey.isKeyPressed (SysKey::PULL));
-    dsa.setOtpr (parser->sysKey.isKeyPressed (SysKey::OTPR));
-    dsa.setOc (parser->sysKey.isKeyPressed (SysKey::OC));
-    dsa.setK20 (parser->sysKey.isKeyPressed (SysKey::K20));
-    dsa.setFreq (parser->sysKey.isKeyPressed (SysKey::FREQ));
-    can->transmitMessage (dsa.encode ());
+
+    dsa.setRb (keyboardState->isPressed (Keyboard::Key::RB));
+    dsa.setRbs (keyboardState->isPressed (Keyboard::Key::RBS));
+    dsa.setVk (keyboardState->isPressed (Keyboard::Key::VK));
+    dsa.setPull (keyboardState->isPressed (Keyboard::Key::PODT));
+    dsa.setOtpr (keyboardState->isPressed (Keyboard::Key::OTPR));
+    dsa.setOc (keyboardState->isPressed (Keyboard::Key::OC));
+    dsa.setK20 (keyboardState->isPressed (Keyboard::Key::K20));
+    dsa.setFreq (keyboardState->isPressed (Keyboard::Key::F));
+    dsa.setTvk (keyboardState->isPressed(Keyboard::Key::TVK));
+
+    dsa.setBacklightLevel(backlightLevel);
+    dsa.setDriveMode (DriveMode(driveMode));
+
+    can->send (dsa.encode ());
 
     DisplayStateB dsb;
-    dsb.setRb (parser->sysKey.isKeyPressed (SysKey::RB));
-    dsb.setRbs (parser->sysKey.isKeyPressed (SysKey::RBS));
-    can->transmitMessage (dsb.encode ());
+    dsb.setRb (keyboardState->isPressed (Keyboard::Key::RB));
+    dsb.setRbs (keyboardState->isPressed (Keyboard::Key::RBS));
+    can->send (dsb.encode ());
 }

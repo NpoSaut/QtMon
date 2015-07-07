@@ -15,20 +15,28 @@
     HANDLE winConsoleandler;
 #endif
 
-#include "qtCanLib/can.h"
+#include "qtCanLib/DummyCan.h"
+#include "qtCanLib/AsyncCan.h"
+#include "qtCanLib/drivers/DummyCan/DummyCanReceiverFactory.h"
+#include "qtCanLib/drivers/DummyCan/DummyCanSenderFactory.h"
+#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
+#include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiverFactory.h"
+#include "qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanSenderFactory.h"
+#endif
+#ifdef LIB_APPI_CAN_DRIVER
+#include "qtCanLib/drivers/AppiCan/LibusbDeviceFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiCanReceiverFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiCanSenderFactory.h"
+#include "qtCanLib/drivers/AppiCan/AppiBlockCan1.h"
+#endif
 #include "qtBlokLib/parser.h"
 #include "qtBlokLib/elmapforwardtarget.h"
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
-#ifdef LIB_SOCKET_CAN
-#include "qtCanLib/socketcan.h"
-#endif
-#include "qtCanLib/dummycan.h"
-
 
 #include "notificator.h"
 #include "displaystatesender.h"
-#include "keyretranslator.h"
+#include "SysKeySender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
@@ -39,14 +47,21 @@
 #include "autolockhandler.h"
 #include "records/stateplayer.h"
 #include "records/staterecorder.h"
+#include "HardcodedVersion.h"
+#include "configuration/CookieConfiguration.h"
+#include "DateTimeConverter.h"
+#include "ModulesActivityToStringConverter.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
 #include "interaction/keyboards/qmlkeyboard.h"
 #include "interaction/keyboards/compositekeyboard.h"
+#include "interaction/KeyboardState.h"
 #include "interaction/storymanager.h"
 #include "interaction/textmanager.h"
 #include "interaction/commandmanager.h"
+#include "interaction/commands/activedpsindicationcommand.h"
+#include "interaction/commands/activehalfsetidicationcommand.h"
 #include "interaction/commands/configurecommand.h"
 #include "interaction/commands/manualcoordinatecommand.h"
 #include "interaction/commands/modulesactivitycommand.h"
@@ -55,13 +70,24 @@
 #include "interaction/commands/versionrequestcommandfactory.h"
 #include "interaction/keyboardmanager.h"
 
+#include "illumination/Edisson.h"
+#include "illumination/implementations/DebugAnalogDevice.h"
+#include "illumination/implementations/LinuxBacklightAnalogDeviceFactory.h"
+#include "illumination/implementations/DummyIlluminationSettings.h"
+#include "illumination/implementations/LinearIntensityConverter.h"
+#include "illumination/implementations/ExponentialIntensityConverter.h"
+#include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
+#include "illumination/implementations/IlluminationDevice.h"
+#include "CanBilLcdIlluminationAnalogDevice.h"
+#include "viewmodels/brightnessviewmodel.h"
+
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
-DisplayStateSander* displayStateSander;
-KeyRetranslator *keyRetranslator;
+DisplayStateSender* displayStateSender;
+SysKeySender *sysKeySender;
 
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
@@ -73,16 +99,22 @@ LedVigilance *ledVigilance;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
-Can *can;
+ICan *can;
 Parser *blokMessages;
 Cookies *cookies;
 ElmapForwardTarget *elmapForwardTarget;
+HardcodedVersion *hardcodedVersion;
+IConfiguration *configuration;
 
 Interaction::Keyboard *keyboard;
+Interaction::KeyboardState *keyboardState;
 Interaction::StoryManager *storyManager;
 Interaction::TextManager *textManager;
 Interaction::CommandManager *commandManager;
 Interaction::KeyboardManager *keyboardManager;
+
+IIlluminationManager *illuminationManager;
+ViewModels::BrightnessViewModel *brightnessViewModel;
 
 // PASSIVE MODE FLAG
 bool passiveMode = false;
@@ -255,6 +287,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<ViewModels::SystemStateViewModel>("views", 1, 0, "SystemStateView");
     qmlRegisterType<ViewModels::TextManagerViewModel>("views", 1, 0, "TextManagerViewModel");
     qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
+    qmlRegisterType<ViewModels::BrightnessViewModel>("views", 1, 0, "BrightnessViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
 
     QmlApplicationViewer viewer;
@@ -275,11 +308,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
     textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
+    brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
     levithan = new Levithan(systemState);
 
-    // Кассета
-    if ( app->arguments().contains(QString("--play")) )
+    // Создание CAN
+    QThread canThread;
+    if ( app->arguments().contains(QString("--play")) ) // Кассета
     {
         can = new DummyCan();
 
@@ -288,13 +323,24 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     }
     else
     {
-#ifdef LIB_SOCKET_CAN
-        can = new SocketCan();
+        IBlockedReceiverFactory *receiverFactory;
+        IBlockedSenderFactory *senderFactory;
+#ifdef LIB_LINUX_SOCKET_CAN_DRIVER
+        receiverFactory = new LinuxSocketCanReceiverFactory ("can0");
+        senderFactory   = new LinuxSocketCanSenderFactory ("can0");
+#elif defined (LIB_APPI_CAN_DRIVER)
+        auto *appiCan = new AppiBlockCan1 (new LibusbDeviceFactory (1));
+        receiverFactory = new AppiCanReceiverFactory (appiCan);
+        senderFactory = new AppiCanSenderFactory (appiCan);
 #else
-        can = new DummyCan();
+        receiverFactory = new DummyCanReceiverFactory ();
+        senderFactory   = new DummyCanSenderFactory ();
 #endif
         if (passiveMode)
-            can = new CanSilent (can);
+            senderFactory = new DummyCanSenderFactory ();
+        auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
+        QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
+        can = asyncCan;
 
         if ( app->arguments().contains(QString("--record")) )
         {
@@ -302,14 +348,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
             recorder->start();
         }
     }
+    can->moveToThread(&canThread);
+    canThread.start();
 
     blokMessages = new Parser(can);
     iodriver = new iodrv(can);
     cookies = new Cookies(can);
+
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
-    displayStateSander = new DisplayStateSander(blokMessages, can);
-    keyRetranslator = new KeyRetranslator(can);
+
     gpioProducer =
 #ifdef Q_OS_LINUX
         new GpioProducer (GpioProducer::LINUX);
@@ -318,6 +366,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         new GpioProducer (GpioProducer::DUMMY);
 #endif
 
+    // Конфигурация
+    configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
+    QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
+
+    // Выдаёт версию по AUX_RESOURCE
+    hardcodedVersion = new HardcodedVersion(3, 0, can);
+    QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
@@ -333,21 +388,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Переносить ли эти события из iodrv в обработчики
     QObject::connect(&blokMessages->vdsState, SIGNAL(ironWheelsChagned(bool)), systemState, SLOT(setIronWheels(bool)));
 
-    // Для отладки
-    QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeedFromEarth(double)));
-    QObject::connect(iodriver, SIGNAL(signal_speed_sky(double)), systemState, SLOT(setSpeedFromSky(double)));
-
     //Скорость и ограничения
     QObject::connect(iodriver, SIGNAL(signal_speed_earth(double)), systemState, SLOT(setSpeed(double)));
 //    QObject::connect(iodriver, SIGNAL(signal_is_on_rails(bool)), systemState, SLOT(setSpeedIsValid(bool))); // HACK для трактора
-    systemState->setSpeedIsValid (true);
-    QObject::connect(iodriver, SIGNAL(signal_speed_limit(int)), systemState, SLOT(setSpeedRestriction(int)));
-    QObject::connect(iodriver, SIGNAL(signal_target_speed(int)), systemState, SLOT(setTargetSpeed(int)));
+    systemState->setSpeedIsValid (true); // HACK для Патриота
+    QObject::connect(&blokMessages->mcoState, SIGNAL(speedRestrictionChanged(int)), systemState, SLOT(setSpeedRestriction(int)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(targetSpeedChanged(int)), systemState, SLOT(setTargetSpeed(int)));
     QObject::connect(iodriver, SIGNAL(signal_acceleration(double)), systemState, SLOT(setAcceleration(double)));
     //Состояние системы
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
-    QObject::connect (iodriver, SIGNAL(signal_modules_activity(QString)), systemState, SLOT(setModulesActivityString(QString)));
+    ModulesActivityToStringConverter modulesActivityToStringConverter;
+    QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), &modulesActivityToStringConverter, SLOT(processActivity(ModulesActivity)));
+    QObject::connect(&modulesActivityToStringConverter, SIGNAL(activityChanged(QString)), systemState, SLOT(setModulesActivityString(QString)));
 
     // Уведомления
     QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));
@@ -395,8 +448,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(latitudeChanged(double)), systemState, SLOT(setLatitude(double)));
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(longitudeChanged(double)), systemState, SLOT(setLongitude(double)));
     QObject::connect(&blokMessages->mmAltLong, SIGNAL(validChanged(bool)), systemState, SLOT(setGpsValid(bool)));
-    QObject::connect(iodriver, SIGNAL(signal_time(QString)), systemState, SLOT(setTime(QString)));
-    QObject::connect(iodriver, SIGNAL(signal_date(QString)), systemState, SLOT(setDate(QString)));
+    DateTimeConverter dateTimeConverter;
+    QObject::connect(&blokMessages->ipdDate, SIGNAL(dateTimeChanged(QDateTime)), &dateTimeConverter, SLOT(processDateTime(QDateTime)));
+    QObject::connect(&dateTimeConverter, SIGNAL(dateChanged(QString)), systemState, SLOT(setDate(QString)));
+    QObject::connect(&dateTimeConverter, SIGNAL(timeChanged(QString)), systemState, SLOT(setTime(QString)));
 
     QObject::connect(&blokMessages->mcoState, SIGNAL(tractionChanged(bool)), systemState, SLOT(setIsTractionOn(bool)));
 
@@ -470,8 +525,35 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
 
-    // Взаимодествие с пользователем через команды
+    // Клавиатуры и кнопки
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
+    keyboardState = new Interaction::KeyboardState (keyboard);
+    displayStateSender = new DisplayStateSender(keyboardState, can);
+    QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), displayStateSender, SLOT(setDriveMode(int)));
+    sysKeySender = new SysKeySender(keyboard, can);
+
+    // Управление яркостью
+    IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(10, 0.4*255, 255);
+    IIntensityConverter *to7IntensityConverter = new LinearIntensityConverter(7);
+    LinuxBacklightAnalogDeviceFactory linuxBacklightFactory;
+    QVector<WeightedCompositeIlluminationDevice::Leaf *> lightControllers =
+    {
+#ifdef ON_DEVICE
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(0))),
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, linuxBacklightFactory.produce(1))),
+#else
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Display"))),
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(intensityConverter, new DebugAnalogDevice("Lights"))),
+#endif
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, new CanBilLcdIlluminationAnalogDevice(can, 1))),
+        new WeightedCompositeIlluminationDevice::Leaf(1.0, new IlluminationDevice(to7IntensityConverter, displayStateSender))
+    };
+    illuminationManager = new Edisson(new WeightedCompositeIlluminationDevice(lightControllers),
+                                      new DummyIlluminationSettings());
+    if (brightnessViewModel)
+        brightnessViewModel->associateManager(illuminationManager);
+
+    // Взаимодествие с пользователем через команды
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);
@@ -496,11 +578,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(4084, "ВДС", SysDiagnostics::VDS, {AuxResource::VDS_A, AuxResource::VDS_B}),
                                                           vrcf.produceCommand(4101, "БС-ДПС", SysDiagnostics::BS_DPS, {AuxResource::BS_DPS_A, AuxResource::BS_DPS_B}),
                                                           vrcf.produceCommand(4357, "ПТК", SysDiagnostics::PTK, {AuxResource::SAUT_PTK_A, AuxResource::SAUT_PTK_B}),
-                                                          vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUT, {AuxResource::OUT_A, AuxResource::OUT_B}),
+                                                          vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUTPUT, {AuxResource::OUTPUT_A, AuxResource::OUTPUT_B}),
                                                           vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
                                                           vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
+                                                          // Работа с комплектами ЦО
+                                                          new Interaction::Commands::ActiveHalfsetIdicationCommand(&blokMessages->mcoState, textManager),
+                                                          //
+                                                          new Interaction::Commands::ActiveDpsIndicationCommand(&blokMessages->ipdState, textManager),
                                                       });
-    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager );
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, illuminationManager );
 
     QtConcurrent::run(getParamsFromConsole);
 

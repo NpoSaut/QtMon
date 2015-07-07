@@ -1,6 +1,6 @@
 #include "autolockhandler.h"
 
-AutolockHandler::AutolockHandler(Can *can, Parser *parser, QObject *parent) :
+AutolockHandler::AutolockHandler(ICan *can, Parser *parser, QObject *parent) :
     QObject(parent),
     can (can),
     parser (parser),
@@ -53,7 +53,7 @@ void AutolockHandler::proccessMcoMode()
             break;
         }
 
-        can->transmitMessage (frame);
+        can->send (frame);
     }
 }
 

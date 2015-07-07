@@ -5,7 +5,7 @@
 #include <QVector>
 #include "../command.h"
 #include "../textmanager.h"
-#include "qtCanLib/can.h"
+#include "qtCanLib/ICan.h"
 #include "qtBlokLib/parsers/sys_diagnostics.h"
 #include "qtBlokLib/parsers/aux_resource.h"
 
@@ -17,12 +17,12 @@ class VersionRequestCommand : public Command
 public:
     VersionRequestCommand(int commandNumber,
                           QString moduleName, SysDiagnostics::AuxModule moduleId, QVector<AuxResourceVersion *> auxResources,
-                          Can *can, TextManager *textManager);
+                          ICan *can, TextManager *textManager);
 
     Story *createStory();
 
 private:
-    Can *can;
+    ICan *can;
     TextManager *textManager;
 
     QString moduleName;

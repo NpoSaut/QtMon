@@ -10,7 +10,7 @@ LedTrafficlight::LedTrafficlight(GpioProducer *producer, QObject *parent) :
     on (false), light (0)
 {
     for (unsigned i = 0; i < count; i ++)
-        gpios[i]->setDirection(Gpio::OUT);
+        gpios[i]->setDirection(Gpio::OUTPUT);
 }
 
 void LedTrafficlight::lightTrafficlight(int l)

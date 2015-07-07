@@ -12,8 +12,8 @@ LedVigilance::LedVigilance(GpioProducer *gpioProducer, QObject *parent) :
     red (gpioProducer->produce(129)),
     yellow (gpioProducer->produce(128))
 {
-    red->setDirection(Gpio::OUT);
-    yellow->setDirection(Gpio::OUT);
+    red->setDirection(Gpio::OUTPUT);
+    yellow->setDirection(Gpio::OUTPUT);
 
     timer.setSingleShot(true);
     QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(timerEvent()));

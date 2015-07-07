@@ -6,8 +6,8 @@ class Gpio
 public:
     enum Direction
     {
-        IN = 0,
-        OUT = 1,
+        INPUT = 0,
+        OUTPUT = 1,
         UNDEF = 2
     };
 

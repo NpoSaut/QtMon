@@ -36,10 +36,10 @@ void LinuxGpio::setDirection(Gpio::Direction dir)
     if ( file.is_open() )
     {
         switch (dir) {
-        case Gpio::IN:
+        case Gpio::INPUT:
             file << "in";
             break;
-        case Gpio::OUT:
+        case Gpio::OUTPUT:
             file << "out";
             break;
         default:
@@ -57,10 +57,10 @@ Gpio::Direction LinuxGpio::getDirection() const
         string dir;
         file >> dir;
         if (dir == "in") {
-            return Gpio::IN;
+            return Gpio::INPUT;
         }
         else if (dir == "out") {
-            return Gpio::OUT;
+            return Gpio::OUTPUT;
         }
     }
     return Gpio::UNDEF;

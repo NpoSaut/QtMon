@@ -381,10 +381,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
 
-    // Ретрансляция кнопок
-    keyRetranslator->connect(&blokMessages->consoleKey1, SIGNAL(keyPressed(ConsoleKey::ConsKey)), SLOT(catchKeyPress(ConsoleKey::ConsKey)));
-    keyRetranslator->connect(&blokMessages->consoleKey1, SIGNAL(keyReleased(ConsoleKey::ConsKey)), SLOT(catchKeyReleased(ConsoleKey::ConsKey)));
-
     // Переносить ли эти события из iodrv в обработчики
     QObject::connect(&blokMessages->vdsState, SIGNAL(ironWheelsChagned(bool)), systemState, SLOT(setIronWheels(bool)));
 

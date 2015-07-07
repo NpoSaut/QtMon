@@ -32,6 +32,26 @@ void QmlKeyboard::processKeyDown(int key)
         emit brightnessKeyDown();
         emit keyDown(Key::BRIGHTNESS);
         break;
+    case Qt::Key_P:
+        emit pKeyDown();
+        emit keyDown(Key::P);
+        break;
+    case Qt::Key_F:
+        emit fKeyDown();
+        emit keyDown(Key::F);
+        break;
+    case Qt::Key_PageUp:
+        emit rbsKeyDown();
+        emit keyDown(Key::RBS);
+        break;
+    case Qt::Key_PageDown:
+        emit rbKeyDown();
+        emit keyDown(Key::RB);
+        break;
+    case Qt::Key_Delete:
+        emit rbpKeyDown();
+        emit keyDown(Key::RBP);
+        break;
     case Qt::Key_0:
         emit numberKeyDown(0);
         emit keyDown(Key::K_0);
@@ -97,6 +117,26 @@ void QmlKeyboard::processKeyUp(int key)
     case Qt::Key_L:
         emit brightnessKeyUp();
         emit keyUp(Key::BRIGHTNESS);
+        break;
+    case Qt::Key_P:
+        emit pKeyUp();
+        emit keyUp(Key::P);
+        break;
+    case Qt::Key_F:
+        emit fKeyUp();
+        emit keyUp(Key::F);
+        break;
+    case Qt::Key_PageUp:
+        emit rbsKeyUp();
+        emit keyUp(Key::RBS);
+        break;
+    case Qt::Key_PageDown:
+        emit rbKeyUp();
+        emit keyUp(Key::RB);
+        break;
+    case Qt::Key_Delete:
+        emit rbpKeyUp();
+        emit keyUp(Key::RBP);
         break;
     case Qt::Key_0:
         emit numberKeyUp(0);

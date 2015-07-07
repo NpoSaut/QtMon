@@ -117,6 +117,10 @@ SOURCES += \
     DateTimeConverter.cpp \
     ModulesActivityToStringConverter.cpp \
     SysKeySender.cpp \
+    interaction/contexts/InputTrackNumberContext.cpp \
+    interaction/activities/SubmitTrackNumberActivity.cpp \
+    interaction/activities/RequestTrackNumberActivity.cpp \
+    interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
@@ -262,6 +266,10 @@ HEADERS += \
     DateTimeConverter.h \
     ModulesActivityToStringConverter.h \
     SysKeySender.h \
+    interaction/contexts/InputTrackNumberContext.h \
+    interaction/activities/SubmitTrackNumberActivity.h \
+    interaction/activities/RequestTrackNumberActivity.h \
+    interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {

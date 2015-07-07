@@ -814,7 +814,7 @@ Rectangle {
                     id: speedometerWarner
                     property int warningLimit: 3
                     property double warningLevel: Math.max(0, Math.min(warningLimit, stateView.Speed + warningLimit - stateView.SpeedRestriction)) / warningLimit
-                    property bool warned: warningLevel > 0 && getDriveModeLetter(stateView.DriveModeFact) != "Т"
+                    property bool warned: warningLevel > 0 && getDriveModeLetter(stateView.DriveModeFact) != "Т" && stateView.IsEpvReady
                     property bool poolsed: warned && innerPoolsed
                     property bool innerPoolsed: false
                     property double nextInterval: 600 * (parent.poolsed ? 0.3 : 1.0) * (1.5 - warningLevel)
@@ -851,6 +851,7 @@ Rectangle {
 
                 // Стрелка целевой скорости
                 Rectangle {
+                    visible: stateView.IsEpvReady
                     transformOrigin: Item.Right
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -876,6 +877,7 @@ Rectangle {
                 // Стрелка ограничения скорости
                 Rectangle {
                     id: speedRestrictionNeedle
+                    visible: stateView.IsEpvReady
                     transformOrigin: Item.Right
 
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -949,6 +951,7 @@ Rectangle {
 
                     // Ограничение скорости
                     Rectangle {
+                        visible: stateView.IsEpvReady
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.verticalCenterOffset: 65

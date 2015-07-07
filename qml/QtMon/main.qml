@@ -294,7 +294,6 @@ Rectangle {
             color: "#00000000"
 
 
-
             // Координата
             VerticalLabeledParameterBox {
                 anchors.left: parent.left

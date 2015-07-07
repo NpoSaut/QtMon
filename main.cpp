@@ -36,6 +36,7 @@
 
 #include "notificator.h"
 #include "displaystatesender.h"
+#include "SysKeySender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
@@ -83,6 +84,7 @@ Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
 Notificator* notificator;
 DisplayStateSender* displayStateSender;
+SysKeySender *sysKeySender;
 
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
@@ -480,6 +482,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     keyboardState = new Interaction::KeyboardState (keyboard);
     displayStateSender = new DisplayStateSender(keyboardState, can);
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), displayStateSender, SLOT(setDriveMode(int)));
+    sysKeySender = new SysKeySender(keyboard, can);
 
     // Управление яркостью
     IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(10, 0.4*255, 255);

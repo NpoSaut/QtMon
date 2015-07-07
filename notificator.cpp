@@ -46,6 +46,9 @@ void Notificator::getStateChangedSignal()
     else if ( parser->mcoLimits.isTractionShutdownCommand () )
         emit notificationTextChanged ("Экстренное торможение");
 
+    else if ( parser->mcoLimits.isSlipping() )
+        emit notificationTextChanged ("Боксование");
+
     else if ( handbrakeHint )
         emit notificationTextChanged ("Подними ручник");
 

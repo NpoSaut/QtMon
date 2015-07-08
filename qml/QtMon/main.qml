@@ -321,6 +321,10 @@ Rectangle {
                         backgroundColor: boxColor
                         boxHeight: globalBoxHeight
                         width: height
+                        iconColor: "#ff3b30"
+                        iconText: stateView.SautIsOutNotifier
+                                    ? "s"
+                                    : " "
                     }
                     IconBox {
                         borderColor: accentColor
@@ -328,9 +332,10 @@ Rectangle {
                         //backgroundColor: accentColor
                         boxHeight: globalBoxHeight
                         width: height
-                        iconSource: stateView.IsRegistrationTapeActive
-                                    ? "Slices/Registration-Type.png"
-                                    : ""
+                        iconColor: "#ffc000"
+                        iconText: stateView.IsRegistrationTapeActive
+                                    ? "t"
+                                    : " "
                     }
                 }
 

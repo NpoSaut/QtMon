@@ -115,7 +115,6 @@ SOURCES += \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
     DateTimeConverter.cpp \
-    ModulesActivityToStringConverter.cpp \
     SysKeySender.cpp \
     interaction/contexts/InputTrackNumberContext.cpp \
     interaction/activities/SubmitTrackNumberActivity.cpp \
@@ -264,7 +263,6 @@ HEADERS += \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
     DateTimeConverter.h \
-    ModulesActivityToStringConverter.h \
     SysKeySender.h \
     interaction/contexts/InputTrackNumberContext.h \
     interaction/activities/SubmitTrackNumberActivity.h \

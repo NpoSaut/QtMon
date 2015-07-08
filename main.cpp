@@ -4,6 +4,8 @@
 #include <QTextCodec>
 #include <QString>
 #include <QtConcurrentRun>
+#include <QFontDatabase>
+#include <QDirIterator>
 #include <qmlapplicationviewer.h>
 
 #include "viewmodels/systemstateviewmodel.h"
@@ -50,7 +52,6 @@
 #include "HardcodedVersion.h"
 #include "configuration/CookieConfiguration.h"
 #include "DateTimeConverter.h"
-#include "ModulesActivityToStringConverter.h"
 
 #include "viewmodels/textmanagerviewmodel.h"
 #include "interaction/keyboards/cankeyboard.h"
@@ -68,6 +69,8 @@
 #include "interaction/commands/tripconfigurationcommand.h"
 #include "interaction/commands/versionrequestcommand.h"
 #include "interaction/commands/versionrequestcommandfactory.h"
+#include "interaction/commands/ChangeBrightnessCommand.h"
+#include "interaction/commands/InputTrackNumberCommand.h"
 #include "interaction/keyboardmanager.h"
 
 #include "illumination/Edisson.h"
@@ -281,6 +284,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QScopedPointer<QApplication> app(createApplication(argc, argv));
 
+    // Загребаем все шрифты из папки "шрифты"
+    QDirIterator it("fonts", QStringList() << "*.ttf", QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        QFontDatabase::addApplicationFont(it.next());
+    }
+
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(codec);
 
@@ -394,9 +403,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //Состояние системы
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
-    ModulesActivityToStringConverter modulesActivityToStringConverter;
-    QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), &modulesActivityToStringConverter, SLOT(processActivity(ModulesActivity)));
-    QObject::connect(&modulesActivityToStringConverter, SIGNAL(activityChanged(QString)), systemState, SLOT(setModulesActivityString(QString)));
+    QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), systemState, SLOT(setModulesActivityObject(ModulesActivity)));
 
     // Уведомления
     QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));
@@ -582,7 +589,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           //
                                                           new Interaction::Commands::ActiveDpsIndicationCommand(&blokMessages->ipdState, textManager),
                                                       });
-    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, illuminationManager );
+
+    QMap<Interaction::Keyboard::Key, Interaction::Command*> hotkeys;
+    hotkeys[Interaction::Keyboard::Key::BRIGHTNESS] = new Interaction::Commands::ChangeBrightnessCommand(illuminationManager, textManager);
+    hotkeys[Interaction::Keyboard::Key::P] = new Interaction::Commands::InputTrackNumberCommand(cookies, textManager);
+    keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
 
     QtConcurrent::run(getParamsFromConsole);
 

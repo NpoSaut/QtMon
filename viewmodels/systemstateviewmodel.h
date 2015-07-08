@@ -82,9 +82,13 @@ class SystemStateViewModel : public QDeclarativeItem
     bool isEpvReleasedValue;
     Q_PROPERTY(bool IsEpvReleased READ getIsEpvReleased WRITE setIsEpvReleased NOTIFY IsEpvReleasedChanged)
 
-    // Активность модулей
+    // Строка с активностью модулей
     QString modulesActivityStringValue;
     Q_PROPERTY(QString ModulesActivityString READ getModulesActivityString WRITE setModulesActivityString NOTIFY ModulesActivityStringChanged)
+
+    // Напоминание о выключенности САУТ
+    bool sautIsOutNotifierValue;
+    Q_PROPERTY(bool SautIsOutNotifier READ getSautIsOutNotifier WRITE setSautIsOutNotifier NOTIFY SautIsOutNotifierChanged)
 
     // Проиденное расстояние
     int milageValue;
@@ -231,6 +235,14 @@ class SystemStateViewModel : public QDeclarativeItem
 
     // private properties end
 
+    // Активность модулей
+    ModulesActivity modulesActivityObjectValue;
+    Q_PROPERTY(ModulesActivity ModulesActivityObject READ getModulesActivityObject WRITE setModulesActivityObject NOTIFY ModulesActivityObjectChanged)
+
+private slots:
+    void convertModulesActivityObjectToString (ModulesActivity ma);
+    void checkSautIsOut (ModulesActivity ma);
+
 public:
     explicit SystemStateViewModel(QDeclarativeItem *parent = 0);
 
@@ -254,6 +266,7 @@ public:
     bool getIsEpvReady() const;
     bool getIsEpvReleased() const;
     QString getModulesActivityString() const;
+    bool getSautIsOutNotifier() const;
     int getMilage() const;
     int getLight() const;
     int getAlsnFreqTarget() const;
@@ -292,6 +305,8 @@ public:
     bool getTsvcIsPreAlarmActive() const;
     // public properties getters end
 
+    ModulesActivity getModulesActivityObject() const;
+
 signals:
     // Для привязки звуков
     void ButtonPressed();
@@ -327,6 +342,7 @@ signals:
     void IsEpvReadyChanged(const bool value);
     void IsEpvReleasedChanged(const bool value);
     void ModulesActivityStringChanged(const QString value);
+    void SautIsOutNotifierChanged(const bool value);
     void MilageChanged(const int value);
     void LightChanged(const int value);
     void AlsnFreqTargetChanged(const int value);
@@ -365,6 +381,8 @@ signals:
     void TsvcIsPreAlarmActiveChanged(const bool value);
     // properties signals end
 
+    void ModulesActivityObjectChanged(const ModulesActivity value);
+
 public slots:
     void setDesignSpeed(int value, bool valid);
 
@@ -388,6 +406,7 @@ public slots:
     void setIsEpvReady(const bool);
     void setIsEpvReleased(const bool);
     void setModulesActivityString(const QString);
+    void setSautIsOutNotifier(const bool);
     void setMilage(const int);
     void setLight(const int);
     void setAlsnFreqTarget(const int);
@@ -426,6 +445,7 @@ public slots:
     void setTsvcIsPreAlarmActive(const bool);
     // public properties setters end
     
+    void setModulesActivityObject(const ModulesActivity ma);
 };
 
 }

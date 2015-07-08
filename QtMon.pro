@@ -3,7 +3,8 @@ folder_01.source = qml/QtMon
 folder_01.target = qml
 folder_02.source = phrases
 folder_02.target =
-DEPLOYMENTFOLDERS = folder_01 folder_02
+folder_fonts.source = fonts
+DEPLOYMENTFOLDERS = folder_01 folder_02 folder_fonts
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -120,8 +121,12 @@ SOURCES += \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
     DateTimeConverter.cpp \
-    ModulesActivityToStringConverter.cpp \
-    SysKeySender.cpp
+    SysKeySender.cpp \
+    interaction/contexts/InputTrackNumberContext.cpp \
+    interaction/activities/SubmitTrackNumberActivity.cpp \
+    interaction/activities/RequestTrackNumberActivity.cpp \
+    interaction/commands/InputTrackNumberCommand.cpp \
+    interaction/commands/ChangeBrightnessCommand.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -271,8 +276,12 @@ HEADERS += \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
     DateTimeConverter.h \
-    ModulesActivityToStringConverter.h \
-    SysKeySender.h
+    SysKeySender.h \
+    interaction/contexts/InputTrackNumberContext.h \
+    interaction/activities/SubmitTrackNumberActivity.h \
+    interaction/activities/RequestTrackNumberActivity.h \
+    interaction/commands/InputTrackNumberCommand.h \
+    interaction/commands/ChangeBrightnessCommand.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

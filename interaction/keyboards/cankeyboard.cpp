@@ -32,7 +32,7 @@ void CanKeyboard::consoleKeyPressed(ConsoleKey::ConsKey key)
         break;
     case ConsoleKey::LGHT:
         emit brightnessKeyDown();
-        emit keyDown(Keyboard::Key::K_9);
+        emit keyDown(Keyboard::Key::BRIGHTNESS);
         break;
     case ConsoleKey::F0:
         emit numberKeyDown(0);

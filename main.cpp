@@ -4,6 +4,8 @@
 #include <QTextCodec>
 #include <QString>
 #include <QtConcurrentRun>
+#include <QFontDatabase>
+#include <QDirIterator>
 #include <qmlapplicationviewer.h>
 
 #include "viewmodels/systemstateviewmodel.h"
@@ -263,6 +265,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     CPRINTF(CL_VIOLET_L, "ДОБРЫЙ ДЕНЬ\n");
 
     QScopedPointer<QApplication> app(createApplication(argc, argv));
+
+    // Загребаем все шрифты из папки "шрифты"
+    QDirIterator it("fonts", QStringList() << "*.ttf", QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        QFontDatabase::addApplicationFont(it.next());
+    }
 
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForCStrings(codec);

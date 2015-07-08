@@ -3,7 +3,8 @@ folder_01.source = qml/QtMon
 folder_01.target = qml
 folder_02.source = phrases
 folder_02.target =
-DEPLOYMENTFOLDERS = folder_01 folder_02
+folder_fonts.source = fonts
+DEPLOYMENTFOLDERS = folder_01 folder_02 folder_fonts
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =

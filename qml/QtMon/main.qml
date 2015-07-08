@@ -146,7 +146,9 @@ Rectangle {
                 // Номер пути
                 HorizontalLabeledParameterBox {
                     labelText: "ПУТЬ:"
-                    text: stateView.TrackNumber
+                    text: stateView.TrackNumber === 0 ? 0 :
+                          stateView.TrackNumber < 16 ? stateView.TrackNumber + "П" :
+                                                       stateView.TrackNumber - 15 + "Н"
                     boxHeight: globalBoxHeight
                     fontHeight: globalFontHeight
                     labelWidth: leftColumn.labelsColumnWidth

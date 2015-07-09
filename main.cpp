@@ -539,7 +539,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                                           vrcf.produceCommand(4357, "ПТК", SysDiagnostics::PTK, {AuxResource::SAUT_PTK_A, AuxResource::SAUT_PTK_B}),
                                                           vrcf.produceCommand(4823, "Вывод", SysDiagnostics::OUTPUT, {AuxResource::OUTPUT_A, AuxResource::OUTPUT_B}),
                                                           vrcf.produceCommand(4869, "МВВ", SysDiagnostics::MVV, {AuxResource::MV_A, AuxResource::MV_B}),
-                                                          vrcf.produceCommand(5125, "МСС", SysDiagnostics::BIL, {AuxResource::BIL_A, AuxResource::BIL_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
+                                                          vrcf.produceCommand(5125, "МСС", SysDiagnostics::MCC, {AuxResource::BIL2_A, AuxResource::BIL2_B}), // Не смогли найти для МСС. Везде использются AUX_RESOURCE_BIL. А мы ещё и запрашиваем вместо МСС монитор.
                                                           // Работа с комплектами ЦО
                                                           new Interaction::Commands::ActiveHalfsetIdicationCommand(&blokMessages->mcoState, textManager),
                                                           //

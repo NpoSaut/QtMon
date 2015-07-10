@@ -126,7 +126,8 @@ SOURCES += \
     interaction/activities/SubmitTrackNumberActivity.cpp \
     interaction/activities/RequestTrackNumberActivity.cpp \
     interaction/commands/InputTrackNumberCommand.cpp \
-    interaction/commands/ChangeBrightnessCommand.cpp
+    interaction/commands/ChangeBrightnessCommand.cpp \
+    interaction/activities/ShiftedInputActivity.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -281,7 +282,8 @@ HEADERS += \
     interaction/activities/SubmitTrackNumberActivity.h \
     interaction/activities/RequestTrackNumberActivity.h \
     interaction/commands/InputTrackNumberCommand.h \
-    interaction/commands/ChangeBrightnessCommand.h
+    interaction/commands/ChangeBrightnessCommand.h \
+    interaction/activities/ShiftedInputActivity.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

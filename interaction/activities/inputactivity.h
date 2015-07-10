@@ -17,7 +17,7 @@ public:
     virtual void run ();
     virtual void dispose ();
 
-private slots:
+protected slots:
     void submitted ();
 
 private:

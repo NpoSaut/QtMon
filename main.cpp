@@ -380,7 +380,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
 
     // Выдаёт версию по AUX_RESOURCE
-    hardcodedVersion = new HardcodedVersion(3, 0, can);
+    hardcodedVersion = new HardcodedVersion(3, 1, can);
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Создание и подключение «обработчиков»

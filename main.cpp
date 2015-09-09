@@ -8,7 +8,8 @@
 
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
-#include "levithan.h"
+#include "sound/Levithan.h"
+#include "sound/WolfsonLevithan.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32
@@ -283,7 +284,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
-    levithan = new Levithan();
+    levithan = new WolfsonLevithan();
 
     // Создание CAN
     QThread canThread;

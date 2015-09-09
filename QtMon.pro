@@ -19,7 +19,6 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
     qtDoodahLib/queues.cpp \
-    levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     main.cpp \
@@ -114,7 +113,9 @@ SOURCES += \
     configuration/IConfiguration.cpp \
     configuration/BaseConfiguration.cpp \
     DateTimeConverter.cpp \
-    ModulesActivityToStringConverter.cpp
+    ModulesActivityToStringConverter.cpp \
+    sound/WolfsonLevithan.cpp \
+    sound/Levithan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -133,7 +134,6 @@ HEADERS += \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
     qtDoodahLib/queues.h \
-    levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
     qtBlokLib/modulesactivity.h \
@@ -256,7 +256,9 @@ HEADERS += \
     qtCanLib/DummyCan.h \
     configuration/BaseConfiguration.h \
     DateTimeConverter.h \
-    ModulesActivityToStringConverter.h
+    ModulesActivityToStringConverter.h \
+    sound/WolfsonLevithan.h \
+    sound/Levithan.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

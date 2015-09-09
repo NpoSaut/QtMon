@@ -1,14 +1,14 @@
-#ifndef LEVITHAN_H
-#define LEVITHAN_H
+#ifndef WOLFSONLEVITHAN_H
+#define WOLFSONLEVITHAN_H
 
-#include <QObject>
+#include "Levithan.h"
 #include <QSound>
 
 #include "viewmodels/systemstateviewmodel.h"
 
 #include "sound/speakingthread.h"
 
-class Levithan : public QObject
+class WolfsonLevithan : public Levithan
 {
     Q_OBJECT
 
@@ -16,9 +16,7 @@ private:
     sound::Speaker speaker;
 
 public:
-    explicit Levithan(QObject *parent = 0);
-    
-signals:
+    explicit WolfsonLevithan(QObject *parent = 0);
     
 public slots:
     void sayHello(int i);
@@ -42,4 +40,4 @@ private:
     int prevLightIndex;
 };
 
-#endif // LEVITHAN_H
+#endif // WOLFSONLEVITHAN_H

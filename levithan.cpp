@@ -3,13 +3,12 @@
 
 using namespace sound;
 
-Levithan::Levithan(ViewModels::SystemStateViewModel *state, QObject *parent) :
+Levithan::Levithan(QObject *parent) :
     QObject(parent),
-    state (state),
     speaker(),
     prevLightIndex (0)
 {
-    QObject::connect (state, SIGNAL(IsVigilanceRequiredChanged(bool)), this, SLOT(onStateVigilanceRequiredChanged(bool)));
+
 }
 
 void Levithan::sayHello(int i)
@@ -96,5 +95,11 @@ void Levithan::proccessNewPreAlarmActive(bool active)
 void Levithan::proccessNewEpvReady(bool ready)
 {
     beepHigh ();
+}
+
+void Levithan::proccessVigilanceRequired(bool value)
+{
+    if (!value)
+        beepConfirmation ();
 }
 

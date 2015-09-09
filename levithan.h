@@ -16,7 +16,7 @@ private:
     sound::Speaker speaker;
 
 public:
-    explicit Levithan(ViewModels::SystemStateViewModel *state, QObject *parent = 0);
+    explicit Levithan(QObject *parent = 0);
     
 signals:
     
@@ -36,12 +36,9 @@ public slots:
     void proccessNewVigilanceRequired (bool required);
     void proccessNewPreAlarmActive (bool active);
     void proccessNewEpvReady (bool ready);
-
-private slots:
-    void onStateVigilanceRequiredChanged (bool value) { if (!value) beepConfirmation (); }
+    void proccessVigilanceRequired (bool value);
 
 private:
-    const ViewModels::SystemStateViewModel *state;
     int prevLightIndex;
 };
 

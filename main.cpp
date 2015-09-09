@@ -283,7 +283,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
-    levithan = new Levithan(systemState);
+    levithan = new Levithan();
 
     // Создание CAN
     QThread canThread;
@@ -473,6 +473,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
+    QObject::connect (systemState, SIGNAL(IsVigilanceRequiredChanged(bool)), levithan, SLOT(proccessVigilanceRequired(bool)));
 
     // Управление яркостью
     IIntensityConverter *intensityConverter = new ExponentialIntensityConverter(10, 0.4*255, 255);

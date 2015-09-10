@@ -10,7 +10,9 @@
 
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
-#include "levithan.h"
+#include "sound/Levithan.h"
+#include "sound/WolfsonLevithan.h"
+#include "sound/CanLevithan.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32
@@ -319,8 +321,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
-    levithan = new Levithan(systemState);
-
     // Создание CAN
     QThread canThread;
     if ( app->arguments().contains(QString("--play")) ) // Кассета
@@ -519,6 +519,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Звуки
+    levithan = new WolfsonLevithan();
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
@@ -527,6 +528,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
     QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
     QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
+    QObject::connect (systemState, SIGNAL(IsVigilanceRequiredChanged(bool)), levithan, SLOT(proccessVigilanceRequired(bool)));
 
     // Клавиатуры и кнопки
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});

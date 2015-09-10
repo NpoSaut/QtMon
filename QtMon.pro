@@ -20,7 +20,6 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
     qtDoodahLib/queues.cpp \
-    levithan.cpp \
     sound/speakingthread.cpp \
     sound/phrase.cpp \
     main.cpp \
@@ -127,7 +126,11 @@ SOURCES += \
     interaction/activities/RequestTrackNumberActivity.cpp \
     interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp \
-    interaction/activities/ShiftedInputActivity.cpp
+    interaction/activities/ShiftedInputActivity.cpp \
+    sound/WolfsonLevithan.cpp \
+    sound/Levithan.cpp \
+    sound/CanLevithan.cpp \
+    qtBlokLib/parsers/console_beep.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -146,7 +149,6 @@ HEADERS += \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
     qtDoodahLib/queues.h \
-    levithan.h \
     sound/speakingthread.h \
     sound/phrase.h \
     qtBlokLib/modulesactivity.h \
@@ -283,7 +285,12 @@ HEADERS += \
     interaction/activities/RequestTrackNumberActivity.h \
     interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h \
-    interaction/activities/ShiftedInputActivity.h
+    interaction/activities/ShiftedInputActivity.h \
+    ModulesActivityToStringConverter.h \
+    sound/WolfsonLevithan.h \
+    sound/Levithan.h \
+    sound/CanLevithan.h \
+    qtBlokLib/parsers/console_beep.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

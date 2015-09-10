@@ -519,7 +519,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Звуки
-    levithan = new WolfsonLevithan();
+    levithan = new CanLevithan(can);
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));

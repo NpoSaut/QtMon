@@ -10,6 +10,7 @@
 #include "viewmodels/modulesactivityviewmodel.h"
 #include "sound/Levithan.h"
 #include "sound/WolfsonLevithan.h"
+#include "sound/CanLevithan.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32
@@ -284,8 +285,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
 
-    levithan = new WolfsonLevithan();
-
     // Создание CAN
     QThread canThread;
     if ( app->arguments().contains(QString("--play")) ) // Кассета
@@ -466,6 +465,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
 
     // Звуки
+    levithan = new WolfsonLevithan();
     QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));

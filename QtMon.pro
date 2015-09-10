@@ -115,7 +115,9 @@ SOURCES += \
     DateTimeConverter.cpp \
     ModulesActivityToStringConverter.cpp \
     sound/WolfsonLevithan.cpp \
-    sound/Levithan.cpp
+    sound/Levithan.cpp \
+    sound/CanLevithan.cpp \
+    qtBlokLib/parsers/console_beep.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -258,7 +260,9 @@ HEADERS += \
     DateTimeConverter.h \
     ModulesActivityToStringConverter.h \
     sound/WolfsonLevithan.h \
-    sound/Levithan.h
+    sound/Levithan.h \
+    sound/CanLevithan.h \
+    qtBlokLib/parsers/console_beep.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

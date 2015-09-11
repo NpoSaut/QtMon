@@ -499,6 +499,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
+    QObject::connect(keyboard, SIGNAL(keyDown(Key)), levithan, SLOT(beepHigh()));
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);

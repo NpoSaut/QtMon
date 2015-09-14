@@ -75,7 +75,8 @@
 #include "illumination/implementations/ExponentialIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
 #include "illumination/implementations/IlluminationDevice.h"
-#include "CanBilLcdIlluminationAnalogDevice.h"
+#include "illumination/implementations/CanBilLcdIlluminationAnalogDevice.h"
+#include "illumination/CanIlluminationSetter.h"
 #include "viewmodels/brightnessviewmodel.h"
 
 ViewModels::SystemStateViewModel *systemState ;
@@ -496,6 +497,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                       new DummyIlluminationSettings());
     if (brightnessViewModel)
         brightnessViewModel->associateManager(illuminationManager);
+    CanIlluminationSetter *canIlluminationSetter = new CanIlluminationSetter(illuminationManager, blokMessages);
+    canIlluminationSetter;
 
     // Взаимодествие с пользователем через команды
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});

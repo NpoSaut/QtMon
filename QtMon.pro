@@ -94,7 +94,6 @@ SOURCES += \
     illumination/implementations/FileAnalogDevice.cpp \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
     qtBlokLib/parsers/BilLcd.cpp \
-    CanBilLcdIlluminationAnalogDevice.cpp \
     illumination/implementations/ExponentialIntensityConverter.cpp \
     interaction/commands/activehalfsetidicationcommand.cpp \
     interaction/commands/activedpsindicationcommand.cpp \
@@ -117,7 +116,10 @@ SOURCES += \
     sound/WolfsonLevithan.cpp \
     sound/Levithan.cpp \
     sound/CanLevithan.cpp \
-    qtBlokLib/parsers/console_beep.cpp
+    qtBlokLib/parsers/console_beep.cpp \
+    illumination/CanIlluminationSetter.cpp \
+    illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
+    qtBlokLib/parsers/bil_bright_level.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -228,7 +230,6 @@ HEADERS += \
     illumination/implementations/FileAnalogDevice.h \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
     qtBlokLib/parsers/BilLcd.h \
-    CanBilLcdIlluminationAnalogDevice.h \
     illumination/implementations/ExponentialIntensityConverter.h \
     interaction/commands/activehalfsetidicationcommand.h \
     interaction/commands/activedpsindicationcommand.h \
@@ -262,7 +263,10 @@ HEADERS += \
     sound/WolfsonLevithan.h \
     sound/Levithan.h \
     sound/CanLevithan.h \
-    qtBlokLib/parsers/console_beep.h
+    qtBlokLib/parsers/console_beep.h \
+    illumination/CanIlluminationSetter.h \
+    illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
+    qtBlokLib/parsers/bil_bright_level.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

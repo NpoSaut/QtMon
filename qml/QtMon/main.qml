@@ -65,12 +65,23 @@ Rectangle {
     Keys.onPressed: {
         // Keyboard Proxy! :3
         keyboardProxy.processKeyDown(event.key);
+        if (event.key == Qt.Key_F1)
+            keyLabelText = "К1";
+        if (event.key == Qt.Key_F2)
+            keyLabelText = "К2";
+        if (event.key == Qt.Key_F3)
+            keyLabelText = "К3";
+        if (event.key == Qt.Key_F4)
+            keyLabelText = "К4";
     }
 
     Keys.onReleased: {
         // Keyboard Proxy! :3
         keyboardProxy.processKeyUp(event.key);
+        keyLabelText = "";
     }
+
+    property string keyLabelText: ""
 
     SystemStateView {
         id: stateView
@@ -460,5 +471,22 @@ Rectangle {
                 onSpeedWarningPoolsed: stateView.SpeedWarningFlash()
             }
         }
+    }
+
+    Text {
+        anchors.verticalCenter: rootRect.verticalCenter
+        anchors.horizontalCenter: rootRect.horizontalCenter
+        anchors.horizontalCenterOffset: 3
+        anchors.verticalCenterOffset: 3
+        font.pixelSize: 60
+        color: "#000"
+        text: keyLabelText
+    }
+    Text {
+        anchors.verticalCenter: rootRect.verticalCenter
+        anchors.horizontalCenter: rootRect.horizontalCenter
+        font.pixelSize: 60
+        color: "#f00"
+        text: keyLabelText
     }
 }

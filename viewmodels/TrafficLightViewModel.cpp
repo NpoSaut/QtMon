@@ -17,13 +17,17 @@ void TrafficLightViewModel::process()
         setLightsMask(0);
     }
     // Classic Zone
-    else if (code() <= 4)
+    else if (code() >= 0 && code() <= 4)
     {
         setLightsMask(1 << code());
     }
     // ALSN Zone
-    else
+    else if (code() >= 8 && code() <= 10)
     {
-        setLightsMask(0xff);
+        setLightsMask(1 << (code() - 8));
+    }
+    else if (code() >= 11)
+    {
+        setLightsMask((1 << 3) | (((1 << (code() - 11)) - 1) << 4));
     }
 }

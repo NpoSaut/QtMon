@@ -1,23 +1,22 @@
-#include "levithan.h"
+#include "WolfsonLevithan.h"
 #include <QDebug>
 
 using namespace sound;
 
-Levithan::Levithan(ViewModels::SystemStateViewModel *state, QObject *parent) :
-    QObject(parent),
-    state (state),
+WolfsonLevithan::WolfsonLevithan(QObject *parent) :
+    Levithan(parent),
     speaker(),
     prevLightIndex (0)
 {
-    QObject::connect (state, SIGNAL(IsVigilanceRequiredChanged(bool)), this, SLOT(onStateVigilanceRequiredChanged(bool)));
+
 }
 
-void Levithan::sayHello(int i)
+void WolfsonLevithan::sayHello(int i)
 {
 
 }
 
-void Levithan::sayLightIndex(int i)
+void WolfsonLevithan::sayLightIndex(int i)
 {
     // Говорим "внимание", если сигнал ограничивающий (не "зелёный")
     if ((i >= 0 && i <= 3)
@@ -53,48 +52,54 @@ void Levithan::sayLightIndex(int i)
     prevLightIndex = i;
 }
 
-void Levithan::beep()
+void WolfsonLevithan::beep()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-700-40.wav", 0));
 }
 
-void Levithan::beep(int i) { beep(); }
-void Levithan::beep(bool b) { beep(); }
+void WolfsonLevithan::beep(int i) { beep(); }
+void WolfsonLevithan::beep(bool b) { beep(); }
 
-void Levithan::beepHigh()
+void WolfsonLevithan::beepHigh()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0));
 }
 
-void Levithan::beepVigilance()
+void WolfsonLevithan::beepVigilance()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-700-160.wav", -1));
 }
 
-void Levithan::beepConfirmation()
+void WolfsonLevithan::beepConfirmation()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-low-hi.wav", -1));
 }
 
-void Levithan::beepNotification()
+void WolfsonLevithan::beepNotification()
 {
     speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 50));
 }
 
-void Levithan::proccessNewVigilanceRequired(bool required)
+void WolfsonLevithan::proccessNewVigilanceRequired(bool required)
 {
     if (required)
         beepNotification ();
 }
 
-void Levithan::proccessNewPreAlarmActive(bool active)
+void WolfsonLevithan::proccessNewPreAlarmActive(bool active)
 {
     if (active)
         beepNotification ();
 }
 
-void Levithan::proccessNewEpvReady(bool ready)
+void WolfsonLevithan::proccessNewEpvReady(bool ready)
 {
     beepHigh ();
+}
+
+void WolfsonLevithan::proccessVigilanceRequired(bool value)
+{
+    if (!value)
+        beepConfirmation ();
 }
 

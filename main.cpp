@@ -283,6 +283,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
     qmlRegisterType<ViewModels::BrightnessViewModel>("views", 1, 0, "BrightnessViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
+    qmlRegisterType<TrafficLightViewModel>("views", 1, 0, "TrafficLightViewModel");
 
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

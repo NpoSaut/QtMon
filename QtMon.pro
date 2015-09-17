@@ -120,14 +120,14 @@ SOURCES += \
     interaction/activities/RequestTrackNumberActivity.cpp \
     interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp \
-    ModulesActivityToStringConverter.cpp \
     sound/WolfsonLevithan.cpp \
     sound/Levithan.cpp \
     sound/CanLevithan.cpp \
     qtBlokLib/parsers/console_beep.cpp \
     illumination/CanIlluminationSetter.cpp \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
-    qtBlokLib/parsers/bil_bright_level.cpp
+    qtBlokLib/parsers/bil_bright_level.cpp \
+    viewmodels/TrafficLightViewModel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -274,14 +274,14 @@ HEADERS += \
     interaction/activities/RequestTrackNumberActivity.h \
     interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h \
-    ModulesActivityToStringConverter.h \
     sound/WolfsonLevithan.h \
     sound/Levithan.h \
     sound/CanLevithan.h \
     qtBlokLib/parsers/console_beep.h \
     illumination/CanIlluminationSetter.h \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
-    qtBlokLib/parsers/bil_bright_level.h
+    qtBlokLib/parsers/bil_bright_level.h \
+    viewmodels/TrafficLightViewModel.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

@@ -4,7 +4,7 @@ namespace ViewModels
 {
 
 SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent)
+    m_trafficLights(this), QDeclarativeItem(parent)
 {
     // fileds init start
     speedValue = 0;
@@ -67,6 +67,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(convertModulesActivityObjectToString(ModulesActivity)));
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(checkSautIsOut(ModulesActivity)));
+    QObject::connect(this, SIGNAL(LightChanged(int)), trafficLights(), SLOT(setCode(int)));
 }
 
 void SystemStateViewModel::setDesignSpeed(int value, bool valid)

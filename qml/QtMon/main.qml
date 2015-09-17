@@ -2117,7 +2117,7 @@ Rectangle {
                             opacity: 0
                         }
 
-                        state: stateView.trafficLights.lightsMask & (1 << maskIndex)
+                        state: stateView.trafficLights.lights & (1 << maskIndex)
                                ? "On" : "Off"
 
                         states: [

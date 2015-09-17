@@ -2,22 +2,25 @@
 #define TRAFFICLIGHTVIEWMODEL_H
 
 #include <QObject>
+#include <QTimer>
 
 class TrafficLightViewModel : public QObject
 {
     Q_OBJECT
-    int m_code;
-
-    int m_lightsMask;
+    int _code;
+    int _lights;
+    int _mask;
+    int _blink;
+    QTimer *_timer;
 
 public:
     explicit TrafficLightViewModel(QObject *parent = 0);
 
     Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
-    Q_PROPERTY(int lightsMask READ lightsMask NOTIFY lightsMaskChanged)
+    Q_PROPERTY(int lights READ lights NOTIFY lightsMaskChanged)
 
-    int code() const { return m_code; }
-    int lightsMask() const { return m_lightsMask; }
+    int code() const { return _code; }
+    int lights();
 
 signals:
 
@@ -28,25 +31,20 @@ public slots:
 
     void setCode(int arg)
     {
-        if (m_code != arg) {
-            m_code = arg;
+        if (_code != arg) {
+            _code = arg;
             emit codeChanged(arg);
         }
     }
 
 private slots:
 
-    void process();
+    void processCode();
+    void tick();
 
 private:
 
-    void setLightsMask(int arg)
-    {
-        if (m_lightsMask != arg) {
-            m_lightsMask = arg;
-            emit lightsMaskChanged(arg);
-        }
-    }
+    void refresh();
 };
 
 #endif // TRAFFICLIGHTVIEWMODEL_H

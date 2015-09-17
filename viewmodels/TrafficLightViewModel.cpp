@@ -1,12 +1,13 @@
 #include "TrafficLightViewModel.h"
 
 TrafficLightViewModel::TrafficLightViewModel(QObject *parent) :
-    _lights(0x0), _mask(0xf), _blink(0), _timer(new QTimer(this)), QObject(parent)
+    QObject(parent),
+    _code(-1), _lights(0x0), _mask(0xf), _blink(0), _number(0), _timer(new QTimer(this))
 {
     connect(this, SIGNAL(codeChanged(int)), this, SLOT(processCode()));
     connect(_timer, SIGNAL(timeout()), this, SLOT(tick()));
     _timer->start(500);
-    refresh();
+    processCode();
 }
 
 int TrafficLightViewModel::lights()
@@ -19,8 +20,8 @@ void TrafficLightViewModel::processCode()
     // Dark Zone
     if (code() < 0)
     {
-        _lights = 7;
-        _blink = 3;
+        _lights = 0;
+        _blink = 0;
     }
     // Classic Zone
     else if (code() >= 0 && code() <= 4)
@@ -40,6 +41,9 @@ void TrafficLightViewModel::processCode()
         _blink = 0;
     }
     refresh();
+
+    _number = std::max(0, code() - 11);
+    emit numberChanged(number());
 }
 
 void TrafficLightViewModel::tick()

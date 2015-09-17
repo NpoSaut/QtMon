@@ -11,6 +11,7 @@ class TrafficLightViewModel : public QObject
     int _lights;
     int _mask;
     int _blink;
+    int _number;
     QTimer *_timer;
 
 public:
@@ -18,17 +19,18 @@ public:
 
     Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
     Q_PROPERTY(int lights READ lights NOTIFY lightsMaskChanged)
+    Q_PROPERTY(int number READ number NOTIFY numberChanged)
 
     int code() const { return _code; }
+    int number() const { return _number; }
     int lights();
 
 signals:
-
     void codeChanged(int arg);
     void lightsMaskChanged(int arg);
+    void numberChanged(int arg);
 
 public slots:
-
     void setCode(int arg)
     {
         if (_code != arg) {
@@ -38,12 +40,10 @@ public slots:
     }
 
 private slots:
-
     void processCode();
     void tick();
 
 private:
-
     void refresh();
 };
 

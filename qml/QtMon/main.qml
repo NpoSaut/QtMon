@@ -2162,8 +2162,8 @@ Rectangle {
 
             Text {
                 id: enLabel
-                text: stateView.Light - 11
-                visible: stateView.Light >= 13
+                text: stateView.trafficLights.number
+                visible: stateView.trafficLights.number >= 2
                 anchors.horizontalCenter: lightsPanel.horizontalCenter
                 anchors.top: lightsPanel.top
                 anchors.topMargin: 10

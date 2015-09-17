@@ -2117,8 +2117,7 @@ Rectangle {
                             opacity: 0
                         }
 
-                        state: ((stateView.Light == alsnIndex || (stateView.Light >= alsenStartIndex && stateView.Light <= alsenStopIndex))
-                               && (stateView.Light != 8 || inputBlinker.blink))
+                        state: stateView.trafficLights.lightsMask & (1 << maskIndex)
                                ? "On" : "Off"
 
                         states: [
@@ -2140,33 +2139,23 @@ Rectangle {
                 model: ListModel {
                     ListElement {
                         name: "Green"
-                        alsnIndex: 4
-                        alsenStartIndex: 12
-                        alsenStopIndex:  999
+                        maskIndex: 4
                     }
                     ListElement {
                         name: "Yellow"
-                        alsnIndex: 3
-                        alsenStartIndex: 11
-                        alsenStopIndex:  999
+                        maskIndex: 3
                     }
                     ListElement {
                         name: "YellowRed"
-                        alsnIndex: 2
-                        alsenStartIndex: 10
-                        alsenStopIndex:  10
+                        maskIndex: 2
                     }
                     ListElement {
                         name: "Red"
-                        alsnIndex: 1
-                        alsenStartIndex: 9
-                        alsenStopIndex:  9
+                        maskIndex: 1
                     }
                     ListElement {
                         name: "White"
-                        alsnIndex: 0
-                        alsenStartIndex: 8
-                        alsenStopIndex:  8
+                        maskIndex: 0
                     }
                 }
             }

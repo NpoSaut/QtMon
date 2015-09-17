@@ -126,7 +126,8 @@ SOURCES += \
     qtBlokLib/parsers/console_beep.cpp \
     illumination/CanIlluminationSetter.cpp \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
-    qtBlokLib/parsers/bil_bright_level.cpp
+    qtBlokLib/parsers/bil_bright_level.cpp \
+    viewmodels/TrafficLightViewModel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -279,7 +280,8 @@ HEADERS += \
     qtBlokLib/parsers/console_beep.h \
     illumination/CanIlluminationSetter.h \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
-    qtBlokLib/parsers/bil_bright_level.h
+    qtBlokLib/parsers/bil_bright_level.h \
+    viewmodels/TrafficLightViewModel.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

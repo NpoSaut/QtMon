@@ -4,6 +4,7 @@
 #include <QDeclarativeItem>
 
 #include "qtBlokLib/modulesactivity.h"
+#include "TrafficLightViewModel.h"
 
 namespace ViewModels
 {
@@ -239,6 +240,9 @@ class SystemStateViewModel : public QDeclarativeItem
     ModulesActivity modulesActivityObjectValue;
     Q_PROPERTY(ModulesActivity ModulesActivityObject READ getModulesActivityObject WRITE setModulesActivityObject NOTIFY ModulesActivityObjectChanged)
 
+    TrafficLightViewModel m_trafficLights;
+    Q_PROPERTY(TrafficLightViewModel* trafficLights READ trafficLights NOTIFY trafficLightsChanged)
+
 private slots:
     void convertModulesActivityObjectToString (ModulesActivity ma);
     void checkSautIsOut (ModulesActivity ma);
@@ -306,6 +310,7 @@ public:
     // public properties getters end
 
     ModulesActivity getModulesActivityObject() const;
+    TrafficLightViewModel *trafficLights() { return &m_trafficLights; }
 
 signals:
     // Для привязки звуков
@@ -382,6 +387,8 @@ signals:
     // properties signals end
 
     void ModulesActivityObjectChanged(const ModulesActivity value);
+
+    void trafficLightsChanged(TrafficLightViewModel* arg);
 
 public slots:
     void setDesignSpeed(int value, bool valid);

@@ -16,8 +16,9 @@ void WolfsonLevithan::sayHello(int i)
 
 }
 
-void WolfsonLevithan::sayLightIndex(int i)
+void WolfsonLevithan::sayLightIndex(Trafficlight l)
 {
+    int i = (int)l;
     // Говорим "внимание", если сигнал ограничивающий (не "зелёный")
     if ((i >= 0 && i <= 3)
             || (i >= 8 && i <= 11))

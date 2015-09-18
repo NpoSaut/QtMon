@@ -4,6 +4,7 @@
 #include <QDeclarativeItem>
 
 #include "qtBlokLib/modulesactivity.h"
+#include "TrafficLightViewModel.h"
 
 namespace ViewModels
 {
@@ -93,10 +94,6 @@ class SystemStateViewModel : public QDeclarativeItem
     // Проиденное расстояние
     int milageValue;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
-
-    // Код сигнала светофора (0 - К, 1 - КЖ, ...)
-    int lightValue;
-    Q_PROPERTY(int Light READ getLight WRITE setLight NOTIFY LightChanged)
 
     // Целевая Частота АЛСН
     int alsnFreqTargetValue;
@@ -239,6 +236,9 @@ class SystemStateViewModel : public QDeclarativeItem
     ModulesActivity modulesActivityObjectValue;
     Q_PROPERTY(ModulesActivity ModulesActivityObject READ getModulesActivityObject WRITE setModulesActivityObject NOTIFY ModulesActivityObjectChanged)
 
+    TrafficLightViewModel m_trafficLights;
+    Q_PROPERTY(TrafficLightViewModel* trafficLights READ trafficLights NOTIFY trafficLightsChanged)
+
 private slots:
     void convertModulesActivityObjectToString (ModulesActivity ma);
     void checkSautIsOut (ModulesActivity ma);
@@ -268,7 +268,6 @@ public:
     QString getModulesActivityString() const;
     bool getSautIsOutNotifier() const;
     int getMilage() const;
-    int getLight() const;
     int getAlsnFreqTarget() const;
     int getAlsnFreqFact() const;
     int getAutolockTypeTarget() const;
@@ -306,6 +305,7 @@ public:
     // public properties getters end
 
     ModulesActivity getModulesActivityObject() const;
+    TrafficLightViewModel *trafficLights() { return &m_trafficLights; }
 
 signals:
     // Для привязки звуков
@@ -344,7 +344,6 @@ signals:
     void ModulesActivityStringChanged(const QString value);
     void SautIsOutNotifierChanged(const bool value);
     void MilageChanged(const int value);
-    void LightChanged(const int value);
     void AlsnFreqTargetChanged(const int value);
     void AlsnFreqFactChanged(const int value);
     void AutolockTypeTargetChanged(const int value);
@@ -383,6 +382,8 @@ signals:
 
     void ModulesActivityObjectChanged(const ModulesActivity value);
 
+    void trafficLightsChanged(TrafficLightViewModel* arg);
+
 public slots:
     void setDesignSpeed(int value, bool valid);
 
@@ -408,7 +409,6 @@ public slots:
     void setModulesActivityString(const QString);
     void setSautIsOutNotifier(const bool);
     void setMilage(const int);
-    void setLight(const int);
     void setAlsnFreqTarget(const int);
     void setAlsnFreqFact(const int);
     void setAutolockTypeTarget(const int);

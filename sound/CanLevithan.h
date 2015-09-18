@@ -12,7 +12,7 @@ public:
 
 public slots:
     void sayHello(int i) { }
-    void sayLightIndex(int i) { }
+    void sayLightIndex(Trafficlight i) { }
 
     void beep() { }
     void beep(int i) { }

@@ -4,7 +4,7 @@ namespace ViewModels
 {
 
 SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent)
+    m_trafficLights(this), QDeclarativeItem(parent)
 {
     // fileds init start
     speedValue = 0;
@@ -28,7 +28,6 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     modulesActivityStringValue = "------------";
     sautIsOutNotifierValue = true;
     milageValue = 0;
-    lightValue = -2;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
     autolockTypeTargetValue = -1;
@@ -363,20 +362,6 @@ void SystemStateViewModel::setMilage(const int value)
     {
         milageValue = value;
         emit MilageChanged(value);
-    }
-}
-
-// Код сигнала светофора (0 - К, 1 - КЖ, ...)
-int SystemStateViewModel::getLight() const
-{
-    return lightValue;
-}
-void SystemStateViewModel::setLight(const int value)
-{
-    if (lightValue != value)
-    {
-        lightValue = value;
-        emit LightChanged(value);
     }
 }
 

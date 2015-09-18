@@ -43,10 +43,9 @@
 #include "SysKeySender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
-#include "trafficlightadaptor.h"
-#include "gpio/gpioproducer.h"
-#include "ledtrafficlight.h"
 #include "ledvigilance.h"
+#include "gpio/gpioproducer.h"
+#include "LedTrafficlightView.h"
 #include "alsnfreqhandler.h"
 #include "autolockhandler.h"
 #include "records/stateplayer.h"
@@ -83,7 +82,8 @@
 #include "illumination/implementations/ExponentialIntensityConverter.h"
 #include "illumination/implementations/WeightedCompositeIlluminationDevice.h"
 #include "illumination/implementations/IlluminationDevice.h"
-#include "CanBilLcdIlluminationAnalogDevice.h"
+#include "illumination/implementations/CanBilLcdIlluminationAnalogDevice.h"
+#include "illumination/CanIlluminationSetter.h"
 #include "viewmodels/brightnessviewmodel.h"
 
 ViewModels::SystemStateViewModel *systemState ;
@@ -97,10 +97,9 @@ SysKeySender *sysKeySender;
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
-TrafficlightAdaptor *trafficlightAdaptor;
-GpioProducer *gpioProducer;
-LedTrafficlight *ledTrafficlight;
 LedVigilance *ledVigilance;
+GpioProducer *gpioProducer;
+LedTrafficlightView *ledTrafficlightView;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
@@ -120,9 +119,6 @@ Interaction::KeyboardManager *keyboardManager;
 
 IIlluminationManager *illuminationManager;
 ViewModels::BrightnessViewModel *brightnessViewModel;
-
-// PASSIVE MODE FLAG
-bool passiveMode = false;
 
 void getParamsFromConsole ()
 {
@@ -170,8 +166,8 @@ void getParamsFromConsole ()
         }
         else if (cmd.at(0) == "c")
         {
-            systemState->setLight( Trafficlight(cmd.at(1).toInt()) );
-            out << "Liht: " << systemState->getLight() << endl;
+            systemState->trafficLights()->setCode( Trafficlight(cmd.at(1).toInt()) );
+            out << "Liht: " << systemState->trafficLights()->code() << endl;
         }
         else if (cmd.at(0) == "a")
         {
@@ -300,6 +296,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<ViewModels::ModulesActivityViewModel>("views", 1, 0, "ModulesActivityViewModel");
     qmlRegisterType<ViewModels::BrightnessViewModel>("views", 1, 0, "BrightnessViewModel");
     qmlRegisterType<Interaction::Keyboards::QmlKeyboard>("views", 1, 0, "QmlKeyboard");
+    qmlRegisterType<TrafficLightViewModel>("views", 1, 0, "TrafficLightViewModel");
 
     QmlApplicationViewer viewer;
 
@@ -345,8 +342,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         receiverFactory = new DummyCanReceiverFactory ();
         senderFactory   = new DummyCanSenderFactory ();
 #endif
-        if (passiveMode)
-            senderFactory = new DummyCanSenderFactory ();
         auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
         QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
         can = asyncCan;
@@ -413,13 +408,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Светофоры:
     // огонь
-    trafficlightAdaptor = new TrafficLightOnOffAdaptor();
-    QObject::connect (&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), (TrafficLightOnOffAdaptor*)trafficlightAdaptor, SLOT(setOnState(bool)));
-    QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
-    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightCodeChanged(int)), systemState, SLOT(setLight(int)));
-    ledTrafficlight = new LedTrafficlight (gpioProducer);
-    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightChanged(int)), ledTrafficlight, SLOT(lightTrafficlight(int)));
-    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightUpStateChanged(bool)), ledTrafficlight, SLOT(setLightUp(bool)));
+    QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), systemState->trafficLights(), SLOT(setCode(Trafficlight)));
+    ledTrafficlightView = new LedTrafficlightView(systemState->trafficLights(), gpioProducer);
     // частота
     alsnFreqHandler = new AlsnFreqPassHandler (blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));
@@ -520,7 +510,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Звуки
     levithan = new CanLevithan(can);
-    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
+    QObject::connect (systemState->trafficLights(), SIGNAL(codeChanged(Trafficlight)), levithan, SLOT(sayLightIndex(Trafficlight)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(beep()));
@@ -557,8 +547,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                                       new DummyIlluminationSettings());
     if (brightnessViewModel)
         brightnessViewModel->associateManager(illuminationManager);
+    CanIlluminationSetter *canIlluminationSetter = new CanIlluminationSetter(illuminationManager, blokMessages);
+    canIlluminationSetter;
 
     // Взаимодествие с пользователем через команды
+    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
+    QObject::connect(keyboard, SIGNAL(keyDown(Key)), levithan, SLOT(beepHigh()));
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);

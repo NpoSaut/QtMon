@@ -54,13 +54,8 @@ SOURCES += \
     drivemodehandler.cpp \
     displaystatesender.cpp \
     pressureselector.cpp \
-    trafficlightadaptor.cpp \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
-    gpio/linuxgpio.cpp \
-    gpio/debuggpio.cpp \
-    gpio/gpioproducer.cpp \
-    ledtrafficlight.cpp \
     ledvigilance.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
@@ -101,7 +96,6 @@ SOURCES += \
     illumination/implementations/FileAnalogDevice.cpp \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.cpp \
     qtBlokLib/parsers/BilLcd.cpp \
-    CanBilLcdIlluminationAnalogDevice.cpp \
     illumination/implementations/ExponentialIntensityConverter.cpp \
     interaction/commands/activehalfsetidicationcommand.cpp \
     interaction/commands/activedpsindicationcommand.cpp \
@@ -130,7 +124,15 @@ SOURCES += \
     sound/WolfsonLevithan.cpp \
     sound/Levithan.cpp \
     sound/CanLevithan.cpp \
-    qtBlokLib/parsers/console_beep.cpp
+    qtBlokLib/parsers/console_beep.cpp \
+    illumination/CanIlluminationSetter.cpp \
+    illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
+    qtBlokLib/parsers/bil_bright_level.cpp \
+    viewmodels/TrafficLightViewModel.cpp \
+    gpio/debuggpio.cpp \
+    gpio/gpioproducer.cpp \
+    gpio/linuxgpio.cpp \
+    LedTrafficlightView.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -177,7 +179,6 @@ HEADERS += \
     pressureselector.h \
     qtBlokLib/parsers/mp_state.h \
     qtBlokLib/parsers/trafficlight.h \
-    trafficlightadaptor.h \
     alsnfreqhandler.h \
     autolockhandler.h \
     qtBlokLib/parsers/mm_alt_long.h \
@@ -186,12 +187,6 @@ HEADERS += \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
     qtBlokLib/parsers/mm_station.h \
-    gpio/gpio.h \
-    gpio/linuxgpio.h \
-    gpio/dummygpio.h \
-    gpio/debuggpio.h \
-    gpio/gpioproducer.h \
-    ledtrafficlight.h \
     ledvigilance.h \
     stateserializer.h \
     records/staterecorder.h \
@@ -249,7 +244,6 @@ HEADERS += \
     illumination/implementations/FileAnalogDevice.h \
     illumination/implementations/LinuxBacklightAnalogDeviceFactory.h \
     qtBlokLib/parsers/BilLcd.h \
-    CanBilLcdIlluminationAnalogDevice.h \
     illumination/implementations/ExponentialIntensityConverter.h \
     interaction/commands/activehalfsetidicationcommand.h \
     interaction/commands/activedpsindicationcommand.h \
@@ -285,12 +279,22 @@ HEADERS += \
     interaction/activities/RequestTrackNumberActivity.h \
     interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h \
-    interaction/activities/ShiftedInputActivity.h \
-    ModulesActivityToStringConverter.h \
     sound/WolfsonLevithan.h \
     sound/Levithan.h \
     sound/CanLevithan.h \
-    qtBlokLib/parsers/console_beep.h
+    interaction/activities/ShiftedInputActivity.h \
+    ModulesActivityToStringConverter.h \
+    qtBlokLib/parsers/console_beep.h \
+    illumination/CanIlluminationSetter.h \
+    illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
+    qtBlokLib/parsers/bil_bright_level.h \
+    viewmodels/TrafficLightViewModel.h \
+    gpio/debuggpio.h \
+    gpio/dummygpio.h \
+    gpio/gpio.h \
+    gpio/gpioproducer.h \
+    gpio/linuxgpio.h \
+    LedTrafficlightView.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

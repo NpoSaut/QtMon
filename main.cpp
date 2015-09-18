@@ -43,6 +43,7 @@
 #include "SysKeySender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
+#include "ledvigilance.h"
 #include "gpio/gpioproducer.h"
 #include "LedTrafficlightView.h"
 #include "alsnfreqhandler.h"
@@ -96,6 +97,7 @@ SysKeySender *sysKeySender;
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
+LedVigilance *ledVigilance;
 GpioProducer *gpioProducer;
 LedTrafficlightView *ledTrafficlightView;
 AlsnFreqHandler *alsnFreqHandler;
@@ -214,6 +216,11 @@ void getParamsFromConsole ()
             systemState->setNotificationText( cmd.at(1) );
             out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
         }
+        else if (cmd.at(0) == "vig")
+        {
+            systemState->setIsVigilanceRequired( cmd.at(1) == "1" );
+            out << "Now Vigilance is Required" << endl;
+        }
         // ТСКБМ: на связи
         else if (cmd.at(0) == "tso")
         {
@@ -238,6 +245,12 @@ void getParamsFromConsole ()
             systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
             out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
         }
+        // Фактическая частота АЛСН
+        else if (cmd.at(0) == "f")
+        {
+            systemState->setAlsnFreqFact( cmd.at(1).toInt() );
+            out << "Now ALSN Freq Fact is: " << systemState->getAlsnFreqFact() << endl;
+        }
         else
         {
             out << "! unknown command. Try this:" << endl;
@@ -253,6 +266,7 @@ void getParamsFromConsole ()
             out << "tsc {1/0} ТСКБМ: Машинист бодр" << endl;
             out << "tsv {1/0} ТСКБМ: Требуется подтверждение бодрости" << endl;
             out << "tsa {1/0} ТСКБМ: Предварительная сигнализация" << endl;
+            out << "f {25/50/75} Фактическая частота АЛСН" << endl;
         }
     }
 }
@@ -285,6 +299,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<TrafficLightViewModel>("views", 1, 0, "TrafficLightViewModel");
 
     QmlApplicationViewer viewer;
+
+    QFont sansFont("URW Gothic L");
+//    sansFont.setStyleStrategy(QFont::NoAntialias);
+    app->setFont(sansFont);
+
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/QtMon/main.qml"));
 #ifdef ON_DEVICE
@@ -357,12 +376,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
 
     // Выдаёт версию по AUX_RESOURCE
-    hardcodedVersion = new HardcodedVersion(3, 0, can);
+    hardcodedVersion = new HardcodedVersion(3, 1, can);
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Создание и подключение «обработчиков»
     // -> Отбработчик нажатия РМП <-
-    drivemodeHandler = new DrivemodeSettingHandler(blokMessages, can);
+    drivemodeHandler = new DrivemodePassHandler(blokMessages);
     QObject::connect(systemState, SIGNAL(ChangeDrivemodeButtonPressed()), drivemodeHandler, SLOT(drivemodeChangeButtonPressed()));
     QObject::connect(drivemodeHandler, SIGNAL(targetDrivemodeChanged(int)), systemState, SLOT(setDriveModeTarget(int)));
     QObject::connect(drivemodeHandler, SIGNAL(actualDrivemodeChanged(int)), systemState, SLOT(setDriveModeFact(int)));
@@ -393,12 +412,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), systemState->trafficLights(), SLOT(setCode(Trafficlight)));
     ledTrafficlightView = new LedTrafficlightView(systemState->trafficLights(), gpioProducer);
     // частота
-    alsnFreqHandler = new AlsnFreqSettingHandler (can, blokMessages);
+    alsnFreqHandler = new AlsnFreqPassHandler (blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));
     QObject::connect (alsnFreqHandler, SIGNAL(targetAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqTarget(int)));
     QObject::connect(systemState, SIGNAL(AlsnFreqTargetChanged(int)), alsnFreqHandler, SLOT(proccessNewTargetAlsnFreq(int)));
 
+    // бдительность
     QObject::connect(iodriver, SIGNAL(signal_vigilance(bool)), systemState, SLOT(setIsVigilanceRequired(bool)));
+    ledVigilance = new LedVigilance (gpioProducer);
+    QObject::connect(systemState, SIGNAL(IsVigilanceRequiredChanged(bool)), ledVigilance, SLOT(doBlinking(bool)));
+
     QObject::connect(iodriver, SIGNAL(signal_movement_direction(int)), systemState, SLOT(setDirection(int)));
     QObject::connect(iodriver, SIGNAL(signal_reg_tape_avl(bool)), systemState, SLOT(setIsRegistrationTapeActive(bool)));
 
@@ -410,7 +433,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (systemState, SIGNAL(AutolockSpeedChanged(int)), autolockHandler, SLOT(setWhiteSpeed(int)));
 
     // Давление
-    pressureSelector = new PressureSelector (PressureSelector::MPA, true, blokMessages);
+    pressureSelector = new PressureSelector (PressureSelector::MPA, false, blokMessages);
     QObject::connect (pressureSelector, SIGNAL(tcPressureChagned(QString)), systemState, SLOT(setPressureTC(QString)));
     QObject::connect (pressureSelector, SIGNAL(tmPressureChanged(QString)), systemState, SLOT(setPressureTM(QString)));
     QObject::connect (pressureSelector, SIGNAL(urPressureChanged(QString)), systemState, SLOT(setPressureUR(QString)));
@@ -480,9 +503,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (elmapForwardTarget, SIGNAL(distanceChanged(int)), systemState, SLOT(setNextTargetDistance(int)));
     QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
+    QObject::connect (&blokMessages->mmStation, SIGNAL(stationNameChanged(QString)), systemState, SLOT(setNextStatinName(QString)));
+
+    // САУТ
+    QObject::connect (&blokMessages->sautState, SIGNAL(distanceToTargetChanged(int)), systemState, SLOT(setSautTargetDistance(int)));
+    QObject::connect (&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Звуки
-    levithan = new WolfsonLevithan();
+    levithan = new CanLevithan(can);
     QObject::connect (systemState->trafficLights(), SIGNAL(codeChanged(Trafficlight)), levithan, SLOT(sayLightIndex(Trafficlight)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));

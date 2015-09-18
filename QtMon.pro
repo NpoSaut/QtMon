@@ -56,6 +56,7 @@ SOURCES += \
     pressureselector.cpp \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
+    ledvigilance.cpp \
     stateserializer.cpp \
     records/staterecorder.cpp \
     records/stateplayer.cpp \
@@ -119,6 +120,7 @@ SOURCES += \
     interaction/activities/RequestTrackNumberActivity.cpp \
     interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp \
+    interaction/activities/ShiftedInputActivity.cpp \
     sound/WolfsonLevithan.cpp \
     sound/Levithan.cpp \
     sound/CanLevithan.cpp \
@@ -185,6 +187,7 @@ HEADERS += \
     qtBlokLib/parsers/console_key.h \
     qtBlokLib/parsers/saut_state.h \
     qtBlokLib/parsers/mm_station.h \
+    ledvigilance.h \
     stateserializer.h \
     records/staterecorder.h \
     records/stateplayer.h \
@@ -279,6 +282,8 @@ HEADERS += \
     sound/WolfsonLevithan.h \
     sound/Levithan.h \
     sound/CanLevithan.h \
+    interaction/activities/ShiftedInputActivity.h \
+    ModulesActivityToStringConverter.h \
     qtBlokLib/parsers/console_beep.h \
     illumination/CanIlluminationSetter.h \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \

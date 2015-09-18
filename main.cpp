@@ -118,9 +118,6 @@ Interaction::KeyboardManager *keyboardManager;
 IIlluminationManager *illuminationManager;
 ViewModels::BrightnessViewModel *brightnessViewModel;
 
-// PASSIVE MODE FLAG
-bool passiveMode = false;
-
 void getParamsFromConsole ()
 {
     qDebug() << "Starting reading console...";
@@ -326,8 +323,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         receiverFactory = new DummyCanReceiverFactory ();
         senderFactory   = new DummyCanSenderFactory ();
 #endif
-        if (passiveMode)
-            senderFactory = new DummyCanSenderFactory ();
         auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
         QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
         can = asyncCan;

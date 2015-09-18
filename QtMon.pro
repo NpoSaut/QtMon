@@ -127,7 +127,11 @@ SOURCES += \
     illumination/CanIlluminationSetter.cpp \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
     qtBlokLib/parsers/bil_bright_level.cpp \
-    viewmodels/TrafficLightViewModel.cpp
+    viewmodels/TrafficLightViewModel.cpp \
+    gpio/debuggpio.cpp \
+    gpio/gpioproducer.cpp \
+    gpio/linuxgpio.cpp \
+    LedTrafficlightView.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -281,7 +285,13 @@ HEADERS += \
     illumination/CanIlluminationSetter.h \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
     qtBlokLib/parsers/bil_bright_level.h \
-    viewmodels/TrafficLightViewModel.h
+    viewmodels/TrafficLightViewModel.h \
+    gpio/debuggpio.h \
+    gpio/dummygpio.h \
+    gpio/gpio.h \
+    gpio/gpioproducer.h \
+    gpio/linuxgpio.h \
+    LedTrafficlightView.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

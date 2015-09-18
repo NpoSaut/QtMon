@@ -44,6 +44,8 @@
 #include "drivemodehandler.h"
 #include "pressureselector.h"
 #include "trafficlightadaptor.h"
+#include "gpio/gpioproducer.h"
+#include "LedTrafficlightView.h"
 #include "alsnfreqhandler.h"
 #include "autolockhandler.h"
 #include "records/stateplayer.h"
@@ -96,6 +98,8 @@ iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 TrafficlightAdaptor *trafficlightAdaptor;
+GpioProducer *gpioProducer;
+LedTrafficlightView *ledTrafficlightView;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
@@ -346,6 +350,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     elmapForwardTarget = new ElmapForwardTarget(can);
     notificator = new Notificator(blokMessages);
 
+    gpioProducer =
+#ifdef Q_OS_LINUX
+        new GpioProducer (GpioProducer::LINUX);
+#endif
+#ifdef Q_OS_WIN
+        new GpioProducer (GpioProducer::DUMMY);
+#endif
+
     // Конфигурация
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
@@ -387,6 +399,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     trafficlightAdaptor = new TrafficlightAdaptor();
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
     QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightCodeChanged(int)), systemState, SLOT(setLight(int)));
+    ledTrafficlightView = new LedTrafficlightView(systemState->trafficLights(), gpioProducer);
     // частота
     alsnFreqHandler = new AlsnFreqSettingHandler (can, blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));

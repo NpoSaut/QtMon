@@ -20,7 +20,7 @@ public:
     
 public slots:
     void sayHello(int i);
-    void sayLightIndex(int i);
+    void sayLightIndex(Trafficlight l);
 
     void beep();
     void beep(int i);

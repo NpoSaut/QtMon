@@ -167,8 +167,8 @@ void getParamsFromConsole ()
         }
         else if (cmd.at(0) == "c")
         {
-            systemState->setLight( Trafficlight(cmd.at(1).toInt()) );
-            out << "Liht: " << systemState->getLight() << endl;
+            systemState->trafficLights()->setCode( Trafficlight(cmd.at(1).toInt()) );
+            out << "Liht: " << systemState->trafficLights()->code() << endl;
         }
         else if (cmd.at(0) == "a")
         {
@@ -487,7 +487,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Звуки
     levithan = new WolfsonLevithan();
-    QObject::connect (systemState, SIGNAL(LightChanged(int)), levithan, SLOT(sayLightIndex(int)));
+    QObject::connect (systemState->trafficLights(), SIGNAL(codeChanged(Trafficlight)), levithan, SLOT(sayLightIndex(Trafficlight)));
     QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
     QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(beep()));

@@ -2,6 +2,7 @@
 #define LEVITHAN_H
 
 #include <QObject>
+#include "qtBlokLib/parsers/trafficlight.h"
 
 class Levithan : public QObject
 {
@@ -11,7 +12,7 @@ public:
 
 public slots:
     virtual void sayHello(int i) =0;
-    virtual void sayLightIndex(int i) =0;
+    virtual void sayLightIndex(Trafficlight i) =0;
 
     virtual void beep() =0;
     virtual void beep(int i) =0;

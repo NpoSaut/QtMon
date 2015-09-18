@@ -4,7 +4,7 @@ TrafficLightViewModel::TrafficLightViewModel(QObject *parent) :
     QObject(parent),
     _code(LIGHT_UNKNOWN), _lights(0x0), _mask(0xf), _blink(0), _number(0), _timer(new QTimer(this))
 {
-    connect(this, SIGNAL(codeChanged(int)), this, SLOT(processCode()));
+    connect(this, SIGNAL(codeChanged(Trafficlight)), this, SLOT(processCode()));
     connect(_timer, SIGNAL(timeout()), this, SLOT(tick()));
     _timer->start(500);
     processCode();

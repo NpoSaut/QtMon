@@ -28,7 +28,6 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     modulesActivityStringValue = "------------";
     sautIsOutNotifierValue = true;
     milageValue = 0;
-    lightValue = -2;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
     autolockTypeTargetValue = -1;
@@ -67,7 +66,6 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(convertModulesActivityObjectToString(ModulesActivity)));
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(checkSautIsOut(ModulesActivity)));
-    QObject::connect(this, SIGNAL(LightChanged(int)), trafficLights(), SLOT(setCode(int)));
 }
 
 void SystemStateViewModel::setDesignSpeed(int value, bool valid)
@@ -364,20 +362,6 @@ void SystemStateViewModel::setMilage(const int value)
     {
         milageValue = value;
         emit MilageChanged(value);
-    }
-}
-
-// Код сигнала светофора (0 - К, 1 - КЖ, ...)
-int SystemStateViewModel::getLight() const
-{
-    return lightValue;
-}
-void SystemStateViewModel::setLight(const int value)
-{
-    if (lightValue != value)
-    {
-        lightValue = value;
-        emit LightChanged(value);
     }
 }
 

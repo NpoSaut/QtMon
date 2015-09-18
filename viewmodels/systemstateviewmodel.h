@@ -95,10 +95,6 @@ class SystemStateViewModel : public QDeclarativeItem
     int milageValue;
     Q_PROPERTY(int Milage READ getMilage WRITE setMilage NOTIFY MilageChanged)
 
-    // Код сигнала светофора (0 - К, 1 - КЖ, ...)
-    int lightValue;
-    Q_PROPERTY(int Light READ getLight WRITE setLight NOTIFY LightChanged)
-
     // Целевая Частота АЛСН
     int alsnFreqTargetValue;
     Q_PROPERTY(int AlsnFreqTarget READ getAlsnFreqTarget WRITE setAlsnFreqTarget NOTIFY AlsnFreqTargetChanged)
@@ -272,7 +268,6 @@ public:
     QString getModulesActivityString() const;
     bool getSautIsOutNotifier() const;
     int getMilage() const;
-    int getLight() const;
     int getAlsnFreqTarget() const;
     int getAlsnFreqFact() const;
     int getAutolockTypeTarget() const;
@@ -349,7 +344,6 @@ signals:
     void ModulesActivityStringChanged(const QString value);
     void SautIsOutNotifierChanged(const bool value);
     void MilageChanged(const int value);
-    void LightChanged(const int value);
     void AlsnFreqTargetChanged(const int value);
     void AlsnFreqFactChanged(const int value);
     void AutolockTypeTargetChanged(const int value);
@@ -415,7 +409,6 @@ public slots:
     void setModulesActivityString(const QString);
     void setSautIsOutNotifier(const bool);
     void setMilage(const int);
-    void setLight(const int);
     void setAlsnFreqTarget(const int);
     void setAlsnFreqFact(const int);
     void setAutolockTypeTarget(const int);

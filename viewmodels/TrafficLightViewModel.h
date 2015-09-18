@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <QTimer>
+#include "qtBlokLib/parsers/trafficlight.h"
 
 class TrafficLightViewModel : public QObject
 {
     Q_OBJECT
-    int _code;
+    Trafficlight _code;
     int _lights;
     int _mask;
     int _blink;
@@ -17,21 +18,21 @@ class TrafficLightViewModel : public QObject
 public:
     explicit TrafficLightViewModel(QObject *parent = 0);
 
-    Q_PROPERTY(int code READ code WRITE setCode NOTIFY codeChanged)
+    Q_PROPERTY(Trafficlight code READ code WRITE setCode NOTIFY codeChanged)
     Q_PROPERTY(int lights READ lights NOTIFY lightsMaskChanged)
     Q_PROPERTY(int number READ number NOTIFY numberChanged)
 
-    int code() const { return _code; }
+    Trafficlight code() const { return _code; }
     int number() const { return _number; }
     int lights();
 
 signals:
-    void codeChanged(int arg);
+    void codeChanged(Trafficlight arg);
     void lightsMaskChanged(int arg);
     void numberChanged(int arg);
 
 public slots:
-    void setCode(int arg)
+    void setCode(Trafficlight arg)
     {
         if (_code != arg) {
             _code = arg;
@@ -45,6 +46,7 @@ private slots:
 
 private:
     void refresh();
+    int intCode () const { return (int) _code; }
 };
 
 #endif // TRAFFICLIGHTVIEWMODEL_H

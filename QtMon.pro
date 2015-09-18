@@ -54,7 +54,6 @@ SOURCES += \
     drivemodehandler.cpp \
     displaystatesender.cpp \
     pressureselector.cpp \
-    trafficlightadaptor.cpp \
     alsnfreqhandler.cpp \
     autolockhandler.cpp \
     stateserializer.cpp \
@@ -178,7 +177,6 @@ HEADERS += \
     pressureselector.h \
     qtBlokLib/parsers/mp_state.h \
     qtBlokLib/parsers/trafficlight.h \
-    trafficlightadaptor.h \
     alsnfreqhandler.h \
     autolockhandler.h \
     qtBlokLib/parsers/mm_alt_long.h \

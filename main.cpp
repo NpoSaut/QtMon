@@ -43,7 +43,6 @@
 #include "SysKeySender.h"
 #include "drivemodehandler.h"
 #include "pressureselector.h"
-#include "trafficlightadaptor.h"
 #include "gpio/gpioproducer.h"
 #include "LedTrafficlightView.h"
 #include "alsnfreqhandler.h"
@@ -97,7 +96,6 @@ SysKeySender *sysKeySender;
 iodrv* iodriver;
 DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
-TrafficlightAdaptor *trafficlightAdaptor;
 GpioProducer *gpioProducer;
 LedTrafficlightView *ledTrafficlightView;
 AlsnFreqHandler *alsnFreqHandler;
@@ -396,9 +394,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     //Светофоры:
     // огонь
-    trafficlightAdaptor = new TrafficlightAdaptor();
-    QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), trafficlightAdaptor, SLOT(proccessNewTrafficlight(Trafficlight)));
-    QObject::connect(trafficlightAdaptor, SIGNAL(trafficlightCodeChanged(int)), systemState, SLOT(setLight(int)));
+    QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), systemState->trafficLights(), SLOT(setCode(Trafficlight)));
     ledTrafficlightView = new LedTrafficlightView(systemState->trafficLights(), gpioProducer);
     // частота
     alsnFreqHandler = new AlsnFreqSettingHandler (can, blokMessages);

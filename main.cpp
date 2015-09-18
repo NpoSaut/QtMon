@@ -323,6 +323,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         receiverFactory = new DummyCanReceiverFactory ();
         senderFactory   = new DummyCanSenderFactory ();
 #endif
+        senderFactory = new DummyCanSenderFactory (); // Ничего не отправлять в CAN
         auto asyncCan = new AsyncCan (receiverFactory, senderFactory);
         QObject::connect(&canThread, SIGNAL(started()), asyncCan, SLOT(start()));
         can = asyncCan;

@@ -66,6 +66,7 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
 
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(convertModulesActivityObjectToString(ModulesActivity)));
     QObject::connect(this, SIGNAL(ModulesActivityObjectChanged(ModulesActivity)), this, SLOT(checkSautIsOut(ModulesActivity)));
+    QObject::connect(this, SIGNAL(IsEpvReadyChanged(bool)), &m_trafficLights, SLOT(setEnabled(bool)));
 }
 
 void SystemStateViewModel::setDesignSpeed(int value, bool valid)

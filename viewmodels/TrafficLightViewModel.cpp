@@ -57,7 +57,7 @@ void TrafficLightViewModel::processEnabled()
 void TrafficLightViewModel::tick()
 {
     _mask = ~_mask;
-    if (_blink & _lights != 0)
+    if (_blink & _lights)
         refresh();
 }
 

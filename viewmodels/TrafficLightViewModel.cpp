@@ -2,9 +2,10 @@
 
 TrafficLightViewModel::TrafficLightViewModel(QObject *parent) :
     QObject(parent),
-    _code(LIGHT_UNKNOWN), _lights(0x0), _mask(0xf), _blink(0), _number(0), _timer(new QTimer(this))
+    _code(LIGHT_UNKNOWN), _lights(0x0), _mask(0xf), _blink(0), _number(0), _timer(new QTimer(this)), _enabled(true)
 {
     connect(this, SIGNAL(codeChanged(Trafficlight)), this, SLOT(processCode()));
+    connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(processEnabled()));
     connect(_timer, SIGNAL(timeout()), this, SLOT(tick()));
     _timer->start(500);
     processCode();
@@ -12,7 +13,9 @@ TrafficLightViewModel::TrafficLightViewModel(QObject *parent) :
 
 int TrafficLightViewModel::lights()
 {
-    return _lights & (_mask | (~_blink));
+    return enabled()
+            ? _lights & (_mask | (~_blink))
+            : 0x00;
 }
 
 void TrafficLightViewModel::processCode()
@@ -46,6 +49,11 @@ void TrafficLightViewModel::processCode()
     emit numberChanged(number());
 }
 
+void TrafficLightViewModel::processEnabled()
+{
+    refresh();
+}
+
 void TrafficLightViewModel::tick()
 {
     _mask = ~_mask;
@@ -55,5 +63,5 @@ void TrafficLightViewModel::tick()
 
 void TrafficLightViewModel::refresh()
 {
-    emit lightsMaskChanged(lights());
+    emit lightsChanged(lights());
 }

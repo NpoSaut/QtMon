@@ -11,7 +11,7 @@ public:
     explicit LedTrafficlightView(TrafficLightViewModel *viewModel, GpioProducer *producer, QObject *parent = 0);
 
 private slots:
-    void onLightsMaskChanged (int state);
+    void onLightsChanged (int state);
 
 private:
     TrafficLightViewModel *viewModel;

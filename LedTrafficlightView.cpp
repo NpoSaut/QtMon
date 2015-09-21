@@ -12,11 +12,11 @@ LedTrafficlightView::LedTrafficlightView(TrafficLightViewModel *viewModel, GpioP
     for (unsigned i = 0; i < count; i ++)
         gpios[i]->setDirection(Gpio::OUTPUT);
 
-    QObject::connect(viewModel, SIGNAL(lightsMaskChanged(int)), this, SLOT(onLightsMaskChanged(int)));
-    onLightsMaskChanged(viewModel->lights());
+    QObject::connect(viewModel, SIGNAL(lightsChanged(int)), this, SLOT(onLightsChanged(int)));
+    onLightsChanged(viewModel->lights());
 }
 
-void LedTrafficlightView::onLightsMaskChanged(int state)
+void LedTrafficlightView::onLightsChanged(int state)
 {
     for (int i = 0; i < count; i ++)
         gpios[i]->setValue(state & (1 << i));

@@ -354,6 +354,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Конфигурация
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
     QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
+    configuration->update();
 
     // Выдаёт версию по AUX_RESOURCE
     hardcodedVersion = new HardcodedVersion(3, 2, can);

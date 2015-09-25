@@ -357,7 +357,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     configuration->update();
 
     // Выдаёт версию по AUX_RESOURCE
-    hardcodedVersion = new HardcodedVersion(3, 2, can);
+    hardcodedVersion = new HardcodedVersion(3, 3, can);
     QObject::connect (&blokMessages->sysDiagnostics, SIGNAL(versionRequested(SysDiagnostics::AuxModule)), hardcodedVersion, SLOT(onVersionRequest(SysDiagnostics::AuxModule)));
 
     // Создание и подключение «обработчиков»

@@ -36,14 +36,13 @@ QByteArray LinuxSpiDev::transfer(QByteArray txData)
 {
     QByteArray rxData (txData.size(), 0);
 
-    spi_ioc_transfer tr = {
-        .tx_buf = (unsigned long)txData.data(),
-        .rx_buf = (unsigned long)rxData.data(),
-        .len = txData.size(),
-        .delay_usecs = 0,
-        .speed_hz = speed,
-        .bits_per_word = bits,
-    };
+    struct spi_ioc_transfer tr;
+    tr.tx_buf = (unsigned long)txData.data();
+    tr.rx_buf = (unsigned long)rxData.data();
+    tr.len = (quint32)txData.size();
+    tr.delay_usecs = 0;
+    tr.speed_hz = speed;
+    tr.bits_per_word = bits;
 
     int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
     if (ret < 1)

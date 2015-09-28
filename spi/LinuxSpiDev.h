@@ -3,7 +3,7 @@
 
 #include "QString"
 
-#include "SpiDev.h"
+#include "ISpiDev.h"
 
 class LinuxSpiDev : public ISpiDev
 {

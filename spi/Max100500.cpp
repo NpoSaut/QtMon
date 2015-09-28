@@ -2,7 +2,12 @@
 
 Max100500::Max100500(ISpiDev *spiDev)
     : _spiDev(spiDev)
+{ }
+
+void Max100500::init()
 {
+    configure();
+    setGlobalIntensity(0x07);
 }
 
 // Run, Command, run!
@@ -19,10 +24,16 @@ void Max100500::configure()
 {
     char config;
     //----------PIRTEBXS
-    config |= 0b00000000;
+    config |= 0b00000001;
     runCommand(0x04, config);
 }
 
-void Max100500::setIntensity()
+void Max100500::setGlobalIntensity(char value)
 {
+    runCommand(0x03, value & 0x0F);
+}
+
+void Max100500::setDigit(int index, char value)
+{
+    runCommand(0x10 + index, value & 0x0F);
 }

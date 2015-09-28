@@ -12,7 +12,7 @@ public:
     void setGlobalIntensity(char value);
     void setDigit(int index, char value);
     void setNumber(int value);
-
+    void clear();
 
 private:
     ISpiDev *_spiDev;

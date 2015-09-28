@@ -132,7 +132,7 @@ SOURCES += \
     gpio/linuxgpio.cpp \
     LedTrafficlightView.cpp \
     spi/Max100500.cpp \
-    Max100500TrafficlightViewModel.cpp
+    Max100500TrafficlightView.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -294,7 +294,7 @@ HEADERS += \
     LedTrafficlightView.h \
     spi/Max100500.h \
     spi/ISpiDev.h \
-    Max100500TrafficlightViewModel.h
+    Max100500TrafficlightView.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

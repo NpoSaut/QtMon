@@ -16,7 +16,7 @@ LinuxSpiDev::LinuxSpiDev(QString deviceName, unsigned speedHz, quint8 bits)
 {
     fd = open(deviceName.toAscii().data(), O_RDWR);
 
-    quint8 mode;
+    quint8 mode = SPI_CS_HIGH;
     ioctl(fd, SPI_IOC_WR_MODE, &mode);
     ioctl(fd, SPI_IOC_RD_MODE, &mode);
 
@@ -43,6 +43,7 @@ QByteArray LinuxSpiDev::transfer(QByteArray txData)
     tr.delay_usecs = 0;
     tr.speed_hz = speed;
     tr.bits_per_word = bits;
+    tr.cs_change = 1;
 
     int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
     if (ret < 1)

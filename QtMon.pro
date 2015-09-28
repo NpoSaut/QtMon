@@ -130,7 +130,8 @@ SOURCES += \
     gpio/debuggpio.cpp \
     gpio/gpioproducer.cpp \
     gpio/linuxgpio.cpp \
-    LedTrafficlightView.cpp
+    LedTrafficlightView.cpp \
+    spi/Max100500.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -290,6 +291,7 @@ HEADERS += \
     gpio/gpioproducer.h \
     gpio/linuxgpio.h \
     LedTrafficlightView.h \
+    spi/Max100500.h \
     spi/ISpiDev.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {

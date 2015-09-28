@@ -9,6 +9,8 @@ Interaction::Activities::RequestTrackNumberActivity::RequestTrackNumberActivity(
 void Interaction::Activities::RequestTrackNumberActivity::dispose()
 {
     RequestCookiesActivity::dispose();
-    context->trackNumber = context->cookieRecord->value % 16;
-    context->regularity = context->cookieRecord->value > 15 ? 0 : 1;
+    context->trackNumber = context->cookieRecord->value <= 15
+            ? context->cookieRecord->value
+            : context->cookieRecord->value - 15;
+    context->regularity = context->cookieRecord->value <= 15 ? 1 : 0;
 }

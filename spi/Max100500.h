@@ -11,6 +11,7 @@ public:
     void init();
     void setGlobalIntensity(char value);
     void setDigit(int index, char value);
+    void setNumber(int value);
 
 
 private:

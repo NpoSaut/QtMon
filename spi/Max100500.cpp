@@ -37,3 +37,13 @@ void Max100500::setDigit(int index, char value)
 {
     runCommand(0x10 + index, value & 0x0F);
 }
+
+void Max100500::setNumber(int value)
+{
+    for (int i = 0; i < 2; i++)
+    {
+        //char digit = (val % (int)pow(10, i + 1)) / (int)pow(10, i);
+        //setDigit(i, digit);
+        setDigit(i, 6);
+    }
+}

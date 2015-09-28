@@ -14,7 +14,7 @@ Interaction::Story *Interaction::Commands::InputTrackNumberCommand::createStory(
     return new Story(context, {
                             new Activities::RequestTrackNumberActivity(context, textManager),
                             new Activities::InputActivity("Номер пути: %1", &context->trackNumber, textManager),
-                            new Activities::InputActivity("Признак правильности пути: %1 (0 - П, 1 - Н)", &context->regularity, textManager),
+                            new Activities::InputActivity("Признак правильности пути: %1 (0 - Н, 1 - П)", &context->regularity, textManager),
                             new Activities::SubmitTrackNumberActivity(context, textManager)
                         });
 }

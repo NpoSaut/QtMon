@@ -45,7 +45,7 @@ void TrafficLightViewModel::processCode()
     }
     refresh();
 
-    _number = std::max(0, intCode() - 11);
+    _number = std::max(-1, intCode() - 10);
     emit numberChanged(number());
 }
 

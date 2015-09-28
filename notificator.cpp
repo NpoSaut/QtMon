@@ -3,6 +3,8 @@
 Notificator::Notificator(Parser *onParser, QObject *parent) :
     QObject(parent),
     parser(onParser),
+    handbrakeHintTimeout(this),
+    handbrakeHint (false),
     handbrakeHintRequired (false)
 {
     this->connect (onParser, SIGNAL(whateverChagned()), SLOT(getStateChangedSignal()));

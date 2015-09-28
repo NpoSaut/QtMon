@@ -130,7 +130,9 @@ SOURCES += \
     gpio/debuggpio.cpp \
     gpio/gpioproducer.cpp \
     gpio/linuxgpio.cpp \
-    LedTrafficlightView.cpp
+    LedTrafficlightView.cpp \
+    spi/Max100500.cpp \
+    Max100500TrafficlightView.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -289,7 +291,10 @@ HEADERS += \
     gpio/gpio.h \
     gpio/gpioproducer.h \
     gpio/linuxgpio.h \
-    LedTrafficlightView.h
+    LedTrafficlightView.h \
+    spi/Max100500.h \
+    spi/ISpiDev.h \
+    Max100500TrafficlightView.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \
@@ -330,6 +335,14 @@ LIB_APPI_CAN_DRIVER {
     DEFINES += WIN32
 }
 
+LIB_LINUX_SPIDEV {
+    SOURCES +=  spi/LinuxSpiDev.cpp
+
+    HEADERS +=  spi/LinuxSpiDev.h
+
+    DEFINES += LIB_LINUX_SPIDEV
+}
+
 CONFIG += console
 
 QMAKE_CXXFLAGS += -std=c++0x
@@ -339,5 +352,5 @@ QMAKE_CXXFLAGS += -std=c++0x
 #unix:!macx:!symbian|win32: LIBS += -lQtSerialPort
 
 # Для работы нужны:
-# DEFINES+=CPP11 DEFINES+=ON_DEVICE CONFIG+=LIB_LINUX_SOCKET_CAN_DRIVER
+# DEFINES+=CPP11 DEFINES+=ON_DEVICE CONFIG+=LIB_LINUX_SOCKET_CAN_DRIVER CONFIG+=LIB_LINUX_SPIDEV
 

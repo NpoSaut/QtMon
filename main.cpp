@@ -85,6 +85,13 @@
 #include "illumination/CanIlluminationSetter.h"
 #include "viewmodels/brightnessviewmodel.h"
 
+#include "spi/ISpiDev.h"
+#ifdef LIB_LINUX_SPIDEV
+#include "spi/LinuxSpiDev.h"
+#endif
+#include "spi/Max100500.h"
+#include "Max100500TrafficlightView.h"
+
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
@@ -98,6 +105,7 @@ DrivemodeHandler *drivemodeHandler;
 PressureSelector *pressureSelector;
 GpioProducer *gpioProducer;
 LedTrafficlightView *ledTrafficlightView;
+Max100500TrafficlightView *max100500TrafficlightView;
 AlsnFreqHandler *alsnFreqHandler;
 AutolockHandler *autolockHandler;
 
@@ -117,6 +125,9 @@ Interaction::KeyboardManager *keyboardManager;
 
 IIlluminationManager *illuminationManager;
 ViewModels::BrightnessViewModel *brightnessViewModel;
+
+ISpiDev *spiDev;
+Max100500 *max100500;
 
 void getParamsFromConsole ()
 {
@@ -392,6 +403,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // огонь
     QObject::connect (&blokMessages->mcoState, SIGNAL(trafficlightChanged(Trafficlight)), systemState->trafficLights(), SLOT(setCode(Trafficlight)));
     ledTrafficlightView = new LedTrafficlightView(systemState->trafficLights(), gpioProducer);
+#ifdef LIB_LINUX_SPIDEV
+    spiDev = new LinuxSpiDev ("/dev/spidev0.0", 1000000, 8);
+    max100500 = new Max100500 (spiDev);
+    max100500TrafficlightView = new Max100500TrafficlightView(systemState->trafficLights(), max100500);
+#endif
     // частота
     alsnFreqHandler = new AlsnFreqSettingHandler (can, blokMessages);
     QObject::connect(alsnFreqHandler, SIGNAL(actualAlsnFreqChanged(int)), systemState, SLOT(setAlsnFreqFact(int)));

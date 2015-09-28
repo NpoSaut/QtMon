@@ -8,12 +8,16 @@
 class LinuxSpiDev : public SpiDev
 {
 public:
-    LinuxSpiDev(QString deviceName, int speedHz);
+    LinuxSpiDev(QString deviceName, unsigned speedHz, quint8 bits = 8);
+    ~LinuxSpiDev();
+
     virtual QByteArray transfer (QByteArray txData); // return rxData
 
 private:
     QString deviceName;
-    int speed;
+    quint32 speed;
+    quint8 bits;
+    int fd;
 };
 
 #endif // LINUXSPIDEV_H

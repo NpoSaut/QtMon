@@ -2,7 +2,9 @@
 
 Max100500::Max100500(ISpiDev *spiDev)
     : _spiDev(spiDev)
-{ }
+{
+    init();
+}
 
 void Max100500::init()
 {

@@ -1,12 +1,12 @@
-#ifndef SPIDEV_H
-#define SPIDEV_H
+#ifndef ISPIDEV_H
+#define ISPIDEV_H
 
 #include "QByteArray"
 
-class SpiDev
+class ISpiDev
 {
 public:
     virtual QByteArray transfer (QByteArray txData) = 0; // return rxData
 };
 
-#endif // SPIDEV_H
+#endif // ISPIDEV_H

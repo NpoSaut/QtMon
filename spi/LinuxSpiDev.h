@@ -5,7 +5,7 @@
 
 #include "SpiDev.h"
 
-class LinuxSpiDev : public SpiDev
+class LinuxSpiDev : public ISpiDev
 {
 public:
     LinuxSpiDev(QString deviceName, unsigned speedHz, quint8 bits = 8);

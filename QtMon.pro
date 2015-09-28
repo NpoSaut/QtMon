@@ -290,7 +290,7 @@ HEADERS += \
     gpio/gpioproducer.h \
     gpio/linuxgpio.h \
     LedTrafficlightView.h \
-    spi/SpiDev.h
+    spi/ISpiDev.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

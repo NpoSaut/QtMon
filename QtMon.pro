@@ -130,7 +130,8 @@ SOURCES += \
     gpio/debuggpio.cpp \
     gpio/gpioproducer.cpp \
     gpio/linuxgpio.cpp \
-    LedTrafficlightView.cpp
+    LedTrafficlightView.cpp \
+    spi/LinuxSpiDev.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -289,7 +290,9 @@ HEADERS += \
     gpio/gpio.h \
     gpio/gpioproducer.h \
     gpio/linuxgpio.h \
-    LedTrafficlightView.h
+    LedTrafficlightView.h \
+    spi/SpiDev.h \
+    spi/LinuxSpiDev.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

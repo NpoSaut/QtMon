@@ -411,6 +411,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReadyChanged(bool)), systemState, SLOT(setIsEpvReady(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), systemState, SLOT(setModulesActivityObject(ModulesActivity)));
+    QObject::connect(&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
 
     // Уведомления
     QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));

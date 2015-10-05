@@ -16,6 +16,9 @@ public:
 
     bool isPressed (Keyboard::Key key);
 
+signals:
+    void stateChanged ();
+
 private slots:
     void keyDown (Interaction::Keyboard::Key key);
     void keyUp (Interaction::Keyboard::Key key);

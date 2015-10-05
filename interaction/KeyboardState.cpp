@@ -19,11 +19,15 @@ bool KeyboardState::isPressed(Keyboard::Key key)
 void KeyboardState::keyDown(Interaction::Keyboard::Key key)
 {
     pressedKeys.append(key);
+    emit stateChanged();
 }
 
 void KeyboardState::keyUp(Interaction::Keyboard::Key key)
 {
     // Удаляет все
     for (int e = pressedKeys.indexOf(key); e != -1; e = pressedKeys.indexOf(key))
+    {
         pressedKeys.remove(e);
+        emit stateChanged();
+    }
 }

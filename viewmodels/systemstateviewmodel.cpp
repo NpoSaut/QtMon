@@ -4,11 +4,13 @@ namespace ViewModels
 {
 
 SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
-    m_trafficLights(this), QDeclarativeItem(parent)
+    QDeclarativeItem(parent),
+    m_trafficLights(this)
 {
     // fileds init start
     speedValue = 0;
     speedIsValidValue = false;
+    isInMotionValue = false;
     speedRestrictionValue = 40;
     targetSpeedValue = 55;
     accelerationValue = 0;
@@ -27,6 +29,8 @@ SystemStateViewModel::SystemStateViewModel(QDeclarativeItem *parent) :
     isEpvReleasedValue = false;
     modulesActivityStringValue = "------------";
     sautIsOutNotifierValue = true;
+    isTractionShutdownValue = false;
+    isSlippingValue = false;
     milageValue = 0;
     alsnFreqTargetValue = -1;
     alsnFreqFactValue = -1;
@@ -100,6 +104,20 @@ void SystemStateViewModel::setSpeedIsValid(const bool value)
     {
         speedIsValidValue = value;
         emit SpeedIsValidChanged(value);
+    }
+}
+
+// В движении
+bool SystemStateViewModel::getIsInMotion() const
+{
+    return isInMotionValue;
+}
+void SystemStateViewModel::setIsInMotion(const bool value)
+{
+    if (isInMotionValue != value)
+    {
+        isInMotionValue = value;
+        emit IsInMotionChanged(value);
     }
 }
 
@@ -349,6 +367,34 @@ void SystemStateViewModel::setSautIsOutNotifier(const bool value)
     {
         sautIsOutNotifierValue = value;
         emit SautIsOutNotifierChanged(value);
+    }
+}
+
+// Разбор тяги
+bool SystemStateViewModel::getIsTractionShutdown() const
+{
+    return isTractionShutdownValue;
+}
+void SystemStateViewModel::setIsTractionShutdown(const bool value)
+{
+    if (isTractionShutdownValue != value)
+    {
+        isTractionShutdownValue = value;
+        emit IsTractionShutdownChanged(value);
+    }
+}
+
+// Боксование
+bool SystemStateViewModel::getIsSlipping() const
+{
+    return isSlippingValue;
+}
+void SystemStateViewModel::setIsSlipping(const bool value)
+{
+    if (isSlippingValue != value)
+    {
+        isSlippingValue = value;
+        emit IsSlippingChanged(value);
     }
 }
 

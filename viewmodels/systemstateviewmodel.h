@@ -22,6 +22,10 @@ class SystemStateViewModel : public QDeclarativeItem
     bool speedIsValidValue;
     Q_PROPERTY(bool SpeedIsValid READ getSpeedIsValid WRITE setSpeedIsValid NOTIFY SpeedIsValidChanged)
 
+    // В движении
+    bool isInMotionValue;
+    Q_PROPERTY(bool IsInMotion READ getIsInMotion WRITE setIsInMotion NOTIFY IsInMotionChanged)
+
     // Ограничение скорости
     int speedRestrictionValue;
     Q_PROPERTY(int SpeedRestriction READ getSpeedRestriction WRITE setSpeedRestriction NOTIFY SpeedRestrictionChanged)
@@ -90,6 +94,14 @@ class SystemStateViewModel : public QDeclarativeItem
     // Напоминание о выключенности САУТ
     bool sautIsOutNotifierValue;
     Q_PROPERTY(bool SautIsOutNotifier READ getSautIsOutNotifier WRITE setSautIsOutNotifier NOTIFY SautIsOutNotifierChanged)
+
+    // Разбор тяги
+    bool isTractionShutdownValue;
+    Q_PROPERTY(bool IsTractionShutdown READ getIsTractionShutdown WRITE setIsTractionShutdown NOTIFY IsTractionShutdownChanged)
+
+    // Боксование
+    bool isSlippingValue;
+    Q_PROPERTY(bool IsSlipping READ getIsSlipping WRITE setIsSlipping NOTIFY IsSlippingChanged)
 
     // Проиденное расстояние
     int milageValue;
@@ -249,6 +261,7 @@ public:
     // public properties getters start
     double getSpeed() const;
     bool getSpeedIsValid() const;
+    bool getIsInMotion() const;
     int getSpeedRestriction() const;
     int getTargetSpeed() const;
     double getAcceleration() const;
@@ -267,6 +280,8 @@ public:
     bool getIsEpvReleased() const;
     QString getModulesActivityString() const;
     bool getSautIsOutNotifier() const;
+    bool getIsTractionShutdown() const;
+    bool getIsSlipping() const;
     int getMilage() const;
     int getAlsnFreqTarget() const;
     int getAlsnFreqFact() const;
@@ -325,6 +340,7 @@ signals:
     // properties signals start
     void SpeedChanged(const double value);
     void SpeedIsValidChanged(const bool value);
+    void IsInMotionChanged(const bool value);
     void SpeedRestrictionChanged(const int value);
     void TargetSpeedChanged(const int value);
     void AccelerationChanged(const double value);
@@ -343,6 +359,8 @@ signals:
     void IsEpvReleasedChanged(const bool value);
     void ModulesActivityStringChanged(const QString value);
     void SautIsOutNotifierChanged(const bool value);
+    void IsTractionShutdownChanged(const bool value);
+    void IsSlippingChanged(const bool value);
     void MilageChanged(const int value);
     void AlsnFreqTargetChanged(const int value);
     void AlsnFreqFactChanged(const int value);
@@ -381,7 +399,6 @@ signals:
     // properties signals end
 
     void ModulesActivityObjectChanged(const ModulesActivity value);
-
     void trafficLightsChanged(TrafficLightViewModel* arg);
 
 public slots:
@@ -390,6 +407,7 @@ public slots:
     // public properties setters start
     void setSpeed(const double);
     void setSpeedIsValid(const bool);
+    void setIsInMotion(const bool);
     void setSpeedRestriction(const int);
     void setTargetSpeed(const int);
     void setAcceleration(const double);
@@ -408,6 +426,8 @@ public slots:
     void setIsEpvReleased(const bool);
     void setModulesActivityString(const QString);
     void setSautIsOutNotifier(const bool);
+    void setIsTractionShutdown(const bool);
+    void setIsSlipping(const bool);
     void setMilage(const int);
     void setAlsnFreqTarget(const int);
     void setAlsnFreqFact(const int);

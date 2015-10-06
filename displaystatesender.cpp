@@ -12,6 +12,7 @@ DisplayStateSender::DisplayStateSender(Interaction::KeyboardState *keyboardState
     driveMode (0)
 {
     this->startTimer (500);
+    QObject::connect(keyboardState, SIGNAL(stateChanged()), this, SLOT(onKeyboardStateChange()));
 }
 
 void DisplayStateSender::setValue(double backlightLevel)
@@ -24,12 +25,32 @@ void DisplayStateSender::setDriveMode(int dm)
     driveMode = dm;
 }
 
+void DisplayStateSender::onKeyboardStateChange()
+{
+    CanFrame newA = constructA();
+    CanFrame newB = constructB();
+
+    if (newA != lastA || newB != lastB)
+        sendState(newA, newB);
+}
+
 void DisplayStateSender::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
+    sendState(constructA(), constructB());
+}
 
+void DisplayStateSender::sendState(CanFrame A, CanFrame B)
+{
+    lastA = A;
+    can->send (A);
+    lastB = B;
+    can->send (B);
+}
+
+CanFrame DisplayStateSender::constructA()
+{
     DisplayStateA dsa;
-
     dsa.setRb (keyboardState->isPressed (Keyboard::Key::RB));
     dsa.setRbs (keyboardState->isPressed (Keyboard::Key::RBS));
     dsa.setVk (keyboardState->isPressed (Keyboard::Key::VK));
@@ -43,10 +64,15 @@ void DisplayStateSender::timerEvent(QTimerEvent *event)
     dsa.setBacklightLevel(backlightLevel);
     dsa.setDriveMode (DriveMode(driveMode));
 
-    can->send (dsa.encode ());
+    return dsa.encode();
+}
 
+CanFrame DisplayStateSender::constructB()
+{
     DisplayStateB dsb;
+
     dsb.setRb (keyboardState->isPressed (Keyboard::Key::RB));
     dsb.setRbs (keyboardState->isPressed (Keyboard::Key::RBS));
-    can->send (dsb.encode ());
+
+    return dsb.encode();
 }

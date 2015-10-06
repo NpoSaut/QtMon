@@ -21,6 +21,8 @@ void DisplayModulesActivityActivity::dispose()
 {
     textManager->clear();
     disconnect(mcoState, SIGNAL(messageReceived()), this, SLOT(onMcoStateReceived()));
+    disconnect(&foulTimer, SIGNAL(timeout()), this, SLOT(onFoulTimeout()));
+    foulTimer.stop();
 }
 
 void DisplayModulesActivityActivity::onMcoStateReceived()

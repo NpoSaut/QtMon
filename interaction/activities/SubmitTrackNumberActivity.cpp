@@ -11,7 +11,7 @@ void Interaction::Activities::SubmitTrackNumberActivity::run()
         context->trackNumber = 0;
 
     int val = context->trackNumber;
-    if (context->trackNumber != 0 && context->regularity == 1)
+    if (context->trackNumber != 0 && context->regularity == 0)
         val += 15;
     context->cookieRecord->value = val;
     SubmitCookiesActivity::run();

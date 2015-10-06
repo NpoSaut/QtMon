@@ -4,7 +4,7 @@
     <!-- Скорость и ограничения -->
     <Property type="double" name="Speed" def="0" description="Текущая скорость" source="IPD_STATE" />
     <Property type="bool" name="SpeedIsValid" def="false" description="Корректность скорости" />
-
+    <Property type="bool" name="IsInMotion" def="false" description="В движении" />
     <Property type="int" name="SpeedRestriction" def="40" description="Ограничение скорости" source="MCO_STATE" />
     <Property type="int" name="TargetSpeed" def="55" description="Целевая скорость" source="MCO_STATE" />
     <Property type="double" name="Acceleration" def="0" description="Ускорение" source="IPD_STATE" />
@@ -32,6 +32,8 @@
     <Property type="bool" name="IsEpvReleased" def="false" description="Признак срыва ЭПК" /> 
     <Property type="QString" name="ModulesActivityString" def="&quot;------------&quot;" description="Строка с активностью модулей" />
     <Property type="bool" name="SautIsOutNotifier" def="true" description="Напоминание о выключенности САУТ" />
+    <Property type="bool" name="IsTractionShutdown" def="false" description="Разбор тяги" />
+    <Property type="bool" name="IsSlipping" def="false" description="Боксование" />
 
     <!-- Одометр -->
     <Property type="int" name="Milage" def="0" description="Проиденное расстояние" />

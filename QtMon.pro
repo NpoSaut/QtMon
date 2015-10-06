@@ -50,7 +50,6 @@ SOURCES += \
     qtBlokLib/parsers/uktol_dd1.cpp \
     qtBlokLib/parsers/vds_state.cpp \
     qtBlokLib/parser.cpp \
-    notificator.cpp \
     drivemodehandler.cpp \
     displaystatesender.cpp \
     pressureselector.cpp \
@@ -134,7 +133,8 @@ SOURCES += \
     gpio/linuxgpio.cpp \
     LedTrafficlightView.cpp \
     spi/Max100500.cpp \
-    Max100500TrafficlightView.cpp
+    Max100500TrafficlightView.cpp \
+    viewmodels/TextNotificationModel.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -170,7 +170,6 @@ HEADERS += \
     qtBlokLib/parsers/mco_state.h \
     qtBlokLib/parsers/sys_key.h \
     qtBlokLib/parsers/tskbm_state.h \
-    notificator.h \
     displaystatesender.h \
     drivemodehandler.h \
     qtBlokLib/parsers/vds_state.h \
@@ -299,7 +298,8 @@ HEADERS += \
     LedTrafficlightView.h \
     spi/Max100500.h \
     spi/ISpiDev.h \
-    Max100500TrafficlightView.h
+    Max100500TrafficlightView.h \
+    viewmodels/TextNotificationModel.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

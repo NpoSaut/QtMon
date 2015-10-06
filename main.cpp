@@ -10,6 +10,7 @@
 
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
+#include "viewmodels/TextNotificationModel.h"
 #include "sound/Levithan.h"
 #include "sound/WolfsonLevithan.h"
 #include "sound/CanLevithan.h"
@@ -38,7 +39,6 @@
 #include "qtBlokLib/iodrv.h"
 #include "qtBlokLib/cookies.h"
 
-#include "notificator.h"
 #include "displaystatesender.h"
 #include "SysKeySender.h"
 #include "drivemodehandler.h"
@@ -95,9 +95,9 @@
 
 ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
+ViewModels::TextNotificationModel *textNotificationViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
 Levithan* levithan;
-Notificator* notificator;
 DisplayStateSender* displayStateSender;
 SysKeySender *sysKeySender;
 
@@ -222,16 +222,6 @@ void getParamsFromConsole ()
             systemState->setDirection( cmd.at(1).toInt() );
             out << "Now Direction is: " << systemState->getDirection() << endl;
         }
-        else if (cmd.at(0) == "nt")
-        {
-            systemState->setNotificationText( cmd.at(1) );
-            out << "Now Notification Text is: " << systemState->getNotificationText() << endl;
-        }
-        else if (cmd.at(0) == "vig")
-        {
-            systemState->setIsVigilanceRequired( cmd.at(1) == "1" );
-            out << "Now Vigilance is Required" << endl;
-        }
         // ТСКБМ: на связи
         else if (cmd.at(0) == "tso")
         {
@@ -328,6 +318,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
+    textNotificationViewModel = new ViewModels::TextNotificationModel (systemState);
 
     // Создание CAN
     QThread canThread;
@@ -371,7 +362,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     cookies = new Cookies(can);
 
     elmapForwardTarget = new ElmapForwardTarget(can);
-    notificator = new Notificator(blokMessages);
+
 
     gpioProducer =
 #ifdef Q_OS_LINUX
@@ -383,7 +374,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Конфигурация
     configuration = new CookieConfiguration (&cookies->monitorKhConfiguration);
-    QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), notificator, SLOT(setHandbrakeHintRequired(bool)));
+    QObject::connect(configuration, SIGNAL(breakAssistRequiredChanged(bool)), textNotificationViewModel, SLOT(setHandbrakeHintRequired(bool)));
     configuration->update();
 
     // Выдаёт версию по AUX_RESOURCE
@@ -412,9 +403,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect(&blokMessages->mcoState, SIGNAL(epvReleasedChanged(bool)), systemState, SLOT(setIsEpvReleased(bool)));
     QObject::connect(&blokMessages->mcoState, SIGNAL(modulesActivityChanged(ModulesActivity)), systemState, SLOT(setModulesActivityObject(ModulesActivity)));
     QObject::connect(&blokMessages->sautState, SIGNAL(brakeFactorChanged(float)), systemState, SLOT(setBreakingFactor(float)));
+    QObject::connect(&blokMessages->mcoLimits, SIGNAL(tractionShutdownCommandChanged(bool)), systemState, SLOT(setIsTractionShutdown(bool)));
+    QObject::connect(&blokMessages->mcoLimits, SIGNAL(slippingChanged(bool)), systemState, SLOT(setIsSlipping(bool)));
+    QObject::connect(&blokMessages->ipdState, SIGNAL(inMotionChanged(bool)), systemState, SLOT(setIsInMotion(bool)));
 
     // Уведомления
-    QObject::connect (notificator, SIGNAL(notificationTextChanged(QString)), systemState, SLOT(setNotificationText(QString)));
+    QObject::connect (textNotificationViewModel, SIGNAL(textChanged(QString)), systemState, SLOT(setNotificationText(QString)));
 
     //Одометр
     QObject::connect(iodriver, SIGNAL(signal_passed_distance(int)), systemState, SLOT(setMilage(int)));

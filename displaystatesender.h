@@ -21,11 +21,18 @@ public:
 public slots:
     void setDriveMode (int driveMode);
 
+private slots:
+    void onKeyboardStateChange ();
+
 private:
+    CanFrame constructA ();
+    CanFrame constructB ();
+    void sendState (CanFrame A, CanFrame B);
     void timerEvent(QTimerEvent *event);
 
     Interaction::KeyboardState *keyboardState;
     ICan *can;
+    CanFrame lastA, lastB;
     int backlightLevel;
     int driveMode;
 };

@@ -9,5 +9,5 @@ PhrasePriorityQueue::PhrasePriorityQueue()
 
 int PhrasePriorityQueue::compare(Phrase a, Phrase b)
 {
-    return b.priority - a.priority;
+    return b.getPriority() - a.getPriority();
 }

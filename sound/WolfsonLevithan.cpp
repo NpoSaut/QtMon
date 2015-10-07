@@ -22,7 +22,7 @@ void WolfsonLevithan::sayLightIndex(Trafficlight l)
     // Говорим "внимание", если сигнал ограничивающий (не "зелёный")
     if ((i >= 0 && i <= 3)
             || (i >= 8 && i <= 11))
-        speaker.enqueuePhrase(Phrase("phrases/attention.wav", 0));
+        speaker.enqueuePhrase(Phrase("phrases/attention.wav", 0.3));
 
     // Проговариваем сигнал
     switch (i)
@@ -55,7 +55,7 @@ void WolfsonLevithan::sayLightIndex(Trafficlight l)
 
 void WolfsonLevithan::beep()
 {
-    speaker.enqueuePhrase(Phrase("phrases/beep-700-40.wav", 0));
+    speaker.enqueuePhrase(Phrase("phrases/beep-700-40.wav", 0.3));
 }
 
 void WolfsonLevithan::beep(int i) { beep(); }
@@ -63,22 +63,22 @@ void WolfsonLevithan::beep(bool b) { beep(); }
 
 void WolfsonLevithan::beepHigh()
 {
-    speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0));
+    speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0.3));
 }
 
 void WolfsonLevithan::beepVigilance()
 {
-    speaker.enqueuePhrase(Phrase("phrases/beep-700-160.wav", -1));
+    speaker.enqueuePhrase(Phrase("phrases/beep-700-160.wav", 0.1));
 }
 
 void WolfsonLevithan::beepConfirmation()
 {
-    speaker.enqueuePhrase(Phrase("phrases/beep-low-hi.wav", -1));
+    speaker.enqueuePhrase(Phrase("phrases/beep-low-hi.wav", 0.1));
 }
 
 void WolfsonLevithan::beepNotification()
 {
-    speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 50));
+    speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 0.8));
 }
 
 void WolfsonLevithan::proccessNewVigilanceRequired(bool required)

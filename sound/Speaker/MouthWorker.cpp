@@ -13,6 +13,6 @@ MouthWorker::MouthWorker(IMouth *mouth, IThreadSafeQueue<Phrase> *queue, QObject
 void MouthWorker::run()
 {
     forever {
-        mouth->say(queue->dequeue().file);
+        mouth->say(queue->dequeue().getFile());
     }
 }

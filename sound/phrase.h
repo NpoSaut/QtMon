@@ -8,18 +8,16 @@ namespace Sound
     class Phrase
     {
     public:
-        Phrase()
-            :file(QString()), priority(10)
-        {}
-        Phrase(QFileInfo file, int priority = 10)
-            : file(file), priority(priority)
-        {}
-        Phrase(QString filename, int priority = 10)
-            : file(filename), priority(priority)
-        {}
+        Phrase(QFileInfo file, float priority = 0.1);
+        Phrase(QString filename = QString(), float priority = 0.1);
 
+        const QFileInfo &getFile () const {return file;}
+        const float getPriority () const {return priority;} // 0 ... 1.0
+
+    private:
+        void setPriority (float x);
         QFileInfo file;
-        int priority;
+        float priority; // 0 ... 1.0
     };
 }
 

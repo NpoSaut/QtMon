@@ -1,16 +1,16 @@
-#ifndef CANLEVITHAN_H
-#define CANLEVITHAN_H
+#ifndef ToCANLEVITHAN_H
+#define ToCANLEVITHAN_H
 
 #include "ILevithan.h"
 #include "qtCanLib/ICan.h"
 
 namespace Sound {
 
-class CanLevithan : public ILevithan
+class ToCanLevithan : public ILevithan
 {
     Q_OBJECT
 public:
-    explicit CanLevithan(ICan *can, QObject *parent = 0);
+    explicit ToCanLevithan(ICan *can, QObject *parent = 0);
 
 public slots:
     virtual void sayLightIndex(Trafficlight i) { /*UNSUPPORTED*/ }
@@ -28,4 +28,4 @@ private:
 }
 
 
-#endif // CANLEVITHAN_H
+#endif // ToCANLEVITHAN_H

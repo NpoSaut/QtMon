@@ -1,16 +1,16 @@
-#include "CanLevithan.h"
+#include "ToCanLevithan.h"
 
 #include "qtBlokLib/parsers/console_beep.h"
 
 using namespace Sound;
 
-CanLevithan::CanLevithan(ICan *can, QObject *parent) :
+ToCanLevithan::ToCanLevithan(ICan *can, QObject *parent) :
     ILevithan(parent),
     can (can)
 {
 }
 
-void CanLevithan::beep()
+void ToCanLevithan::beep()
 {
     ConsoleBeep message;
     can->send(message.encode());

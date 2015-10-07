@@ -13,7 +13,7 @@
 #include "viewmodels/TextNotificationModel.h"
 #include "sound/KxSoundController.h"
 #include "sound/WolfsonLevithan.h"
-#include "sound/CanLevithan.h"
+#include "sound/ToCanLevithan.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32

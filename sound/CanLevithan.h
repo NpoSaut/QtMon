@@ -1,35 +1,31 @@
 #ifndef CANLEVITHAN_H
 #define CANLEVITHAN_H
 
-#include "Levithan.h"
+#include "ILevithan.h"
 #include "qtCanLib/ICan.h"
 
-class CanLevithan : public Levithan
+namespace Sound {
+
+class CanLevithan : public ILevithan
 {
     Q_OBJECT
 public:
     explicit CanLevithan(ICan *can, QObject *parent = 0);
 
 public slots:
-    void sayHello(int i) { }
-    void sayLightIndex(Trafficlight i) { }
+    virtual void sayLightIndex(Trafficlight i) { /*UNSUPPORTED*/ }
 
-    void beep() { }
-    void beep(int i) { }
-    void beep(bool b) { }
-
-    void beepHigh();
-    void beepVigilance() { }
-    void beepConfirmation() { }
-    void beepNotification() { }
-
-    void proccessNewVigilanceRequired (bool required) { }
-    void proccessNewPreAlarmActive (bool active) { }
-    void proccessNewEpvReady (bool ready) { }
-    void proccessVigilanceRequired (bool value) { }
+    virtual void beep();
+    virtual void beepLong() {beep();}
+    virtual void beepHigh() {beep();}
+    virtual void beepLowHi() {beep();}
+    virtual void beepNotification() {beep();}
 
 private:
     ICan *can;
 };
+
+}
+
 
 #endif // CANLEVITHAN_H

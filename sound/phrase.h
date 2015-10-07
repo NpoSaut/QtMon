@@ -1,24 +1,23 @@
 #ifndef PHRASE_H
 #define PHRASE_H
-#include <QString>
 
-namespace sound
+#include <QFileInfo>
+
+namespace Sound
 {
     class Phrase
     {
     public:
-        Phrase()
-            :fileName(""), priority(10)
-        {}
-        Phrase(QString filename)
-            : fileName(filename), priority(10)
-        {}
-        Phrase(QString filename, int priority)
-            : fileName(filename), priority(priority)
-        {}
+        Phrase(QFileInfo file, float priority = 0.1);
+        Phrase(QString filename = QString(), float priority = 0.1);
 
-        QString fileName;
-        int priority;
+        const QFileInfo &getFile () const {return file;}
+        const float getPriority () const {return priority;} // 0 ... 1.0
+
+    private:
+        void setPriority (float x);
+        QFileInfo file;
+        float priority; // 0 ... 1.0
     };
 }
 

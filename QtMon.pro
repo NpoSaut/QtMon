@@ -117,7 +117,6 @@ SOURCES += \
     interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp \
     sound/WolfsonLevithan.cpp \
-    sound/Levithan.cpp \
     sound/CanLevithan.cpp \
     qtBlokLib/parsers/console_beep.cpp \
     illumination/CanIlluminationSetter.cpp \
@@ -134,7 +133,9 @@ SOURCES += \
     sound/Speaker/MouthWorker.cpp \
     sound/Speaker.cpp \
     sound/Speaker/PhrasePriorityQueue.cpp \
-    sound/QSoundMouth.cpp
+    sound/QSoundMouth.cpp \
+    sound/SoundModel.cpp \
+    sound/ILevithan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -278,7 +279,6 @@ HEADERS += \
     interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h \
     sound/WolfsonLevithan.h \
-    sound/Levithan.h \
     sound/CanLevithan.h \
     qtBlokLib/parsers/console_beep.h \
     illumination/CanIlluminationSetter.h \
@@ -299,7 +299,9 @@ HEADERS += \
     sound/Speaker/MouthWorker.h \
     sound/Speaker.h \
     sound/Speaker/PhrasePriorityQueue.h \
-    sound/QSoundMouth.h
+    sound/QSoundMouth.h \
+    sound/SoundModel.h \
+    sound/ILevithan.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

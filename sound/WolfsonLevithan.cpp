@@ -1,17 +1,11 @@
 #include "WolfsonLevithan.h"
-#include <QDebug>
 
 using namespace Sound;
 
 WolfsonLevithan::WolfsonLevithan(QObject *parent) :
-    Levithan(parent),
+    ILevithan(parent),
     speaker(&mouth),
     prevLightIndex (0)
-{
-
-}
-
-void WolfsonLevithan::sayHello(int i)
 {
 
 }
@@ -58,20 +52,17 @@ void WolfsonLevithan::beep()
     speaker.enqueuePhrase(Phrase("phrases/beep-700-40.wav", 0.3));
 }
 
-void WolfsonLevithan::beep(int i) { beep(); }
-void WolfsonLevithan::beep(bool b) { beep(); }
-
 void WolfsonLevithan::beepHigh()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-900-40.wav", 0.3));
 }
 
-void WolfsonLevithan::beepVigilance()
+void WolfsonLevithan::beepLong()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-700-160.wav", 0.1));
 }
 
-void WolfsonLevithan::beepConfirmation()
+void WolfsonLevithan::beepLowHi()
 {
     speaker.enqueuePhrase(Phrase("phrases/beep-low-hi.wav", 0.1));
 }
@@ -81,26 +72,4 @@ void WolfsonLevithan::beepNotification()
     speaker.enqueuePhrase (Phrase("phrases/beep-notification.wav", 0.8));
 }
 
-void WolfsonLevithan::proccessNewVigilanceRequired(bool required)
-{
-    if (required)
-        beepNotification ();
-}
-
-void WolfsonLevithan::proccessNewPreAlarmActive(bool active)
-{
-    if (active)
-        beepNotification ();
-}
-
-void WolfsonLevithan::proccessNewEpvReady(bool ready)
-{
-    beepHigh ();
-}
-
-void WolfsonLevithan::proccessVigilanceRequired(bool value)
-{
-    if (!value)
-        beepConfirmation ();
-}
 

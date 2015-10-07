@@ -11,7 +11,7 @@
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
 #include "viewmodels/TextNotificationModel.h"
-#include "sound/Levithan.h"
+#include "sound/SoundModel.h"
 #include "sound/WolfsonLevithan.h"
 #include "sound/CanLevithan.h"
 
@@ -96,7 +96,6 @@ ViewModels::SystemStateViewModel *systemState ;
 ViewModels::TextManagerViewModel *textManagerViewModel;
 ViewModels::TextNotificationModel *textNotificationViewModel;
 Interaction::Keyboards::QmlKeyboard *qmlKeyboard;
-Levithan* levithan;
 DisplayStateSender* displayStateSender;
 SysKeySender *sysKeySender;
 
@@ -497,19 +496,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QObject::connect (elmapForwardTarget, SIGNAL(kindChanged(int)), systemState, SLOT(setNextTargetKind(int)));
     QObject::connect (&blokMessages->mmCoord, SIGNAL(railWayCoordinateChanged(int)), systemState, SLOT(setOrdinate(int)));
 
-    // Звуки
-    levithan = new WolfsonLevithan();
-    QObject::connect (systemState->trafficLights(), SIGNAL(codeChanged(Trafficlight)), levithan, SLOT(sayLightIndex(Trafficlight)));
-    QObject::connect (systemState, SIGNAL(SpeedWarningFlash()), levithan, SLOT(beepHigh()));
-    QObject::connect (systemState, SIGNAL(ButtonPressed()), levithan, SLOT(beepHigh()));
-    QObject::connect (systemState, SIGNAL(ConfirmButtonPressed()), levithan, SLOT(beep()));
-    QObject::connect (systemState, SIGNAL(TsvcIsVigilanceRequiredChanged(bool)), levithan, SLOT(proccessNewVigilanceRequired(bool)));
-    QObject::connect (systemState, SIGNAL(TsvcIsPreAlarmActiveChanged(bool)), levithan, SLOT(proccessNewPreAlarmActive(bool)));
-    QObject::connect (systemState, SIGNAL(IsEpvReadyChanged(bool)), levithan, SLOT(proccessNewEpvReady(bool)));
-    QObject::connect (systemState, SIGNAL(WarningLedFlash()), levithan, SLOT(beepVigilance()));
-    QObject::connect (systemState, SIGNAL(IsVigilanceRequiredChanged(bool)), levithan, SLOT(proccessVigilanceRequired(bool)));
-
-    // Клавиатуры и кнопки
+    // Клавиатура
     keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
     keyboardState = new Interaction::KeyboardState (keyboard);
     displayStateSender = new DisplayStateSender(keyboardState, can);
@@ -540,8 +527,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     canIlluminationSetter;
 
     // Взаимодествие с пользователем через команды
-    keyboard = new Interaction::Keyboards::CompositeKeyboard ({qmlKeyboard, new Interaction::Keyboards::CanKeyboard (&blokMessages->consoleKey1)});
-    QObject::connect(keyboard, SIGNAL(keyDown(Key)), levithan, SLOT(beepHigh()));
     storyManager = new Interaction::StoryManager ();
     textManager = new Interaction::TextManager (keyboard);
     textManagerViewModel->assign(textManager);
@@ -579,6 +564,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     hotkeys[Interaction::Keyboard::Key::BRIGHTNESS] = new Interaction::Commands::ChangeBrightnessCommand(illuminationManager, textManager);
     hotkeys[Interaction::Keyboard::Key::P] = new Interaction::Commands::InputTrackNumberCommand(cookies, textManager);
     keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
+
+
+    // Звуки
+    Sound::WolfsonLevithan levithan;
+    Sound::SoundModel soundModel (systemState, keyboard, &levithan);
 
     QtConcurrent::run(getParamsFromConsole);
 

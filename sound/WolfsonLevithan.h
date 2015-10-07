@@ -2,18 +2,20 @@
 #define WOLFSONLEVITHAN_H
 
 #include "Levithan.h"
-#include <QSound>
 
 #include "viewmodels/systemstateviewmodel.h"
+#include "Speaker.h"
+#include "QSoundMouth.h"
 
-#include "sound/speakingthread.h"
+#include <QSound>
 
 class WolfsonLevithan : public Levithan
 {
     Q_OBJECT
 
 private:
-    sound::Speaker speaker;
+    Sound::QSoundMouth mouth;
+    Sound::Speaker speaker;
 
 public:
     explicit WolfsonLevithan(QObject *parent = 0);

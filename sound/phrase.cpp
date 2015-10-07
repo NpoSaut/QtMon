@@ -1,3 +1,3 @@
 #include "phrase.h"
 
-using namespace sound;
+using namespace Sound;

@@ -1,11 +1,11 @@
 #include "WolfsonLevithan.h"
 #include <QDebug>
 
-using namespace sound;
+using namespace Sound;
 
 WolfsonLevithan::WolfsonLevithan(QObject *parent) :
     Levithan(parent),
-    speaker(),
+    speaker(&mouth),
     prevLightIndex (0)
 {
 

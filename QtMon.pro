@@ -19,8 +19,6 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += \
-    qtDoodahLib/queues.cpp \
-    sound/speakingthread.cpp \
     sound/phrase.cpp \
     main.cpp \
     qtBlokLib/modulesactivity.cpp \
@@ -132,7 +130,11 @@ SOURCES += \
     LedTrafficlightView.cpp \
     spi/Max100500.cpp \
     Max100500TrafficlightView.cpp \
-    viewmodels/TextNotificationModel.cpp
+    viewmodels/TextNotificationModel.cpp \
+    sound/Speaker/MouthWorker.cpp \
+    sound/Speaker.cpp \
+    sound/Speaker/PhrasePriorityQueue.cpp \
+    sound/QSoundMouth.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -150,8 +152,6 @@ HEADERS += \
     cDoodahLib/packing.h \
     cDoodahLib/masqarade.h \
     cDoodahLib/lowlevel.h \
-    qtDoodahLib/queues.h \
-    sound/speakingthread.h \
     sound/phrase.h \
     qtBlokLib/modulesactivity.h \
     qtBlokLib/iodrvmain.h \
@@ -294,7 +294,12 @@ HEADERS += \
     spi/Max100500.h \
     spi/ISpiDev.h \
     Max100500TrafficlightView.h \
-    viewmodels/TextNotificationModel.h
+    viewmodels/TextNotificationModel.h \
+    sound/IMouth.h \
+    sound/Speaker/MouthWorker.h \
+    sound/Speaker.h \
+    sound/Speaker/PhrasePriorityQueue.h \
+    sound/QSoundMouth.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

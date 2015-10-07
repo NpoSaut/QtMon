@@ -11,7 +11,7 @@
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
 #include "viewmodels/TextNotificationModel.h"
-#include "sound/SoundModel.h"
+#include "sound/KxSoundController.h"
 #include "sound/WolfsonLevithan.h"
 #include "sound/CanLevithan.h"
 
@@ -402,7 +402,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // Звуки
     Sound::WolfsonLevithan levithan;
-    Sound::SoundModel soundModel (systemState, keyboard, &levithan);
+    Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
 
     QtConcurrent::run(getParamsFromConsole);
 

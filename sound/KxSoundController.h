@@ -1,5 +1,5 @@
-#ifndef SOUNDMODEL_H
-#define SOUNDMODEL_H
+#ifndef KXSOUNDCONTROLLER_H
+#define KXSOUNDCONTROLLER_H
 
 #include "viewmodels/systemstateviewmodel.h"
 #include "interaction/keyboard.h"
@@ -7,11 +7,11 @@
 
 namespace Sound {
 
-class SoundModel : public QObject
+class KxSoundController : public QObject
 {
     Q_OBJECT
 public:
-    SoundModel(ViewModels::SystemStateViewModel *viewModel, Interaction::Keyboard *keyboard, ILevithan *levithan, QObject *parent = 0);
+    KxSoundController(ViewModels::SystemStateViewModel *viewModel, Interaction::Keyboard *keyboard, ILevithan *levithan, QObject *parent = 0);
 
 private slots:
     void proccessTsvcVigilanceRequired(bool required);
@@ -25,4 +25,4 @@ private:
 }
 
 
-#endif // SOUNDMODEL_H
+#endif // KXSOUNDCONTROLLER_H

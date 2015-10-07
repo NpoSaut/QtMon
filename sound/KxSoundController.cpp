@@ -1,8 +1,8 @@
-#include "SoundModel.h"
+#include "KxSoundController.h"
 
 using namespace Sound;
 
-SoundModel::SoundModel(ViewModels::SystemStateViewModel *viewModel, Interaction::Keyboard *keyboard, ILevithan *levithan, QObject *parent)
+KxSoundController::KxSoundController(ViewModels::SystemStateViewModel *viewModel, Interaction::Keyboard *keyboard, ILevithan *levithan, QObject *parent)
     : QObject (parent),
       levithan (levithan)
 {
@@ -21,19 +21,19 @@ SoundModel::SoundModel(ViewModels::SystemStateViewModel *viewModel, Interaction:
     QObject::connect(viewModel, SIGNAL(IsVigilanceRequiredChanged(bool)), this, SLOT(proccessVigilanceRequired(bool)));
 }
 
-void SoundModel::proccessTsvcVigilanceRequired(bool required)
+void KxSoundController::proccessTsvcVigilanceRequired(bool required)
 {
     if (required)
         levithan->beepNotification ();
 }
 
-void SoundModel::proccessTsvcPreAlarmActive(bool active)
+void KxSoundController::proccessTsvcPreAlarmActive(bool active)
 {
     if (active)
         levithan->beepNotification ();
 }
 
-void SoundModel::proccessVigilanceRequired(bool value)
+void KxSoundController::proccessVigilanceRequired(bool value)
 {
     if (!value)
         levithan->beepNotification();

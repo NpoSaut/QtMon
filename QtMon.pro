@@ -134,7 +134,7 @@ SOURCES += \
     sound/Speaker.cpp \
     sound/Speaker/PhrasePriorityQueue.cpp \
     sound/QSoundMouth.cpp \
-    sound/SoundModel.cpp \
+    sound/KxSoundController.cpp \
     sound/ILevithan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
@@ -300,7 +300,7 @@ HEADERS += \
     sound/Speaker.h \
     sound/Speaker/PhrasePriorityQueue.h \
     sound/QSoundMouth.h \
-    sound/SoundModel.h \
+    sound/KxSoundController.h \
     sound/ILevithan.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {

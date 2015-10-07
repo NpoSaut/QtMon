@@ -14,13 +14,8 @@ namespace Sound {
 class WolfsonLevithan : public ILevithan
 {
     Q_OBJECT
-
-private:
-    Sound::QSoundMouth mouth;
-    Sound::Speaker speaker;
-
 public:
-    explicit WolfsonLevithan(QObject *parent = 0);
+    explicit WolfsonLevithan(Speaker *speaker, QObject *parent = 0);
 
 public slots:
     virtual void sayLightIndex(Trafficlight l);
@@ -32,6 +27,7 @@ public slots:
     virtual void beepNotification();
 
 private:
+    Speaker *speaker;
     int prevLightIndex;
 };
 

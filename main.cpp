@@ -401,7 +401,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Interaction::KeyboardManager *keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
 
     // Звуки
-    Sound::WolfsonLevithan levithan;
+    Sound::Speaker speaker (new Sound::QSoundMouth());
+    Sound::WolfsonLevithan levithan (&speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
 
     QtConcurrent::run(getParamsFromConsole);

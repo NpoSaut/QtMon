@@ -136,7 +136,8 @@ SOURCES += \
     sound/KxSoundController.cpp \
     sound/ILevithan.cpp \
     sound/ToCanLevithan.cpp \
-    sound/M7SoundController.cpp
+    sound/M7SoundController.cpp \
+    sound/PhraseNumberLevithan.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -303,7 +304,8 @@ HEADERS += \
     sound/KxSoundController.h \
     sound/ILevithan.h \
     sound/ToCanLevithan.h \
-    sound/M7SoundController.h
+    sound/M7SoundController.h \
+    sound/PhraseNumberLevithan.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

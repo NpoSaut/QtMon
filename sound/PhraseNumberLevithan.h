@@ -8,7 +8,7 @@
 namespace Sound {
 
 // Говорит фразу по номеру
-// Фразы лежат в phrasesDir, воспроизводятся все файлы по шаблону N*.wav
+// Фразы лежат в phrasesDir, воспроизводятся все файлы по шаблону N*.mp3
 class PhraseNumberLevithan : public QObject
 {
     Q_OBJECT

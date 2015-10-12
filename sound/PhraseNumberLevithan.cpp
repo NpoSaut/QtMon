@@ -10,7 +10,7 @@ PhraseNumberLevithan::PhraseNumberLevithan(QDir phrasesDir, Speaker *speaker)
 
 void PhraseNumberLevithan::sayPhrase(int n)
 {
-    QString fileMask = QString("%1*.wav").arg(n, 2, 10, QChar('0'));
+    QString fileMask = QString("%1*.mp3").arg(n, 2, 10, QChar('0'));
     auto files = dir.entryInfoList(QStringList(fileMask), QDir::NoFilter, QDir::Name);
     foreach (auto fileInfo, files)
         speaker->enqueuePhrase(Phrase(fileInfo));

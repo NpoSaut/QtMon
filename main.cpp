@@ -407,9 +407,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Звуки
     Sound::IMouthFactory *mouthFactory =
 #ifdef _WIN32
-        new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.wav"));
+        new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.mp3"));
 #else
-        new Sound::ExternalToolMouthFactory("aplay");
+        new Sound::ExternalToolMouthFactory("mpg123");
 #endif
     Sound::Speaker *speaker = new Sound::Speaker (mouthFactory);
     Sound::WolfsonLevithan levithan (speaker);

@@ -14,6 +14,8 @@
 #include "sound/KxSoundController.h"
 #include "sound/WolfsonLevithan.h"
 #include "sound/ToCanLevithan.h"
+#include "sound/PhraseNumberLevithan.h"
+#include "sound/QSoundMouthFactory.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32
@@ -93,6 +95,7 @@
 #include "Max100500TrafficlightView.h"
 
 ViewModels::SystemStateViewModel *systemState ;
+Sound::PhraseNumberLevithan *phraseNumberLevithan;
 
 void getParamsFromConsole ();
 
@@ -401,9 +404,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Interaction::KeyboardManager *keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
 
     // Звуки
-    Sound::Speaker speaker (new Sound::QSoundMouth());
+    Sound::Speaker speaker (new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.wav")));
     Sound::WolfsonLevithan levithan (&speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
+    phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), &speaker);
+    qDebug() << "sound ready";
 
     QtConcurrent::run(getParamsFromConsole);
 
@@ -524,6 +529,10 @@ void getParamsFromConsole ()
         {
             systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
             out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
+        }
+        else if (cmd.at(0) == "snd")
+        {
+            phraseNumberLevithan->sayPhrase( cmd.at(1).toInt() );
         }
         else
         {

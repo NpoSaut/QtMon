@@ -8,9 +8,12 @@ namespace Sound {
 class QSoundMouth : public IMouth
 {
 public:
-    QSoundMouth();
+    QSoundMouth(QObject *parent = 0);
 
     virtual void say (QFileInfo file);
+
+private:
+    QObject *parent;
 };
 
 }

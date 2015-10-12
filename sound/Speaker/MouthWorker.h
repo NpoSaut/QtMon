@@ -3,7 +3,7 @@
 
 #include "qtDoodahLib/IThreadWorker.h"
 #include "qtDoodahLib/queues/IThreadSafeQueue.h"
-#include "../IMouth.h"
+#include "../IMouthFactory.h"
 #include "../phrase.h"
 
 namespace Sound {
@@ -13,12 +13,13 @@ class MouthWorker : public IThreadWorker
 {
     Q_OBJECT
 public:
-    explicit MouthWorker(IMouth *mouth, IThreadSafeQueue<Phrase> *queue, QObject *parent = 0);
+    explicit MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue, QObject *parent = 0);
 
 public slots:
     virtual void run ();
 
 private:
+    IMouthFactory *mouthFactory;
     IMouth *mouth;
     IThreadSafeQueue<Phrase> *queue;
 };

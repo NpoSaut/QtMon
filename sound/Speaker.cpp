@@ -4,9 +4,9 @@
 using namespace Sound;
 using namespace SpeakerInternals;
 
-Speaker::Speaker(IMouth *mouth)
+Speaker::Speaker(IMouthFactory *mouthFactory)
     : queue (),
-      mouthThread(new MouthWorker(mouth, &queue, 0))
+      mouthThread(new MouthWorker(mouthFactory, &queue, 0))
 {
     mouthThread.start();
 }

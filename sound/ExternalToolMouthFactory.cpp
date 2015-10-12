@@ -4,7 +4,7 @@
 
 using namespace Sound;
 
-ExternalToolMouthFactory::ExternalToolMouthFactory(QString &command) :
+ExternalToolMouthFactory::ExternalToolMouthFactory(QString command) :
     command (command)
 { }
 

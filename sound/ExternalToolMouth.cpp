@@ -10,6 +10,6 @@ ExternalToolMouth::ExternalToolMouth(const QString &program, QObject *parent) :
 
 void ExternalToolMouth::say(QFileInfo file)
 {
-    process.start(program + file.absoluteFilePath());
+    process.start(program + " " + file.absoluteFilePath());
     process.waitForFinished();
 }

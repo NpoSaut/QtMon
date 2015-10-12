@@ -16,6 +16,7 @@
 #include "sound/ToCanLevithan.h"
 #include "sound/PhraseNumberLevithan.h"
 #include "sound/QSoundMouthFactory.h"
+#include "sound/ExternalToolMouthFactory.h"
 
 #include "cDoodahLib/masqarade.h"
 #ifdef WIN32
@@ -404,10 +405,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Interaction::KeyboardManager *keyboardManager = new Interaction::KeyboardManager (keyboard, storyManager, commandManager, textManager, &hotkeys );
 
     // Звуки
-    Sound::Speaker speaker (new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.wav")));
-    Sound::WolfsonLevithan levithan (&speaker);
+    Sound::IMouthFactory *mouthFactory =
+#ifdef _WIN32
+        new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.wav"));
+#else
+        new Sound::ExternalToolMouthFactory("aplay");
+#endif
+    Sound::Speaker *speaker = new Sound::Speaker (mouthFactory);
+    Sound::WolfsonLevithan levithan (speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
-    phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), &speaker);
+    phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), speaker);
     qDebug() << "sound ready";
 
     QtConcurrent::run(getParamsFromConsole);

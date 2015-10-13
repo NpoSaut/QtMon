@@ -4,7 +4,10 @@ folder_01.target = qml
 folder_02.source = phrases
 folder_02.target =
 folder_fonts.source = fonts
+utils.source = runtime-utils-win
 DEPLOYMENTFOLDERS = folder_01 folder_02 folder_fonts
+win32 { DEPLOYMENTFOLDERS += utils }
+
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
@@ -117,7 +120,6 @@ SOURCES += \
     interaction/commands/InputTrackNumberCommand.cpp \
     interaction/commands/ChangeBrightnessCommand.cpp \
     sound/WolfsonLevithan.cpp \
-    sound/CanLevithan.cpp \
     qtBlokLib/parsers/console_beep.cpp \
     illumination/CanIlluminationSetter.cpp \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.cpp \
@@ -135,7 +137,13 @@ SOURCES += \
     sound/Speaker/PhrasePriorityQueue.cpp \
     sound/QSoundMouth.cpp \
     sound/KxSoundController.cpp \
-    sound/ILevithan.cpp
+    sound/ILevithan.cpp \
+    sound/ToCanLevithan.cpp \
+    sound/M7SoundController.cpp \
+    sound/PhraseNumberLevithan.cpp \
+    sound/QSoundMouthFactory.cpp \
+    sound/ExternalToolMouth.cpp \
+    sound/ExternalToolMouthFactory.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -279,7 +287,6 @@ HEADERS += \
     interaction/commands/InputTrackNumberCommand.h \
     interaction/commands/ChangeBrightnessCommand.h \
     sound/WolfsonLevithan.h \
-    sound/CanLevithan.h \
     qtBlokLib/parsers/console_beep.h \
     illumination/CanIlluminationSetter.h \
     illumination/implementations/CanBilLcdIlluminationAnalogDevice.h \
@@ -301,7 +308,14 @@ HEADERS += \
     sound/Speaker/PhrasePriorityQueue.h \
     sound/QSoundMouth.h \
     sound/KxSoundController.h \
-    sound/ILevithan.h
+    sound/ILevithan.h \
+    sound/ToCanLevithan.h \
+    sound/M7SoundController.h \
+    sound/PhraseNumberLevithan.h \
+    sound/IMouthFactory.h \
+    sound/QSoundMouthFactory.h \
+    sound/ExternalToolMouth.h \
+    sound/ExternalToolMouthFactory.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

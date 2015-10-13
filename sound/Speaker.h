@@ -1,7 +1,7 @@
 #ifndef SPEAKER_H
 #define SPEAKER_H
 
-#include "IMouth.h"
+#include "IMouthFactory.h"
 #include "phrase.h"
 #include "qtDoodahLib/ThreadWithWorker.h"
 #include "Speaker/PhrasePriorityQueue.h"
@@ -11,7 +11,7 @@ namespace Sound {
 class Speaker
 {
 public:
-    Speaker(IMouth *mouth);
+    Speaker(IMouthFactory *mouthFactory);
 
     void enqueuePhrase(Phrase phrase);
 

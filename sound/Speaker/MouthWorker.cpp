@@ -3,15 +3,18 @@
 using namespace Sound;
 using namespace SpeakerInternals;
 
-
-MouthWorker::MouthWorker(IMouth *mouth, IThreadSafeQueue<Phrase> *queue, QObject *parent)
+MouthWorker::MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue, QObject *parent)
     : IThreadWorker (parent),
-      mouth (mouth),
+      mouthFactory (mouthFactory),
+      mouth (nullptr),
       queue (queue)
 { }
 
 void MouthWorker::run()
 {
+    if (!mouth)
+        mouth = mouthFactory->produce(this);
+
     forever {
         mouth->say(queue->dequeue().getFile());
     }

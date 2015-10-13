@@ -407,15 +407,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     // Звуки
     Sound::IMouthFactory *mouthFactory =
 #ifdef _WIN32
-        new Sound::QSoundMouthFactory(QFileInfo("./phrases/beep-700-40.mp3"));
+        new Sound::ExternalToolMouthFactory("runtime-utils-win/mpg123 \"%1\"");
 #else
-        new Sound::ExternalToolMouthFactory("mpg123");
+        new Sound::ExternalToolMouthFactory("sh -x -c \"madplay -A-18 -owave:- '%1' | aplay\""); // Громкость: -18 дБ
 #endif
     Sound::Speaker *speaker = new Sound::Speaker (mouthFactory);
     Sound::WolfsonLevithan levithan (speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
     phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), speaker);
-    qDebug() << "sound ready";
 
     QtConcurrent::run(getParamsFromConsole);
 

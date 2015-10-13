@@ -10,7 +10,7 @@ namespace Sound {
 class ExternalToolMouthFactory : public IMouthFactory
 {
 public:
-    ExternalToolMouthFactory(QString command);
+    ExternalToolMouthFactory(QString command); // %1 будет заменено на воспроизводимый файл
 
     virtual IMouth *produce (QObject *parent = 0);
 

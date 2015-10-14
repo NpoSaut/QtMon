@@ -11,6 +11,7 @@
 #include "viewmodels/systemstateviewmodel.h"
 #include "viewmodels/modulesactivityviewmodel.h"
 #include "viewmodels/TextNotificationModel.h"
+#include "ConsoleStateViewModelController.h"
 #include "sound/KxSoundController.h"
 #include "sound/WolfsonLevithan.h"
 #include "sound/ToCanLevithan.h"
@@ -95,10 +96,6 @@
 #include "spi/Max100500.h"
 #include "Max100500TrafficlightView.h"
 
-ViewModels::SystemStateViewModel *systemState ;
-Sound::PhraseNumberLevithan *phraseNumberLevithan;
-
-void getParamsFromConsole ();
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -137,7 +134,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     QObject *object = viewer.rootObject();
-    systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
+    ViewModels::SystemStateViewModel *systemState = object->findChild<ViewModels::SystemStateViewModel*>("stateView");
     ViewModels::TextManagerViewModel *textManagerViewModel = object->findChild<ViewModels::TextManagerViewModel*>("textManager");
     Interaction::Keyboards::QmlKeyboard *qmlKeyboard = object->findChild<Interaction::Keyboards::QmlKeyboard*>("keyboardProxy");
     ViewModels::BrightnessViewModel *brightnessViewModel = object->findChild<ViewModels::BrightnessViewModel*>("brightnessViewModel");
@@ -414,147 +411,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Sound::Speaker *speaker = new Sound::Speaker (mouthFactory);
     Sound::WolfsonLevithan levithan (speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
-    phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), speaker);
+    Sound::PhraseNumberLevithan *phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), speaker);
 
-    QtConcurrent::run(getParamsFromConsole);
+    ConsoleStateViewModelController consoleStateViewModelController (systemState);
+    consoleStateViewModelController.start();
 
     return app->exec();
-}
-
-void getParamsFromConsole ()
-{
-    qDebug() << "Starting reading console...";
-
-    QString str;
-    QTextStream in(stdin);
-    QTextStream out(stdout);
-
-    while (true)
-    {
-        str = in.readLine();
-        QStringList cmd = str.split(" ");
-
-        if (cmd.at(0) == "s")
-        {
-            systemState->setSpeed( cmd.at(1).toInt() );
-            systemState->setSpeedIsValid(true);
-            out << "Speed: " << systemState->getSpeed() << endl;
-        }
-        else if (cmd.at(0) == "r")
-        {
-            systemState->setSpeedRestriction( cmd.at(1).toInt() );
-            out << "Speed restriction: " << systemState->getSpeedRestriction() << endl;
-        }
-        else if (cmd.at(0) == "g")
-        {
-            if (cmd.size() == 3)
-            {
-                systemState->setLongitude( cmd.at(1).toDouble() );
-                systemState->setLatitude( cmd.at(2).toDouble() );
-            }
-            out << "Longitude: " << systemState->getLongitude()
-                << "; Lattitude: " << systemState->getLatitude() << endl;
-        }
-        else if (cmd.at(0) == "gg")
-        {
-            if (cmd.size() == 3)
-            {
-                systemState->setLongitude(systemState->getLongitude() + cmd.at(1).toDouble() );
-                systemState->setLatitude(systemState->getLatitude() + cmd.at(2).toDouble() );
-            }
-            out << "Longitude: " << systemState->getLongitude()
-                << "; Lattitude: " << systemState->getLatitude() << endl;
-        }
-        else if (cmd.at(0) == "c")
-        {
-            systemState->trafficLights()->setCode( Trafficlight(cmd.at(1).toInt()) );
-            out << "Liht: " << systemState->trafficLights()->code() << endl;
-        }
-        else if (cmd.at(0) == "a")
-        {
-            systemState->setAlsnFreqTarget( cmd.at(1).toInt() );
-            out << "AlsnFreqTarget: " << systemState->getAlsnFreqTarget() << endl;
-        }
-        else if (cmd.at(0) == "epv")
-        {
-            systemState->setIsEpvReady( cmd.at(1) == "1" );
-            out << "IsEpvReady: " << systemState->getIsEpvReady() << endl;
-        }
-        else if (cmd.at(0) == "b")
-        {
-            systemState->setIsEpvReleased( cmd.at(1) == "1" );
-            out << "IsEpvReady: " << systemState->getIsEpvReleased() << endl;
-        }
-        else if (cmd.at(0) == "dm")
-        {
-            systemState->setDriveModeFact( cmd.at(1).toInt() );
-            out << "DriveModeFact: " << systemState->getDriveModeFact() << endl;
-        }
-        else if (cmd.at(0) == "tdm")
-        {
-            systemState->setDriveModeTarget( cmd.at(1).toInt() );
-            out << "DriveModeTarget: " << systemState->getDriveModeTarget() << endl;
-        }
-        else if (cmd.at(0) == "iw")
-        {
-            systemState->setIronWheels( cmd.at(1) == "1" );
-            out << "Iron Wheels: " << systemState->getIronWheels() << endl;
-        }
-        // Тяга
-        else if (cmd.at(0) == "tr")
-        {
-            systemState->setIsTractionOn( cmd.at(1) == "1" );
-            out << "Traction is: " << systemState->getIsTractionOn() << endl;
-        }
-        // Направление движения
-        else if (cmd.at(0) == "dir")
-        {
-            systemState->setDirection( cmd.at(1).toInt() );
-            out << "Now Direction is: " << systemState->getDirection() << endl;
-        }
-        // ТСКБМ: на связи
-        else if (cmd.at(0) == "tso")
-        {
-            systemState->setTsvcIsOnline( cmd.at(1) == "1" );
-            out << "Now TSVC online is: " << systemState->getTsvcIsOnline() << endl;
-        }
-        // ТСКБМ: Машинист Бодр
-        else if (cmd.at(0) == "tsc")
-        {
-            systemState->setTsvcIsMachinistCheerful( cmd.at(1) == "1" );
-            out << "Now is Machinist Cheerful is: " << systemState->getTsvcIsMachinistCheerful() << endl;
-        }
-        // ТСКБМ: на связи
-        else if (cmd.at(0) == "tsv")
-        {
-            systemState->setTsvcIsVigilanceRequired( cmd.at(1) == "1" );
-            out << "Now TSVC Vigilance Required is: " << systemState->getTsvcIsVigilanceRequired() << endl;
-        }
-        // ТСКБМ: на связи
-        else if (cmd.at(0) == "tsa")
-        {
-            systemState->setTsvcIsPreAlarmActive( cmd.at(1) == "1" );
-            out << "Now TSVC Pre-Alarm is: " << systemState->getTsvcIsPreAlarmActive() << endl;
-        }
-        else if (cmd.at(0) == "snd")
-        {
-            phraseNumberLevithan->sayPhrase( cmd.at(1).toInt() );
-        }
-        else
-        {
-            out << "! unknown command. Try this:" << endl;
-            out << "tdm {0/1/2/3/4} Целевой режим движения: П/М/Р/Д/Т" << endl;
-            out << "dm {0/1/2/3/4} Фактический режим движения: П/М/Р/Д/Т" << endl;
-            out << "epb {1/0} Ключ ЭПК: вкл/выкл" << endl;
-            out << "b {1/0} Экстренное торможение: вкл/выкл" << endl;
-            out << "iw {1/0} IronWheels" << endl;
-            out << "tr {1/0} Тяга: вкл/выкл" << endl;
-            out << "dir {1/-1/0} Направление движения: вперёд/назад/стоим" << endl;
-            out << "nt {text} Текст извещения" << endl;
-            out << "tso {1/0} ТСКБМ: Связь с ТСКБМ" << endl;
-            out << "tsc {1/0} ТСКБМ: Машинист бодр" << endl;
-            out << "tsv {1/0} ТСКБМ: Требуется подтверждение бодрости" << endl;
-            out << "tsa {1/0} ТСКБМ: Предварительная сигнализация" << endl;
-        }
-    }
 }

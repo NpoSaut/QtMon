@@ -143,7 +143,8 @@ SOURCES += \
     sound/PhraseNumberLevithan.cpp \
     sound/QSoundMouthFactory.cpp \
     sound/ExternalToolMouth.cpp \
-    sound/ExternalToolMouthFactory.cpp
+    sound/ExternalToolMouthFactory.cpp \
+    ConsoleStateViewModelController.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -315,7 +316,8 @@ HEADERS += \
     sound/IMouthFactory.h \
     sound/QSoundMouthFactory.h \
     sound/ExternalToolMouth.h \
-    sound/ExternalToolMouthFactory.h
+    sound/ExternalToolMouthFactory.h \
+    ConsoleStateViewModelController.h
 
 LIB_LINUX_SOCKET_CAN_DRIVER {
     SOURCES +=  qtCanLib/drivers/LinuxSocketCan/LinuxSocketCanReceiver.cpp \

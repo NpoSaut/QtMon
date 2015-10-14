@@ -6,7 +6,7 @@ using namespace SpeakerInternals;
 
 Speaker::Speaker(IMouthFactory *mouthFactory)
     : queue (),
-      mouthThread(new MouthWorker(mouthFactory, &queue, 0))
+      mouthThread(new MouthWorker(mouthFactory, &queue))
 {
     mouthThread.start();
 }

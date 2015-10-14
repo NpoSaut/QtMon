@@ -13,7 +13,7 @@ class MouthWorker : public IThreadWorker
 {
     Q_OBJECT
 public:
-    explicit MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue, QObject *parent = 0);
+    explicit MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue);
 
 public slots:
     virtual void run ();

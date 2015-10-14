@@ -3,8 +3,8 @@
 using namespace Sound;
 using namespace SpeakerInternals;
 
-MouthWorker::MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue, QObject *parent)
-    : IThreadWorker (parent),
+MouthWorker::MouthWorker(IMouthFactory *mouthFactory, IThreadSafeQueue<Phrase> *queue)
+    : IThreadWorker (),
       mouthFactory (mouthFactory),
       mouth (nullptr),
       queue (queue)

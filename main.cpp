@@ -412,6 +412,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     Sound::WolfsonLevithan levithan (speaker);
     Sound::KxSoundController kxSoundController (systemState, keyboard, &levithan);
     Sound::PhraseNumberLevithan *phraseNumberLevithan = new Sound::PhraseNumberLevithan (QDir("./phrases/bri/"), speaker);
+    QObject::connect(&blokMessages->soundCommand, SIGNAL(sayPhraseNumber(int)), phraseNumberLevithan, SLOT(sayPhrase(int)));
 
     ConsoleStateViewModelController consoleStateViewModelController (systemState);
     consoleStateViewModelController.start();

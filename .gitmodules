@@ -1,15 +1,15 @@
 [submodule "cDoodahLib"]
 	path = cDoodahLib
-	url = https://github.com/NpoSaut/cDoodahLib.git
+	url = ../cDoodahLib.git
 [submodule "qtDoodahLib"]
 	path = qtDoodahLib
-	url = https://github.com/NpoSaut/qtDoodahLib.git
+	url = ../qtDoodahLib.git
 [submodule "qtCanLib"]
 	path = qtCanLib
-	url = https://github.com/NpoSaut/qtCanLib.git
+	url = ../qtCanLib.git
 [submodule "qtBlokLib"]
 	path = qtBlokLib
-	url = https://github.com/NpoSaut/qtBlokLib.git
+	url = ../qtBlokLib.git
 [submodule "Utilities/netQtCodegen"]
 	path = Utilities/netQtCodegen
 	url = ../netQtCodegen.git
